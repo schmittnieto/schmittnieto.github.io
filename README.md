@@ -10,6 +10,10 @@ Jekyll Theme Leaf is a very simple yet beautiful theme created by [Supun Kavinda
 
 ## Installation
 
+Video de instalación:
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/OZDKNqMXSxA/0.jpg)](https://www.youtube.com/watch?v=OZDKNqMXSxA)
+
+
 Add this line to your Jekyll site's `Gemfile`:
 
 ```ruby
