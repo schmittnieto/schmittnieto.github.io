@@ -153,9 +153,9 @@ Github Pages uses LetsEncrypt to generate this certificate, without having to do
 
 Each time I make modifications to the blog, I verify them locally by running the following command. This allows me to preview the changes in a local server before pushing them to GitHub:
 
-´´´sh
+```sh
 bundle exec jekyll serve
-´´´
+```
 
 # Conclusion
 
