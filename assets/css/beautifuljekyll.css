@@ -1020,6 +1020,39 @@ pre {
   margin: 0 auto;
 }
 
+/* --- Misc Certifications --- */
+
+.certifications {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.certifications a {
+  display: inline-block;
+  margin: 10px;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+}
+
+.cert-image {
+  width: 60px; /* Tamaño reducido */
+  height: 60px;
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.3s;
+}
+
+.cert-image:hover {
+  transform: scale(1.1);
+}
+
+.certifications div {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+
 /* Search bar */
 #beautifuljekyll-search-overlay {
   font-family: var(--header-font);

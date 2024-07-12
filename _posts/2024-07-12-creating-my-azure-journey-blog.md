@@ -6,6 +6,7 @@ categories: blog
 thumbnail-img: /assets/img/blogpost01_01.webp
 tags: [GitHub Pages, Jekyll]
 excerpt: "In this article, I provide a thorough guide on creating a blog with GitHub Pages and Jekyll, detailing everything from initial setup to customizing themes and configuring your custom domain."
+toc: true
 ---
 
 # Introduction
@@ -144,7 +145,17 @@ And a CNAME record for `www`:
 
 ## Enabling HTTPS
 
-Finally, I enabled HTTPS in the GitHub Pages settings to ensure secure access to my blog.
+Finally, I enabled HTTPS in the GitHub Pages settings to ensure secure access to my blog. 
+This happens automatically when you check the HTTPS checkbox in Github Pages (on your Repository) and after verifying that the DNS has been configured correctly.
+Github Pages uses LetsEncrypt to generate this certificate, without having to do nothing (at the user site) and at no cost.
+
+# Step 5: Verifying Changes Locally
+
+Each time I make modifications to the blog, I verify them locally by running the following command. This allows me to preview the changes in a local server before pushing them to GitHub:
+
+´´´sh
+bundle exec jekyll serve
+´´´
 
 # Conclusion
 

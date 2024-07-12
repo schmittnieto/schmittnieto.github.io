@@ -6,57 +6,46 @@ categories: blog
 thumbnail-img: /assets/img/avatar-csn.jpeg
 #tags: [Azure,Azure Stack HCI]
 tags: [Cristian]
-excerpt: "Join me as I share my journey and experiences in the world of Azure and IT."
+excerpt: "Discover the reasons behind the creation of my Azure-focused blog and my journey in the IT world."
+toc: false
 ---
 
 <div style="text-align: center;">
   <img src="/assets/img/avatar-csn.jpeg" alt="Cristian Schmitt Nieto" style="width: 150px; height: 150px; border-radius: 50%;"/>
 </div>
 
-## Introduction
+# Why I Started This Blog
 
-Hello, I'm **Cristian Schmitt Nieto**, a Spanish IT enthusiast who moved to Germany for work. From a young age, I've been passionate about computers, and this passion has driven my career in IT for over 10 years.
+Hello, I'm **Cristian Schmitt Nieto**, and welcome to my blog! As an Azure consultant with over a decade of experience in IT, I wanted to create a space to share my knowledge, experiences, and insights. This blog is a reflection of my passion for technology and my journey from managing small data centers to diving deep into the world of Azure.
 
-## Early Career
+## My Journey
 
-I started my professional journey as an apprentice, handling clients, installing printers, and managing basic tasks. However, my career path took a significant turn when I discovered the fascinating world of network infrastructures and servers.
+Starting as an IT enthusiast in Spain, my career took me to Germany, where I managed data center infrastructures and explored various technologies. Over the years, my fascination with cloud computing led me to specialize in Azure. I've had the opportunity to work on hybrid infrastructures, Azure Virtual Desktop, and various DevOps practices, which has enriched my professional journey.
 
-## Professional Experience
+## Purpose of This Blog
 
-After several years managing a small data center, which included firewalls, S2D Clusters, Windows infrastructures, and Citrix, I decided to dive into the realm of Azure.
+The main goal of this blog is to share my experiences and solutions to everyday challenges I encounter in the Azure ecosystem. I aim to provide valuable insights, tutorials, and guides that can help others in their cloud journey. Whether you're an IT professional or someone curious about Azure, I hope this blog serves as a helpful resource.
 
-### Data Center Management
+## The Inspiration
 
-Managing a data center involved working with:
-- Firewalls
-- S2D Clusters
-- Windows Servers
-  - File Servers (DFS)
-  - Active Directory
-  - DHCP / DNS
-- Citrix
+The inspiration for this blog came from my day-to-day experiences. Often, I found myself troubleshooting complex issues, experimenting with new Azure features, and working on intricate projects. Documenting these experiences not only helps me reflect on my work but also provides a platform to help others who might be facing similar challenges.
 
-## Azure Journey
+## What to Expect
 
-It's been over five years since I embarked on this Azure adventure, and my enthusiasm and motivation have only grown. In this blog, I aim to share my personal experiences in the Azure world, along with the day-to-day challenges and solutions I encounter.
+In this blog, you can expect:
+- **Detailed Tutorials and How-To Guides**: Step-by-step instructions on various Azure services and tools.
+- **Best Practices and Frameworks**: Insights into frameworks like CAF and WAF, ensuring robust and scalable solutions.
+- **Real-World Experiences**: Stories and lessons learned from my projects, providing practical insights.
+- **Updates on Azure**: Keeping you informed about the latest features and developments in the Azure ecosystem.
 
-### Areas of Expertise
+## Building a Community
 
-Throughout the years, I've worked with:
-- **Hybrid Infrastructures**: Primarily Azure Stack HCI and AKS
-- **Azure Infrastructures**: Mainly Azure Virtual Desktop and Azure Public Infrastructure
+Beyond sharing knowledge, I aim to build a community where fellow Azure enthusiasts and IT professionals can engage, discuss, and collaborate. Your feedback, questions, and contributions are invaluable to making this blog a vibrant and resourceful space.
 
-I have guided various clients on their cloud journeys, helping them implement diverse solutions using technologies and frameworks like:
-- **Azure DevOps**
-- **Terraform**
-- **Bicep**
-- **Cloud Adoption Framework (CAF)**
-- **Well Architected Framework (WAF)**
+## Final Thoughts
 
-## Conclusion
+Creating this blog has been an incredibly rewarding journey. It's amazing how tools like GitHub Pages and Jekyll can transform a simple idea into a fully functional blog. Stay tuned for more posts where I'll dive deeper into Azure and share my ongoing IT adventures!
 
-I hope you enjoy this journey as much as I do.
-
-Thank you for joining me!
+Thank you for joining me on this journey. I look forward to sharing my knowledge and learning from the community.
 
 **Cristian Schmitt Nieto**
