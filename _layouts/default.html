@@ -1,6 +1,7 @@
 ---
 layout: base
 ---
+
 <div class="intro-header"></div>
 
 <main class="{% if page.full-width %} container-fluid {% else %} container-md {% endif %}">
@@ -21,24 +22,4 @@ layout: base
       {% endfor %}
     </div>
   {% endif %}
-  <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
-  <script>
-    function addDarkmodeWidget() {
-      const options = {
-        bottom: '64px', // Ubicación del widget
-        right: '32px', // Ubicación del widget
-        time: '0.5s', // Tiempo de transición
-        mixColor: '#fff', // Color de mezcla
-        backgroundColor: '#fff',  // Color de fondo
-        buttonColorDark: '#100f2c',  // Color del botón en modo oscuro
-        buttonColorLight: '#fff', // Color del botón en modo claro
-        saveInCookies: true, // Guardar la preferencia en cookies
-        label: '🌓', // Etiqueta del botón
-        autoMatchOsTheme: true // Coincidir automáticamente con el tema del sistema operativo
-      }
-      new Darkmode(options).showWidget();
-    }
-    window.addEventListener('load', addDarkmodeWidget);
-  </script>
-
 </main>

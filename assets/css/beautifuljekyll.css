@@ -22,29 +22,6 @@ layout: null
   --body-font: 'Lora', 'Times New Roman', serif;
   --header-font: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --mid-col: #808080;
-
-  /* Variables para el tema claro */
-  --bg: #ffffff;
-  --text: #000000;
-}
-
-[data-theme="dark"] {
-  --bg: #000000;
-  --text: #ffffff;
-}
-
-body {
-  background-color: var(--bg);
-  color: var(--text);
-}
-
-#dark-mode-toggle {
-  margin-left: auto;
-  padding: 5px 10px;
-  background-color: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--text);
-  cursor: pointer;
 }
 
 /* --- General --- */
@@ -68,7 +45,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-
 body > main {
   flex: 1;
 }
@@ -1047,14 +1023,14 @@ pre {
 /* --- Misc Toc --- */
 
 .toc-container {
-  text-align: center;
-  margin: 20px 0;
+  text-align: left;
+  margin: 10px 0;
 }
 
 .toc {
   display: inline-block;
   text-align: left; /* Para alinear el texto del TOC a la izquierda */
-  list-style-type: none; /* Elimina los subpuntos */
+  /*list-style-type: none; Elimina los subpuntos */
   padding: 0;
 }
 
@@ -1099,32 +1075,6 @@ pre {
   font-size: 14px;
 }
 
-/* Dark Mode Toggler */
-/*:root {
-  --bg: #ffffff;
-  --text: #000000;
-}
-
-[data-theme="dark"] {
-  --bg: #000000;
-  --text: #ffffff;
-}
-
-body {
-  background-color: var(--bg);
-  color: var(--text);
-}
-
-
-#dark-mode-toggle {
-  margin-left: auto;
-  padding: 5px 10px;
-  background-color: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--text);
-  cursor: pointer;
-}
-*/
 
 /* Search bar */
 #beautifuljekyll-search-overlay {
