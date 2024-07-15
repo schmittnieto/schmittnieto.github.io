@@ -40,29 +40,53 @@ cd myblog
 
 # Step 2: Choosing and Configuring the Theme
 
-## Selecting a Theme
+## Selecting and Installing the Theme
 
-I decided to use the **Beautiful Jekyll** theme for its clean design and rich features. The installation was simplified as it was automatically configured. Here’s how I set it up:
+I decided to use the **Beautiful Jekyll** theme for its clean design and rich features. Here’s how I set it up:
 
-**Add the theme to the Gemfile:**
-```sh
-gem "beautiful-jekyll-theme", "6.0.1"
-```
+1. **Fork the Beautiful Jekyll Repository**:
+   - Go to the [Beautiful Jekyll GitHub repository](https://github.com/daattali/beautiful-jekyll) and click the "Fork" button at the top-right corner. This will create a copy of the repository under your GitHub account.
 
-**Update `_config.yml`:**
-```yaml
-theme: "beautiful-jekyll-theme"
-```
+2. **Rename Your Repository**:
+   - Navigate to the Settings of your forked repository, scroll down to the "Repository name" section, and rename it to `your-username.github.io`.
 
-**Install the dependencies:**
-```sh
-bundle install
-```
+3. **Clone Your Repository**:
+   - Clone the repository to your local machine using the following command:
+     ```sh
+     git clone https://github.com/your-username/your-username.github.io
+     cd your-username.github.io
+     ```
 
+4. **Install the Dependencies**:
+   - Install the necessary dependencies by running:
+     ```sh
+     bundle install
+     ```
 
 ## Customizing the Theme
 
-To make the blog feel more personal, I customized various elements like the `_config.yml` for site details, navigation bar links, and added a personal touch with some custom CSS.
+To make the blog feel more personal, I customized various elements in the `_config.yml` file, such as site details, navigation bar links, and added a personal touch with some custom CSS. Here's a snippet of my `_config.yml`:
+
+```yaml
+title: Cristian´s Blog
+author: Cristian Schmitt Nieto
+navbar-links:
+  About Me: "aboutme"
+  Tags: "/tags/"
+avatar: "/assets/img/avatar-icon-logo.webp"
+round-avatar: true
+social-network-links:
+  email: "blog@schmitt-nieto.com"
+  rss: true
+  github: schmittnieto
+  linkedin: cristian-schmitt-nieto
+rss-description: Sharing my Azure expertise and IT journey on schmitt-nieto.com
+post_search: true
+edit_page_button: true
+disqus: "schmittnieto"
+```
+
+With these steps, I had the Beautiful Jekyll theme set up and customized for my blog.
 
 # Step 3: Creating and Structuring Content
 

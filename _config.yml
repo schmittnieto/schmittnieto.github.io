@@ -281,6 +281,14 @@ defaults:
     values:
       layout: "page"
 
+
+# Theme changes (for DarkMode)
+theme: "beautiful-jekyll"
+skins:
+  - default
+  - dark
+
+
 # Exclude these files from production site
 exclude:
   - CHANGELOG.md

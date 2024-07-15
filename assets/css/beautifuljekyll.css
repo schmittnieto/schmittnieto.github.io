@@ -1020,6 +1020,29 @@ pre {
   margin: 0 auto;
 }
 
+/* --- Misc Toc --- */
+
+.toc-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.toc {
+  display: inline-block;
+  text-align: left; /* Para alinear el texto del TOC a la izquierda */
+  list-style-type: none; /* Elimina los subpuntos */
+  padding: 0;
+}
+
+.toc-item {
+  margin: 10px 0;
+}
+
+.toc-header {
+  font-weight: bold;
+}
+
+
 /* --- Misc Certifications --- */
 
 .certifications {
@@ -1050,6 +1073,16 @@ pre {
 .certifications div {
   margin-top: 5px;
   font-size: 14px;
+}
+
+/* Dark Mode Toggler */
+#dark-mode-toggle {
+  margin-left: auto;
+  padding: 5px 10px;
+  background-color: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--text);
+  cursor: pointer;
 }
 
 
