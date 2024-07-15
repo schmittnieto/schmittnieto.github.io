@@ -22,6 +22,29 @@ layout: null
   --body-font: 'Lora', 'Times New Roman', serif;
   --header-font: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --mid-col: #808080;
+
+  /* Variables para el tema claro */
+  --bg: #ffffff;
+  --text: #000000;
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --text: #ffffff;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+#dark-mode-toggle {
+  margin-left: auto;
+  padding: 5px 10px;
+  background-color: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--text);
+  cursor: pointer;
 }
 
 /* --- General --- */
@@ -45,6 +68,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 body > main {
   flex: 1;
 }
@@ -1076,6 +1100,22 @@ pre {
 }
 
 /* Dark Mode Toggler */
+/*:root {
+  --bg: #ffffff;
+  --text: #000000;
+}
+
+[data-theme="dark"] {
+  --bg: #000000;
+  --text: #ffffff;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+
 #dark-mode-toggle {
   margin-left: auto;
   padding: 5px 10px;
@@ -1084,7 +1124,7 @@ pre {
   border: 1px solid var(--text);
   cursor: pointer;
 }
-
+*/
 
 /* Search bar */
 #beautifuljekyll-search-overlay {
