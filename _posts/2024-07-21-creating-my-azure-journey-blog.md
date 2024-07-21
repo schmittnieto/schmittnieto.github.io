@@ -2,7 +2,7 @@
 title: "Creating My Azure Journey Blog: A Step-by-Step Guide"
 date: 2024-07-12
 categories:
-  - Blog
+  - blog
 tags:
   - GitHub Pages
   - Jekyll

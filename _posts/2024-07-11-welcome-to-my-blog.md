@@ -5,6 +5,7 @@ categories:
   - blog
 tags: 
   - Cristian
+  - Personal
 header:
   teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpeg"
 ---
