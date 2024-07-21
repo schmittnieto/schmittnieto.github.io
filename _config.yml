@@ -17,12 +17,12 @@ title: Cristian´s Blog
 email: blog@schmitt-nieto.com
 description: Sharing my Azure expertise and IT journey on schmitt-nieto.com
 github_username: schmittnieto
+minimal_mistakes_skin: dark
 search: true
 
 # Build settings
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
-minimal_mistakes_skin: "dark"
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
