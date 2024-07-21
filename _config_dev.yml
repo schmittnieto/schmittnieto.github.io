@@ -13,21 +13,26 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Cristian´s Blog
-email: blog@schmitt-nieto.com
-description: Sharing my Azure expertise and IT journey on schmitt-nieto.com
-github_username: schmittnieto
+title: Janmeppe.com 👋
+email: janmeppe@gmail.com
+description: I write about how to grow as a machine learning engineer.
+# this means to ignore newlines until "baseurl:"
+# Write an awesome description for your new site here. You can edit this
+# line in _config.yml. It will appear in your document head meta (for
+# Google search results) and in your feed.xml site description.
+twitter_username: janmeppe
+github_username: rainymood
+minimal_mistakes_skin: default
 search: true
 
 # Build settings
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
-minimal_mistakes_skin: "dark"
 # Outputting
 permalink: /:categories/:title/
-paginate: 5 # amount of posts to show
+paginate: 15 # amount of posts to show
 paginate_path: /page:num/
-timezone: DE # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 include:
   - _pages
@@ -54,34 +59,40 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "Cristian Schmitt Nieto"
-  avatar : "/assets/img/avatar-csn.jpeg"
-  bio    : "Azure Consultant with over 10 years of IT experience, sharing insights and solutions here 😊"
-  location: "Frankfurt"
+  name   : "Jan Meppe"
+  avatar : "/assets/images/bio-photo.jpg"
+  bio    : "Machine learning engineer in love with building digital products."
+  location : "Amsterdam"
   links:
-    - label: "schmitt-nieto.com"
+    - label: "janmeppe.com"
       icon: "fas fa-fw fa-link"
-      url: "https://schmitt-nieto.com/about"
-    - label: "GitHub"
+      url: "https://www.janmeppe.com/about"
+    - label: "@janmeppe"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/janmeppe"
+    - label: "Github"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/schmittnieto"
+      url: "https://github.com/rainymood"
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/cristian-schmitt-nieto/"     
+      url: "https://www.linkedin.com/in/jan-meppe-48491656/"
 
 footer:
   links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/janmeppe"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/schmittnieto"
-    - label: "LinkedIn"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/cristian-schmitt-nieto/"     
+      url: "https://github.com/rainymood"
+    - label: "Instagram"
+      icon: "fab fa-fw fa-instagram"
+      url: "https://instagram.com/janmeppe"
 
 comments:
   provider: "disqus"
   disqus:
-    shortname:  "schmittnieto"
+    shortname: "janmeppeblog"
 
 defaults:
   # _posts
@@ -90,11 +101,12 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: true 
       read_time: true
       comments: true
       share: true
       related: true
+      show_date: true
   # _pages
   - scope:
       path: "_pages"
@@ -102,6 +114,14 @@ defaults:
     values:
       layout: single
       author_profile: true
+  # _essays
+  - scope:
+      path: ""
+      type: essays
+    values:
+      layout: single
+      author_profile: false
+      share: true
 
 category_archive:
   type: liquid
@@ -109,3 +129,21 @@ category_archive:
 tag_archive:
   type: liquid
   path: /tags/
+
+# These settings essentially say output index.html files for each portfolio
+# document in _portfolio at _site/portfolio/<document-filename>/.
+collections:
+  essays:
+    output: true
+    permalink: /:collection/:path/
+
+
+analytics:
+  provider: "google"
+  google:
+    tracking_id: "G-FDMCMSCC4F" # this doesn't work anymore?
+    anonymize_ip: false # default
+
+# fixes "No GitHub API authentication" error
+github: [metadata]
+

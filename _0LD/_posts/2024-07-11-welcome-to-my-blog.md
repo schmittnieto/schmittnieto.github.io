@@ -1,12 +1,13 @@
 ---
+layout: post
 title: "Welcome to My Azure Journey"
 date: 2024-07-11
-categories: 
-  - blog
-tags: 
-  - Cristian
-header:
-  teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpeg"
+categories: blog
+thumbnail-img: /assets/img/avatar-csn.jpeg
+#tags: [Azure,Azure Stack HCI]
+tags: [Cristian]
+excerpt: "Discover the reasons behind the creation of my Azure-focused blog and my journey in the IT world."
+toc: false
 ---
 
 <div style="text-align: center;">
