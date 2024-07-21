@@ -87,5 +87,3 @@ As a part of my career in Azure I have carried out several certification, among 
 # Conclusion
 
 This blog is a reflection of my passion for IT and Azure. I hope you find the content informative and engaging, and that it helps you in your own IT journey. Thank you for joining me on this adventure. Enjoy the journey as much as I do!
-
-**Cristian Schmitt Nieto**

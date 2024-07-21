@@ -1,6 +1,6 @@
 ---
 title: "Creating My Azure Journey Blog: A Step-by-Step Guide"
-date: 2024-07-12
+date: 2024-07-21
 categories:
   - blog
 tags:
