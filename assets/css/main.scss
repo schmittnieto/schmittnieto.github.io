@@ -80,7 +80,7 @@ $caption-font-family        : $serif;
 
 
 // ====================
-
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 // *************************************************************
 // !! ALL VARIABLE DECLARATIONS MUST BE BEFORE THIS STATEMENT !!
 // *************************************************************
