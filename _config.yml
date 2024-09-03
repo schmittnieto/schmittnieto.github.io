@@ -13,36 +13,43 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Cristian´s Blog
+title: Cristian Schmitt Nieto´s Blog
 email: blog@schmitt-nieto.com
-description: Sharing my Azure expertise and IT journey on schmitt-nieto.com
+description: Welcome to my blog, where you will find all kinds of information related to Azure, Azure Virtual Desktop and Azure Stack HCI.
 github_username: schmittnieto
 minimal_mistakes_skin: "dark"
+logo: "/assets/images/logo.png"
+masthead_title: "Cristian Schmitt Nieto´s Blog"
+
+# Search
 search: true
+lunr:
+  search_within_pages: true
+
+# Miscellaneous 
+enable_copy_code_button: true
 
 # Build settings
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
+
 # Outputting
 permalink: /:categories/:title/
-paginate: 5 # amount of posts to show
+paginate: 5
 paginate_path: /page:num/
-timezone: DE # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: DE
 
 include:
   - _pages
 
-# Exclude from processing.
-# The following items will not be processed, by default. Create a custom list
-# to override the default setting.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
+exclude:
+  - Gemfile
+  - Gemfile.lock
   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
 
 # Plugins (previously gems:)
 plugins:
@@ -95,6 +102,7 @@ defaults:
       comments: true
       share: true
       related: true
+      show_date: true
   # _pages
   - scope:
       path: "_pages"
@@ -109,3 +117,9 @@ category_archive:
 tag_archive:
   type: liquid
   path: /tags/
+
+analytics:
+  provider: "google"
+  google:
+    tracking_id: "G-0JC8WREF2K"
+    anonymize_ip: false
