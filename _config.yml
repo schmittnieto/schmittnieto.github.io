@@ -19,7 +19,7 @@ description: Welcome to my blog, where you will find all kinds of information re
 github_username: schmittnieto
 minimal_mistakes_skin: "dark"
 #logo: "/assets/images/logo.png"
-masthead_title: "Cristian Schmitt Nieto´s Blog"
+masthead_title: "schmitt-nieto.com 🦾"
 
 # Search
 search: true
@@ -28,6 +28,7 @@ lunr:
 
 # Miscellaneous 
 enable_copy_code_button: true
+teaser: /assets/img/avatar-logo2.png
 
 # Build settings
 markdown: kramdown
