@@ -8,10 +8,10 @@ tags:
   - Cristian
   - Personal
 header:
-  image: 
-  overlay_image:
+  image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
+  overlay_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
   overlay_filter: 0.15  
-  teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpeg"
+  teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
   caption: "Photo credit: [**Cristian Schmitt Nieto**](https://www.schmitt-nieto.com)"
 ---
 
