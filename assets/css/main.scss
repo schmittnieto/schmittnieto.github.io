@@ -106,8 +106,12 @@ $caption-font-family        : $serif;
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #4c4c4c;
+  background-color: #f1d600;
   text-align: center;
   padding: 15px;
   z-index: 1000;
+}
+
+#cookieConsent.hidden {
+  display: none;
 }
