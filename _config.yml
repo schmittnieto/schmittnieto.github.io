@@ -94,7 +94,7 @@ comments:
 defaults:
   # _posts
   - scope:
-      path: ""
+      path: "_post"
       type: posts
     values:
       layout: single
