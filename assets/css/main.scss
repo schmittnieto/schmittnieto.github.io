@@ -101,3 +101,13 @@ $caption-font-family        : $serif;
   font-size: 0.9em;
   line-height: 1.5;
 }
+
+#cookieConsent {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #4c4c4c;
+  text-align: center;
+  padding: 15px;
+  z-index: 1000;
+}
