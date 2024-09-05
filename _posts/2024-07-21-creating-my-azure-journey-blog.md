@@ -7,12 +7,12 @@ categories:
 tags:
   - GitHub Pages
   - Jekyll
-  
+
 header:
-  image: "/assets/img/post//assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
-  overlay_image: "/assets/img/post//assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
+  image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
+  overlay_image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
   overlay_filter: 0.15  
-  teaser: "/assets/img/post//assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
+  teaser: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---
 
