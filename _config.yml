@@ -94,7 +94,7 @@ comments:
 defaults:
   # _posts
   - scope:
-      path: "_post"
+      path: ""
       type: posts
     values:
       layout: single
@@ -106,7 +106,7 @@ defaults:
       show_date: true
   # _pages
   - scope:
-      path: "_pages"
+      path: ""
       type: pages
     values:
       layout: single
