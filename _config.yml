@@ -119,8 +119,8 @@ tag_archive:
   type: liquid
   path: /tags/
 
-analytics:
-  provider: "google"
-  google:
-    tracking_id: "G-0JC8WREF2K"
-    anonymize_ip: true
+#analytics:
+#  provider: "google"
+#  google:
+#    tracking_id: "G-0JC8WREF2K"
+#    anonymize_ip: true
