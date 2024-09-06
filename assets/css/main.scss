@@ -101,22 +101,6 @@ $caption-font-family        : $serif;
   font-size: 0.9em;
   line-height: 1.5;
 }
-
-#open_preferences_center {
-  position: fixed;
-  bottom: 20px; 
-  right: 20px; 
-  z-index: 1000; 
-  padding: 10px;
-  border-radius: 5px;
-  text-decoration: none; 
-  color: #ffffff;
-}
-
-#open_preferences_center:hover {
-  background-color: #a5a5a5;
-}
-
 //#cookieConsent {
 //  position: fixed;
 //  bottom: 0;
