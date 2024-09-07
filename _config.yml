@@ -18,8 +18,8 @@ email: blog@schmitt-nieto.com
 description: Welcome to my blog, where you will find all kinds of information related to Azure, Azure Virtual Desktop and Azure Stack HCI.
 github_username: schmittnieto
 minimal_mistakes_skin: "dark"
-#logo: "/assets/images/logo.png"
-masthead_title: "🦾"
+logo: "/assets/img/logo.png"
+#masthead_title: "🦾"
 
 # Search
 search: true

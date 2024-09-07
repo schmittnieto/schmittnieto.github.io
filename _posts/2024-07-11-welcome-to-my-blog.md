@@ -3,7 +3,7 @@ title: "Welcome to My Azure Journey"
 date: 2024-07-11
 excerpt: "Join me as I embark on my Azure journey, sharing IT experience, insights, and practical solutions to everyday challenges in the cloud ecosystem. From managing data centers to diving deep into Azure, this blog is a reflection of my passion for technology and a resource for fellow Azure enthusiasts."
 categories: 
-  - blog
+  - Blog
 tags: 
   - Cristian
   - Personal
@@ -14,10 +14,6 @@ header:
   teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---
-
-<div style="text-align: center;">
-  <img src="/assets/img/avatar-csn.jpeg" alt="Cristian Schmitt Nieto" style="width: 150px; height: 150px; border-radius: 50%;"/>
-</div>
 
 # Why I Started This Blog
 

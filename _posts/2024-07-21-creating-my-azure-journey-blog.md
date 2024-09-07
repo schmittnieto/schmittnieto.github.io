@@ -3,7 +3,7 @@ title: "Creating My Azure Journey Blog: A Step-by-Step Guide"
 date: 2024-07-21
 excerpt: "Learn how I built my Azure journey blog using GitHub Pages and Jekyll. This step-by-step guide covers everything from setting up your environment to customizing themes and hosting with a custom domain. Perfect for IT enthusiasts and developers looking to create their own blog."
 categories:
-  - blog
+  - Blog
 tags:
   - GitHub Pages
   - Jekyll
