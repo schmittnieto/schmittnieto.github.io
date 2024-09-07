@@ -58,29 +58,29 @@ Over the years, I've helped numerous clients navigate their cloud journeys, impl
 
 As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
 <div class="Certifications" style="text-align: center;">
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/E724DDDADB705179?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-specialty-badge-avd.svg" alt="Microsoft Certified: Azure Virtual Desktop Specialty" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Azure Virtual Desktop Specialty</div>
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/DEC07C6846AF65A7?sharingId=24F0DC952D8EB05D" target="_blank">
+    <img src="/assets/img/microsoft-certified-fundamentals-badge-AI.png" alt="Microsoft Certified: Azure AI Fundamentals" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Microsoft Certified: Azure AI Fundamentals</div>
   </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/5FBC968AEABFC10B?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-associate-badge-adm.svg"  alt="Microsoft Certified: Azure Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
+    <img src="/assets/img/microsoft-certified-associate-badge-adm.png"  alt="Microsoft Certified: Azure Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure Administrator Associate</div>
   </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/A3635D8F3BE9F9C2?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-associate-badge-hybrid.svg" alt="Microsoft Certified: Windows Server Hybrid Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
+    <img src="/assets/img/microsoft-certified-associate-badge-hybrid.png" alt="Microsoft Certified: Windows Server Hybrid Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Windows Server Hybrid Administrator Associate</div>
   </a>
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/E724DDDADB705179?sharingId=24F0DC952D8EB05D" target="_blank">
+    <img src="/assets/img/microsoft-certified-specialty-badge-avd.png" alt="Microsoft Certified: Azure Virtual Desktop Specialty" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Microsoft Certified: Azure Virtual Desktop Specialty</div>
+  </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/225ACCA9CD499B3C?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-expert-badge-DevOps.svg" alt="Microsoft Certified: DevOps Engineer Expert" class="cert-image" style="width: 150px; height: 150px;"/>
+    <img src="/assets/img/microsoft-certified-expert-badge-DevOps.png" alt="Microsoft Certified: DevOps Engineer Expert" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: DevOps Engineer Expert</div>
   </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/B8D453727AF2E0FF?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-expert-badge-expert.svg" alt="Microsoft Certified: Azure Solutions Architect Expert" class="cert-image" style="width: 150px; height: 150px;"/>
+    <img src="/assets/img/microsoft-certified-expert-badge-expert.png" alt="Microsoft Certified: Azure Solutions Architect Expert" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure Solutions Architect Expert</div>
-  </a>
-    <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/DEC07C6846AF65A7?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-fundamentals-badge-AI.svg" alt="Microsoft Certified: Azure AI Fundamentals" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Azure AI Fundamentals</div>
   </a>
 </div>
 
