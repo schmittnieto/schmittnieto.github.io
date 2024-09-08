@@ -10,19 +10,12 @@ tags:
   - Customization
 
 header:
-  image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
-  overlay_image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
+  image: "https://schmitt-nieto.com/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
+  overlay_image: "https://schmitt-nieto.com/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   overlay_filter: 0.15  
-  teaser: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
+  teaser: "https://schmitt-nieto.com/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---
-<head>
-  <meta property="og:title" content="My Work Environment: Tools and Customizations">
-  <meta property="og:description" content="Discover the essential tools and customizations I use daily, from package management with Winget to interactive PowerShell with Oh My Posh and PSReadLine, plus helpful AI support with ChatGPT">
-  <meta property="og:image" content="/assets/img/post/2024-09-07-my-work-environment-tools.jpg">
-  <meta property="og:type" content="article">
-</head>
-
 
 # Introduction
 
