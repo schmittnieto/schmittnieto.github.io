@@ -10,10 +10,10 @@ tags:
   - Customization
 
 header:
-  image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
-  overlay_image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
+  image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
+  overlay_image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   overlay_filter: 0.15  
-  teaser: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
+  teaser: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---
 ---

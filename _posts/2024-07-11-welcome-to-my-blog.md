@@ -8,10 +8,10 @@ tags:
   - Cristian
   - Personal
 header:
-  image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
-  overlay_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
+  image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
+  overlay_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
   overlay_filter: 0.15  
-  teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
+  teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---
 
