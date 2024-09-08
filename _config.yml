@@ -19,7 +19,7 @@ description: Welcome to my blog, where you will find all kinds of information re
 github_username: schmittnieto
 minimal_mistakes_skin: "dark"
 logo: "/assets/img/logo.png"
-#masthead_title: "🦾"
+masthead_title: "To Infinity and Azure 🦾"
 
 # Search
 search: true
