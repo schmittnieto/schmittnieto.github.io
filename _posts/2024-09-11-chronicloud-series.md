@@ -3,8 +3,9 @@ title: "Chronicloud Series: A Journey through Azure Solutions"
 date: 2024-09-11
 excerpt: "Explore Azure technologies in the Chronicloud Series, with in-depth guides and hands-on labs."
 categories:
-  - Chronicloud Series
+  - Blog
 tags:
+  - Chronicloud Series
   - Azure
   - Azure Stack HCI
   - Azure Virtual Desktop
