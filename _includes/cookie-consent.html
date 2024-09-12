@@ -1,41 +1,74 @@
-<div id="cookieConsent">
-  <p>This website uses cookies to enhance your experience. <a href="/privacy-policy">Learn more</a></p>
-  <button id="acceptCookies">Accept</button>
-  <button id="declineCookies">Decline</button>
+<style>
+    #cookie-notice {
+        font-weight: 900;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        display: none;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        width: calc(100% - 2rem);
+        background: #222;
+        color: rgba(255,255,255,0.8);
+        z-index: 9000;
+    }
+    #cookie-notice a {
+        display: inline-block;
+        cursor: pointer;
+        margin-left: 0.5rem;
+    }
+    @media (max-width: 767px) {
+        #cookie-notice span {
+            display: block;
+            padding-top: 3px;
+            margin-bottom: 1rem;
+        }
+        #cookie-notice .btn a {
+            position: relative;
+            bottom: 4px;
+        }
+    }
+</style>
+
+<div id="cookie-notice">
+    <span>We use cookies to enhance your experience. <a href="/privacy-policy/">Privacy Policy</a></span>
+    <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Approve</a>
+    <a id="cookie-notice-dismiss" class="btn btn-primary btn-sm">Dismiss</a>
 </div>
 
 <script>
-  document.getElementById('acceptCookies').addEventListener('click', function() {
-      document.cookie = "analytics_consent=true; path=/";
-      hideConsentBanner();
-      loadGoogleAnalytics();
-  });
+    function createCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
 
-  document.getElementById('declineCookies').addEventListener('click', function() {
-      document.cookie = "analytics_consent=false; path=/";
-      hideConsentBanner();
-  });
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
 
-  function hideConsentBanner() {
-      document.getElementById('cookieConsent').style.display = 'none';
-  }
+    if (readCookie('cookie-notice-dismissed') !== 'true') {
+        document.getElementById('cookie-notice').style.display = 'block';
+    }
 
-  window.onload = function() {
-      if (document.cookie.indexOf('analytics_consent=true') > -1) {
-          loadGoogleAnalytics();
-          hideConsentBanner();
-      } else if (document.cookie.indexOf('analytics_consent=false') > -1) {
-          hideConsentBanner();
-      }
-  };
+    document.getElementById('cookie-notice-accept').addEventListener("click", function() {
+        createCookie('cookie-notice-dismissed', 'true', 31);
+        document.getElementById('cookie-notice').style.display = 'none';
+        location.reload();
+    });
 
-  function loadGoogleAnalytics() {
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'G-0JC8WREF2K', 'auto');
-      ga('send', 'pageview');
-  }
+    document.getElementById('cookie-notice-dismiss').addEventListener("click", function() {
+        document.getElementById('cookie-notice').style.display = 'none';
+    });
 </script>
