@@ -54,28 +54,34 @@
         }
     }
 
-    /* Pestaña (notch) que inicialmente se muestra */
+    /* Pestaña (notch) que inicialmente se muestra con el ícono ↕️ */
     #cookie-tab {
         position: fixed;
-        bottom: 20px;
+        bottom: 10px; /* Ahora más cerca del borde inferior */
         right: 20px;
         width: 60px;
-        height: 10px; /* Grosor del notch */
+        height: 60px;
         background-color: #00a8ff;
-        border-radius: 10px 10px 0 0;  /* Bordes redondeados solo en la parte superior */
+        border-radius: 50%;
         cursor: pointer;
         z-index: 9001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        font-size: 24px; /* Tamaño del ícono ↕️ */
+        color: white;
         transition: opacity 0.3s ease-in-out;
     }
 
     /* Botón de galleta */
     #cookie-toggle {
         position: fixed;
-        bottom: 10px; /* Posición inicial, justo bajo el notch */
+        bottom: 10px; /* Se alineará con el notch */
         right: 20px;
         background-color: #00a8ff;
         border: none;
-        border-radius: 50%; /* Inicialmente es un círculo */
+        border-radius: 50%; /* Mantiene el botón redondo */
         width: 60px;
         height: 60px;
         cursor: pointer;
@@ -84,7 +90,7 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out, bottom 0.3s ease-in-out;
         opacity: 0; /* Inicialmente oculto */
         pointer-events: none; /* No interactúa hasta que se muestra */
     }
@@ -98,10 +104,7 @@
     #cookie-toggle.open {
         opacity: 1; /* Muestra el botón de la galleta */
         pointer-events: auto; /* Activa la interacción */
-        transform: translateY(-50px); /* El botón sube cubriendo el notch */
-        border-radius: 30px; /* El botón se convierte en un círculo alargado */
-        width: 80px;
-        height: 60px;
+        transform: translateY(-70px); /* El botón sube ligeramente para estar más visible */
     }
 
     #cookie-tab.hidden {
@@ -114,8 +117,8 @@
     }
 </style>
 
-<!-- Notch que inicialmente es visible -->
-<div id="cookie-tab">•••</div>
+<!-- Notch que inicialmente es visible con el ícono ↕️ -->
+<div id="cookie-tab">↕️</div>
 
 <!-- Botón de galleta oculto inicialmente, que se expande -->
 <button id="cookie-toggle">
