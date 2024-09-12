@@ -53,9 +53,29 @@
         }
     }
 
+    /* Pestaña que oculta la galleta */
+    #cookie-tab {
+        position: fixed;
+        bottom: 0;
+        right: 20px;
+        width: 50px;
+        height: 20px;
+        background-color: #00a8ff;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        cursor: pointer;
+        z-index: 9001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* El icono de la galleta inicialmente está oculto */
     #cookie-toggle {
         position: fixed;
-        bottom: 20px;
+        bottom: -80px; /* Está oculto hasta que se haga clic */
         right: 20px;
         background-color: #00a8ff;
         border: none;
@@ -63,11 +83,12 @@
         width: 60px;
         height: 60px;
         cursor: pointer;
-        z-index: 9001;
+        z-index: 9002;
         display: flex;
         align-items: center;
         justify-content: center;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        transition: bottom 0.3s ease-in-out;
     }
 
     #cookie-toggle img {
@@ -75,21 +96,28 @@
         height: 40px;
     }
 
+    #cookie-toggle.open {
+        bottom: 20px; /* Muestra la galleta cuando la pestaña es clickeada */
+    }
+
     #cookie-toggle:hover {
         background-color: #0073b1;
     }
 </style>
+
+<!-- Pestaña para mostrar la galleta -->
+<div id="cookie-tab">•••</div>
+
+<!-- Botón de galleta para reactivar el banner -->
+<button id="cookie-toggle">
+    <img src="/assets/images/cookie.webp" alt="Cookie Settings">
+</button>
 
 <div id="cookie-notice">
     <span>We use cookies to enhance your experience. <a href="/privacy-policy/">Privacy Policy</a></span>
     <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Approve</a>
     <a id="cookie-notice-dismiss" class="btn btn-primary btn-sm">Dismiss</a>
 </div>
-
-<!-- Botón de galleta para reactivar el banner -->
-<button id="cookie-toggle">
-    <img src="/assets/images/cookie.webp" alt="Cookie Settings">
-</button>
 
 <script>
     function createCookie(name, value, days) {
@@ -143,6 +171,13 @@
         document.getElementById('cookie-notice').style.display = 'none';
     });
 
+    // Muestra la galleta cuando se hace clic en la pestaña
+    document.getElementById('cookie-tab').addEventListener("click", function() {
+        var cookieToggle = document.getElementById('cookie-toggle');
+        cookieToggle.classList.toggle('open');  // Añade o quita la clase 'open'
+    });
+
+    // Mostrar el banner de cookies cuando se hace clic en el icono de galleta
     document.getElementById('cookie-toggle').addEventListener("click", function() {
         document.getElementById('cookie-notice').style.display = 'block';
     });
