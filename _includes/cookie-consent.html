@@ -114,9 +114,11 @@
         }
     }
 
-    // Mostrar el banner de cookies si no se ha aceptado o rechazado
-    if (readCookie('cookie-notice-dismissed') !== 'true') {
-        document.getElementById('cookie-notice').style.display = 'block';
+    // Verificar si se ha aceptado o rechazado la política de cookies
+    if (readCookie('cookie-notice-dismissed') === 'true') {
+        document.getElementById('cookie-toggle').style.display = 'block'; // Mostrar el botón de galleta
+    } else {
+        document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de cookies
     }
 
     // Al hacer clic en "Aceptar"
@@ -137,5 +139,6 @@
     // Cuando se hace clic en el botón de galleta
     document.getElementById('cookie-toggle').addEventListener("click", function() {
         document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de nuevo si se quiere cambiar la decisión
+        document.getElementById('cookie-toggle').style.display = 'none'; // Oculta el botón de galleta mientras el banner está visible
     });
 </script>
