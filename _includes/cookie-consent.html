@@ -7,25 +7,49 @@
         text-align: center;
         position: fixed;
         bottom: 0;
-        width: calc(100% - 2rem);
+        left: 0;
+        width: 100%;
         background: #222;
-        color: rgba(255,255,255,0.8);
+        color: rgba(255, 255, 255, 0.8);
         z-index: 9000;
+        border-top: 2px solid #00a8ff;
+        box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.3);
     }
+
     #cookie-notice a {
-        display: inline-block;
-        cursor: pointer;
-        margin-left: 0.5rem;
+        color: #00a8ff;
+        margin-left: 1rem;
+        font-weight: 600;
     }
+
+    #cookie-notice .btn {
+        background-color: #00a8ff;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-left: 1rem;
+        border-radius: 4px;
+    }
+
+    #cookie-notice .btn:hover {
+        background-color: #0073b1;
+    }
+
     @media (max-width: 767px) {
+        #cookie-notice {
+            padding: 1rem;
+        }
+
         #cookie-notice span {
             display: block;
-            padding-top: 3px;
-            margin-bottom: 1rem;
+            margin-bottom: 10px;
         }
-        #cookie-notice .btn a {
-            position: relative;
-            bottom: 4px;
+
+        #cookie-notice .btn {
+            display: inline-block;
+            margin: 5px 0;
         }
     }
 </style>
@@ -37,7 +61,6 @@
 </div>
 
 <script>
-    // Función para crear una cookie
     function createCookie(name, value, days) {
         var expires = "";
         if (days) {
@@ -48,7 +71,6 @@
         document.cookie = name + "=" + value + expires + "; path=/";
     }
 
-    // Función para leer una cookie
     function readCookie(name) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
@@ -60,15 +82,12 @@
         return null;
     }
 
-    // Función para cargar el script de Google Analytics
     function loadAnalytics() {
-        // Carga el script de Google Tag Manager
         var scriptGA = document.createElement("script");
         scriptGA.src = "https://www.googletagmanager.com/gtag/js?id=G-0JC8WREF2K";
         scriptGA.async = true;
         document.head.appendChild(scriptGA);
 
-        // Inicializa Google Analytics
         scriptGA.onload = function() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -77,22 +96,18 @@
         }
     }
 
-    // Mostrar banner si el usuario no ha aceptado
     if (readCookie('cookie-notice-dismissed') !== 'true') {
         document.getElementById('cookie-notice').style.display = 'block';
     } else {
-        // Si ya aceptó, carga Google Analytics directamente
         loadAnalytics();
     }
 
-    // Cuando el usuario acepta cookies
     document.getElementById('cookie-notice-accept').addEventListener("click", function() {
         createCookie('cookie-notice-dismissed', 'true', 31);
         document.getElementById('cookie-notice').style.display = 'none';
-        loadAnalytics();  // Cargar Google Analytics tras la aceptación
+        loadAnalytics();
     });
 
-    // Cuando el usuario rechaza el aviso
     document.getElementById('cookie-notice-dismiss').addEventListener("click", function() {
         document.getElementById('cookie-notice').style.display = 'none';
     });
