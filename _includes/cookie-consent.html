@@ -52,6 +52,32 @@
             margin: 5px 0;
         }
     }
+
+    #cookie-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #00a8ff;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        z-index: 9001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    #cookie-toggle img {
+        width: 40px;
+        height: 40px;
+    }
+
+    #cookie-toggle:hover {
+        background-color: #0073b1;
+    }
 </style>
 
 <div id="cookie-notice">
@@ -59,6 +85,11 @@
     <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Approve</a>
     <a id="cookie-notice-dismiss" class="btn btn-primary btn-sm">Dismiss</a>
 </div>
+
+<!-- Botón de galleta para reactivar el banner -->
+<button id="cookie-toggle">
+    <img src="/assets/images/cookie.webp" alt="Cookie Settings">
+</button>
 
 <script>
     function createCookie(name, value, days) {
@@ -110,5 +141,9 @@
 
     document.getElementById('cookie-notice-dismiss').addEventListener("click", function() {
         document.getElementById('cookie-notice').style.display = 'none';
+    });
+
+    document.getElementById('cookie-toggle').addEventListener("click", function() {
+        document.getElementById('cookie-notice').style.display = 'block';
     });
 </script>
