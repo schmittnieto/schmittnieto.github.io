@@ -37,16 +37,18 @@
 </div>
 
 <script>
+    // Función para crear una cookie
     function createCookie(name, value, days) {
         var expires = "";
         if (days) {
             var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }
         document.cookie = name + "=" + value + expires + "; path=/";
     }
 
+    // Función para leer una cookie
     function readCookie(name) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
@@ -58,16 +60,39 @@
         return null;
     }
 
-    if (readCookie('cookie-notice-dismissed') !== 'true') {
-        document.getElementById('cookie-notice').style.display = 'block';
+    // Función para cargar el script de Google Analytics
+    function loadAnalytics() {
+        // Carga el script de Google Tag Manager
+        var scriptGA = document.createElement("script");
+        scriptGA.src = "https://www.googletagmanager.com/gtag/js?id=G-0JC8WREF2K";
+        scriptGA.async = true;
+        document.head.appendChild(scriptGA);
+
+        // Inicializa Google Analytics
+        scriptGA.onload = function() {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-0JC8WREF2K');
+        }
     }
 
+    // Mostrar banner si el usuario no ha aceptado
+    if (readCookie('cookie-notice-dismissed') !== 'true') {
+        document.getElementById('cookie-notice').style.display = 'block';
+    } else {
+        // Si ya aceptó, carga Google Analytics directamente
+        loadAnalytics();
+    }
+
+    // Cuando el usuario acepta cookies
     document.getElementById('cookie-notice-accept').addEventListener("click", function() {
         createCookie('cookie-notice-dismissed', 'true', 31);
         document.getElementById('cookie-notice').style.display = 'none';
-        location.reload();
+        loadAnalytics();  // Cargar Google Analytics tras la aceptación
     });
 
+    // Cuando el usuario rechaza el aviso
     document.getElementById('cookie-notice-dismiss').addEventListener("click", function() {
         document.getElementById('cookie-notice').style.display = 'none';
     });
