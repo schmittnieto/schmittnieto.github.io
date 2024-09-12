@@ -4,7 +4,7 @@
         font-weight: 900;
         font-size: 1rem;
         padding: 0.5rem 1rem;
-        display: none;
+        display: none; /* Oculto por defecto */
         text-align: center;
         position: fixed;
         bottom: 0;
@@ -54,88 +54,29 @@
         }
     }
 
-    /* Notch bajo y plano */
-    #cookie-tab {
-        position: fixed;
-        bottom: 20px; /* Espaciado desde el borde inferior */
-        right: 20px;
-        width: 60px;
-        height: 10px; /* Grosor bajo y plano */
-        background-color: #00a8ff;
-        border-radius: 10px 10px 0 0;  /* Bordes redondeados solo en la parte superior */
-        cursor: pointer;
-        z-index: 9001;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-        font-size: 16px;
-        color: white;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    /* Botón de galleta */
+    /* Botón de galleta que aparece tras la decisión del usuario */
     #cookie-toggle {
         position: fixed;
-        bottom: -60px; /* Oculto por defecto */
+        bottom: 20px;
         right: 20px;
-        background-color: #00a8ff;
-        border: none;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
+        font-size: 36px; /* Tamaño del emoji */
         cursor: pointer;
-        z-index: 9002;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease-in-out, bottom 0.3s ease-in-out;
-    }
-
-    #cookie-toggle img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-    }
-
-    /* Abierto: el botón y el notch suben */
-    .open #cookie-toggle {
-        bottom: 80px;
-        transform: translateY(-10px);
-    }
-
-    .open #cookie-tab {
-        transform: translateY(-80px); /* Mueve el notch más arriba */
-    }
-
-    /* Cerrado: el botón y el notch bajan */
-    .close #cookie-toggle {
-        bottom: -60px; /* Oculta el botón */
-    }
-
-    .close #cookie-tab {
-        transform: translateY(0); /* Devuelve el notch a su posición original */
-    }
-
-    #cookie-toggle:hover {
-        background-color: #0073b1;
+        z-index: 9001;
+        display: none; /* Oculto inicialmente */
+        background: none;
+        border: none;
     }
 </style>
 
-<!-- Notch bajo y plano con el ícono ↕️ -->
-<div id="cookie-tab">↕️</div>
-
-<!-- Botón de galleta oculto inicialmente -->
-<button id="cookie-toggle">
-    <img src="/assets/images/cookie.webp" alt="Cookie Settings">
-</button>
-
+<!-- Banner de política de cookies -->
 <div id="cookie-notice">
     <span>We use cookies to enhance your experience. <a href="/privacy-policy/">Privacy Policy</a></span>
-    <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Approve</a>
-    <a id="cookie-notice-dismiss" class="btn btn-primary btn-sm">Dismiss</a>
+    <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Accept</a>
+    <a id="cookie-notice-decline" class="btn btn-primary btn-sm">Decline</a>
 </div>
+
+<!-- Botón de galleta 🍪 que aparece tras la aceptación/rechazo -->
+<button id="cookie-toggle">🍪</button>
 
 <script>
     function createCookie(name, value, days) {
@@ -173,28 +114,28 @@
         }
     }
 
+    // Mostrar el banner de cookies si no se ha aceptado o rechazado
     if (readCookie('cookie-notice-dismissed') !== 'true') {
         document.getElementById('cookie-notice').style.display = 'block';
-    } else {
-        loadAnalytics();
     }
 
-    var cookieToggle = document.getElementById('cookie-toggle');
-    var cookieTab = document.getElementById('cookie-tab');
-
-    // Alternar entre abrir y cerrar
-    cookieTab.addEventListener("click", function() {
-        if (cookieTab.classList.contains('open')) {
-            cookieTab.classList.remove('open');
-            cookieTab.classList.add('close');
-        } else {
-            cookieTab.classList.remove('close');
-            cookieTab.classList.add('open');
-        }
+    // Al hacer clic en "Aceptar"
+    document.getElementById('cookie-notice-accept').addEventListener("click", function() {
+        createCookie('cookie-notice-dismissed', 'true', 31);
+        document.getElementById('cookie-notice').style.display = 'none';
+        document.getElementById('cookie-toggle').style.display = 'block'; // Muestra el botón de galleta
+        loadAnalytics(); // Cargar Google Analytics
     });
 
-    // Mostrar el banner de cookies cuando se hace clic en el botón de galleta
-    cookieToggle.addEventListener("click", function() {
-        document.getElementById('cookie-notice').style.display = 'block';
+    // Al hacer clic en "Rechazar"
+    document.getElementById('cookie-notice-decline').addEventListener("click", function() {
+        createCookie('cookie-notice-dismissed', 'true', 31);
+        document.getElementById('cookie-notice').style.display = 'none';
+        document.getElementById('cookie-toggle').style.display = 'block'; // Muestra el botón de galleta
+    });
+
+    // Cuando se hace clic en el botón de galleta
+    document.getElementById('cookie-toggle').addEventListener("click", function() {
+        document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de nuevo si se quiere cambiar la decisión
     });
 </script>
