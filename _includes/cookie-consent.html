@@ -1,4 +1,5 @@
 <style>
+    /* Estilos para el banner de cookies */
     #cookie-notice {
         font-weight: 900;
         font-size: 1rem;
@@ -53,32 +54,28 @@
         }
     }
 
-    /* Pestaña que oculta la galleta (ahora solapada con el botón) */
+    /* Pestaña (notch) que inicialmente se muestra */
     #cookie-tab {
         position: fixed;
         bottom: 20px;
         right: 20px;
         width: 60px;
-        height: 60px;
+        height: 10px; /* Grosor del notch */
         background-color: #00a8ff;
-        border-radius: 50%;  /* Misma forma redonda que el botón */
+        border-radius: 10px 10px 0 0;  /* Bordes redondeados solo en la parte superior */
         cursor: pointer;
         z-index: 9001;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease-in-out;
+        transition: opacity 0.3s ease-in-out;
     }
 
-    /* El icono de la galleta inicialmente está oculto */
+    /* Botón de galleta */
     #cookie-toggle {
         position: fixed;
-        bottom: 20px;
+        bottom: 10px; /* Posición inicial, justo bajo el notch */
         right: 20px;
         background-color: #00a8ff;
         border: none;
-        border-radius: 50%;
+        border-radius: 50%; /* Inicialmente es un círculo */
         width: 60px;
         height: 60px;
         cursor: pointer;
@@ -87,9 +84,9 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease-in-out, bottom 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out, border-radius 0.3s ease-in-out;
         opacity: 0; /* Inicialmente oculto */
-        pointer-events: none; /* No puede ser clickeado cuando está oculto */
+        pointer-events: none; /* No interactúa hasta que se muestra */
     }
 
     #cookie-toggle img {
@@ -99,12 +96,17 @@
     }
 
     #cookie-toggle.open {
-        opacity: 1; /* Muestra el botón cuando está abierto */
-        pointer-events: auto; /* Habilita el clic cuando está visible */
+        opacity: 1; /* Muestra el botón de la galleta */
+        pointer-events: auto; /* Activa la interacción */
+        transform: translateY(-50px); /* El botón sube cubriendo el notch */
+        border-radius: 30px; /* El botón se convierte en un círculo alargado */
+        width: 80px;
+        height: 60px;
     }
 
-    #cookie-tab.open {
-        transform: translateY(80px); /* Mueve el notch hacia arriba cuando se hace clic */
+    #cookie-tab.hidden {
+        opacity: 0; /* Oculta el notch cuando el botón está activo */
+        pointer-events: none;
     }
 
     #cookie-toggle:hover {
@@ -112,10 +114,10 @@
     }
 </style>
 
-<!-- Pestaña para mostrar la galleta -->
+<!-- Notch que inicialmente es visible -->
 <div id="cookie-tab">•••</div>
 
-<!-- Botón de galleta para reactivar el banner -->
+<!-- Botón de galleta oculto inicialmente, que se expande -->
 <button id="cookie-toggle">
     <img src="/assets/images/cookie.webp" alt="Cookie Settings">
 </button>
@@ -178,15 +180,15 @@
         document.getElementById('cookie-notice').style.display = 'none';
     });
 
-    // Muestra la galleta cuando se hace clic en la pestaña
+    // Muestra el botón de galleta y oculta el notch
     document.getElementById('cookie-tab').addEventListener("click", function() {
         var cookieToggle = document.getElementById('cookie-toggle');
         var cookieTab = document.getElementById('cookie-tab');
-        cookieToggle.classList.toggle('open');  // Muestra/oculta el botón
-        cookieTab.classList.toggle('open');  // Mueve la pestaña hacia arriba
+        cookieToggle.classList.add('open');  // Activa el botón de galleta
+        cookieTab.classList.add('hidden');  // Oculta el notch
     });
 
-    // Mostrar el banner de cookies cuando se hace clic en el icono de galleta
+    // Mostrar el banner de cookies cuando se hace clic en el botón de galleta
     document.getElementById('cookie-toggle').addEventListener("click", function() {
         document.getElementById('cookie-notice').style.display = 'block';
     });
