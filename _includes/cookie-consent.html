@@ -54,34 +54,34 @@
         }
     }
 
-    /* Pestaña (notch) que inicialmente se muestra con el ícono ↕️ */
+    /* Notch bajo y plano */
     #cookie-tab {
         position: fixed;
-        bottom: 10px; /* Ahora más cerca del borde inferior */
+        bottom: 20px; /* Espaciado desde el borde inferior */
         right: 20px;
         width: 60px;
-        height: 60px;
+        height: 10px; /* Grosor bajo y plano */
         background-color: #00a8ff;
-        border-radius: 50%;
+        border-radius: 10px 10px 0 0;  /* Bordes redondeados solo en la parte superior */
         cursor: pointer;
         z-index: 9001;
         display: flex;
         align-items: center;
         justify-content: center;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-        font-size: 24px; /* Tamaño del ícono ↕️ */
+        font-size: 16px;
         color: white;
-        transition: opacity 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out;
     }
 
     /* Botón de galleta */
     #cookie-toggle {
         position: fixed;
-        bottom: 10px; /* Se alineará con el notch */
+        bottom: -60px; /* Oculto por defecto */
         right: 20px;
         background-color: #00a8ff;
         border: none;
-        border-radius: 50%; /* Mantiene el botón redondo */
+        border-radius: 50%;
         width: 60px;
         height: 60px;
         cursor: pointer;
@@ -91,25 +91,31 @@
         justify-content: center;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
         transition: transform 0.3s ease-in-out, bottom 0.3s ease-in-out;
-        opacity: 0; /* Inicialmente oculto */
-        pointer-events: none; /* No interactúa hasta que se muestra */
     }
 
     #cookie-toggle img {
         width: 40px;
         height: 40px;
-        border-radius: 50%; /* Bordes redondeados para la imagen de la galleta */
+        border-radius: 50%;
     }
 
-    #cookie-toggle.open {
-        opacity: 1; /* Muestra el botón de la galleta */
-        pointer-events: auto; /* Activa la interacción */
-        transform: translateY(-70px); /* El botón sube ligeramente para estar más visible */
+    /* Abierto: el botón y el notch suben */
+    .open #cookie-toggle {
+        bottom: 80px;
+        transform: translateY(-10px);
     }
 
-    #cookie-tab.hidden {
-        opacity: 0; /* Oculta el notch cuando el botón está activo */
-        pointer-events: none;
+    .open #cookie-tab {
+        transform: translateY(-80px); /* Mueve el notch más arriba */
+    }
+
+    /* Cerrado: el botón y el notch bajan */
+    .close #cookie-toggle {
+        bottom: -60px; /* Oculta el botón */
+    }
+
+    .close #cookie-tab {
+        transform: translateY(0); /* Devuelve el notch a su posición original */
     }
 
     #cookie-toggle:hover {
@@ -117,10 +123,10 @@
     }
 </style>
 
-<!-- Notch que inicialmente es visible con el ícono ↕️ -->
+<!-- Notch bajo y plano con el ícono ↕️ -->
 <div id="cookie-tab">↕️</div>
 
-<!-- Botón de galleta oculto inicialmente, que se expande -->
+<!-- Botón de galleta oculto inicialmente -->
 <button id="cookie-toggle">
     <img src="/assets/images/cookie.webp" alt="Cookie Settings">
 </button>
@@ -173,26 +179,22 @@
         loadAnalytics();
     }
 
-    document.getElementById('cookie-notice-accept').addEventListener("click", function() {
-        createCookie('cookie-notice-dismissed', 'true', 31);
-        document.getElementById('cookie-notice').style.display = 'none';
-        loadAnalytics();
-    });
+    var cookieToggle = document.getElementById('cookie-toggle');
+    var cookieTab = document.getElementById('cookie-tab');
 
-    document.getElementById('cookie-notice-dismiss').addEventListener("click", function() {
-        document.getElementById('cookie-notice').style.display = 'none';
-    });
-
-    // Muestra el botón de galleta y oculta el notch
-    document.getElementById('cookie-tab').addEventListener("click", function() {
-        var cookieToggle = document.getElementById('cookie-toggle');
-        var cookieTab = document.getElementById('cookie-tab');
-        cookieToggle.classList.add('open');  // Activa el botón de galleta
-        cookieTab.classList.add('hidden');  // Oculta el notch
+    // Alternar entre abrir y cerrar
+    cookieTab.addEventListener("click", function() {
+        if (cookieTab.classList.contains('open')) {
+            cookieTab.classList.remove('open');
+            cookieTab.classList.add('close');
+        } else {
+            cookieTab.classList.remove('close');
+            cookieTab.classList.add('open');
+        }
     });
 
     // Mostrar el banner de cookies cuando se hace clic en el botón de galleta
-    document.getElementById('cookie-toggle').addEventListener("click", function() {
+    cookieToggle.addEventListener("click", function() {
         document.getElementById('cookie-notice').style.display = 'block';
     });
 </script>
