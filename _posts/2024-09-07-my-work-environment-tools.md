@@ -13,7 +13,7 @@ header:
   image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   og_image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   overlay_image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
-  overlay_filter: 0.15  
+  overlay_filter: 0.5  
   teaser: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---

@@ -17,7 +17,7 @@ header:
   image: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
   og_image: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
   overlay_image: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
-  overlay_filter: 0.15  
+  overlay_filter: 0.5  
   teaser: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---

@@ -11,7 +11,7 @@ header:
   image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
   og_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
   overlay_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
-  overlay_filter: 0.15  
+  overlay_filter: 0.5  
   teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 ---
