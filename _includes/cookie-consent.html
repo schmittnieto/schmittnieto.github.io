@@ -79,6 +79,7 @@
 <button id="cookie-toggle">🍪</button>
 
 <script>
+    // Función para crear una cookie
     function createCookie(name, value, days) {
         var expires = "";
         if (days) {
@@ -89,6 +90,7 @@
         document.cookie = name + "=" + value + expires + "; path=/";
     }
 
+    // Función para leer una cookie
     function readCookie(name) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
@@ -100,6 +102,7 @@
         return null;
     }
 
+    // Función para cargar Google Analytics
     function loadAnalytics() {
         var scriptGA = document.createElement("script");
         scriptGA.src = "https://www.googletagmanager.com/gtag/js?id=G-0JC8WREF2K";
@@ -114,31 +117,32 @@
         }
     }
 
-    // Verificar si se ha aceptado o rechazado la política de cookies
+    // Comprobar si las cookies han sido aceptadas o rechazadas
     if (readCookie('cookie-notice-dismissed') === 'true') {
         document.getElementById('cookie-toggle').style.display = 'block'; // Mostrar el botón de galleta
+        loadAnalytics(); // Cargar Google Analytics en todas las páginas si se han aceptado las cookies
     } else {
         document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de cookies
     }
 
     // Al hacer clic en "Aceptar"
     document.getElementById('cookie-notice-accept').addEventListener("click", function() {
-        createCookie('cookie-notice-dismissed', 'true', 31);
+        createCookie('cookie-notice-dismissed', 'true', 31); // Crear la cookie por 31 días
         document.getElementById('cookie-notice').style.display = 'none';
-        document.getElementById('cookie-toggle').style.display = 'block'; // Muestra el botón de galleta
-        loadAnalytics(); // Cargar Google Analytics
+        document.getElementById('cookie-toggle').style.display = 'block'; // Mostrar el botón de galleta
+        loadAnalytics(); // Cargar Google Analytics inmediatamente
     });
 
     // Al hacer clic en "Rechazar"
     document.getElementById('cookie-notice-decline').addEventListener("click", function() {
-        createCookie('cookie-notice-dismissed', 'true', 31);
+        createCookie('cookie-notice-dismissed', 'false', 31); // Crear cookie pero sin cargar Google Analytics
         document.getElementById('cookie-notice').style.display = 'none';
-        document.getElementById('cookie-toggle').style.display = 'block'; // Muestra el botón de galleta
+        document.getElementById('cookie-toggle').style.display = 'block'; // Mostrar el botón de galleta
     });
 
     // Cuando se hace clic en el botón de galleta
     document.getElementById('cookie-toggle').addEventListener("click", function() {
-        document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de nuevo si se quiere cambiar la decisión
-        document.getElementById('cookie-toggle').style.display = 'none'; // Oculta el botón de galleta mientras el banner está visible
+        document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de nuevo para cambiar la decisión
+        document.getElementById('cookie-toggle').style.display = 'none'; // Ocultar el botón de galleta mientras el banner está visible
     });
 </script>
