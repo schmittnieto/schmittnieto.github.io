@@ -1,7 +1,7 @@
 ---
 title: "Posts"
 permalink: /posts/
-layout: archive
+layout: post
 author_profile: true
 entries_layout: grid
 show_excerpts: true
