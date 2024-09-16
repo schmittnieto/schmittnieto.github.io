@@ -15,6 +15,10 @@ header:
   overlay_filter: 0.5  
   teaser: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
+
+toc: true
+toc_label: "Topics Overview" 
+toc_icon: "list-ul"
 ---
 
 # Introduction

@@ -20,6 +20,10 @@ header:
   overlay_filter: 0.5  
   teaser: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
+
+toc: true
+toc_label: "Topics Overview" 
+toc_icon: "list-ul"
 ---
 
 # Chronicloud Series: A Journey through Azure Solutions

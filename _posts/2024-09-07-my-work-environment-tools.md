@@ -16,6 +16,10 @@ header:
   overlay_filter: 0.5  
   teaser: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
+
+toc: true
+toc_label: "Topics Overview" 
+toc_icon: "list-ul"
 ---
 
 # Introduction
