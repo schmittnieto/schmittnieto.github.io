@@ -1,11 +1,9 @@
 ![Contributors](https://img.shields.io/github/contributors/schmittnieto/schmittnieto.github.io)
-![Forks](https://img.shields.io/github/forks/schmittnieto/schmittnieto.github.io)
-![Stars](https://img.shields.io/github/stars/schmittnieto/schmittnieto.github.io)
 ![Commits](https://img.shields.io/github/last-commit/schmittnieto/schmittnieto.github.io)
 ![Issues](https://img.shields.io/github/issues/schmittnieto/schmittnieto.github.io)
 ![Languages](https://img.shields.io/github/languages/top/schmittnieto/schmittnieto.github.io)
-
-
+![Forks](https://img.shields.io/github/forks/schmittnieto/schmittnieto.github.io)
+![Stars](https://img.shields.io/github/stars/schmittnieto/schmittnieto.github.io)
 
 This Repository uses a Modified installation from Minimal Mistakes
 
