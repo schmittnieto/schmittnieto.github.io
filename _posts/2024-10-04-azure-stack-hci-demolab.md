@@ -221,6 +221,7 @@ Run the following command:
 .\00_Infra_AzHCI.ps1
 ```
 <!-- 00INFRA:START -->
+
 <!-- 00INFRA:END -->
 
 #### Configure Domain Controller
@@ -233,6 +234,7 @@ Run:
 .\01_DC.ps1
 ```
 <!-- 01DC:START -->
+
 <!-- 01DC:END -->
 
 This process will take approximately 20 minutes as it installs Windows Updates, creates Organizational Units (OUs), and sets up the necessary administrator for the cluster as defined in the script variables.
@@ -247,6 +249,7 @@ Run:
 .\02_Cluster.ps1
 ```
 <!-- 02CLUSTER:START -->
+
 <!-- 02CLUSTER:END -->
 
 This script will prompt you to register the node with Azure upon completion, approximately 4-5 minutes into the execution.
@@ -260,6 +263,7 @@ If you encounter issues with Azure Connected Machine extensions, run:
 ```
 
 <!-- 03TROUBLESHOOTING:START -->
+
 <!-- 03TROUBLESHOOTING:END -->
 
 #### Cleanup and Offboarding (if errors occur during the process)
@@ -271,6 +275,7 @@ Run:
 ```
 
 <!-- 99OFFBOARDING:START -->
+
 <!-- 99OFFBOARDING:END -->
 
 ### 5. Registering the Cluster
