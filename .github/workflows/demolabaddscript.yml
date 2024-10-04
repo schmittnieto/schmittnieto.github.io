@@ -30,7 +30,7 @@ jobs:
             exit 1
           fi
 
-          # Función para insertar scripts
+          # Función para insertar scripts usando perl
           insert_script() {
             local script_path=$1
             local start_marker=$2
@@ -43,15 +43,13 @@ jobs:
 
             local script_content
             script_content=$(cat "$script_path")
-            local escaped_content
-            escaped_content=$(printf '%s\n' "$script_content" | sed 's/[&/\]/\\&/g')
-
-            sed -i "/<!-- $start_marker -->/,/<!-- $end_marker -->/c\\
-            <!-- $start_marker -->\\
-            \`\`\`powershell\\
-            $escaped_content\\
-            \`\`\`\\
-            <!-- $end_marker -->" "$ARTICLE_PATH"
+            
+            # Escapar barras y otros caracteres si es necesario
+            # Aquí no es necesario escapar, ya que `perl` maneja bien el contenido
+            # Reemplazar el bloque entre los marcadores con el contenido del script
+            perl -0777 -i -pe '
+              s/(<!-- '"$start_marker"' -->)(.*?)(<!-- '"$end_marker"' -->)/$1\n```powershell\n'"$script_content"'\n```\n$3/s;
+            ' "$ARTICLE_PATH"
 
             echo "Bloque $start_marker insertado correctamente."
           }
