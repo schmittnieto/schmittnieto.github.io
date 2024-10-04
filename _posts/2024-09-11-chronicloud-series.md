@@ -40,7 +40,7 @@ Each article in the **Chronicloud Series** will focus on specific Azure products
 1. **Azure Stack HCI**  
 Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that enables organizations to run virtualized workloads on-premises, with integration to Azure. In this series, we'll cover:
    - **Understanding Azure Stack HCI**: For an in-depth exploration of what Azure Stack HCI is, its key use cases, and how it compares to traditional hyper-converged solutions, please read [Azure Stack HCI Evolution: Use Cases and Comparison](/blog/azure-stack-hci-evolution-use-cases-comparison/).
-   - Labs on deploying and managing an Azure Stack HCI cluster with high availability and failover scenarios.
+   - Labs on deploying and managing an Azure Stack HCI cluster, please read [Azure Stack HCI Evolution: Demolab](/blog/azure-stack-hci-demolab/).
    - *Backup and Restore*: Explore how to implement reliable backup and restore strategies using Azure services and HCI’s native tools.
    - *Migration to HCI*: Step-by-step guidance on migrating from traditional systems to Azure Stack HCI.
    - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops.
