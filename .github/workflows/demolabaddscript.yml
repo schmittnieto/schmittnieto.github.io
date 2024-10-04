@@ -34,46 +34,46 @@ jobs:
           SCRIPT1_CONTENT=$(cat "$SCRIPT_DIR/00_Infra_AzHCI.ps1")
           ESCAPED_SCRIPT1_CONTENT=$(printf '%s\n' "$SCRIPT1_CONTENT" | sed 's/[&/\]/\\&/g')
           sed -i '/<!-- 00INFRA:START -->/,/<!-- 00INFRA:END -->/c\<!-- 00INFRA:START -->\
-```powershell\
-'"$ESCAPED_SCRIPT1_CONTENT"'\
-```\
-<!-- 00INFRA:END -->' "$ARTICLE_PATH"
+          ```powershell\
+          '"$ESCAPED_SCRIPT1_CONTENT"'\
+          ```\
+          <!-- 00INFRA:END -->' "$ARTICLE_PATH"
 
           # Script 2
           SCRIPT2_CONTENT=$(cat "$SCRIPT_DIR/01_DC.ps1")
           ESCAPED_SCRIPT2_CONTENT=$(printf '%s\n' "$SCRIPT2_CONTENT" | sed 's/[&/\]/\\&/g')
           sed -i '/<!-- 01DC:START -->/,/<!-- 01DC:END -->/c\<!-- 01DC:START -->\
-```powershell\
-'"$ESCAPED_SCRIPT2_CONTENT"'\
-```\
-<!-- 01DC:END -->' "$ARTICLE_PATH"
+          ```powershell\
+          '"$ESCAPED_SCRIPT2_CONTENT"'\
+          ```\
+          <!-- 01DC:END -->' "$ARTICLE_PATH"
 
           # Script 3
           SCRIPT3_CONTENT=$(cat "$SCRIPT_DIR/02_Cluster.ps1")
           ESCAPED_SCRIPT3_CONTENT=$(printf '%s\n' "$SCRIPT3_CONTENT" | sed 's/[&/\]/\\&/g')
           sed -i '/<!-- 02CLUSTER:START -->/,/<!-- 02CLUSTER:END -->/c\<!-- 02CLUSTER:START -->\
-```powershell\
-'"$ESCAPED_SCRIPT3_CONTENT"'\
-```\
-<!-- 02CLUSTER:END -->' "$ARTICLE_PATH"
+          ```powershell\
+          '"$ESCAPED_SCRIPT3_CONTENT"'\
+          ```\
+          <!-- 02CLUSTER:END -->' "$ARTICLE_PATH"
 
           # Script 4
           SCRIPT4_CONTENT=$(cat "$SCRIPT_DIR/03_TroubleshootingExtensions.ps1")
           ESCAPED_SCRIPT4_CONTENT=$(printf '%s\n' "$SCRIPT4_CONTENT" | sed 's/[&/\]/\\&/g')
           sed -i '/<!-- 03TROUBLESHOOTING:START -->/,/<!-- 03TROUBLESHOOTING:END -->/c\<!-- 03TROUBLESHOOTING:START -->\
-```powershell\
-'"$ESCAPED_SCRIPT4_CONTENT"'\
-```\
-<!-- 03TROUBLESHOOTING:END -->' "$ARTICLE_PATH"
+          ```powershell\
+          '"$ESCAPED_SCRIPT4_CONTENT"'\
+          ```\
+          <!-- 03TROUBLESHOOTING:END -->' "$ARTICLE_PATH"
 
           # Script 5
           SCRIPT5_CONTENT=$(cat "$SCRIPT_DIR/99_Offboarding.ps1")
           ESCAPED_SCRIPT5_CONTENT=$(printf '%s\n' "$SCRIPT5_CONTENT" | sed 's/[&/\]/\\&/g')
           sed -i '/<!-- 99OFFBOARDING:START -->/,/<!-- 99OFFBOARDING:END -->/c\<!-- 99OFFBOARDING:START -->\
-```powershell\
-'"$ESCAPED_SCRIPT5_CONTENT"'\
-```\
-<!-- 99OFFBOARDING:END -->' "$ARTICLE_PATH"
+          ```powershell\
+          '"$ESCAPED_SCRIPT5_CONTENT"'\
+          ```\
+          <!-- 99OFFBOARDING:END -->' "$ARTICLE_PATH"
 
       - name: Commit and Push Changes
         run: |
