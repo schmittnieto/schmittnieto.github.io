@@ -21,59 +21,97 @@ jobs:
           git config user.name "schmittnieto"
           git config user.email "cristian@schmitt-nieto.com"
 
+      - name: Debug Scripts Content
+        run: |
+          for script in assets/repo/AzSHCI/scripts/01Lab/*.ps1; do
+            echo "Contenido de $script:"
+            cat "$script"
+            echo "--------------------------------------"
+          done
+
       - name: Insert PowerShell Code into Article
         run: |
-          # Definir variables
-          ARTICLE_PATH="_posts/2024-10-04-azure-stack-hci-demolab.md"
-          SCRIPT_DIR="assets/repo/AzSHCI/scripts/01Lab"
-
-          # Verificar que el artículo existe
-          if [ ! -f "$ARTICLE_PATH" ]; then
-            echo "El archivo $ARTICLE_PATH no existe."
-            exit 1
-          fi
-
-          # Función para insertar scripts usando awk
-          insert_script() {
-            local script_path=$1
-            local start_marker=$2
-            local end_marker=$3
-
-            if [ ! -f "$script_path" ]; then
-              echo "El script $script_path no existe."
-              exit 1
-            fi
-
-            # Leer el contenido del script
-            local script_content
-            script_content=$(cat "$script_path")
-
-            # Reemplazar el bloque entre los marcadores con el contenido del script
-            awk -v start="<!-- $start_marker -->" \
-                -v end="<!-- $end_marker -->" \
-                -v script="```powershell\n$script_content\n```" '
-              BEGIN { in_block=0 }
-              $0 ~ start { print start; print script; in_block=1; next }
-              $0 ~ end { print end; in_block=0; next }
-              !in_block { print }
-            ' "$ARTICLE_PATH" > temp.md && mv temp.md "$ARTICLE_PATH"
-
-            echo "Bloque $start_marker insertado correctamente."
-          }
-
-          # Insertar cada script
-          insert_script "$SCRIPT_DIR/00_Infra_AzHCI.ps1" "00INFRA:START" "00INFRA:END"
-          insert_script "$SCRIPT_DIR/01_DC.ps1" "01DC:START" "01DC:END"
-          insert_script "$SCRIPT_DIR/02_Cluster.ps1" "02CLUSTER:START" "02CLUSTER:END"
-          insert_script "$SCRIPT_DIR/03_TroubleshootingExtensions.ps1" "03TROUBLESHOOTING:START" "03TROUBLESHOOTING:END"
-          insert_script "$SCRIPT_DIR/99_Offboarding.ps1" "99OFFBOARDING:START" "99OFFBOARDING:END"
-
-          # Opcional: Verificar el contenido del artículo después de la inserción
-          echo "Contenido del artículo después de la inserción:"
-          cat "$ARTICLE_PATH"
+          python3 - <<'END_PYTHON'
+          import sys
+          
+          def replace_block(file_path, start_marker, end_marker, script_path):
+              try:
+                  with open(file_path, 'r') as f:
+                      lines = f.readlines()
+              except Exception as e:
+                  print(f'Error reading {file_path}: {e}')
+                  sys.exit(1)
+          
+              try:
+                  with open(script_path, 'r') as f:
+                      script_content = f.read()
+              except Exception as e:
+                  print(f'Error reading {script_path}: {e}')
+                  sys.exit(1)
+          
+              new_lines = []
+              in_block = False
+              block_replaced = False
+              for line_num, line in enumerate(lines, 1):
+                  if start_marker in line:
+                      print(f'Encontrado {start_marker} en la línea {line_num}.')
+                      new_lines.append(line)  # Agregar el marcador de inicio
+                      new_lines.append('```powershell\n')  # Iniciar el bloque de código
+                      new_lines.append(script_content)
+                      if not script_content.endswith('\n'):
+                          new_lines.append('\n')
+                      new_lines.append('```\n')  # Cerrar el bloque de código
+                      in_block = True
+                      block_replaced = True
+                      continue
+                  if end_marker in line:
+                      if in_block:
+                          print(f'Encontrado {end_marker} en la línea {line_num}.')
+                          new_lines.append(line)  # Agregar el marcador de fin
+                          in_block = False
+                          continue
+                  if not in_block:
+                      new_lines.append(line)
+          
+              if not block_replaced:
+                  print(f'No se encontró el bloque entre {start_marker} y {end_marker} en {file_path}.')
+                  sys.exit(1)
+          
+              try:
+                  with open(file_path, 'w') as f:
+                      f.writelines(new_lines)
+              except Exception as e:
+                  print(f'Error writing to {file_path}: {e}')
+                  sys.exit(1)
+          
+              print(f'Se ha insertado el script {script_path} entre {start_marker} y {end_marker}.')
+          
+          markers_scripts = [
+              ('<!-- 00INFRA:START -->', '<!-- 00INFRA:END -->', 'assets/repo/AzSHCI/scripts/01Lab/00_Infra_AzHCI.ps1'),
+              ('<!-- 01DC:START -->', '<!-- 01DC:END -->', 'assets/repo/AzSHCI/scripts/01Lab/01_DC.ps1'),
+              ('<!-- 02CLUSTER:START -->', '<!-- 02CLUSTER:END -->', 'assets/repo/AzSHCI/scripts/01Lab/02_Cluster.ps1'),
+              ('<!-- 03TROUBLESHOOTING:START -->', '<!-- 03TROUBLESHOOTING:END -->', 'assets/repo/AzSHCI/scripts/01Lab/03_TroubleshootingExtensions.ps1'),
+              ('<!-- 99OFFBOARDING:START -->', '<!-- 99OFFBOARDING:END -->', 'assets/repo/AzSHCI/scripts/01Lab/99_Offboarding.ps1'),
+          ]
+          
+          ARTICLE_PATH = '_posts/2024-10-04-azure-stack-hci-demolab.md'
+          
+          for start_marker, end_marker, script_path in markers_scripts:
+              replace_block(ARTICLE_PATH, start_marker, end_marker, script_path)
+          
+          # Opcional, print del archivo final
+          try:
+              with open(ARTICLE_PATH, 'r') as f:
+                  final_content = f.read()
+              print('Contenido del artículo después de la inserción:')
+              print(final_content)
+          except Exception as e:
+              print(f'Error al leer el artículo después de la inserción: {e}')
+              sys.exit(1)
+          END_PYTHON
 
       - name: Commit and Push Changes
         run: |
           git add .
-          git commit -m "Update article with latest PowerShell scripts"
+          git commit -m "Update article with latest PowerShell scripts" || echo "No changes to commit"
           git push origin main
