@@ -2,6 +2,7 @@
 title: "Azure Stack HCI: Demolab"
 excerpt: "Streamline your Azure Stack HCI deployment on minimal hardware with the AzSHCI scripts. This guide compares existing solutions and provides a step-by-step deployment process for efficient testing and development."
 date: 2024-10-04
+last_modified_at: 2024-10-05
 categories:
   - Blog
 tags:
@@ -741,7 +742,7 @@ Write-Message "All configurations and VM creations completed successfully." -Typ
 
 #### Configure Domain Controller
 
-Before running `01_DC.ps1`, ensure the VM is powered on and Windows Server is installed (no need to install any roles). Add your local administrator credentials to the `$defaultUser` and `$defaultPwd` variables in the script.
+Before running `01_DC.ps1`, ensure the VM is powered on and Windows Server is installed by you (no need to install any roles). Add your local administrator credentials to the `$defaultUser` and `$defaultPwd` variables in the script. Then you can run the script:
 
 Run:
 
@@ -1310,9 +1311,7 @@ This process will take approximately 20 minutes as it installs Windows Updates, 
 
 #### Configure Cluster Node
 
-After successfully running `01_DC.ps1`, proceed to install the cluster node. Update the `$defaultUser` and `$defaultPwd` variables in `02_Cluster.ps1` with your local administrator credentials.
-
-Run:
+After successfully running `01_DC.ps1`, proceed to install the cluster node (like the DC). After the installation, update the `$defaultUser` and `$defaultPwd` variables in `02_Cluster.ps1` with your local administrator credentials. Then you can run the script:
 
 ```
 .\02_Cluster.ps1
@@ -2256,12 +2255,13 @@ Write-Message "Azure Connected Machine extensions troubleshooting completed succ
 
 #### Cleanup and Offboarding (if errors occur during the process)
 
-Run:
+If you have any problems during deployment, you can delete all the provided infrastructure using the following script:
 
 ```
 .\99_Offboarding.ps1
 ```
-
+<details>
+  <summary>99_Offboarding.ps1</summary>
 <!-- 99OFFBOARDING:START -->
 ```powershell
 # Offboarding Script to Clean Up Configurations
@@ -2476,7 +2476,7 @@ Write-Message "Cleanup completed successfully." -Type "Success"
 #endregion
 ```
 <!-- 99OFFBOARDING:END -->
-
+</details>
 ### 5. Registering the Cluster
 
 *This section will be detailed in a future update, complete with step-by-step instructions and screenshots.*
