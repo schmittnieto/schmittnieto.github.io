@@ -2260,8 +2260,7 @@ If you have any problems during deployment, you can delete all the provided infr
 ```
 .\99_Offboarding.ps1
 ```
-<details>
-  <summary>99_Offboarding.ps1</summary>
+
 <!-- 99OFFBOARDING:START -->
 ```powershell
 # Offboarding Script to Clean Up Configurations
@@ -2476,7 +2475,7 @@ Write-Message "Cleanup completed successfully." -Type "Success"
 #endregion
 ```
 <!-- 99OFFBOARDING:END -->
-</details>
+
 ### 5. Registering the Cluster
 
 *This section will be detailed in a future update, complete with step-by-step instructions and screenshots.*
