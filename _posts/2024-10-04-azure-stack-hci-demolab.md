@@ -241,7 +241,7 @@ Run the following command:
     - Configures networking, storage, and security settings for the VMs.
 
 .NOTES
-    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com
+    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
     - Run this script with administrative privileges.
     - Ensure the ISO paths are correct before execution.
     - Execution Policy may need to be set to allow the script to run. To set the execution policy, you can run:
@@ -772,7 +772,7 @@ Run:
     - Installs necessary modules and creates Azure Stack HCI AD objects.
 
 .NOTES
-    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com
+    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
     - Run this script with administrative privileges.
     - Ensure the Execution Policy allows the script to run. To set the execution policy, you can run:
       Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -1335,7 +1335,7 @@ After successfully running `01_DC.ps1`, proceed to install the cluster node (lik
     - Registers the node with Azure Arc.
 
 .NOTES
-    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com
+    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
     - Run this script with administrative privileges.
     - Ensure the Execution Policy allows the script to run. To set the execution policy, you can run:
       Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -1823,7 +1823,7 @@ If you encounter issues with Azure Connected Machine extensions, run:
     - Adds any missing extensions based on a predefined list.
 
 .NOTES
-    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com
+    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
     - Run this script with administrative privileges.
     - Ensure the Execution Policy allows the script to run. To set the execution policy, you can run:
       Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -2278,7 +2278,7 @@ If you have any problems during deployment, you can delete all the provided infr
     - Removes designated folder structures.
 
 .NOTES
-    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com
+    - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
     - Run this script with administrative privileges.
     - Ensure the Execution Policy allows the script to run. To set the execution policy, you can run:
       Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
