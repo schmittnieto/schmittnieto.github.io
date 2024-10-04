@@ -46,13 +46,15 @@ jobs:
             local escaped_content
             escaped_content=$(printf '%s\n' "$script_content" | sed 's/[&/\]/\\&/g')
 
-            sed -i "/$start_marker/,/$end_marker/c\\
+            sed -i "/<!-- $start_marker -->/,/<!-- $end_marker -->/c\\
             <!-- $start_marker -->\\
             \`\`\`powershell\\
             $escaped_content\\
             \`\`\`\\
             <!-- $end_marker -->" "$ARTICLE_PATH"
-                      }
+
+            echo "Bloque $start_marker insertado correctamente."
+          }
 
           # Insertar cada script
           insert_script "$SCRIPT_DIR/00_Infra_AzHCI.ps1" "00INFRA:START" "00INFRA:END"
