@@ -21,7 +21,7 @@ jobs:
       - name: Insert PowerShell Code into Article
         run: |
           # Definir variables
-          ARTICLE_PATH="_posts/2024-10-04-azure-stack-hCI-demolab.md"
+          ARTICLE_PATH="_posts/2024-10-04-azure-stack-hci-demolab.md"
           SCRIPT_DIR="assets/repo/AzSHCI/scripts/01Lab"
 
           # Verificar que el artículo existe
