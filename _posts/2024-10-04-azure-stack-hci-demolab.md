@@ -19,6 +19,8 @@ header:
 toc: true
 toc_label: "Topics Overview" 
 toc_icon: "list-ul"
+toc_min_header: 1
+toc_max_header: 2
 ---
 
 ## Introduction
