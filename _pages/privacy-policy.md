@@ -6,8 +6,6 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# Privacy Policy
-
 ## Introduction
 
 This personal blog, operated by Cristian Schmitt Nieto, is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal data when you visit our website, in accordance with the European Union's General Data Protection Regulation (GDPR).
