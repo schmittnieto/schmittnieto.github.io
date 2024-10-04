@@ -1,5 +1,71 @@
 <style>
-    /* Your existing CSS styles */
+    /* Estilos para el banner de cookies */
+    #cookie-notice {
+        font-weight: 900;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        display: none; /* Oculto por defecto */
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #222;
+        color: rgba(255, 255, 255, 0.8);
+        z-index: 9000;
+        border-top: 2px solid #00a8ff;
+        box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    #cookie-notice a {
+        color: #00a8ff;
+        margin-left: 1rem;
+        font-weight: 600;
+    }
+
+    #cookie-notice .btn {
+        background-color: #00a8ff;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-left: 1rem;
+        border-radius: 4px;
+    }
+
+    #cookie-notice .btn:hover {
+        background-color: #0073b1;
+    }
+
+    @media (max-width: 767px) {
+        #cookie-notice {
+            padding: 1rem;
+        }
+
+        #cookie-notice span {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #cookie-notice .btn {
+            display: inline-block;
+            margin: 5px 0;
+        }
+    }
+
+    /* Botón de galleta que aparece tras la decisión del usuario */
+    #cookie-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        font-size: 36px; /* Tamaño del emoji */
+        cursor: pointer;
+        z-index: 9001;
+        display: none; /* Oculto inicialmente */
+        background: none;
+        border: none;
+    }
 </style>
 
 <!-- Banner de política de cookies -->
@@ -13,7 +79,7 @@
 <button id="cookie-toggle">🍪</button>
 
 <script>
-    // Function to create a cookie
+    // Función para crear una cookie
     function createCookie(name, value, days) {
         var expires = "";
         if (days) {
@@ -24,7 +90,7 @@
         document.cookie = name + "=" + value + expires + "; path=/";
     }
 
-    // Function to read a cookie
+    // Función para leer una cookie
     function readCookie(name) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
@@ -36,9 +102,8 @@
         return null;
     }
 
-    // Function to load Google Analytics and Microsoft Clarity
+    // Función para cargar Google Analytics
     function loadAnalytics() {
-        // Load Google Analytics
         var scriptGA = document.createElement("script");
         scriptGA.src = "https://www.googletagmanager.com/gtag/js?id=G-0JC8WREF2K";
         scriptGA.async = true;
@@ -49,42 +114,35 @@
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-0JC8WREF2K');
-        };
-
-        // Load Microsoft Clarity
-        var scriptClarity = document.createElement("script");
-        scriptClarity.type = "text/javascript";
-        scriptClarity.async = true;
-        scriptClarity.src = "https://www.clarity.ms/tag/odc6tt5gf3";
-        document.head.appendChild(scriptClarity);
+        }
     }
 
-    // Check if cookies have been accepted or declined
+    // Comprobar si las cookies han sido aceptadas o rechazadas
     if (readCookie('cookie-notice-dismissed') === 'true') {
-        document.getElementById('cookie-toggle').style.display = 'block'; // Show the cookie button
-        loadAnalytics(); // Load Google Analytics and Clarity if cookies have been accepted
+        document.getElementById('cookie-toggle').style.display = 'block'; // Mostrar el botón de galleta
+        loadAnalytics(); // Cargar Google Analytics en todas las páginas si se han aceptado las cookies
     } else {
-        document.getElementById('cookie-notice').style.display = 'block'; // Show the cookie banner
+        document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de cookies
     }
 
-    // When "Accept" is clicked
+    // Al hacer clic en "Aceptar"
     document.getElementById('cookie-notice-accept').addEventListener("click", function() {
-        createCookie('cookie-notice-dismissed', 'true', 31); // Create the cookie for 31 days
+        createCookie('cookie-notice-dismissed', 'true', 31); // Crear la cookie por 31 días
         document.getElementById('cookie-notice').style.display = 'none';
-        document.getElementById('cookie-toggle').style.display = 'block'; // Show the cookie button
-        loadAnalytics(); // Load Google Analytics and Clarity immediately
+        document.getElementById('cookie-toggle').style.display = 'block'; // Mostrar el botón de galleta
+        loadAnalytics(); // Cargar Google Analytics inmediatamente
     });
 
-    // When "Decline" is clicked
+    // Al hacer clic en "Rechazar"
     document.getElementById('cookie-notice-decline').addEventListener("click", function() {
-        createCookie('cookie-notice-dismissed', 'false', 31); // Create the cookie but do not load analytics scripts
+        createCookie('cookie-notice-dismissed', 'false', 31); // Crear cookie pero sin cargar Google Analytics
         document.getElementById('cookie-notice').style.display = 'none';
-        document.getElementById('cookie-toggle').style.display = 'block'; // Show the cookie button
+        document.getElementById('cookie-toggle').style.display = 'block'; // Mostrar el botón de galleta
     });
 
-    // When the cookie button is clicked
+    // Cuando se hace clic en el botón de galleta
     document.getElementById('cookie-toggle').addEventListener("click", function() {
-        document.getElementById('cookie-notice').style.display = 'block'; // Show the banner again to change the decision
-        document.getElementById('cookie-toggle').style.display = 'none'; // Hide the cookie button while the banner is visible
+        document.getElementById('cookie-notice').style.display = 'block'; // Mostrar el banner de nuevo para cambiar la decisión
+        document.getElementById('cookie-toggle').style.display = 'none'; // Ocultar el botón de galleta mientras el banner está visible
     });
 </script>
