@@ -30,7 +30,7 @@ jobs:
             exit 1
           fi
 
-          # Función para insertar scripts usando perl
+          # Función para insertar scripts usando awk
           insert_script() {
             local script_path=$1
             local start_marker=$2
@@ -41,15 +41,19 @@ jobs:
               exit 1
             fi
 
+            # Leer el contenido del script
             local script_content
             script_content=$(cat "$script_path")
-            
-            # Escapar barras y otros caracteres si es necesario
-            # Aquí no es necesario escapar, ya que `perl` maneja bien el contenido
+
             # Reemplazar el bloque entre los marcadores con el contenido del script
-            perl -0777 -i -pe '
-              s/(<!-- '"$start_marker"' -->)(.*?)(<!-- '"$end_marker"' -->)/$1\n```powershell\n'"$script_content"'\n```\n$3/s;
-            ' "$ARTICLE_PATH"
+            awk -v start="<!-- $start_marker -->" \
+                -v end="<!-- $end_marker -->" \
+                -v script="```powershell\n$script_content\n```" '
+              BEGIN { in_block=0 }
+              $0 ~ start { print start; print script; in_block=1; next }
+              $0 ~ end { print end; in_block=0; next }
+              !in_block { print }
+            ' "$ARTICLE_PATH" > temp.md && mv temp.md "$ARTICLE_PATH"
 
             echo "Bloque $start_marker insertado correctamente."
           }
