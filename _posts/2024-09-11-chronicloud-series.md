@@ -41,11 +41,13 @@ Each article in the **Chronicloud Series** will focus on specific Azure products
 Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that enables organizations to run virtualized workloads on-premises, with integration to Azure. In this series, we'll cover:
    - **Understanding Azure Stack HCI**: For an in-depth exploration of what Azure Stack HCI is, its key use cases, and how it compares to traditional hyper-converged solutions, please read [Azure Stack HCI Evolution: Use Cases and Comparison](/blog/azure-stack-hci-evolution-use-cases-comparison/).
    - Labs on deploying and managing an Azure Stack HCI cluster, please read [Azure Stack HCI Evolution: Demolab](/blog/azure-stack-hci-demolab/).
-   - *Backup and Restore*: Explore how to implement reliable backup and restore strategies using Azure services and HCI’s native tools.
-   - *Migration to HCI*: Step-by-step guidance on migrating from traditional systems to Azure Stack HCI.
+   - Day 2 Operations: After deploying your cluster, this guide will walk you through the essential steps to configure, activate, and optimize your Azure Stack HCI environment, covering networking, security, monitoring, and more. For more details, see [Azure Stack HCI: Day 2 Operations](/blog/azure-stack-hci-day2).
+   - *VMs Deployment and management*: Learn how to create, manage, and optimize virtual machines (VMs) in your Azure Stack HCI environment.You'll also discover how to integrate with Azure Arc for advanced VM management, allowing you to manage VMs on-premises through the Azure portal.
    - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops.
    - *AKS Hybrid*: Deploy and manage Azure Kubernetes Service (AKS) on Azure Stack HCI in a hybrid cloud setup.
    - *Lifecycle Management*: Best practices for managing updates, upgrades, and the entire lifecycle of your Azure Stack HCI infrastructure.
+   - *Backup and Disaster Recovery*: Explore how to implement reliable backup and restore strategies using Azure services and HCI’s native tools.
+   - *Migration to HCI*: Step-by-step guidance on migrating from traditional systems to Azure Stack HCI.
 
 2. **Azure Virtual Desktop (AVD)**  
    AVD offers a virtualized desktop experience in the cloud, enabling secure remote work. In this series, I’ll explore:
