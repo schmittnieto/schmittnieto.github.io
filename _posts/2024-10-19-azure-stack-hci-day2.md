@@ -1,7 +1,7 @@
 ---
 title: "Azure Stack HCI: Day2 operations"
 excerpt: "Unlock the full potential of your Azure Stack HCI deployment with essential Day 2 operations. From configuring networks to managing VMs Images, monitoring, and security, this guide walks you through the steps to optimize your environment."
-date: 2024-10-20
+date: 2024-10-19
 categories:
   - Blog
 tags:
