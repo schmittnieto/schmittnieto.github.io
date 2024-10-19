@@ -1,5 +1,5 @@
 ---
-title: "Azure Stack HCI: Demolab - Day2 operations"
+title: "Azure Stack HCI: Day2 operations"
 excerpt: "Unlock the full potential of your Azure Stack HCI deployment with essential Day 2 operations. From configuring networks to managing VMs Images, monitoring, and security, this guide walks you through the steps to optimize your environment."
 date: 2024-10-20
 categories:
@@ -9,11 +9,12 @@ tags:
   - Azure Stack HCI
 
 header:
-  teaser: "/assets/img/post/2024-10-04-azure-stack-hci-demolab-day2.webp"
-  image: "/assets/img/post/2024-10-04-azure-stack-hci-demolab-day2.webp"
-  og_image: "/assets/img/post/2024-10-04-azure-stack-hci-demolab-day2.webp"
-  overlay_image: "/assets/img/post/2024-10-04-azure-stack-hci-demolab-day2.webp"
+  teaser: "/assets/img/post/2024-10-19-azure-stack-hci-day2.webp"
+  image: "/assets/img/post/2024-10-19-azure-stack-hci-day2.webp"
+  og_image: "/assets/img/post/2024-10-19-azure-stack-hci-day2.webp"
+  overlay_image: "/assets/img/post/2024-10-19-azure-stack-hci-day2.webp"
   overlay_filter: 0.5
+  caption: "Photo credit: [**Flux**](https://flux1.ai/)"
 
 toc: true
 toc_label: "Topics Overview" 
