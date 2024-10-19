@@ -1,7 +1,7 @@
 ---
 title: "Chronicloud Series: A Journey through Azure Solutions"
 date: 2024-09-11
-last_modified_at: 2024-09-19
+last_modified_at: 2024-10-19
 excerpt: "Explore Azure technologies in the Chronicloud Series, with in-depth guides and hands-on labs."
 categories:
   - Blog
