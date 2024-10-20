@@ -98,12 +98,19 @@ Once you've created your first **Logical Network (lnet)**, you can deploy an AKS
 
 However, keep in mind that **VMs** and **Azure Automanage for Windows Server** still cannot be deployed at this point, as they depend on custom **VM images**, which we will address later.
 
-### Installing Windows Admin Center (WAC)
+### Windows Admin Center (WAC)
 
-There are two versions of **Windows Admin Center (WAC)** that you can use with Azure Stack HCI:
-- **Local WAC**: Fully functional and stable, this version requires an Active Directory connection and direct access to the cluster. While this works flawlessly for managing the HCI environment, it depends heavily on the existing network infrastructure and WAC VM.
+Windows Admin Center (WAC) was a key management tool for Azure Stack HCI, providing a centralized interface to manage servers, clusters, and virtual machines. It streamlined tasks like monitoring, updating, and troubleshooting, making it an important tool for administrators. There are two main versions of WAC available for Azure Stack HCI: local and cloud-based, each with specific advantages.
 
-- **Azure ARC-based WAC**: Currently in **Preview** and built on **EntraID** (formerly Azure Active Directory). This version does not depend on Active Directory or a direct connection to the cluster, and it requires no manual opening of ports. The connection works indirectly through Azure, similar to how TeamViewer works, with Azure acting as the intermediary for outbound connections from the cluster. The Azure-based WAC is not fully supported and has stability issues in its preview state based on my experience, but it will undoubtedly be the way to go for us.
+#### Local WAC
+
+Local WAC is the stable, fully functional version that runs on a dedicated management server or VM within your environment. It requires a connection to **Active Directory** and direct access to your Azure Stack HCI cluster. In previous versions of HCI, Local WAC was **crucial** for tasks like **firmware and hardware updates**, which relied heavily on **plugins**. These plugins were essential for managing hardware from specific OEM vendors, providing deep integration for updates and monitoring.
+
+However, starting with **Azure Stack HCI version 23H2**, the responsibility for managing **firmware and hardware updates** has largely shifted to the **Solution Builder Extensions (SBE)**. The goal moving forward is to manage **everything** from the Azure portal, or at least get as close to that as possible. I'll dive deeper into the specifics of this shift and how updates are handled in a future article focused on the **update process**.
+
+#### Azure Arc-based WAC
+
+Azure Arc-based WAC is currently in preview and built on **EntraID** (formerly Azure Active Directory). Unlike Local WAC, it doesn’t require an Active Directory connection or direct access to the cluster. Instead, it routes connections through Azure, which acts as an intermediary, similar to how **TeamViewer** works. This simplifies remote management by removing the need to open ports manually. Although the Arc-based version represents the future of hybrid cloud management, it's still in preview and can be unstable. The goal is to eventually manage everything via the Azure portal, and Arc-based WAC is a step toward that future, though it's not fully reliable yet.
 
 More details on the Azure-based WAC can be found [here](https://learn.microsoft.com/en-us/windows-server/manage/windows-admin-center/azure/manage-arc-hybrid-machines).
 
