@@ -104,9 +104,9 @@ Windows Admin Center (WAC) was a key management tool for Azure Stack HCI, provid
 
 #### Local WAC
 
-Local WAC is the stable, fully functional version that runs on a dedicated management server or VM within your environment. It requires a connection to **Active Directory** and direct access to your Azure Stack HCI cluster. In previous versions of HCI, Local WAC was **crucial** for tasks like **firmware and hardware updates**, which relied heavily on **plugins**. These plugins were essential for managing hardware from specific OEM vendors, providing deep integration for updates and monitoring.
+Local WAC is the stable, fully functional version that runs on a dedicated management server or VM within your environment. It requires a connection to Active Directory and direct access to your Azure Stack HCI cluster. In previous versions of HCI, Local WAC was **crucial** for tasks like **firmware and hardware updates**, which relied heavily on **plugins**. These plugins were essential for managing hardware from specific OEM vendors, providing deep integration for updates and monitoring.
 
-However, starting with **Azure Stack HCI version 23H2**, the responsibility for managing **firmware and hardware updates** has largely shifted to the **Solution Builder Extensions (SBE)**. The goal moving forward is to manage **everything** from the Azure portal, or at least get as close to that as possible. I'll dive deeper into the specifics of this shift and how updates are handled in a future article focused on the **update process**.
+However, starting with Azure Stack HCI version **23H2**, the responsibility for managing **firmware and hardware updates** has largely shifted to the **Solution Builder Extensions (SBE)**. The goal moving forward is to manage everything from the Azure portal, or at least get as close to that as possible. I'll dive deeper into the specifics of this shift and how updates are handled in a future article focused on the **update process**.
 
 #### Azure Arc-based WAC
 
@@ -165,6 +165,7 @@ Since I'm experimenting with the possibility of creating a Workbook that include
    - These Event IDs correspond to VM lifecycle events such as creation, deletion, starting, stopping, and state changes. Collecting these events will provide insights into the current VMs and their statuses.
 - `Microsoft-Windows-Hyper-V-Worker-Admin!*[System[(EventID=18500 or EventID=18501 or EventID=18530 or EventID=18531 or EventID=18560 or EventID=18561)]]`
    - These events capture detailed information about the VM operations at the worker level, including health status and operational issues.
+
 ![Monitoring 08](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon08.png){: style="border: 2px solid grey;"}
 
 In the Workbook I will also add the current status of the extensions, because it does not seem to update automatically and it is not listed as “outdated” either:
