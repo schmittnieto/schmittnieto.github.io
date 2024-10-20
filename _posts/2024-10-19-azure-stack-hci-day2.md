@@ -25,9 +25,9 @@ toc_icon: "list-ul"
 
 Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! If you've been following along, you should now have a fully provisioned **Azure Stack HCI DemoLab**. In the previous article, [Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), we took you through the process of setting up Azure Stack HCI in a clean environment, highlighting the steps necessary to bring your infrastructure online. But provisioning is just the beginning!
 
-Now that your HCI environment is up and running, it's time to explore the essential **Day 2 Operations**—the next steps that will bring your infrastructure to full functionality. These are the critical actions required after your deployment to ensure that your environment is secure, performant, and ready for production workloads. Whether you’re preparing to deploy virtual machines (VMs), **Azure Virtual Desktop (AVD)**, or Kubernetes clusters, this guide will help you configure and activate all the necessary features.
+Now that your HCI environment is up and running, it's time to explore the essential **Day 2 Operations**—the next steps that will bring your infrastructure to full functionality. These are the critical actions required after your deployment to ensure that your environment is secure, performant, and ready for production workloads. Whether you’re preparing to deploy virtual machines (VMs), Azure Virtual Desktop (AVD), or Kubernetes clusters, this guide will help you configure and activate all the necessary features.
 
-In addition to setting up networking and management tools, we'll also cover the important task of **downloading and configuring VM images** required for VM workloads and AVD. These images are essential for deploying VMs and ensuring that Azure Stack HCI is ready to handle Windows Server and Linux workloads from the **Azure Marketplace**. 
+In addition to setting up networking and management tools, we'll also cover the important task of **downloading and configuring VM images** required for VM workloads and AVD. These images are essential for deploying VMs and ensuring that Azure Stack HCI is ready to handle Windows Server workloads from the Azure Marketplace. 
 
 Day 2 operations are about configuring and activating the capabilities you need to run a stable, secure, and performant infrastructure. You’ll learn how to:
 
@@ -35,7 +35,7 @@ Day 2 operations are about configuring and activating the capabilities you need 
 - Set up logical networks to support key workloads like **AKS (Azure Kubernetes Service)**, **AVD (Azure Virtual Desktop)**, and **VMs (virtual machines)**.
 - Activate **Windows Admin Center (WAC)** to manage your HCI environment, while understanding its different versions and limitations.
 - Enable monitoring, alerting, and other management tools to keep your system healthy.
-- Download and manage **VM images** for your workloads, which will unlock the ability to deploy **VMs** and **AVD**.
+- Download and manage **VM images** for your workloads, which will unlock the ability to deploy VMs and AVD.
 
 Each of these steps is crucial for ensuring your Azure Stack HCI environment is fully integrated with Azure, optimized for workloads, and ready for production. Let’s get started by diving into what powers this integration: **Azure Arc Resource Bridge**.
 
@@ -101,7 +101,7 @@ However, keep in mind that **VMs** and **Azure Automanage for Windows Server** s
 ### Installing Windows Admin Center (WAC)
 
 There are two versions of **Windows Admin Center (WAC)** that you can use with Azure Stack HCI:
-- **Local WAC**: Fully functional and stable, this version requires an Active Directory connection and direct access to the cluster. While this works flawlessly for managing the HCI environment, it depends heavily on the existing network infrastructure and domain management.
+- **Local WAC**: Fully functional and stable, this version requires an Active Directory connection and direct access to the cluster. While this works flawlessly for managing the HCI environment, it depends heavily on the existing network infrastructure and WAC VM.
 
 - **Azure ARC-based WAC**: Currently in **Preview** and built on **EntraID** (formerly Azure Active Directory). This version does not depend on Active Directory or a direct connection to the cluster, and it requires no manual opening of ports. The connection works indirectly through Azure, similar to how TeamViewer works, with Azure acting as the intermediary for outbound connections from the cluster. The Azure-based WAC is not fully supported and has stability issues in its preview state based on my experience, but it will undoubtedly be the way to go for us.
 
@@ -119,11 +119,11 @@ Here is also a small guide on how to install and use the WAC extension in Azure:
 After this process and provided that everything has gone as expected, you will be able to manage the WAC of the cluster through your EntraID user.
 I was unable to install the WAC extension (0.37.0.0) during this week because I received the following error:  `RetrieveCertificate: Failed to retrieve certificate from key vault using app service`, even though I have the correct permissions and have successfully completed this process in the past. 
 
-Keep in mind that manual modifications (via Powershell or WAC) should be as minimal as possible, but there are still problems when managing certain VMs which are not present in Azure, or even the ARC Resource Bridge itself, which is why it does not hurt to have an alternative to manage these resources from remote. 
+Keep in mind that manual modifications (via Powershell or WAC) should be as minimal as possible, but there are still problems when managing certain VMs which are not present in Azure like ARC Resource Bridge itself, which is why it does not hurt to have an alternative to manage these resources from remote. 
 
 ### Monitoring and Alerting with Azure Monitor Insights
 
-Monitoring your **Azure Stack HCI** cluster is a key part of keeping everything running smoothly. Azure Monitor **Insights** is a feature that helps you do just that by giving you visibility into the health, performance, and usage of your cluster—all within the **Azure portal**. While it’s a powerful tool, keep in mind that **Insights isn’t real-time**. It can take up to 15 minutes to collect data, so there may be a delay between what's happening on your system and when it shows up in the portal.
+Monitoring your Azure Stack HCI cluster is a key part of keeping everything running smoothly. Azure Monitor **Insights** is a feature that helps you do just that by giving you visibility into the health, performance, and usage of your cluster—all within the **Azure portal**. While it’s a powerful tool, keep in mind that **Insights isn’t real-time**. It can take up to 15 minutes to collect data, so there may be a delay between what's happening on your system and when it shows up in the portal.
 
 #### Why Use Insights?
 
