@@ -2,7 +2,7 @@
 title: "Azure Stack HCI: Demolab"
 excerpt: "Streamline your Azure Stack HCI deployment on minimal hardware with the AzSHCI scripts. This guide compares existing solutions and provides a step-by-step deployment process for efficient testing and development."
 date: 2024-10-04
-last_modified_at: 2024-10-11
+last_modified_at: 2024-10-22
 categories:
   - Blog
 tags:
