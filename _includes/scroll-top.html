@@ -24,8 +24,6 @@
     #scroll-top-btn:focus {
         opacity: 0.8;
     }
-
-    /* Remove empty media queries to avoid warnings */
 </style>
 
 <!-- Scroll to Top Button HTML -->
@@ -60,8 +58,7 @@
          */
         function showScrollBtn() {
             if (window.innerWidth <= 767) { // Ensure it's a mobile device
-                // Show the button with fade-in effect if scrolling down
-                if (isScrollingDown && window.scrollY > 100) {
+                if (window.scrollY > 0) { // Trigger as soon as scrolling starts
                     if (scrollBtn.style.display !== "block") {
                         scrollBtn.style.display = "block";
                         // Allow time for display to take effect before starting transition
@@ -81,7 +78,7 @@
                         setTimeout(() => {
                             scrollBtn.style.display = "none";
                         }, 500); // Match the CSS transition duration
-                    }, 2000);
+                    }, 3000); // Extend visibility to 3 seconds
                 }
             }
         }
@@ -109,7 +106,7 @@
         }
 
         // Attach the debounced scroll event listener
-        window.addEventListener("scroll", debounce(handleScroll, 100));
+        window.addEventListener("scroll", debounce(handleScroll, 50)); // Increased responsiveness with shorter debounce
 
         // When the user clicks on the button, scroll to the top smoothly
         scrollBtn.addEventListener("click", function () {
@@ -130,7 +127,7 @@
         });
 
         // Ensure the button is hidden on initial load if not scrolled
-        if (window.innerWidth > 767 || window.scrollY <= 50) {
+        if (window.innerWidth > 767 || window.scrollY <= 0) { // Adjusted threshold to 0
             scrollBtn.style.display = "none";
             scrollBtn.style.opacity = "0";
             scrollBtn.style.visibility = "hidden";
