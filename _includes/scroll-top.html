@@ -36,6 +36,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const scrollBtn = document.getElementById("scroll-top-btn");
         let scrollTimeout;
+        let isButtonClicked = false; // Flag to track if button was clicked
 
         /**
          * Function to show the scroll button.
@@ -44,7 +45,7 @@
         function showScrollBtn() {
             if (window.innerWidth <= 767) { // Ensure it's a mobile device
                 if (window.scrollY > 0) { // Trigger as soon as scrolling starts
-                    if (scrollBtn.style.display !== "block") {
+                    if (scrollBtn.style.display !== "block" && !isButtonClicked) {
                         scrollBtn.style.display = "block";
                         // Allow time for display to take effect before starting transition
                         setTimeout(() => {
@@ -53,17 +54,19 @@
                         }, 10);
                     }
 
-                    // Reset the hide timer
-                    clearTimeout(scrollTimeout);
-                    scrollTimeout = setTimeout(() => {
-                        // Start fade-out effect
-                        scrollBtn.style.opacity = "0";
-                        scrollBtn.style.visibility = "hidden";
-                        // Hide the button after the transition duration
-                        setTimeout(() => {
-                            scrollBtn.style.display = "none";
-                        }, 500); // Match the CSS transition duration
-                    }, 1500); // Visibility duration set to 1.5 seconds
+                    // Reset the hide timer only if the button wasn't clicked
+                    if (!isButtonClicked) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(() => {
+                            // Start fade-out effect
+                            scrollBtn.style.opacity = "0";
+                            scrollBtn.style.visibility = "hidden";
+                            // Hide the button after the transition duration
+                            setTimeout(() => {
+                                scrollBtn.style.display = "none";
+                            }, 500); // Match the CSS transition duration
+                        }, 1500); // Visibility duration set to 1.5 seconds
+                    }
                 }
             }
         }
@@ -81,6 +84,7 @@
 
         // When the user clicks on the button, scroll to the top smoothly and hide the button
         scrollBtn.addEventListener("click", function () {
+            isButtonClicked = true; // Set flag to prevent reappearing during scroll up
             window.scrollTo({
                 top: 0,
                 behavior: "smooth"
@@ -90,6 +94,7 @@
             scrollBtn.style.visibility = "hidden";
             setTimeout(() => {
                 scrollBtn.style.display = "none";
+                isButtonClicked = false; // Reset flag after hiding
             }, 500); // Match the CSS transition duration
             // Clear any existing hide timers to prevent conflicts
             clearTimeout(scrollTimeout);
@@ -102,6 +107,7 @@
                 scrollBtn.style.display = "none";
                 scrollBtn.style.opacity = "0";
                 scrollBtn.style.visibility = "hidden";
+                isButtonClicked = false; // Reset flag on resize
             }
         });
 
