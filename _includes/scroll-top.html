@@ -7,9 +7,9 @@
         top: 20px; /* Position at the top */
         right: 20px; /* Position at the right */
         z-index: 9002; /* Ensure it sits above other elements */
-        background: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
+        background: rgba(255, 255, 255, 0.6); /* More opaque semi-transparent background */
         border: 2px solid white; /* White border for visibility */
-        border-radius: 50%; /* Circular shape */
+        border-radius: 8px; /* Slightly rounded corners */
         font-size: 36px; /* Same size as the cookie consent emoji */
         cursor: pointer;
         transition: opacity 0.5s ease, visibility 0.5s ease;
@@ -78,7 +78,7 @@
                         setTimeout(() => {
                             scrollBtn.style.display = "none";
                         }, 500); // Match the CSS transition duration
-                    }, 2000); // Extend visibility to 2 seconds
+                    }, 2000); // Reduce visibility duration to 2 seconds
                 }
             }
         }
