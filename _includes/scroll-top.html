@@ -36,25 +36,10 @@
     document.addEventListener("DOMContentLoaded", function () {
         const scrollBtn = document.getElementById("scroll-top-btn");
         let scrollTimeout;
-        let lastScrollY = window.scrollY;
-        let isScrollingDown = true;
-
-        /**
-         * Debounce function to limit the rate at which a function can fire.
-         * @param {Function} func - The function to debounce.
-         * @param {number} wait - The delay in milliseconds.
-         * @returns {Function} - The debounced function.
-         */
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        }
 
         /**
          * Function to show the scroll button.
+         * This function is called on any scroll event, regardless of direction.
          */
         function showScrollBtn() {
             if (window.innerWidth <= 767) { // Ensure it's a mobile device
@@ -78,35 +63,21 @@
                         setTimeout(() => {
                             scrollBtn.style.display = "none";
                         }, 500); // Match the CSS transition duration
-                    }, 2000); // Reduce visibility duration to 2 seconds
+                    }, 2000); // Visibility duration set to 2 seconds
                 }
             }
         }
 
         /**
          * Function to handle scroll events.
-         * Detects scroll direction and toggles the visibility of the scroll button.
+         * Shows the button on any scroll (up or down).
          */
         function handleScroll() {
-            const currentScrollY = window.scrollY;
-            isScrollingDown = currentScrollY > lastScrollY;
-            lastScrollY = currentScrollY;
-
-            if (isScrollingDown) {
-                showScrollBtn();
-            } else {
-                // If scrolling up, hide the button immediately
-                clearTimeout(scrollTimeout);
-                scrollBtn.style.opacity = "0";
-                scrollBtn.style.visibility = "hidden";
-                setTimeout(() => {
-                    scrollBtn.style.display = "none";
-                }, 500); // Match the CSS transition duration
-            }
+            showScrollBtn();
         }
 
-        // Attach the debounced scroll event listener
-        window.addEventListener("scroll", debounce(handleScroll, 50)); // Increased responsiveness with shorter debounce
+        // Attach the scroll event listener without debounce for instant response
+        window.addEventListener("scroll", handleScroll);
 
         // When the user clicks on the button, scroll to the top smoothly
         scrollBtn.addEventListener("click", function () {
