@@ -7,17 +7,15 @@
         top: 20px; /* Position at the top */
         right: 20px; /* Position at the right */
         z-index: 9002; /* Ensure it sits above other elements */
-        background: rgba(255, 255, 255, 0.6); /* More opaque semi-transparent background */
+        background: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
         border: 2px solid white; /* White border for visibility */
         border-radius: 8px; /* Slightly rounded corners */
-        font-size: 36px; /* Same size as the cookie consent emoji */
+        font-size: 36px; /* Size of the 🔝 emoji */
         cursor: pointer;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-        padding: 0.5rem; /* Adequate padding for touch devices */
-        /* Optional: Add shadow for better visibility */
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        /* Ensure the button is focusable */
-        outline: none;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        padding: 0.5rem; /* Padding for touch devices */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Optional shadow for better visibility */
+        outline: none; /* Remove default outline */
     }
 
     #scroll-top-btn:hover,
@@ -35,108 +33,82 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const scrollBtn = document.getElementById("scroll-top-btn");
-        let scrollTimeout;
-        let isButtonClicked = false; // Flag to track if button was clicked
-        let lastScrollY = window.scrollY; // Track last scroll position
+        let lastScrollY = window.scrollY;
 
         /**
-         * Function to show the scroll button.
-         * This function is called on any scroll event, regardless of direction.
+         * Shows the scroll button.
          */
         function showScrollBtn() {
-            if (window.innerWidth <= 767) { // Ensure it's a mobile device
-                if (window.scrollY > 0) { // Trigger as soon as scrolling starts
-                    if (scrollBtn.style.display !== "block" && !isButtonClicked) {
-                        scrollBtn.style.display = "block";
-                        // Allow time for display to take effect before starting transition
-                        setTimeout(() => {
-                            scrollBtn.style.opacity = "1";
-                            scrollBtn.style.visibility = "visible";
-                        }, 10);
-                    }
-
-                    // Reset the hide timer only if the button wasn't clicked
-                    if (!isButtonClicked) {
-                        clearTimeout(scrollTimeout);
-                        scrollTimeout = setTimeout(() => {
-                            // Start fade-out effect
-                            scrollBtn.style.opacity = "0";
-                            scrollBtn.style.visibility = "hidden";
-                            // Hide the button after the transition duration
-                            setTimeout(() => {
-                                scrollBtn.style.display = "none";
-                            }, 500); // Match the CSS transition duration
-                        }, 1500); // Visibility duration set to 1.5 seconds
-                    }
-                }
+            if (scrollBtn.style.display !== "block") {
+                scrollBtn.style.display = "block";
+                // Slight delay to allow display property to take effect before transitioning
+                setTimeout(() => {
+                    scrollBtn.style.opacity = "1";
+                    scrollBtn.style.visibility = "visible";
+                }, 10);
             }
+
+            // Hide the button after 1.2 seconds of no scrolling
+            clearTimeout(scrollBtn.hideTimeout);
+            scrollBtn.hideTimeout = setTimeout(hideScrollBtn, 1200);
         }
 
         /**
-         * Function to handle scroll events.
-         * Detects scroll direction and toggles the visibility of the scroll button.
+         * Hides the scroll button.
          */
-        function handleScroll() {
-            const currentScrollY = window.scrollY;
-            const isScrollingDown = currentScrollY > lastScrollY;
-            lastScrollY = currentScrollY;
-
-            if (isScrollingDown) {
-                showScrollBtn();
-            } else {
-                // If scrolling up and the button was clicked, do not show it
-                if (isButtonClicked) {
-                    // Do nothing, keep the button hidden
-                    return;
-                } else {
-                    // Hide the button immediately when scrolling up
-                    clearTimeout(scrollTimeout);
-                    scrollBtn.style.opacity = "0";
-                    scrollBtn.style.visibility = "hidden";
-                    setTimeout(() => {
-                        scrollBtn.style.display = "none";
-                    }, 500); // Match the CSS transition duration
-                }
-            }
-        }
-
-        // Attach the scroll event listener without debounce for instant response
-        window.addEventListener("scroll", handleScroll);
-
-        // When the user clicks on the button, scroll to the top smoothly and hide the button
-        scrollBtn.addEventListener("click", function () {
-            isButtonClicked = true; // Set flag to prevent reappearing during scroll up
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-            // Hide the button immediately after click
+        function hideScrollBtn() {
             scrollBtn.style.opacity = "0";
             scrollBtn.style.visibility = "hidden";
             setTimeout(() => {
                 scrollBtn.style.display = "none";
-                isButtonClicked = false; // Reset flag after hiding
-            }, 500); // Match the CSS transition duration
-            // Clear any existing hide timers to prevent conflicts
-            clearTimeout(scrollTimeout);
-        });
+            }, 300); // Match the CSS transition duration
+        }
 
-        // Handle window resize to hide the button if not on mobile
+        /**
+         * Handles scroll events to determine direction and show/hide the button accordingly.
+         */
+        function handleScroll() {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY) {
+                // Scrolling Down
+                showScrollBtn();
+            } else {
+                // Scrolling Up
+                hideScrollBtn();
+            }
+
+            lastScrollY = currentScrollY;
+        }
+
+        /**
+         * Smoothly scrolls to the top and hides the button immediately.
+         */
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+            hideScrollBtn();
+        }
+
+        // Event listener for scroll without debounce for immediate response
+        window.addEventListener("scroll", handleScroll);
+
+        // Event listener for button click
+        scrollBtn.addEventListener("click", scrollToTop);
+
+        // Event listener for window resize to hide the button on larger screens
         window.addEventListener("resize", function () {
             if (window.innerWidth > 767) {
-                clearTimeout(scrollTimeout);
-                scrollBtn.style.display = "none";
-                scrollBtn.style.opacity = "0";
-                scrollBtn.style.visibility = "hidden";
-                isButtonClicked = false; // Reset flag on resize
+                hideScrollBtn();
+                clearTimeout(scrollBtn.hideTimeout);
             }
         });
 
-        // Ensure the button is hidden on initial load if not scrolled
-        if (window.innerWidth > 767 || window.scrollY <= 0) { // Adjusted threshold to 0
-            scrollBtn.style.display = "none";
-            scrollBtn.style.opacity = "0";
-            scrollBtn.style.visibility = "hidden";
+        // Initial check to hide the button if the page is not scrolled
+        if (window.innerWidth > 767 || window.scrollY <= 0) {
+            hideScrollBtn();
         }
     });
 </script>
