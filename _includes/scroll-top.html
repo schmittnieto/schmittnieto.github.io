@@ -37,6 +37,7 @@
         const scrollBtn = document.getElementById("scroll-top-btn");
         let scrollTimeout;
         let isButtonClicked = false; // Flag to track if button was clicked
+        let lastScrollY = window.scrollY; // Track last scroll position
 
         /**
          * Function to show the scroll button.
@@ -73,10 +74,30 @@
 
         /**
          * Function to handle scroll events.
-         * Shows the button on any scroll (up or down).
+         * Detects scroll direction and toggles the visibility of the scroll button.
          */
         function handleScroll() {
-            showScrollBtn();
+            const currentScrollY = window.scrollY;
+            const isScrollingDown = currentScrollY > lastScrollY;
+            lastScrollY = currentScrollY;
+
+            if (isScrollingDown) {
+                showScrollBtn();
+            } else {
+                // If scrolling up and the button was clicked, do not show it
+                if (isButtonClicked) {
+                    // Do nothing, keep the button hidden
+                    return;
+                } else {
+                    // Hide the button immediately when scrolling up
+                    clearTimeout(scrollTimeout);
+                    scrollBtn.style.opacity = "0";
+                    scrollBtn.style.visibility = "hidden";
+                    setTimeout(() => {
+                        scrollBtn.style.display = "none";
+                    }, 500); // Match the CSS transition duration
+                }
+            }
         }
 
         // Attach the scroll event listener without debounce for instant response
