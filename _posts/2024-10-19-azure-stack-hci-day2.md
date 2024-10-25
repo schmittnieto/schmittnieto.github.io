@@ -1,7 +1,8 @@
 ---
 title: "Azure Stack HCI: Day2 operations"
-excerpt: "Unlock the full potential of your Azure Stack HCI deployment with essential Day 2 operations. From configuring networks to managing VMs Images, monitoring, and security, this guide walks you through the steps to optimize your environment."
+excerpt: "Optimize your Azure Stack HCI deployment with Day 2 operations. Learn to configure networks, manage VM images, monitor, and secure your environment effectively."
 date: 2024-10-19
+last_modified_at: 2024-10-28
 categories:
   - Blog
 tags:
@@ -21,7 +22,7 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-## Azure Stack HCI Day 2 Operations
+# Azure Stack HCI Day 2 Operations
 
 Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! If you've been following along, you should now have a fully provisioned **Azure Stack HCI DemoLab**. In the previous article, [Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), we took you through the process of setting up Azure Stack HCI in a clean environment, highlighting the steps necessary to bring your infrastructure online. But provisioning is just the beginning!
 

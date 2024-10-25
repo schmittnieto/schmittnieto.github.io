@@ -1,8 +1,8 @@
 ---
 title: "Azure Stack HCI: Demolab"
-excerpt: "Streamline your Azure Stack HCI deployment on minimal hardware with the AzSHCI scripts. This guide compares existing solutions and provides a step-by-step deployment process for efficient testing and development."
+excerpt: "Streamline Azure Stack HCI deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2024-10-22
+last_modified_at: 2024-10-28
 categories:
   - Blog
 tags:
@@ -24,17 +24,17 @@ toc_min_header: 1
 toc_max_header: 2
 ---
 
-## Introduction
+# Azure Stack HCI: Demolab
 
 Azure Stack HCI is a hyperconverged infrastructure solution that combines software-defined compute, storage, and networking. While it's a powerful tool for modernizing your data center and integrating with Azure services, setting it up for testing or development can be resource-intensive.
 
 Deploying Azure Stack HCI can often seem daunting, especially when constrained by hardware resources. Traditional methods typically require substantial infrastructure, making it challenging for individuals or small teams to set up testing and lab environments. In this article, I'll explore a streamlined approach using the **AzSHCI** scripts, which allow you to deploy Azure Stack HCI on minimal hardware setups, such as a laptop.
 
-### Existing Solutions and Their Limitations
+## Existing Solutions and Their Limitations
 
 Several tools and guides exist to help deploy Azure Stack HCI in lab environments. However, they often come with limitations that make them less suitable for minimal hardware setups.
 
-#### MSLab by Jaromir Kaspar
+### MSLab by Jaromir Kaspar
 
 [MSLab](https://github.com/microsoft/MSLab) is a comprehensive solution that allows you to deploy various Microsoft products in a lab environment.
 
@@ -49,7 +49,7 @@ Several tools and guides exist to help deploy Azure Stack HCI in lab environment
 
 Additionally, the [DellGEOS Repository](https://github.com/DellGEOS/AzureStackHOLs) offers more current scenarios and use cases. Most scenarios in the DellGEOS repository are designed for infrastructures somewhat more robust than a simple laptop. In the past, DellGEOS has been the base for my configurations on Azure Stack HCI with Dell hardware, providing very current troubleshooting scenarios.
 
-#### Azure Arc Jumpstart by Lior Kamrat
+### Azure Arc Jumpstart by Lior Kamrat
 
 [Azure Arc Jumpstart](https://azurearcjumpstart.io/) provides automated deployment scenarios for Azure Arc-enabled resources.
 
@@ -62,7 +62,7 @@ Additionally, the [DellGEOS Repository](https://github.com/DellGEOS/AzureStackHO
   - Lack of flexibility in networking due to virtualization and Azure-based implementation, limiting access to VM consoles.
   - Costs approximate around $3,000 per month, not accounting for additional expenses. [Cost Details](https://aka.ms/JumpstartHCIBoxCost)
 
-#### Manual Deployment
+### Manual Deployment
 
 Deploying Azure Stack HCI manually using the [Deployment Guide](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-virtual) is another option. However, this manual approach has several drawbacks:
 
@@ -74,7 +74,7 @@ Deploying Azure Stack HCI manually using the [Deployment Guide](https://learn.mi
   - Missing steps and incomplete documentation make the process cumbersome.
   - Performing a manual deployment is much more tedious and time-consuming compared to using AzSHCI scripts.
 
-### Why AzSHCI?
+## Why AzSHCI?
 
 The **AzSHCI** scripts are designed to bridge this gap by providing a lightweight, efficient way to deploy Azure Stack HCI on minimal hardware. Key advantages include:
 

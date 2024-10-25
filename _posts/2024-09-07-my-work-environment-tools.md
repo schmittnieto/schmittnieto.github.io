@@ -1,7 +1,8 @@
 ---
 title: "My Work Environment: Tools and Customizations"
 date: 2024-09-07
-excerpt: "Discover the essential tools and customizations I use daily, from package management with Winget to interactive PowerShell with Oh My Posh and PSReadLine, plus helpful AI support with ChatGPT."
+last_modified_at: 2024-10-28
+excerpt: "Discover essential tools and customizations I use daily, including Winget for package management and interactive PowerShell with Oh My Posh and much more!"
 categories:
   - Blog
 tags:
@@ -22,7 +23,7 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# Introduction
+# My Work Environment: Tools and Customizations
 
 In this post, I want to share with you the tools and customizations that make up my daily work environment. As an Azure consultant and developer, having a well-organized and efficient setup is crucial. Here are some of the tools and customizations I use to streamline my workflow and boost productivity.
 
@@ -160,7 +161,7 @@ Last but not least, Spotify is my constant companion while working. With its vas
 
 Another essential tool I use daily is ChatGPT. As an AI assistant, ChatGPT helps me quickly find answers, generate ideas, and even write scripts or code snippets when needed. It speeds up the research process, provides alternative solutions to problems, and assists in breaking down complex topics.
 
-# Conclusion
+## Conclusion
 
 This is just a small list of tools which I use day by day, I will be modifying it by adding tools or customizations to them. 
 In case you have tools that you want to share with the community, please don't hesitate to comment!

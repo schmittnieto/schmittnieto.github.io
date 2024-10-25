@@ -1,7 +1,8 @@
 ---
 title: "Creating My Azure Journey Blog: A Step-by-Step Guide"
 date: 2024-07-21
-excerpt: "Learn how I built my Azure journey blog using GitHub Pages and Jekyll. This step-by-step guide covers everything from setting up your environment to customizing themes and hosting with a custom domain. Perfect for IT enthusiasts and developers looking to create their own blog."
+last_modified_at: 2024-10-28
+excerpt: "Build your Azure blog with GitHub Pages and Jekyll. This step-by-step guide covers setup, theme installation, customization, and hosting with a custom domain."
 categories:
   - Blog
 tags:
@@ -21,13 +22,13 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# Introduction
+# Creating My Azure Journey Blog: A Step-by-Step Guide
 
 In this article, I'll walk you through the process of creating a personal blog using GitHub Pages and Jekyll. Whether you're an IT enthusiast like me or just someone looking to start a blog, this guide will provide you with all the necessary steps to set up your site, choose and customize a theme, create content, and host it with a custom domain.
 
-# Step 1: Setting Up the Environment
+## Step 1: Setting Up the Environment
 
-## Installing Jekyll and Ruby
+### Installing Jekyll and Ruby
 
 First, I set up a development environment on an Ubuntu virtual machine. I needed to install Ruby and Jekyll to get started. Here’s how I did it:
 
@@ -42,7 +43,7 @@ Then, I installed Jekyll:
 gem install jekyll bundler
 ```
 
-## Creating a New Jekyll Site
+### Creating a New Jekyll Site
 
 With Jekyll installed, I created a new site to kickstart the blog setup. This was pretty straightforward:
 
@@ -51,9 +52,9 @@ jekyll new myblog
 cd myblog
 ```
 
-# Step 2: Choosing and Configuring the Theme
+## Step 2: Choosing and Configuring the Theme
 
-## Selecting and Installing the Theme
+### Selecting and Installing the Theme
 
 I decided to use the **Minimal Mistakes** theme for its clean design and rich features. Here’s how I set it up:
 
@@ -76,14 +77,14 @@ I decided to use the **Minimal Mistakes** theme for its clean design and rich fe
      bundle install
      ```
 
-## Customizing the Theme
+### Customizing the Theme
 
 To make the blog feel more personal, I customized various elements in the `_config.yml` file, such as site details, navigation bar links, and added a personal touch with some custom CSS. Here's a snippet of my `_config.yml`:
 
 ```yaml
 title: "Cristian´s Blog"
 email: blog@schmitt-nieto.com
-description: >- # this means to ignore newlines until "baseurl:"
+description: >- ## this means to ignore newlines until "baseurl:"
   Sharing my Azure expertise and IT journey on schmitt-nieto.com
 github_username: schmittnieto
 minimal_mistakes_skin: "dark"
@@ -104,9 +105,9 @@ author:
 
 With these steps, I had the Minimal Mistakes theme set up and customized for my blog.
 
-# Step 3: Creating and Structuring Content
+## Step 3: Creating and Structuring Content
 
-## Adding Pages and Posts
+### Adding Pages and Posts
 
 I created essential pages like `aboutme.md`. This page is all about introducing myself and my journey:
 
@@ -134,18 +135,18 @@ excerpt: "Join me as I share my journey and experiences in the world of Azure an
 author_profile: true
 ---
 
-# Welcome to My Azure Journey
+## Welcome to My Azure Journey
 
 Hello, I'm **Cristian Schmitt Nieto**, a Spanish IT enthusiast who moved to Germany...
 ```
 
-## Implementing Tags
+### Implementing Tags
 
 I structured my blog to categorize posts using tags. Each tag page was dynamically created using Jekyll collections, making it easier for readers to find content on specific topics.
 
-# Step 4: Hosting with GitHub Pages
+## Step 4: Hosting with GitHub Pages
 
-## Creating a GitHub Repository
+### Creating a GitHub Repository
 
 I already had a repository named `schmittnieto.github.io` that I had set up about a year ago for testing GitHub Pages. I decided to recycle this repository for my blog. Here’s how I pushed my local site to GitHub:
 
@@ -157,7 +158,7 @@ git remote add origin https://github.com/schmittnieto/schmittnieto.github.io.git
 git push -u origin main
 ```
 
-## Configuring GitHub Pages
+### Configuring GitHub Pages
 
 In the repository settings, I configured GitHub Pages to serve from the `main` branch. I also added a `CNAME` file to set up my custom domain:
 
@@ -168,7 +169,7 @@ git commit -m "Add custom domain"
 git push origin main
 ```
 
-## Setting Up DNS
+### Setting Up DNS
 
 To point my custom domain to GitHub's servers, I added the following A records:
 
@@ -185,11 +186,11 @@ And a CNAME record for `www`:
 |-------|------|------------------------|------|
 | CNAME | www  | schmittnieto.github.io | 3600 |
 
-## Enabling HTTPS
+### Enabling HTTPS
 
 Finally, I enabled HTTPS in the GitHub Pages settings to ensure secure access to my blog. This happens automatically when you check the HTTPS checkbox in GitHub Pages (on your Repository) and after verifying that the DNS has been configured correctly. GitHub Pages uses Let's Encrypt to generate this certificate, without having to do anything (at the user side) and at no cost.
 
-# Step 5: Verifying Changes Locally
+## Step 5: Verifying Changes Locally
 
 Each time I make modifications to the blog, I verify them locally by running the following command. This allows me to preview the changes in a local server before pushing them to GitHub:
 
@@ -197,6 +198,6 @@ Each time I make modifications to the blog, I verify them locally by running the
 bundle exec jekyll serve
 ```
 
-# Conclusion
+## Conclusion
 
 Building this blog has been an incredibly rewarding journey. It's amazing how tools like GitHub Pages and Jekyll can transform a simple idea into a fully functional blog. I hope this guide has provided you with valuable insights and inspiration to start your own blogging journey. Stay tuned for more posts where I'll dive deeper into Azure and share my ongoing IT adventures!

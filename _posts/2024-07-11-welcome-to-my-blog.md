@@ -1,7 +1,8 @@
 ---
 title: "Welcome to My Azure Journey"
 date: 2024-07-11
-excerpt: "Join me as I embark on my Azure journey, sharing IT experience, insights, and practical solutions to everyday challenges in the cloud ecosystem. From managing data centers to diving deep into Azure, this blog is a reflection of my passion for technology and a resource for fellow Azure enthusiasts."
+last_modified_at: 2024-10-28
+excerpt: "Join my Azure journey, sharing IT experience, insights, and practical solutions for cloud challenges. From data centers On premises to deep Azure dives."
 categories: 
   - Blog
 tags: 
