@@ -21,7 +21,7 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# Why I Started This Blog
+## Why I Started This Blog
 
 Hello, I'm **Cristian Schmitt Nieto**, and welcome to my blog! As an Azure consultant with over a decade of experience in IT, I wanted to create a space to share my knowledge, experiences, and insights. This blog is a reflection of my passion for technology and my journey from managing small data centers to diving deep into the world of Azure.
 

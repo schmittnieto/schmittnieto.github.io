@@ -23,7 +23,7 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# My Work Environment: Tools and Customizations
+## My Work Environment: Tools and Customizations
 
 In this post, I want to share with you the tools and customizations that make up my daily work environment. As an Azure consultant and developer, having a well-organized and efficient setup is crucial. Here are some of the tools and customizations I use to streamline my workflow and boost productivity.
 

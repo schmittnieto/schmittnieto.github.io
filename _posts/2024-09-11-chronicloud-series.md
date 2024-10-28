@@ -27,7 +27,7 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# Chronicloud Series: A Journey through Azure Solutions
+## Chronicloud Series: A Journey through Azure Solutions
 
 Welcome to the **Chronicloud Series**, a comprehensive exploration of various Azure products and solutions! This series aims to provide an in-depth look into different Azure services, focusing on their use cases, advantages, and the best ways to implement them. Throughout these articles, we will dive into technical guides, resources, and labs that will help you master these tools in real-world scenarios. Each series will be composed of multiple articles, serving as an extensive guide on these critical cloud technologies.
 

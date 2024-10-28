@@ -22,7 +22,7 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# Creating My Azure Journey Blog: A Step-by-Step Guide
+## Creating My Azure Journey Blog: A Step-by-Step Guide
 
 In this article, I'll walk you through the process of creating a personal blog using GitHub Pages and Jekyll. Whether you're an IT enthusiast like me or just someone looking to start a blog, this guide will provide you with all the necessary steps to set up your site, choose and customize a theme, create content, and host it with a custom domain.
 

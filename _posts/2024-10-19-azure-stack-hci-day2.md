@@ -22,7 +22,7 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 ---
 
-# Azure Stack HCI Day 2 Operations
+## Azure Stack HCI Day 2 Operations
 
 Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! If you've been following along, you should now have a fully provisioned **Azure Stack HCI DemoLab**. In the previous article, [Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), we took you through the process of setting up Azure Stack HCI in a clean environment, highlighting the steps necessary to bring your infrastructure online. But provisioning is just the beginning!
 

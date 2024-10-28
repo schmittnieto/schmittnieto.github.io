@@ -24,7 +24,7 @@ toc_min_header: 1
 toc_max_header: 2
 ---
 
-# Azure Stack HCI: Demolab
+## Azure Stack HCI: Demolab
 
 Azure Stack HCI is a hyperconverged infrastructure solution that combines software-defined compute, storage, and networking. While it's a powerful tool for modernizing your data center and integrating with Azure services, setting it up for testing or development can be resource-intensive.
 
