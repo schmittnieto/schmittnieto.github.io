@@ -9,10 +9,10 @@ tags:
   - Azure Stack HCI
 
 header:
-  teaser: "/assets/img/post/2024-11-02-azure-stacl-hci-vmdeployment.webp"
-  image: "/assets/img/post/2024-11-02-azure-stacl-hci-vmdeployment.webp"
-  og_image: "/assets/img/post/2024-11-02-azure-stacl-hci-vmdeployment.webp"
-  overlay_image: "/assets/img/post/2024-11-02-azure-stacl-hci-vmdeployment.webp"
+  teaser: "/assets/img/post/2024-11-02-azure-stack-hci-vmdeployment.webp"
+  image: "/assets/img/post/2024-11-02-azure-stack-hci-vmdeployment.webp"
+  og_image: "/assets/img/post/2024-11-02-azure-stack-hci-vmdeployment.webp"
+  overlay_image: "/assets/img/post/2024-11-02-azure-stack-hci-vmdeployment.webp"
   overlay_filter: 0.5
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
@@ -49,7 +49,7 @@ Steps to create an Arc VM via Azure Portal:
 1. **Sign In and Navigate**: Log in to the Azure Portal and navigate to your Azure Stack HCI cluster resource.
 
 2. **Access Virtual Machines**: In your cluster resource, go to Virtual machines and click on **+ Create VM**.
-![Deploying VM Azure Stack HCI 01](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/01.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 01](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/01.png){: style="border: 2px solid grey;"}
 3. **Fill in Project Details**:
    - **Subscription**: Choose the subscription you wish to use.
    - **Resource Group**: Select an existing resource group or create a new one.
@@ -64,20 +64,20 @@ Steps to create an Arc VM via Azure Portal:
    - **Virtual Processor Count**: Specify the number of vCPUs.
    - **Memory**: Allocate the desired amount of memory in MB.
    - **Memory Type**: Choose between static or dynamic memory.**This cannot be changed after deployment**.
-![Deploying VM Azure Stack HCI 02](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/02.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 02](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/02.png){: style="border: 2px solid grey;"}
 5. **Enable Guest Management**:
    - In the **VM extensions** section, enable **Guest Management** to allow for extensions and Arc integration.
-![Deploying VM Azure Stack HCI 03](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/03.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 03](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/03.png){: style="border: 2px solid grey;"}
 6. **Domain Join (Optional)**:
    - If you wish to domain join the VM, enable **Domain Join** and provide the necessary Active Directory credentials.
-![Deploying VM Azure Stack HCI 04](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/04.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 04](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/04.png){: style="border: 2px solid grey;"}
 7. **Add Disks (Optional)**:
    - Add additional disks if required, specifying their size, provisioning type, and storage path.
 
 8. **Configure Networking**:
    - Add at least one network interface. If you've enabled guest management, this step is mandatory.
    - Configure the network settings, including IP allocation methods and static IPs if needed.
-![Deploying VM Azure Stack HCI 05](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/05.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 05](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/05.png){: style="border: 2px solid grey;"}
 9. **Review and Create**:
    - Review all the configurations and click **Create** to initiate the deployment.
 
@@ -100,7 +100,7 @@ If **Guest Management** is enabled, the VM is registered with **Azure Arc** upon
 
 If you've opted for **Domain Join** during deployment, the VM will automatically join the specified domain using VM scripts and the **Arc Agent**, streamlining the process and ensuring compliance with your organization's policies.
 
-![Deploying VM Azure Stack HCI 06](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/06.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 06](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/06.png){: style="border: 2px solid grey;"}
 
 ## Managing Deployed VMs
 
@@ -118,7 +118,7 @@ From the cluster's viewpoint, you can manage the following aspects of all VMs de
 
 **Note:** The Arc VMs provisioned on Azure Stack HCI offer more options than traditional Arc VMs, specifically related to cluster resource management like **Disk**, **Size**, and **Networking**. This enhanced functionality allows for better integration and management of resources directly from the Azure Portal.
 
-![Deploying VM Azure Stack HCI 07](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/07.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 07](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/07.png){: style="border: 2px solid grey;"}
 
 ### VM Perspective
 
@@ -142,7 +142,7 @@ From the VM's perspective, management is akin to managing any VM in **Azure Arc*
 
 - **Monitoring Capabilities**: Leverage Azure Monitor to gain insights into the VM's performance, health, and availability, allowing for proactive management.
 
-![Deploying VM Azure Stack HCI 08](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/08.png){: style="border: 2px solid grey;"}
+![Deploying VM Azure Stack HCI 08](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/08.png){: style="border: 2px solid grey;"}
 
 ## Advantages of Azure Stack HCI-Integrated Arc VMs
 
@@ -182,7 +182,7 @@ To streamline VM access without exposing firewall ports, I've configured a custo
 
 By using this script, you can securely manage your VMs without big changes on your network security, making remote administration more convenient.
 
-![RDP over SSH on Arc VM](/assets/img/post/2024-11-02-azure-stacl-hci-demolab-vmdeployment/99.png){: style="border: 2px solid grey;"}
+![RDP over SSH on Arc VM](/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/99.png){: style="border: 2px solid grey;"}
 
 ## Conclusion
 
