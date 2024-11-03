@@ -996,7 +996,7 @@ Write-Message "All configurations and VM creations completed successfully." -Typ
 
 # Define credentials and variables
 $defaultUser = "Administrator"
-$defaultPwd = "D0m41nC0ntr0LL3r"
+$defaultPwd = "Start#1234"
 $DefaultSecuredPassword = ConvertTo-SecureString $defaultPwd -AsPlainText -Force
 $DefaultCredentials = New-Object System.Management.Automation.PSCredential ($defaultUser, $DefaultSecuredPassword)
 
@@ -2022,6 +2022,7 @@ Write-Message "Cluster node configuration completed successfully." -Type "Succes
     - Adds any missing extensions based on a predefined list.
 
 .NOTES
+    - Based on Jaromir´s aproach: https://github.com/DellGEOS/AzureStackHOLs/tree/main/tips%26tricks/05-FixExtensions
     - Designed by Cristian Schmitt Nieto. For more information and usage, visit: https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
     - Run this script with administrative privileges.
     - Ensure the Execution Policy allows the script to run. To set the execution policy, you can run:
