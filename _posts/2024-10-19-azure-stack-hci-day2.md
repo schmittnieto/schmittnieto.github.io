@@ -321,7 +321,7 @@ Here's are screenshots illustrating the manual addition of the VHDX image:
 
 I plan to revisit this automation in the future when the tools and support for Hyper-V Generation 2 images become more mature, potentially allowing for full automation without the need for complex scripting.
 
-You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/02Day2/11_ImageBuilderAzSHCI.ps1).
+You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/scripts%2F02Day2%2F11_ImageBuilderAzSHCI.ps1).
 
 ### Bonus: Automating Cluster Start and Stop Operations
 
@@ -364,7 +364,7 @@ This script ensures that the Domain Controller (DC) and Cluster Node VMs are sta
 
 By using this script, you can safely power down your Azure Stack HCI cluster when you need to shut down the host machine, and easily bring it back online when needed.
 
-You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/02Day2/10_StartStopAzSHCI.ps1).
+You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/scripts%2F02Day2%2F10_StartStopAzSHCI.ps1).
 
 
 ## Conclusion
