@@ -166,7 +166,7 @@ However, manually deployed VMs have limitations:
 
 - **Management Challenges**: Lack of integration with Azure Arc features like Policies and Update Manager can lead to inconsistent management practices.
 
-Microsoft is actively working on solutions to "rehydrate" these manually deployed VMs, ensuring they can be integrated into Azure Arc for unified management. Currently, a workaround is available, detailed in [Kenny Lowe's blog](https://multicloud.is/2023/06/03/migrate-to-hci.html), which we'll explore in a future article on VM migration to Azure Stack HCI.
+Microsoft is actively working on solutions to "rehydrate" these manually deployed VMs, ensuring they can be integrated into Azure Arc for unified management. Currently, a workaround is available, detailed in [Kenny Lowe's blog](https://www.kennylowe.org/2024/06/03/migrate-to-hci.html/), which we'll explore in a future article on VM migration to Azure Stack HCI.
 
 ## Enhancing VM Access with Custom Scripts
 
