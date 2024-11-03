@@ -1,5 +1,5 @@
 ---
-title: "Azure Stack HCI VM Deployment"
+title: "Azure Stack HCI: VM Deployment"
 excerpt: "Deploy VMs on Azure Stack HCI easily and discover the process, management features, and benefits of integrated VM deployments."
 date: 2024-11-02
 categories:
@@ -23,7 +23,7 @@ toc_icon: "list-ul"
 
 ## Azure Stack HCI VM Deployment
 
-Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! If you've been following along, you should have successfully set up your **Azure Stack HCI DemoLab** and optimized it with **Day 2 Operations**. In the previous articles, [Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/) and [Azure Stack HCI: Day2 Operations](/blog/azure-stack-hci-day2-operations/), we walked you through the initial setup and essential post-deployment configurations. Now, it's time to take the next step: deploying virtual machines (VMs) on your Azure Stack HCI environment.
+Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! If you've been following along, you should have successfully set up your **Azure Stack HCI DemoLab** and optimized it with **Day 2 Operations**. In the previous articles, [Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/) and [Azure Stack HCI: Day2 Operations](/blog/azure-stack-hci-day2/), we walked you through the initial setup and essential post-deployment configurations. Now, it's time to take the next step: deploying virtual machines (VMs) on your Azure Stack HCI environment.
 
 This article will guide you through the **Azure Stack HCI VM Deployment** process using the **Azure Arc Resource Bridge**. We'll cover the deployment steps, management capabilities from both cluster and VM perspectives, and highlight the advantages of using Azure Stack HCI-integrated Arc VMs. Additionally, we'll discuss manual deployment methods and introduce a custom script from the **AzSHCI** repository to streamline VM access.
 
