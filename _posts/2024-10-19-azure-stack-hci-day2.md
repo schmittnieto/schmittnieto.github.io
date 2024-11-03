@@ -2,7 +2,7 @@
 title: "Azure Stack HCI: Day2 operations"
 excerpt: "Optimize your Azure Stack HCI deployment with Day 2 operations. Learn to configure networks, manage VM images, monitor, and secure your environment effectively."
 date: 2024-10-19
-last_modified_at: 2024-10-28
+last_modified_at: 2024-11-02
 categories:
   - Blog
 tags:
@@ -305,11 +305,67 @@ Here’s how I create a VM image using **Azure Marketplace** images in the **Azu
 
 For more details, you can always refer to the [official guide](https://learn.microsoft.com/en-us/azure-stack/hci/manage/virtual-machine-image-azure-marketplace).
 
-#### Future Plans for Custom Images
+#### Custom Images Script
 
-Later on, I’ll provide a guide on creating custom VM images from **local shares**, especially for those using **VHDX**. I also plan to cover how to update Marketplace images and manage multiple versions efficiently.
+In my ongoing efforts to streamline the process of creating custom VM images for Azure Stack HCI, I've developed a PowerShell script named `11_ImageBuilderAzSHCI.ps1`. This script automates many steps, such as downloading images from Azure Marketplace, converting them to the VHDX format, and optimizing them on the VM Node.
 
-For now, using the **Azure Marketplace** is the easiest way for me to get access to the latest, compatible VM images in my Azure Stack HCI environment.
+However, I've intentionally omitted the part of the script that would automatically add the optimized VHDX image back into Azure Stack HCI via Azure CLI commands. The reason for this is that the Azure CLI currently does not support the inclusion of Hyper-V Generation 2 VM images directly into Azure Stack HCI. Attempting to automate this step would involve complex ARM or Bicep scripting, which can be quite tedious and time-consuming for this specific case.
+
+Therefore, I've opted to perform this final step manually. After the script completes the download and conversion process, I manually add the optimized VHDX image into Azure Stack HCI using the Azure Portal. This approach simplifies the script and reduces potential errors that could arise from unsupported or complex automation steps.
+
+Here's are screenshots illustrating the manual addition of the VHDX image:
+
+![Manually Adding VM Image 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-01.png){: style="border: 2px solid grey;"}
+
+![Manually Adding VM Image 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-02.png){: style="border: 2px solid grey;"}
+
+I plan to revisit this automation in the future when the tools and support for Hyper-V Generation 2 images become more mature, potentially allowing for full automation without the need for complex scripting.
+
+You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/02Day2/11_ImageBuilderAzSHCI.ps1).
+
+### Bonus: Automating Cluster Start and Stop Operations
+
+Managing the startup and shutdown sequences of your Azure Stack HCI cluster is essential, especially when you need to power down the host for maintenance or energy savings. To simplify this process, I've created a PowerShell script called `10_StartStopAzSHCI.ps1` that automates turning the cluster off and on.
+
+#### Script: `10_StartStopAzSHCI.ps1`
+
+This script ensures that the Domain Controller (DC) and Cluster Node VMs are started and stopped in the correct order, preventing potential issues with services that depend on Active Directory or cluster resources.
+
+**Features:**
+
+- **Stop Operation:**
+  - Connects to the Cluster Node VM and stops the Cluster service.
+  - Shuts down the Cluster Node VM.
+  - Shuts down the Domain Controller VM.
+
+- **Start Operation:**
+  - Starts the Domain Controller VM and waits for its services to become available.
+  - Starts the Cluster Node VM.
+  - Starts the Cluster service on the Cluster Node VM.
+
+**Usage Instructions:**
+
+1. **Prerequisites:**
+   - Run the script with administrative privileges.
+   - Ensure the execution policy allows the script to run:
+     ```powershell
+     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+     ```
+   - Update the script variables to match your environment, such as VM names and credentials.
+
+2. **Running the Script:**
+   - Open PowerShell with administrative privileges.
+   - Navigate to the directory where the script is saved.
+   - Execute the script:
+     ```powershell
+     .\10_StartStopAzSHCI.ps1
+     ```
+   - When prompted, type `start` or `stop` to initiate the desired operation.
+
+By using this script, you can safely power down your Azure Stack HCI cluster when you need to shut down the host machine, and easily bring it back online when needed.
+
+You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/02Day2/10_StartStopAzSHCI.ps1).
+
 
 ## Conclusion
 
