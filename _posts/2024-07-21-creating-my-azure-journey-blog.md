@@ -10,11 +10,11 @@ tags:
   - Jekyll
 
 header:
-  image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.jpg"
-  og_image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.jpg"
-  overlay_image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.jpg"
+  image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
+  og_image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
+  overlay_image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
   overlay_filter: 0.5  
-  teaser: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.jpg"
+  teaser: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true

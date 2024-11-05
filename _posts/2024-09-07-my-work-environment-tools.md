@@ -11,11 +11,11 @@ tags:
   - Customization
 
 header:
-  image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
-  og_image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
-  overlay_image: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
+  image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
+  og_image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
+  overlay_image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
   overlay_filter: 0.5  
-  teaser: "/assets/img/post/2024-09-07-my-work-environment-tools.jpg"
+  teaser: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true

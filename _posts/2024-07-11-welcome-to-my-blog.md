@@ -9,11 +9,11 @@ tags:
   - Cristian
   - Personal
 header:
-  image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
-  og_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
-  overlay_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
+  image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
+  og_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
+  overlay_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
   overlay_filter: 0.5  
-  teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.jpg"
+  teaser: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true

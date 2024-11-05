@@ -15,11 +15,11 @@ tags:
   - Cloud Adoption Framework
 
 header:
-  image: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
-  og_image: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
-  overlay_image: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
+  image: "/assets/img/post/2024-09-11-chronicloud-series.webp"
+  og_image: "/assets/img/post/2024-09-11-chronicloud-series.webp"
+  overlay_image: "/assets/img/post/2024-09-11-chronicloud-series.webp"
   overlay_filter: 0.5  
-  teaser: "/assets/img/post/2024-09-11-chronicloud-series.jpg"
+  teaser: "/assets/img/post/2024-09-11-chronicloud-series.webp"
   caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true
