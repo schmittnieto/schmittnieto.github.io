@@ -1,13 +1,13 @@
 ---
 title: "Creating My Azure Journey Blog: A Step-by-Step Guide"
 date: 2024-07-21
-last_modified_at: 2024-10-28
+last_modified_at: 2024-11-06
 excerpt: "Build your Azure blog with GitHub Pages and Jekyll. This step-by-step guide covers setup, theme installation, customization, and hosting with a custom domain."
 categories:
   - Blog
 tags:
   - GitHub Pages
-  - Jekyll
+  - Blog
 
 header:
   image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"

@@ -1,7 +1,7 @@
 ---
 title: "Chronicloud Series: A Journey through Azure Solutions"
 date: 2024-09-11
-last_modified_at: 2024-10-28
+last_modified_at: 2024-11-06
 excerpt: "Delve into Azure technologies with the Chronicloud Series. Access in-depth guides and hands-on labs to enhance your skills and understanding in cloud computing."
 categories:
   - Blog
@@ -11,7 +11,7 @@ tags:
   - Azure Stack HCI
   - Azure Virtual Desktop
   - Azure ARC
-  - Cloud PC
+  - Windows 365
   - Cloud Adoption Framework
 
 header:

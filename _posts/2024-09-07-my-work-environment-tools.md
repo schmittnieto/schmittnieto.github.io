@@ -1,14 +1,12 @@
 ---
 title: "My Work Environment: Tools and Customizations"
 date: 2024-09-07
-last_modified_at: 2024-10-28
+last_modified_at: 2024-11-06
 excerpt: "Discover essential tools and customizations I use daily, including Winget for package management and interactive PowerShell with Oh My Posh and much more!"
 categories:
   - Blog
 tags:
-  - Productivity
   - Tools
-  - Customization
 
 header:
   image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
@@ -74,7 +72,7 @@ Oh My Posh is a fantastic tool for customizing my PowerShell prompt. By followin
 One of the best features of my setup is the autocomplete functionality in PowerShell. By customizing my `$PROFILE`, I've enabled autocompletion for various commands, including PowerShell, Winget, and Azure CLI. Here's my `$PROFILE` setup:
 
 ```powershell
-oh-my-posh --init --shell pwsh --config C:/Users/User/Dropbox/Computer/AppData/powershell.json | Invoke-Expression
+oh-my-posh init pwsh --config ~\AppData\Local\Programs\oh-my-posh\themes\atomic.omp | Invoke-Expression
 
 if ($host.Name -eq 'ConsoleHost' -or $host.Name -eq 'Visual Studio Code Host' ) {
 

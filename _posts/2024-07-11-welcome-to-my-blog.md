@@ -1,13 +1,13 @@
 ---
 title: "Welcome to My Azure Journey"
 date: 2024-07-11
-last_modified_at: 2024-10-28
+last_modified_at: 2024-11-06
 excerpt: "Join my Azure journey, sharing IT experience, insights, and practical solutions for cloud challenges. From data centers On premises to deep Azure dives."
 categories: 
   - Blog
 tags: 
-  - Cristian
-  - Personal
+  - Blog
+
 header:
   image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
   og_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
