@@ -23,7 +23,7 @@ toc_icon: "list-ul"
 
 ## Azure Virtual Desktop on Azure Stack HCI
 
-Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! Continuing our journey with Azure Stack HCI, today we're diving into deploying **Azure Virtual Desktop (AVD) on Azure Stack HCI**. This article builds upon our previous ones—[Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), [Azure Stack HCI Day 2 Operations](/blog/azure-stack-hci-day2-operations/), and [Azure Stack HCI VM Deployment](/blog/azure-stack-hci-vm-deployment/). If you've followed those, you're all set for what's next!
+Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! Continuing our journey with Azure Stack HCI, today we're diving into deploying **Azure Virtual Desktop (AVD) on Azure Stack HCI**. This article builds upon our previous ones—[Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), [Azure Stack HCI Day 2 Operations](/blog/azure-stack-hci-day2/), and [Azure Stack HCI VM Deployment](/blog/azure-stack-hci-vm-deployment/). If you've followed those, you're all set for what's next!
 
 In this installment, we'll explore how to set up AVD on Azure Stack HCI. While we'll touch on the essentials here, I'm planning a more in-depth series on AVD early next year, where we'll unpack all the concepts and features extensively. Until now, I haven't seen many blogs detailing the technical steps for provisioning AVD on Azure Stack HCI, which inspired me to document the process for you.
 
