@@ -144,7 +144,7 @@ Next, we'll configure a new UPN Suffix that matches the domain in your Entra ID 
 
 Finally, we'll create the user to login in AVD with the right Suffix (e.g., `avdhci@yourentraiddomain.com`).
 
-![Configuring UPN Suffix](/assets/img/post/2024-11-17-azure-stack-hci-avd/aduser01.png){: style="border: 2px solid grey;"}
+![Configuring UPN Suffix](/assets/img/post/2024-11-17-azure-stack-hci-avd/ADUser01.png){: style="border: 2px solid grey;"}
 
 ### Configuring Entra ID Connect
 
