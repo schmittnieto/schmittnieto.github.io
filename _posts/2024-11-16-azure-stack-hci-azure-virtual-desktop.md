@@ -2,6 +2,7 @@
 title: "Azure Stack HCI: Azure Virtual Desktop"
 excerpt: "Discover how to deploy Azure Virtual Desktop on Azure Stack HCI, including prerequisites, architecture, deployment steps, and connectivity options."
 date: 2024-11-17
+last_modified_at: 2024-11-18
 categories:
   - Blog
 tags:
@@ -245,7 +246,10 @@ In order for RDP Shortpath to function as desired, several modifications must be
 ![RDP Shortpath 3](/assets/img/post/2024-11-17-azure-stack-hci-avd/rdpsp03.png){: style="border: 2px solid grey;"}
 
 This concludes our review of RDP Shortpath and the advantages it provides. 
-An interesting comment from microsoft that goes unnoticed is that it is not recommended to use RDP Sortpath via TCP VPNs because it congests the TCP (link to the warning).
+An interesting comment from microsoft that goes unnoticed is that it is not recommended to use RDP Sortpath via TCP VPNs because it congests the TCP ([link to the warning](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath?tabs=managed-networks#how-rdp-shortpath-works)).
+
+If you're using other VPN types to connect to Azure, we recommend using a UDP-based VPN. While most TCP-based VPN solutions support nested UDP, they add inherited overhead of TCP congestion control, which slows down RDP performance.
+{: .notice--info}
 
 ## Conclusion
 
