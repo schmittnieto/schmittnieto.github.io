@@ -77,7 +77,7 @@ author:
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/cristian-schmitt-nieto/"     
     - label: "BlueSky"
-      icon: "fab fa-fw fa-bluesky"
+      icon: "fas fa-fw fa-bluesky"
       url: "https://bsky.app/profile/schmitt-nieto.com"    
 
 footer:
