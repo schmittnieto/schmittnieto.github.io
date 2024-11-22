@@ -2,7 +2,7 @@
 title: "Azure Stack HCI: Demolab"
 excerpt: "Streamline Azure Stack HCI deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2024-10-28
+last_modified_at: 2024-11-22
 categories:
   - Blog
 tags:
@@ -42,9 +42,9 @@ Several tools and guides exist to help deploy Azure Stack HCI in lab environment
   - Supports a wide range of scenarios and configurations.
   - Highly customizable and feature-rich.
   - Served as the foundation for my lab setups for a long time.
+  - Maintained by the community.
 
 - **Cons:**
-  - The latest versions, such as Azure Stack HCI 2408, have not been updated and are somewhat discontinued.
   - Setup process involves more steps and hardware resources compared to AzSHCI.
 
 Additionally, the [DellGEOS Repository](https://github.com/DellGEOS/AzureStackHOLs) offers more current scenarios and use cases. Most scenarios in the DellGEOS repository are designed for infrastructures somewhat more robust than a simple laptop. In the past, DellGEOS has been the base for my configurations on Azure Stack HCI with Dell hardware, providing very current troubleshooting scenarios.
