@@ -14,21 +14,21 @@ about: "Report an issue with a blog article or its link."
 ## URL to the Article (mandatory)
 
 **Article URL:**  
-<!-- Provide the URL to the blog article with the issue for example schmitt-nieto.com/blog/article-name -->
+<!-- Provide the URL to the blog article with the issue. Example: https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/ -->
 
 ---
 
 ## Issue Description (optional)
 
 **Description:**  
-<!-- Describe the issue with the article or link for example typo, broken link, outdated information, etc -->
+<!-- Describe the issue with the article or link. Examples: typo, broken link, outdated information, etc. -->
 
 ---
 
 ## Suggested Fix (optional)
 
 **Suggested Fix:**  
-<!-- Provide your suggestion to correct the issue, if possible for example correct text, updated link, etc -->
+<!-- Provide your suggestion to correct the issue, if possible. Example: correct text, updated link, etc. -->
 
 ---
 

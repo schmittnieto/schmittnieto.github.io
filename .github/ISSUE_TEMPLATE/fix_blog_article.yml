@@ -15,7 +15,7 @@ body:
     attributes:
       label: URL to the Article (mandatory)
       description: Provide the URL to the blog article with the issue.
-      placeholder: e.g., "https://example.com/blog/article-name"
+      placeholder: e.g., "https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/"
     validations:
       required: true
 
@@ -38,7 +38,7 @@ body:
       required: false
 
   - type: textarea
-    id: additional-comments
+    id: comments
     attributes:
       label: Additional Comments
       description: Add any other relevant information or context.
