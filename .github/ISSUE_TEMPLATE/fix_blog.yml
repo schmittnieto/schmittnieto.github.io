@@ -11,6 +11,15 @@ body:
         - Provide any suggestions for fixing the issue, if possible.
 
   - type: input
+    id: article-name
+    attributes:
+      label: Name to the Article (mandatory)
+      description: Provide the Name to the blog article with the issue.
+      placeholder: e.g., "Azure Stack HCI Azure Virtual Desktop"
+    validations:
+      required: true
+
+  - type: input
     id: article-url
     attributes:
       label: URL to the Article (mandatory)
@@ -20,19 +29,19 @@ body:
       required: true
 
   - type: textarea
-    id: issue-description
+    id: article-description
     attributes:
       label: Issue Description (optional)
-      description: Describe the issue with the article or link. Examples: typo, broken link, outdated information, etc.
+      description: Describe the issue with the article or link. Examples, typo, broken link, outdated information, etc.
       placeholder: e.g., "The article contains outdated information about Azure features..."
     validations:
       required: false
 
   - type: textarea
-    id: suggested-fix
+    id: article-fix
     attributes:
       label: Suggested Fix (optional)
-      description: Provide your suggestion to correct the issue, if possible. Example: correct text, updated link, etc.
+      description: Provide your suggestion to correct the issue, if possible. Example, correct text, updated link, etc.
       placeholder: e.g., "Update the link to the new version of the article here..."
     validations:
       required: false

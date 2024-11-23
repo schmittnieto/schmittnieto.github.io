@@ -10,4 +10,4 @@ issue_templates:
 
   - name: Fix Blog Article or Link
     description: Report an issue with a blog article or its link.
-    file: .github/ISSUE_TEMPLATE/fix_blog_article.yml
+    file: .github/ISSUE_TEMPLATE/fix_blog.yml

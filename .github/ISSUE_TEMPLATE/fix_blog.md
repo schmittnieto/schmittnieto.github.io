@@ -11,11 +11,17 @@ about: "Report an issue with a blog article or its link."
   - Provide any suggestions for fixing the issue, if possible.
 -->
 
+## Blog Article name (mandatory)
+
+**Blog Article Name:**  
+<!-- Provide the name of the Blog Article you are suggesting -->
+
+---
+
 ## URL to the Article (mandatory)
 
-**Article URL:**  
-<!-- Provide the URL to the blog article with the issue. Example: https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/ -->
-
+**Tool URL:**  
+<!-- Provide the URL to the blog article with the issue -->
 ---
 
 ## Issue Description (optional)
