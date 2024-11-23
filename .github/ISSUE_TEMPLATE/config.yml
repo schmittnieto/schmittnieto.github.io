@@ -3,3 +3,11 @@ contact_links:
   - name: Support
     url: https://github.com/schmittnieto/schmittnieto.github.io/discussions
     about: Please post your support questions in the Discussions section.
+issue_templates:
+  - name: Add Tool
+    description: Suggest a new tool to be added to the project.
+    file: .github/ISSUE_TEMPLATE/add_tool.yml
+
+  - name: Fix Blog Article or Link
+    description: Report an issue with a blog article or its link.
+    file: .github/ISSUE_TEMPLATE/fix_blog_article.yml
