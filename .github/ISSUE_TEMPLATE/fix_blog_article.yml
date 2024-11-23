@@ -1,14 +1,19 @@
 name: Fix Blog Article or Link
 description: Report an issue with a blog article or its link.
-title: "[Blog Fix] " # Título sugerido para los issues creados.
-labels:
-  - blog
-  - fix
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting a blog article fix request, please ensure the following:
+
+        - Verify that the URL provided is valid and accessible.
+        - Clearly describe the issue with the article or link to help us address it efficiently.
+        - Provide any suggestions for fixing the issue, if possible.
+
   - type: input
     id: article-url
     attributes:
-      label: URL to the Article
+      label: URL to the Article (mandatory)
       description: Provide the URL to the blog article with the issue.
       placeholder: "https://example.com/blog/article-name"
     validations:
@@ -17,7 +22,7 @@ body:
   - type: textarea
     id: issue-description
     attributes:
-      label: Issue Description
+      label: Issue Description (optional)
       description: Describe the issue with the article or link. Examples: typo, broken link, outdated information, etc.
       placeholder: "The article contains outdated information about Azure features..."
     validations:
@@ -26,7 +31,7 @@ body:
   - type: textarea
     id: suggested-fix
     attributes:
-      label: Suggested Fix
+      label: Suggested Fix (optional)
       description: Provide your suggestion to correct the issue, if possible. Example: correct text, updated link, etc.
       placeholder: "Update the link to the new version of the article here..."
     validations:

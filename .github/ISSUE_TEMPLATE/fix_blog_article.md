@@ -4,16 +4,17 @@ about: "Report an issue with a blog article or its link."
 ---
 
 <!--
-  Please ensure the following before submitting this issue:
+  Before submitting a blog article fix request, please ensure the following:
 
   - Verify that the URL provided is valid and accessible.
   - Clearly describe the issue with the article or link to help us address it efficiently.
+  - Provide any suggestions for fixing the issue, if possible.
 -->
 
 ## URL to the Article (mandatory)
 
 **Article URL:**  
-<!-- Provide the URL to the blog article with the issue. Example: https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/ -->
+<!-- Provide the URL to the blog article with the issue. Example: https://example.com/blog/article-name -->
 
 ---
 
@@ -34,4 +35,4 @@ about: "Report an issue with a blog article or its link."
 ## Additional Comments
 
 **Comments:**  
-<!-- Add any other relevant information or context. -->
+<!-- Add any other relevant information or context -->
