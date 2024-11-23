@@ -1,6 +1,6 @@
 ---
 name: "Fix Blog Article or Link"
-description: "Report an issue with a blog article or its link."
+about: "Report an issue with a blog article or its link."
 ---
 
 <!--
@@ -14,7 +14,7 @@ description: "Report an issue with a blog article or its link."
 ## URL to the Article (mandatory)
 
 **Article URL:**  
-<!-- Provide the URL to the blog article with the issue. Example: https://example.com/blog/article-name -->
+<!-- Provide the URL to the blog article with the issue. Example: https://schmitt-nieto.com/blog/article-name -->
 
 ---
 

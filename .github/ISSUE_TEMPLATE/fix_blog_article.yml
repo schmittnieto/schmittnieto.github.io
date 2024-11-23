@@ -15,7 +15,7 @@ body:
     attributes:
       label: URL to the Article (mandatory)
       description: Provide the URL to the blog article with the issue.
-      placeholder: e.g., "https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/"
+      placeholder: e.g., "https://example.com/blog/article-name"
     validations:
       required: true
 
