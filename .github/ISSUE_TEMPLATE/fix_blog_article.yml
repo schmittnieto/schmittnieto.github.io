@@ -1,0 +1,38 @@
+name: Fix Blog Article or Link
+description: Report an issue with a blog article or its link.
+body:
+  - type: input
+    id: article-url
+    attributes:
+      label: URL to the Article (mandatory)
+      description: Provide the URL to the blog article with the issue.
+      placeholder: "https://example.com/blog/article-name"
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description (optional)
+      description: Describe the issue with the article or link. Examples: typo, broken link, outdated information, etc.
+      placeholder: "The article contains outdated information about Azure features..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: suggested-fix
+    attributes:
+      label: Suggested Fix (optional)
+      description: Provide your suggestion to correct the issue, if possible. Example: correct text, updated link, etc.
+      placeholder: "Update the link to the new version of the article here..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-comments
+    attributes:
+      label: Additional Comments
+      description: Add any other relevant information or context.
+      placeholder: "Additional notes or details about the issue."
+    validations:
+      required: false
