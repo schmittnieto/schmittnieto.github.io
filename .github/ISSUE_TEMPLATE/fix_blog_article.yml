@@ -1,5 +1,7 @@
 name: Fix Blog Article or Link
 description: Report an issue with a blog article or its link.
+title: "[Blog Fix]: "  # Título predeterminado para el issue.
+labels: ["blog", "fix"]  # Etiquetas asignadas automáticamente al issue.
 body:
   - type: markdown
     attributes:
@@ -11,7 +13,7 @@ body:
         - Provide any suggestions for fixing the issue, if possible.
 
   - type: input
-    id: article-url
+    id: article_url
     attributes:
       label: URL to the Article (mandatory)
       description: Provide the URL to the blog article with the issue.
@@ -20,7 +22,7 @@ body:
       required: true
 
   - type: textarea
-    id: issue-description
+    id: issue_description
     attributes:
       label: Issue Description (optional)
       description: Describe the issue with the article or link. Examples: typo, broken link, outdated information, etc.
@@ -29,7 +31,7 @@ body:
       required: false
 
   - type: textarea
-    id: suggested-fix
+    id: suggested_fix
     attributes:
       label: Suggested Fix (optional)
       description: Provide your suggestion to correct the issue, if possible. Example: correct text, updated link, etc.
@@ -38,7 +40,7 @@ body:
       required: false
 
   - type: textarea
-    id: additional-comments
+    id: additional_comments
     attributes:
       label: Additional Comments
       description: Add any other relevant information or context.

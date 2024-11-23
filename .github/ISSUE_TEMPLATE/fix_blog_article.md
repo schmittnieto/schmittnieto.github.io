@@ -1,6 +1,6 @@
 ---
 name: "Fix Blog Article or Link"
-about: "Report an issue with a blog article or its link."
+description: "Report an issue with a blog article or its link."
 ---
 
 <!--
