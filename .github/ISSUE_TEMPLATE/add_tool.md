@@ -1,41 +1,45 @@
-**Issue Template: Add a New Tool**
-
+---
+name: "Add Tool"
+about: "Suggest a new tool to be added."
 ---
 
-### Tool to Add (mandatory)
-_Provide the name of the tool you'd like to add._
+<!--
+  Before submitting a new tool request, please ensure the following:
+
+  - Check if the tool is already included or under consideration.
+  - Provide as much detail as possible to help evaluate the tool.
+  - Use clear and concise descriptions to avoid any ambiguity.
+-->
+
+## Tool to Add (mandatory)
 
 **Tool Name:**  
-<!-- Mandatory field -->
+<!-- Provide the name of the tool you are suggesting -->
 
 ---
 
-### URL of the Tool (optional)
-_If available, include the URL for the tool._
+## URL of the Tool (optional)
 
 **Tool URL:**  
-<!-- Optional field -->
+<!-- Add the URL of the tool, if available -->
 
 ---
 
-### Description (optional)
-_Provide a brief description of the tool, its purpose, or features._
+## Description (optional)
 
 **Description:**  
-<!-- Optional field -->
+<!-- Provide a brief description of the tool, its purpose, or features -->
 
 ---
 
-### LinkedIn of the Developer (optional)
-_If you know the developer’s LinkedIn profile, add it here._
+## LinkedIn of the Developer (optional)
 
 **Developer LinkedIn:**  
-<!-- Optional field -->
+<!-- Include the LinkedIn profile link of the tool’s developer, if known -->
 
 ---
 
-### Additional Information
-_You can add any other relevant details below._
+## Additional Comments
 
 **Comments:**  
-<!-- Optional field -->
+<!-- Add any other relevant information or context -->

@@ -1,0 +1,56 @@
+name: Add Tool
+description: Suggest a new tool to be added to the project.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting a new tool request, please ensure the following:
+
+        - Check if the tool is already included or under consideration.
+        - Provide as much detail as possible to help evaluate the tool.
+        - Use clear and concise descriptions to avoid any ambiguity.
+
+  - type: input
+    id: tool-name
+    attributes:
+      label: Tool to Add (mandatory)
+      description: Provide the name of the tool you are suggesting.
+      placeholder: e.g., "Tool Name"
+    validations:
+      required: true
+
+  - type: input
+    id: tool-url
+    attributes:
+      label: URL of the Tool (optional)
+      description: Add the URL of the tool, if available.
+      placeholder: e.g., "https://example.com"
+    validations:
+      required: false
+
+  - type: textarea
+    id: tool-description
+    attributes:
+      label: Description (optional)
+      description: Provide a brief description of the tool, its purpose, or features.
+      placeholder: e.g., "This tool is designed to..."
+    validations:
+      required: false
+
+  - type: input
+    id: developer-linkedin
+    attributes:
+      label: LinkedIn of the Developer (optional)
+      description: Include the LinkedIn profile link of the tool’s developer, if known.
+      placeholder: e.g., "https://linkedin.com/in/username"
+    validations:
+      required: false
+
+  - type: textarea
+    id: comments
+    attributes:
+      label: Additional Comments
+      description: Add any other relevant information or context.
+      placeholder: e.g., "Other details or considerations..."
+    validations:
+      required: false
