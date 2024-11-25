@@ -13,11 +13,11 @@ body:
   - type: input
     id: article-name
     attributes:
-      label: Name to the Article (mandatory)
+      label: Name to the Article (optional)
       description: Provide the Name to the blog article with the issue.
       placeholder: e.g., "Azure Stack HCI Azure Virtual Desktop"
     validations:
-      required: true
+      required: false
 
   - type: input
     id: article-url

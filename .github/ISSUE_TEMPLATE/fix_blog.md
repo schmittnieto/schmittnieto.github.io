@@ -11,7 +11,7 @@ about: "Report an issue with a blog article or its link."
   - Provide any suggestions for fixing the issue, if possible.
 -->
 
-## Blog Article name (mandatory)
+## Blog Article name (optional)
 
 **Blog Article Name:**  
 <!-- Provide the name of the Blog Article you are suggesting -->
