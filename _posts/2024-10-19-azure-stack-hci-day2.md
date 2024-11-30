@@ -124,8 +124,8 @@ Here is also a small guide on how to install and use the WAC extension in Azure:
 - To access the Windows Admin Center, the following RBAC permission "Windows Admin Center Administrator Login" is required (I usually grant them in the Resource Group of the Azure Stack HCI because I usually require this right in the other resources too):
 ![Windows Admin Center Setup 04](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac04.png){: style="border: 2px solid grey;"}
 
-Version 2408: After this process and provided that everything has gone as expected, you will be able to manage the WAC of the cluster through your EntraID user.
-I was unable to install the WAC extension (0.37.0.0) during this week because I received the following error:  `RetrieveCertificate: Failed to retrieve certificate from key vault using app service`, even though I have the correct permissions and have successfully completed this process in the past. 
+~~After this process and provided that everything has gone as expected, you will be able to manage the WAC of the cluster through your EntraID user.
+I was unable to install the WAC extension (0.37.0.0) during this week because I received the following error:  `RetrieveCertificate: Failed to retrieve certificate from key vault using app service`, even though I have the correct permissions and have successfully completed this process in the past.~~ (That was related to the previous Azure Stack HCI version 2408)
 
 **Update** With the new version 10.2411.0.22 of AzureLocal (formerly known as Azure Stack HCI), it is now possible to use WAC again 🎉:
 
