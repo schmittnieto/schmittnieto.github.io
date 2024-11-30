@@ -2,7 +2,7 @@
 title: "Azure Stack HCI: Day2 operations"
 excerpt: "Optimize your Azure Stack HCI deployment with Day 2 operations. Learn to configure networks, manage VM images, monitor, and secure your environment effectively."
 date: 2024-10-19
-last_modified_at: 2024-11-02
+last_modified_at: 2024-11-30
 categories:
   - Blog
 tags:
@@ -124,8 +124,14 @@ Here is also a small guide on how to install and use the WAC extension in Azure:
 - To access the Windows Admin Center, the following RBAC permission "Windows Admin Center Administrator Login" is required (I usually grant them in the Resource Group of the Azure Stack HCI because I usually require this right in the other resources too):
 ![Windows Admin Center Setup 04](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac04.png){: style="border: 2px solid grey;"}
 
-After this process and provided that everything has gone as expected, you will be able to manage the WAC of the cluster through your EntraID user.
+Version 2408: After this process and provided that everything has gone as expected, you will be able to manage the WAC of the cluster through your EntraID user.
 I was unable to install the WAC extension (0.37.0.0) during this week because I received the following error:  `RetrieveCertificate: Failed to retrieve certificate from key vault using app service`, even though I have the correct permissions and have successfully completed this process in the past. 
+
+**Update** With the new version 10.2411.0.22 of AzureLocal (formerly known as Azure Stack HCI), it is now possible to use WAC again 🎉:
+
+![Windows Admin Center Setup 05](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac05.png){: style="border: 2px solid grey;"}
+
+This means that WAC can be used once more to connect VMs remotely by accessing the host and pivoting to the VM through WAC.
 
 Keep in mind that manual modifications (via Powershell or WAC) should be as minimal as possible, but there are still problems when managing certain VMs which are not present in Azure like ARC Resource Bridge itself, which is why it does not hurt to have an alternative to manage these resources from remote. 
 
