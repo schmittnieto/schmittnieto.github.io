@@ -226,6 +226,14 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **Note**: A tool that will help you have the modules installed and updated; if you work with GraphAPI, you should take a look.
   - **LinkedIn**: [in/andres-bohren-4ba45293](https://www.linkedin.com/in/andres-bohren-4ba45293)
 
+- **MG-Cloudflow/Intune-Toolkit**
+  - **GitHub**: [https://github.com/MG-Cloudflow/Intune-Toolkit](https://github.com/MG-Cloudflow/Intune-Toolkit)
+  - **Type**: The Intune-Toolkit offers a basic and user-friendly interface to connect to Microsoft Graph, manage policy assignments, and handle backup and restore operations.
+  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/MG-Cloudflow/Intune-Toolkit?style=plastic)
+  - **Note**: This tool is easy and intuitive to use. I’m currently testing it for backing up Intune configurations, and so far, it's been great.
+  - **LinkedIn**: [https://www.linkedin.com/in/maxime-guillemin-526618161/](https://www.linkedin.com/in/maxime-guillemin-526618161/)
+
+
 ## Azure & Microsoft
 
 In this section, I'll cover the tools I frequently use for Azure and Microsoft technologies. These tools assist in various tasks, from deploying labs to optimizing virtual desktops, and they're invaluable for consultants and administrators alike.
