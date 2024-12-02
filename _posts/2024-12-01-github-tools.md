@@ -163,7 +163,7 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **Note**: This is undoubtedly the perfect tool if you have to carry out an inventory of Conditional Access Policies, and best of all, the export is in PowerPoint!
   - **LinkedIn**: [in/merill](https://www.linkedin.com/in/merill/)
 
-- **michaelmsonne/ManagedIdentityPermissionManager**
+- **michaelmsonne/ ManagedIdentityPermissionManager**
   - **GitHub**: [michaelmsonne - ManagedIdentityPermissionManager](https://github.com/michaelmsonne/ManagedIdentityPermissionManager)
   - **Type**: Azure Managed Identity Permissions Tool, a new PowerShell tool that simplifies and streamlines the management of Managed Identity permissions in Azure (Entra ID).
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/michaelmsonne/ManagedIdentityPermissionManager?style=plastic)
