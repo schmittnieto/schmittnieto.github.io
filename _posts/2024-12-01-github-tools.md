@@ -354,7 +354,7 @@ In this section, I'll cover the tools I frequently use for Azure and Microsoft t
   - **GitHub**: [lukemurraynz - awesome-azure-architecture](https://github.com/lukemurraynz/awesome-azure-architecture)
   - **Type**: A curated list of awesome blogs, videos, tutorials, code, tools, and scripts related to designing and implementing solutions in Microsoft Azure.
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/lukemurraynz/awesome-azure-architecture?style=plastic)
-  - **Note**: This is one of the main link collectors I've used throughout my career—one of the most complete and well-structured. It even has its own shortcut: [https://aka.ms/AwesomeAzureArchitecture](https://aka.ms/AwesomeAzureArchitecture)
+  - **Note**: This is one of the main link collectors I've used throughout my career—one of the most complete and well-structured. It even has its own (aka.ms) shortcut: [AwesomeAzureArchitecture](https://aka.ms/AwesomeAzureArchitecture)
   - **LinkedIn**: [in/ljmurray](https://www.linkedin.com/in/ljmurray/)
 
 - **MarcelMeurer/WVD-Hydra**
