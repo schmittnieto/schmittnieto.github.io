@@ -126,7 +126,7 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **Type**: A sample gallery of scripts to manage all things Microsoft 365.
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/pnp/script-samples?style=plastic)
   - **Note**: A great collection of scripts for managing M365. The main focus is on SharePoint Online, so if you manage SPO in your day-to-day, take a look.
-  - **LinkedIn**: [https://linkedin.com/in/pkbullock](https://linkedin.com/in/pkbullock)
+  - **LinkedIn**: [in/pkbullock](https://linkedin.com/in/pkbullock)
 
 - **jasperbaes/Conditional-Access-Matrix**
   - **GitHub**: [jasperbaes - Conditional-Access-Matrix](https://github.com/jasperbaes/Conditional-Access-Matrix)
