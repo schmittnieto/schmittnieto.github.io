@@ -71,7 +71,7 @@ As a part of my career in Azure I have carried out several certification, among 
     <div style="text-align: center;">Microsoft Certified: Windows Server Hybrid Administrator Associate</div>
   </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto-7357/923DF5023E108FBA?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-associate-badge-endpint.png" alt="Microsoft 365 Certified: Endpoint Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
+    <img src="/assets/img/microsoft-certified-associate-badge-endpoint.png" alt="Microsoft 365 Certified: Endpoint Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft 365 Certified: Endpoint Administrator Associate</div>
   </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/E724DDDADB705179?sharingId=24F0DC952D8EB05D" target="_blank">
