@@ -2,7 +2,7 @@
 title: "GitHub Tools and Repositories that I use"
 excerpt: "A personal overview of the GitHub tools and Repositories I frequently use as a consultant, sharing insights into various community-driven repositories."
 date: 2024-12-01
-last_modified_at: 2024-12-02
+last_modified_at: 2025-01-02
 categories:
   - Blog
 tags:
@@ -135,6 +135,13 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **Note**: This is one of the tools you can use to generate reports on conditional access. Since it requires Node.js, I personally don't use it as much as I could and prefer other solutions (like ConditionalAccessDocumentation or IdPowerToys) for this purpose.
   - **LinkedIn**: [in/jasper-baes](https://www.linkedin.com/in/jasper-baes/)
 
+- **aollivierre/ConditionalAccess**
+  - **GitHub**: [aollivierre - ConditionalAccess](https://github.com/aollivierre/ConditionalAccess)
+  - **Type**: A comprehensive collection of Conditional Access (CA) policies and PowerShell management tools for Microsoft Entra ID (formerly Azure AD).
+  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/aollivierre/ConditionalAccess?style=plastic)
+  - **Note**: This repository offers a well-rounded set of Conditional Access policies that aim to enhance organizational security without sacrificing usability. The included PowerShell tools make managing these policies efficient and straightforward. I recommend this repository for admins seeking robust CA configurations and streamlined management.
+  - **LinkedIn**: [in/aollivierre](https://www.linkedin.com/in/aollivierre/)
+
 - **Windows365Management/PSCloudPC**
   - **GitHub**: [Windows365Management - PSCloudPC](https://github.com/Windows365Management/PSCloudPC)
   - **Type**: Windows 365 Cloud PC Management PowerShell Module.
@@ -218,6 +225,20 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/lazywinadmin/PowerShell?style=plastic)
   - **Note**: Collection of scripts I've used in the past.
   - **LinkedIn**: [in/fxcat](https://www.linkedin.com/in/fxcat/)
+
+- **lkarlslund/Adalanche**
+  - **GitHub**: [lkarlslund - Adalanche](https://github.com/lkarlslund/Adalanche)
+  - **Type**: Active Directory ACL Visualizer and Explorer.
+  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/lkarlslund/Adalanche?style=plastic)
+  - **Note**: Adalanche is an incredibly powerful tool for Active Directory environments, providing instant insights into permissions for users and groups. It helps visualize and explore who has the potential to take over accounts, machines, or even the entire domain, making it essential for identifying and addressing misconfigurations. If you work with AD, this tool is a must-try for understanding and securing your environment.
+  - **LinkedIn**: [in/lkarlslund](https://www.linkedin.com/in/lkarlslund/)
+
+- **MHaggis/PowerShell-Hunter**
+  - **GitHub**: [MHaggis - PowerShell-Hunter](https://github.com/MHaggis/PowerShell-Hunter)
+  - **Type**: A collection of PowerShell-based tools for threat hunting in Windows environments.
+  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/MHaggis/PowerShell-Hunter?style=plastic)
+  - **Note**: PowerShell-Hunter is an evolving project designed for defenders and security analysts. It leverages the native power of PowerShell to investigate and detect malicious activity in Windows environments. With its growing toolset, it provides a flexible and practical approach to uncovering potential threats, making it a valuable resource for enhancing security operations.
+  - **LinkedIn**: [in/michaelahaag](https://www.linkedin.com/in/michaelahaag/)
 
 - **fabrisodotps1/M365PSProfile**
   - **GitHub**: [fabrisodotps1 - M365PSProfile](https://github.com/fabrisodotps1/M365PSProfile)
