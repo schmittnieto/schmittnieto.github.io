@@ -226,20 +226,6 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **Note**: Collection of scripts I've used in the past.
   - **LinkedIn**: [in/fxcat](https://www.linkedin.com/in/fxcat/)
 
-- **lkarlslund/Adalanche**
-  - **GitHub**: [lkarlslund - Adalanche](https://github.com/lkarlslund/Adalanche)
-  - **Type**: Active Directory ACL Visualizer and Explorer.
-  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/lkarlslund/Adalanche?style=plastic)
-  - **Note**: Adalanche is an incredibly powerful tool for Active Directory environments, providing instant insights into permissions for users and groups. It helps visualize and explore who has the potential to take over accounts, machines, or even the entire domain, making it essential for identifying and addressing misconfigurations. If you work with AD, this tool is a must-try for understanding and securing your environment.
-  - **LinkedIn**: [in/lkarlslund](https://www.linkedin.com/in/lkarlslund/)
-
-- **MHaggis/PowerShell-Hunter**
-  - **GitHub**: [MHaggis - PowerShell-Hunter](https://github.com/MHaggis/PowerShell-Hunter)
-  - **Type**: A collection of PowerShell-based tools for threat hunting in Windows environments.
-  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/MHaggis/PowerShell-Hunter?style=plastic)
-  - **Note**: PowerShell-Hunter is an evolving project designed for defenders and security analysts. It leverages the native power of PowerShell to investigate and detect malicious activity in Windows environments. With its growing toolset, it provides a flexible and practical approach to uncovering potential threats, making it a valuable resource for enhancing security operations.
-  - **LinkedIn**: [in/michaelahaag](https://www.linkedin.com/in/michaelahaag/)
-
 - **fabrisodotps1/M365PSProfile**
   - **GitHub**: [fabrisodotps1 - M365PSProfile](https://github.com/fabrisodotps1/M365PSProfile)
   - **Type**: M365PSProfile installs and keeps the PowerShell modules needed for Microsoft 365 management up to date. It provides a simple way to add it to the PowerShell profile.
@@ -272,6 +258,20 @@ In this section, I'll cover the tools I frequently use for Azure and Microsoft t
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/microsoft/MSLab?style=plastic)
   - **Note**: If you want to implement Azure Local in a demo infrastructure, this is your repository. I have an article on my blog ([Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/)) where I cover a similar but much simpler scenario. MSLab is a well-curated community project by Jaromir. If you work with MSLab, I highly recommend taking a look.
   - **LinkedIn**: [in/jaromir-kaspar-1bb7887](https://www.linkedin.com/in/jaromir-kaspar-1bb7887/)
+
+- **lkarlslund/Adalanche**
+  - **GitHub**: [lkarlslund - Adalanche](https://github.com/lkarlslund/Adalanche)
+  - **Type**: Active Directory ACL Visualizer and Explorer.
+  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/lkarlslund/Adalanche?style=plastic)
+  - **Note**: Adalanche is an incredibly powerful tool for Active Directory environments, providing instant insights into permissions for users and groups. It helps visualize and explore who has the potential to take over accounts, machines, or even the entire domain, making it essential for identifying and addressing misconfigurations. If you work with AD, this tool is a must-try for understanding and securing your environment.
+  - **LinkedIn**: [in/lkarlslund](https://www.linkedin.com/in/lkarlslund/)
+
+- **MHaggis/PowerShell-Hunter**
+  - **GitHub**: [MHaggis - PowerShell-Hunter](https://github.com/MHaggis/PowerShell-Hunter)
+  - **Type**: A collection of PowerShell-based tools for threat hunting in Windows environments.
+  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/MHaggis/PowerShell-Hunter?style=plastic)
+  - **Note**: PowerShell-Hunter is an evolving project designed for defenders and security analysts. It leverages the native power of PowerShell to investigate and detect malicious activity in Windows environments. With its growing toolset, it provides a flexible and practical approach to uncovering potential threats, making it a valuable resource for enhancing security operations.
+  - **LinkedIn**: [in/michaelahaag](https://www.linkedin.com/in/michaelahaag/)
 
 - **DellGEOS/AzureStackHOLs**
   - **GitHub**: [DellGEOS - AzureStackHOLs](https://github.com/DellGEOS/AzureStackHOLs)
