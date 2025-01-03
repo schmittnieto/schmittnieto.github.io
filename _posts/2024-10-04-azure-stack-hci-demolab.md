@@ -1922,7 +1922,7 @@ try {
     # Set-AzContext -SubscriptionName $subscription -ErrorAction Stop
 
     # Allow user to select Resource Group
-    $resourceGroup = Get-Option "Get-AzResourceGroup" "ResourceGroupName"
+    $resourceGroupName = Get-Option "Get-AzResourceGroup" "ResourceGroupName"
 
     $TenantID = (Get-AzContext).Tenant.Id
     $SubscriptionID = (Get-AzContext).Subscription.Id
@@ -1956,7 +1956,7 @@ Invoke-AzStackHciArcInitialization -SubscriptionID $SubscriptionID `
 
 Write-Host "VM '$env:COMPUTERNAME' registered with Azure Arc successfully." -ForegroundColor Green | Out-Null
 '@
-
+    
     # Copy the script to the node
     $ScriptPath = "C:\Temp\ArcInitScript.ps1"
     Invoke-Command -VMName $nodeName -Credential $SetupCredentials -ScriptBlock {
@@ -1974,6 +1974,7 @@ Write-Host "VM '$env:COMPUTERNAME' registered with Azure Arc successfully." -For
     } -ArgumentList $ArcInitScript, $ScriptPath -ErrorAction Stop -WarningAction SilentlyContinue -Verbose:$false | Out-Null
 
     # Run the script locally on the node
+    Start-SleepWithProgress -Seconds 20 -Activity "Waiting for Parameters" -Status "Waiting for Parameters" 
     Invoke-Command -VMName $nodeName -Credential $SetupCredentials -ScriptBlock {
         param($ScriptPath, $SubscriptionID, $ResourceGroupName, $TenantID, $Cloud, $Location, $ARMToken, $AccountId)
         $ErrorActionPreference = 'Stop'
@@ -1986,7 +1987,7 @@ Write-Host "VM '$env:COMPUTERNAME' registered with Azure Arc successfully." -For
 
         # Execute the script locally
         & $ScriptPath -SubscriptionID $SubscriptionID -ResourceGroupName $ResourceGroupName -TenantID $TenantID -Cloud $Cloud -Location $Location -ARMToken $ARMToken -AccountId $AccountId | Out-Null
-    } -ArgumentList $ScriptPath, $SubscriptionID, $resourceGroup, $TenantID, $Cloud, $Location, $ARMToken, $AccountId -ErrorAction Stop -WarningAction SilentlyContinue -Verbose:$false | Out-Null
+    } -ArgumentList $ScriptPath, $SubscriptionID, $ResourceGroupName, $TenantID, $Cloud, $Location, $ARMToken, $AccountId -ErrorAction Stop -WarningAction SilentlyContinue -Verbose:$false | Out-Null
 
     # Write-Message "VM '$nodeName' registered successfully with Azure Arc." -Type "Success"
 } catch {
