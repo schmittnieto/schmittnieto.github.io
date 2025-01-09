@@ -1037,7 +1037,7 @@ To deploy SQLmi in Azure Local, the process involves the following steps:
 
 ### Deployment Limitations
 
-Unfortunately, deploying Arc Data Services requires a worker node of at least `Standard_D8s_v3`, which demands 8 vCPUs and 32 GB of RAM (https://learn.microsoft.com/en-us/azure/azure-arc/data/plan-azure-arc-data-services#deployment-requirements). While vCPU requirements aren't a problem in my lab, the 32 GB memory requirement exceeds my laptop’s capacity, which only has 64 GB in total. As such, I can't perform a functional deployment but will demonstrate the process for educational purposes.
+Unfortunately, deploying Arc Data Services requires a worker node of at least `Standard_D8s_v3`, which demands 8 vCPUs and 32 GB of RAM ([Link](https://learn.microsoft.com/en-us/azure/azure-arc/data/plan-azure-arc-data-services#deployment-requirements)). While vCPU requirements aren't a problem in my lab, the 32 GB memory requirement exceeds my laptop’s capacity, which only has 64 GB in total. As such, I can't perform a functional deployment but will demonstrate the process for educational purposes.
 
 ### Disclaimer: Separate AKS Clusters for SQLmi
 
@@ -1123,6 +1123,7 @@ Thank you for following along, and I look forward to sharing more insights in fu
 
 ### Links
 
+``` text
 https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
 https://schmitt-nieto.com/blog/azure-stack-hci-day2/
 https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-baseline
@@ -1141,3 +1142,4 @@ https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/
 https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-create-clusters-portal
 https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network
 https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture
+```
