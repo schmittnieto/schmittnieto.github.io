@@ -7,6 +7,7 @@ categories:
 tags:
   - Chronicloud Series
   - Azure Stack HCI
+  - Azure Local
 
 header:
   teaser: "/assets/img/post/2024-11-02-azure-stack-hci-vmdeployment.webp"

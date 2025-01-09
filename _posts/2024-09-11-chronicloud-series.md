@@ -9,6 +9,7 @@ tags:
   - Chronicloud Series
   - Azure
   - Azure Stack HCI
+  - Azure Local
   - Azure Virtual Desktop
   - Azure ARC
   - Windows 365

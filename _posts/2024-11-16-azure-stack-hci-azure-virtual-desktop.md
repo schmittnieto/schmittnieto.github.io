@@ -8,6 +8,8 @@ categories:
 tags:
   - Chronicloud Series
   - Azure Stack HCI
+  - Azure Local
+  - Azure Virtual Desktop
 
 header:
   teaser: "/assets/img/post/2024-11-17-azure-stack-hci-avd.webp"

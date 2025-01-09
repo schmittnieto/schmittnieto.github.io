@@ -8,6 +8,7 @@ categories:
 tags:
   - Chronicloud Series
   - Azure Stack HCI
+  - Azure Local
 
 header:
   teaser: "/assets/img/post/2024-09-15-azure-stack-hci.webp"
