@@ -133,9 +133,9 @@ Implementing AKS on Azure Local empowers organizations to leverage the benefits 
 ## Technical Architecture of the Solution (AKS on Azure Local)
 
 Let's delve into the technical architecture of Azure Kubernetes Service (AKS) on Azure Local. Understanding these components will provide you with a clearer picture of how to effectively deploy and manage your containerized applications within your own data center.
-![Diagramm Azure Local by Azure Arc Jumpstart](/assets/img/post/2025-01-09-azure-local-aks/diagramm01.png){: style="border: 2px solid grey;"}
+![Diagramm Azure Local by Azure Arc Jumpstart](/assets/img/post/2025-01-09-azure-local-aks/Diagramm01.png){: style="border: 2px solid grey;"}
 *Diagram courtesy of [Azure Arc Jumpstart](https://azurearcjumpstart.com/).*
-![Diagramm AKS on Azure Local by Microsoft Learn](/assets/img/post/2025-01-09-azure-local-aks/diagramm02.png){: style="border: 2px solid grey;"}
+![Diagramm AKS on Azure Local by Microsoft Learn](/assets/img/post/2025-01-09-azure-local-aks/Diagramm02.png){: style="border: 2px solid grey;"}
 *Diagram courtesy of [Microsoft Learn](https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture).*
 
 ### Core Components
@@ -420,6 +420,7 @@ metadata:
    - In the same **Namespace** tab, click **+Add** to deploy the application.
    - Use this pre-configured YAML file for the deployment: [aks-store-all-in-one.yaml](https://github.com/Azure-Samples/aks-store-demo/blob/main/aks-store-all-in-one.yaml).
    - You can copy this code:
+   
 ```yaml
 ---
 apiVersion: apps/v1
