@@ -1077,8 +1077,8 @@ To deploy the data controller, you'll need a Log Analytics Workspace (LAW) and i
   ![SQLmi Configuration](/assets/img/post/2025-01-09-azure-local-aks/042.png){: style="border: 2px solid grey;"}
 
 - Select the service tier and size. For testing, you can opt for a **development-only** instance, which is free:
-  ![SQLmi Cost Selection](/assets/img/post/2025-01-09-azure-local-aks/043.png){: style="border: 2px solid grey;}
-  ![Development-Only Cost](/assets/img/post/2025-01-09-azure-local-aks/044.png){: style="border: 2px solid grey;"}
+  ![SQLmi Cost Selection](/assets/img/post/2025-01-09-azure-local-aks/044.png){: style="border: 2px solid grey;}
+  ![Development-Only Cost](/assets/img/post/2025-01-09-azure-local-aks/043.png){: style="border: 2px solid grey;"}
 
 - Provide a username and password. Optionally, you can configure an AD connector if previously set up in the data controller. For simplicity, we’ll skip this:
   ![SQLmi Credentials](/assets/img/post/2025-01-09-azure-local-aks/045.png){: style="border: 2px solid grey;"}
