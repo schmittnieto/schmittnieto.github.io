@@ -58,6 +58,10 @@ Over the years, I've helped numerous clients navigate their cloud journeys, impl
 
 As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
 <div class="Certifications" style="text-align: center;">
+  <a href="/assets/img/cert/NME-200.pdf" target="_blank">
+    <img src="/assets/img/nerdio-nme-200.png" alt="Microsoft Certified: Azure AI Fundamentals" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Nerdio Manager for Enterprise Certified</div>
+  </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/DEC07C6846AF65A7?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-fundamentals-badge-AI.png" alt="Microsoft Certified: Azure AI Fundamentals" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure AI Fundamentals</div>
