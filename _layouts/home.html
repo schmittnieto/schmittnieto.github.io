@@ -4,28 +4,28 @@ layout: archive
 
 {{ content }}
 
-<!-- Sección de Publicaciones Destacadas -->
-{% assign sticky_posts = site.posts | where: 'sticky', true %}
-{% if sticky_posts.size > 0 %}
-  <h3 class="archive__subtitle">Fixed Posts</h3>
-  {% assign entries_layout = page.entries_layout | default: 'list' %}
-  <div class="entries-{{ entries_layout }}">
-    {% for post in sticky_posts %}
-      {% include archive-single.html type=entries_layout %}
-    {% endfor %}
-  </div>
+{% if paginator.page == 1 %}
+  <!-- Sección de Publicaciones Destacadas -->
+  {% assign sticky_posts = site.posts | where: 'sticky', true %}
+  {% if sticky_posts.size > 0 %}
+    <h3 class="archive__subtitle">Fixed Posts</h3>
+    {% assign entries_layout = page.entries_layout | default: 'list' %}
+    <div class="entries-{{ entries_layout }}">
+      {% for post in sticky_posts %}
+        {% include archive-single.html type=entries_layout %}
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endif %}
 
 <!-- Sección de Publicaciones Recientes -->
 <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
-{% if paginator %}
-  {% assign posts = paginator.posts %}
-{% else %}
-  {% assign posts = site.posts %}
-{% endif %}
-{% assign non_sticky_posts = posts | where_exp: 'post', 'post.sticky != true' %}
+{% assign all_posts = site.posts | sort: 'date' | reverse %}
+{% assign non_sticky_posts = all_posts | where_exp: 'post', 'post.sticky != true' %}
+{% assign paginated_posts = non_sticky_posts | slice: paginator.per_page | offset: paginator.per_page | times: paginator.page | minus: paginator.per_page %}
+{% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
-  {% for post in non_sticky_posts %}
+  {% for post in paginated_posts %}
     {% include archive-single.html type=entries_layout %}
   {% endfor %}
 </div>
