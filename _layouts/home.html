@@ -6,13 +6,10 @@ layout: archive
 
 <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
 
-{% if paginator %}
-  {% assign posts = paginator.posts %}
-  {% assign sorted = paginator.posts | sort: "stickiness" %}
-  {% for post in sorted %}
-{% else %}
-  {% assign posts = site.posts %}
-{% endif %}
+{% assign sticky_posts = site.posts | where: 'sticky', true %}
+{% assign regular_posts = site.posts | where: 'sticky', false %}
+
+{% assign posts = sticky_posts | concat: regular_posts %}
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
