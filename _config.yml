@@ -61,6 +61,7 @@ plugins:
   - jemoji
   - jekyll-include-cache
   - jekyll-redirect-from
+  - jekyll-stickyposts
 
 author:
   name   : "Cristian Schmitt Nieto"
