@@ -1,0 +1,84 @@
+---
+layout: archive
+---
+
+{{ content }}
+
+<!-- First, sort and group all posts by year -->
+{% assign posts_by_year = site.posts
+  | sort: "date"
+  | reverse
+  | group_by_exp: "post", "post.date | date: '%Y'"
+%}
+
+<!-- Create a "table of contents" that includes both years and their months -->
+<ul class="taxonomy__index">
+  {% for year in posts_by_year %}
+    <!-- Group the year's posts by month so we can link to them too -->
+    {% assign posts_by_month = year.items
+      | group_by_exp: "post", "post.date | date: '%m'"
+      | sort: "name"
+      | reverse
+    %}
+
+    <li>
+      <!-- Link to the year's heading -->
+      <a href="#{{ year.name }}">
+        <strong>{{ year.name }}</strong> <span class="taxonomy__count">({{ year.items | size }})</span>
+      </a>
+
+      <!-- Now list each month as a sub-list under the year -->
+      <ul>
+        {% for month in posts_by_month %}
+          {% assign month_number = month.name | plus: 0 %}
+          {% assign month_index  = month_number | minus: 1 %}
+          {% assign month_names  = "January|February|March|April|May|June|July|August|September|October|November|December" | split: "|" %}
+          {% assign month_name   = month_names[month_index] %}
+
+          <li>
+            <!-- Link to a combined ID of year-month -->
+            <a href="#{{ year.name }}-{{ month_number }}">
+              {{ month_name }} ({{ month.items | size }})
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endfor %}
+</ul>
+
+{% assign entries_layout = page.entries_layout | default: 'list' %}
+
+<!-- Now print the actual archive of posts, grouped by year and month -->
+{% for year in posts_by_year %}
+  <section id="{{ year.name }}" class="taxonomy__section">
+    <h2 class="archive__subtitle">{{ year.name }}</h2>
+
+    <!-- Group by month to display -->
+    {% assign posts_by_month = year.items
+      | group_by_exp: "post", "post.date | date: '%m'"
+      | sort: "name"
+      | reverse
+    %}
+
+    {% for month in posts_by_month %}
+      {% assign month_number = month.name | plus: 0 %}
+      {% assign month_index  = month_number | minus: 1 %}
+      {% assign month_names  = "January|February|March|April|May|June|July|August|September|October|November|December" | split: "|" %}
+      {% assign month_name   = month_names[month_index] %}
+
+      <!-- Use the same ID for the anchor as in the TOC link -->
+      <h3 id="{{ year.name }}-{{ month_number }}">{{ month_name }} ({{ month.items | size }} posts)</h3>
+
+      <div class="entries-{{ entries_layout }}">
+        {% for post in month.items %}
+          {% include archive-single.html type=entries_layout %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <a href="#page-title" class="back-to-top">
+      {{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;
+    </a>
+  </section>
+{% endfor %}
