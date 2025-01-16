@@ -11,7 +11,6 @@ layout: archive
   | group_by_exp: "post", "post.date | date: '%Y'"
 %}
 
-<!-- Create a "table of contents" that includes both years and their months -->
 <ul class="taxonomy__index">
   {% for year in posts_by_year %}
     <!-- Group the year's posts by month so we can link to them too -->
@@ -22,12 +21,11 @@ layout: archive
     %}
 
     <li>
-      <!-- Link to the year's heading -->
+      <!-- Year link with total posts in parentheses -->
       <a href="#{{ year.name }}">
-        <strong>{{ year.name }}</strong> <span class="taxonomy__count">({{ year.items | size }})</span>
+        <strong>{{ year.name }}</strong> 
+        <span class="taxonomy__count">({{ year.items | size }})</span>
       </a>
-
-      <!-- Now list each month as a sub-list under the year -->
       <ul>
         {% for month in posts_by_month %}
           {% assign month_number = month.name | plus: 0 %}
@@ -36,9 +34,10 @@ layout: archive
           {% assign month_name   = month_names[month_index] %}
 
           <li>
-            <!-- Link to a combined ID of year-month -->
+            <!-- Month link with its post count -->
             <a href="#{{ year.name }}-{{ month_number }}">
-              {{ month_name }} ({{ month.items | size }})
+              {{ month_name }}
+              <span class="taxonomy__count">({{ month.items | size }})</span>
             </a>
           </li>
         {% endfor %}
@@ -67,8 +66,10 @@ layout: archive
       {% assign month_names  = "January|February|March|April|May|June|July|August|September|October|November|December" | split: "|" %}
       {% assign month_name   = month_names[month_index] %}
 
-      <!-- Use the same ID for the anchor as in the TOC link -->
-      <h3 id="{{ year.name }}-{{ month_number }}">{{ month_name }} ({{ month.items | size }} posts)</h3>
+      <!-- Match the anchor ID for quick navigation -->
+      <h3 id="{{ year.name }}-{{ month_number }}">
+        {{ month_name }} ({{ month.items | size }} posts)
+      </h3>
 
       <div class="entries-{{ entries_layout }}">
         {% for post in month.items %}
