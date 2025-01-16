@@ -63,6 +63,13 @@ plugins:
   - jekyll-redirect-from
   - jekyll-stickyposts
 
+pagination:
+  sort_field: "stickiness"
+  sort_reverse: false
+
+stickyposts:
+  sort: "date"
+
 author:
   name   : "Cristian Schmitt Nieto"
   avatar : "/assets/img/avatar-csn.jpeg"

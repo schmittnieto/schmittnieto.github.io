@@ -16,6 +16,7 @@ tags:
   - Cloud Adoption Framework
 
 sticky: true
+pin: true
 
 header:
   image: "/assets/img/post/2024-09-11-chronicloud-series.webp"
