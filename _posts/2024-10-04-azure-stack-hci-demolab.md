@@ -10,6 +10,10 @@ tags:
   - Azure Stack HCI
   - Azure Local
 
+redirect_from:
+  - /blog/azure-stack-hci-demolab/
+  - /blog/azure-local-demolab/
+
 header:
   teaser: "/assets/img/post/2024-10-04-azure-stack-hci-demolab.webp"
   image: "/assets/img/post/2024-10-04-azure-stack-hci-demolab.webp"

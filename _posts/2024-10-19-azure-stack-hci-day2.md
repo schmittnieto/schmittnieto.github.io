@@ -10,6 +10,10 @@ tags:
   - Azure Stack HCI
   - Azure Local
 
+redirect_from:
+  - /blog/azure-stack-hci-day2/
+  - /blog/azure-local-day2/
+
 header:
   teaser: "/assets/img/post/2024-10-19-azure-stack-hci-day2.webp"
   image: "/assets/img/post/2024-10-19-azure-stack-hci-day2.webp"

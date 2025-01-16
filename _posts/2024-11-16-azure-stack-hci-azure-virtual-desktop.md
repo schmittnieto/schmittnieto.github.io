@@ -11,6 +11,10 @@ tags:
   - Azure Local
   - Azure Virtual Desktop
 
+redirect_from:
+  - /blog/azure-stack-hci-azure-virtual-desktop/
+  - /blog/azure-local-azure-virtual-desktop/
+
 header:
   teaser: "/assets/img/post/2024-11-17-azure-stack-hci-avd.webp"
   image: "/assets/img/post/2024-11-17-azure-stack-hci-avd.webp"

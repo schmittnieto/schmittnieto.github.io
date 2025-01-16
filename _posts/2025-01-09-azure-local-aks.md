@@ -10,6 +10,10 @@ tags:
   - Azure Local
   - AKS
 
+redirect_from:
+  - /blog/azure-stack-hci-aks/
+  - /blog/azure-local-aks/
+
 header:
   teaser: "/assets/img/post/2025-01-09-azure-local-aks.webp"
   image: "/assets/img/post/2025-01-09-azure-local-aks.webp"
