@@ -10,6 +10,10 @@ tags:
   - Azure Stack HCI
   - Azure Local
 
+redirect_from:
+  - /blog/azure-stack-hci-evolution-use-cases-comparison/
+  - /blog/azure-local-evolution-use-cases-comparison/
+
 header:
   teaser: "/assets/img/post/2024-09-15-azure-stack-hci.webp"
   image: "/assets/img/post/2024-09-15-azure-stack-hci.webp"
