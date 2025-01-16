@@ -6,15 +6,16 @@ layout: archive
 
 <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
 
-{% assign sticky_posts = site.posts | where: 'sticky', true %}
-{% assign regular_posts = site.posts | where: 'sticky', false %}
+{% assign all_posts = site.posts | sort: 'date' | reverse %}
+{% assign sticky_posts = all_posts | where: 'sticky', true %}
+{% assign non_sticky_posts = all_posts | where_exp: 'post', 'post.sticky != true' %}
 
-{% assign all_posts = sticky_posts | concat: regular_posts %}
+{% assign combined_posts = sticky_posts | concat: non_sticky_posts %}
 
 {% if paginator %}
-  {% assign paginated_posts = all_posts | slice: paginator.per_page | plus: paginator.page | times: paginator.per_page %}
+  {% assign paginated_posts = paginator.posts %}
 {% else %}
-  {% assign paginated_posts = all_posts %}
+  {% assign paginated_posts = combined_posts %}
 {% endif %}
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
