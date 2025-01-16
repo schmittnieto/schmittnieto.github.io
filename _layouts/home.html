@@ -9,11 +9,17 @@ layout: archive
 {% assign sticky_posts = site.posts | where: 'sticky', true %}
 {% assign regular_posts = site.posts | where: 'sticky', false %}
 
-{% assign sorted_posts = sticky_posts | concat: regular_posts %}
+{% assign all_posts = sticky_posts | concat: regular_posts %}
+
+{% if paginator %}
+  {% assign paginated_posts = all_posts | slice: paginator.per_page | plus: paginator.page | times: paginator.per_page %}
+{% else %}
+  {% assign paginated_posts = all_posts %}
+{% endif %}
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
-  {% for post in sorted_posts %}
+  {% for post in paginated_posts %}
     {% include archive-single.html type=entries_layout %}
   {% endfor %}
 </div>
