@@ -11,7 +11,7 @@ layout: archive
 {% if paginator.page == 1 %}
   <!-- Sección de Publicaciones Destacadas -->
   {% if sticky_posts.size > 0 %}
-    <h3 class="archive__subtitle">Fixed Posts</h3>
+    <h3 class="archive__subtitle">Pinned Posts</h3>
     {% assign entries_layout = page.entries_layout | default: 'list' %}
     <div class="entries-{{ entries_layout }}">
       {% for post in sticky_posts %}
@@ -24,7 +24,6 @@ layout: archive
 <!-- Sección de Publicaciones Recientes -->
 <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
 {% assign start_index = paginator.per_page | times: paginator.page | minus: paginator.per_page %}
-{% assign end_index = paginator.per_page | times: paginator.page %}
 {% assign paginated_posts = non_sticky_posts | slice: start_index, paginator.per_page %}
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
