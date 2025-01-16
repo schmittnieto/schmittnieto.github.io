@@ -38,7 +38,7 @@ remote_theme: mmistakes/minimal-mistakes
 permalink: /:categories/:title/
 paginate: 5
 paginate_path: /page:num/
-timezone: DE
+timezone: Europe/Berlin
 
 include:
   - _pages
