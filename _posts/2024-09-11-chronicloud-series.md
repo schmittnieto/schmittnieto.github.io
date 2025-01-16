@@ -15,9 +15,6 @@ tags:
   - Windows 365
   - Cloud Adoption Framework
 
-sticky: true
-pin: true
-
 header:
   image: "/assets/img/post/2024-09-11-chronicloud-series.webp"
   og_image: "/assets/img/post/2024-09-11-chronicloud-series.webp"
