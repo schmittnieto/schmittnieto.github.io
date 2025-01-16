@@ -10,6 +10,8 @@ tags:
   - Azure Local
   - AKS
 
+sticky: false
+
 redirect_from:
   - /blog/azure-stack-hci-aks/
   - /blog/azure-local-aks/

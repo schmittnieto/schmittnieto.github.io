@@ -9,6 +9,8 @@ tags:
   - GitHub Pages
   - Blog
 
+sticky: false
+
 header:
   image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"
   og_image: "/assets/img/post/2024-07-21-creating-my-azure-journey-blog.webp"

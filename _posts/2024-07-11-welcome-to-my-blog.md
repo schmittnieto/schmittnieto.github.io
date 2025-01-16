@@ -8,6 +8,8 @@ categories:
 tags: 
   - Blog
 
+sticky: false
+
 header:
   image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"
   og_image: "/assets/img/post/2024-07-11-welcome-to-my-blog.webp"

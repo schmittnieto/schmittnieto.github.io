@@ -9,6 +9,8 @@ tags:
   - Tools
   - GitHub
 
+sticky: false
+
 header:
   teaser: "/assets/img/post/2024-12-01-github-tools.webp"
   image: "/assets/img/post/2024-12-01-github-tools.webp"

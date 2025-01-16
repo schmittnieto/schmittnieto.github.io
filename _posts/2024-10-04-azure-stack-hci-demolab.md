@@ -10,6 +10,8 @@ tags:
   - Azure Stack HCI
   - Azure Local
 
+sticky: false
+
 redirect_from:
   - /blog/azure-stack-hci-demolab/
   - /blog/azure-local-demolab/

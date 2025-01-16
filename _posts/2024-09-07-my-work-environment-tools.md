@@ -8,6 +8,8 @@ categories:
 tags:
   - Tools
 
+sticky: false
+
 header:
   image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"
   og_image: "/assets/img/post/2024-09-07-my-work-environment-tools.webp"

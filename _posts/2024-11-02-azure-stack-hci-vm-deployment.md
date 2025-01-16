@@ -9,6 +9,8 @@ tags:
   - Azure Stack HCI
   - Azure Local
 
+sticky: false
+
 redirect_from:
   - /blog/azure-stack-hci-vm-deployment/
   - /blog/azure-local-vm-deployment/
