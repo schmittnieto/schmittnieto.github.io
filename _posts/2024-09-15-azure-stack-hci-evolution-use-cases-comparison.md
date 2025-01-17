@@ -29,7 +29,8 @@ toc_label: "Topics Overview"
 toc_icon: "list-ul"
 
 sidebar:
-  nav: "Azurelocal"
+  nav: 
+    - Azurelocal
   
 ---
 
