@@ -1,9 +1,23 @@
 main:
   - title: "Posts"
     url: /posts/
-  - title: "Categories"
-    url: /categories/
   - title: "Tags"
     url: /tags/
   - title: "About"
     url: /about/
+
+Azurelocal:
+- title: Azure Local
+  children:
+    - title: "Use Cases and Comparison"
+      url: /blog/azure-stack-hci-evolution-use-cases-comparison/
+    - title: "DemoLab"
+      url: /blog/azure-stack-hci-demolab/
+    - title: "Day 2 Operations"
+      url: /blog/azure-stack-hci-day2/
+    - title: "VM Deployment"
+      url: /blog/azure-stack-hci-vm-deployment/
+    - title: "Azure Virtual Desktop"
+      url: /blog/azure-stack-hci-azure-virtual-desktop/
+    - title: "AKS"
+      url: /blog/azure-local-aks/

@@ -28,6 +28,10 @@ header:
 toc: true
 toc_label: "Topics Overview" 
 toc_icon: "list-ul"
+
+sidebar:
+  nav: "Azurelocal"
+  
 ---
 
 ## Azure Virtual Desktop on Azure Stack HCI

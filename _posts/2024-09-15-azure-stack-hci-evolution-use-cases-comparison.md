@@ -27,6 +27,10 @@ header:
 toc: true
 toc_label: "Topics Overview" 
 toc_icon: "list-ul"
+
+sidebar:
+  nav: "Azurelocal"
+  
 ---
 
 ## Azure Stack HCI: Evolution, Use Cases, and Comparison with Other Solutions

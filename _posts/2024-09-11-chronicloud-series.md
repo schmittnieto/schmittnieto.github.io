@@ -1,7 +1,7 @@
 ---
 title: "Chronicloud Series: A Journey through Azure Solutions"
 date: 2024-09-11
-last_modified_at: 2024-11-06
+last_modified_at: 2025-01-17
 excerpt: "Delve into Azure technologies with the Chronicloud Series. Access in-depth guides and hands-on labs to enhance your skills and understanding in cloud computing."
 categories:
   - Blog
@@ -43,7 +43,7 @@ Each article in the **Chronicloud Series** will focus on specific Azure products
 1. **Azure Stack HCI**  
 Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that enables organizations to run virtualized workloads on-premises, with integration to Azure. In this series, we'll cover:
    - **Understanding Azure Stack HCI**: For an in-depth exploration of what Azure Stack HCI is, its key use cases, and how it compares to traditional hyper-converged solutions, please read [Azure Stack HCI Evolution: Use Cases and Comparison](/blog/azure-stack-hci-evolution-use-cases-comparison/).
-   - Labs on deploying and managing an Azure Stack HCI cluster, please read [Azure Stack HCI Evolution: Demolab](/blog/azure-stack-hci-demolab/).
+   - Labs on deploying and managing an Azure Stack HCI cluster, please read [Azure Stack HCI: Demolab](/blog/azure-stack-hci-demolab/).
    - Day 2 Operations: After deploying your cluster, this guide will walk you through the essential steps to configure, activate, and optimize your Azure Stack HCI environment, covering networking, security, monitoring, and more. For more details, see [Azure Stack HCI: Day 2 Operations](/blog/azure-stack-hci-day2).
    - *VMs Deployment and management*: Learn how to create, manage, and optimize virtual machines (VMs) in your Azure Stack HCI environment.You'll also discover how to integrate with Azure Arc for advanced VM management, allowing you to manage VMs on-premises through the Azure portal. For more details, see [Azure Stack HCI: VM Deployment](/blog/azure-stack-hci-vm-deployment).
    - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops. For more details, see [Azure Stack HCI: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop).
