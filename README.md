@@ -5,7 +5,7 @@
 ![Forks](https://img.shields.io/github/forks/schmittnieto/schmittnieto.github.io)
 ![Stars](https://img.shields.io/github/stars/schmittnieto/schmittnieto.github.io)
 
-This Repository uses a Modified installation from Minimal Mistakes
+This Repository uses a Modified installation from Minimal Mistakes for my [Blog](https://schmitt-nieto.com)
 
 # Minimal Mistakes remote theme starter
 
