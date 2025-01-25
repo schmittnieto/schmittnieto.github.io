@@ -11,7 +11,7 @@ Azurelocal:
   children:
     - title: "Use Cases and Comparison"
       url: /blog/azure-stack-hci-evolution-use-cases-comparison/
-    - title: "DemoLab"
+    - title: "Build the DemoLab"
       url: /blog/azure-stack-hci-demolab/
     - title: "Day 2 Operations"
       url: /blog/azure-stack-hci-day2/
@@ -19,5 +19,7 @@ Azurelocal:
       url: /blog/azure-stack-hci-vm-deployment/
     - title: "Azure Virtual Desktop"
       url: /blog/azure-stack-hci-azure-virtual-desktop/
-    - title: "AKS"
+    - title: "AKS & SQL Managed Instances"
       url: /blog/azure-local-aks/
+    - title: "Lifecycle Management"
+      url: /blog/azure-local-lifecycle/
