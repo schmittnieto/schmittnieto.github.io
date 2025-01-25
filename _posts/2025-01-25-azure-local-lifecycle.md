@@ -1,7 +1,7 @@
 ---
 title: "Azure Local: Lifecycle Management"
 excerpt: "Learn about Lifecycle Management in Azure Local, including updates, upgrades, and repair processes to streamline hybrid infrastructure operations."
-date: 2025-01-19
+date: 2025-01-25
 categories:
   - Blog
 tags:
