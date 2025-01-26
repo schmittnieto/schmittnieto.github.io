@@ -47,7 +47,7 @@ Let’s get started!
 
 The update process in Azure Local (starting with version 23H2) is straightforward and easy to manage from an administrative perspective. In this section, I’ll walk you through how this process works, its phases, and the key considerations to keep in mind before applying updates.
 
-Spoiler alert: The information I’m sharing is a mix of official documentation (from Microsoft and some OEMs) and my personal experience since the product launched in February 2024. For the sake of brevity, I won’t dive into specific scenarios like **SDN** or updates for **Stretch Clusters**—and yes, while Stretch Clusters aren’t available in this version, there’s a **Rack-Aware option**, which I also won’t cover here.
+Spoiler alert: The information I’m sharing is a mix of official documentation (from Microsoft and some OEMs) and my personal experience since the product launched in February 2024. For the sake of brevity, I won’t dive into specific scenarios like **SDN** or updates for **Stretch Clusters**, and yes, while Stretch Clusters aren’t available in this version, there’s a **Rack-Aware option**, which I also won’t cover here.
 
 ### Azure Local Updates
 
@@ -55,7 +55,7 @@ I recently updated my Azure Local cluster, and I want to share my experience bas
 
 #### Keeping the Cluster Updated
 
-Let’s face it—keeping your system updated is critical, especially with the new Azure Local 23H2 update process. This version introduces the **Lifecycle Manager** (orchestrator), which simplifies how updates are deployed and managed for the OS, agents, services, and even drivers and firmware.
+Let’s face it, keeping your system updated is critical, especially with the new Azure Local 23H2 update process. This version introduces the **Lifecycle Manager** (orchestrator), which simplifies how updates are deployed and managed for the OS, agents, services, and even drivers and firmware.
 
 If you’re still running Azure Stack HCI 22H2, be aware that support ends in **May 2025**. I recommend making the move to 23H2 sooner rather than later to ensure your system remains secure and supported.
 
