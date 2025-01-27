@@ -53,7 +53,7 @@ Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that
    - *VMs Deployment and management*: Learn how to create, manage, and optimize virtual machines (VMs) in your Azure Stack HCI environment.You'll also discover how to integrate with Azure Arc for advanced VM management, allowing you to manage VMs on-premises through the Azure portal. For more details, see [Azure Stack HCI: VM Deployment](/blog/azure-stack-hci-vm-deployment).
    - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops. For more details, see [Azure Stack HCI: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop).
    - *AKS Hybrid and SQL Managed Instances*: Deploy and manage Azure Kubernetes Service (AKS) and SQL Managed Instances on Azure Local in a hybrid cloud setup. For more details, see [Azure Local: AKS and SQL Managed Instances](/blog/azure-local-aks).
-   - *Lifecycle Management*: Best practices for managing updates, upgrades, and the entire lifecycle of your Azure Stack HCI infrastructure.
+   - *Lifecycle Management*: Best practices for managing updates, upgrades, and the entire lifecycle of your Azure Stack HCI infrastructure. For more details, see [Azure Local: Lifecycle Management](/blog/azure-local-lifecycle).
    - *Backup and Disaster Recovery*: Explore how to implement reliable backup and restore strategies using Azure services and HCI’s native tools.
    - *Migration to HCI*: Step-by-step guidance on migrating from traditional systems to Azure Stack HCI.
 
