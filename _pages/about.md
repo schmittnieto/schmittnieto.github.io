@@ -80,7 +80,7 @@ As a part of my career in Azure I have carried out several certification, among 
   </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto-7357/11278E3D76BB2B12?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-associate-badge-identity-access.png" alt="Microsoft Certified: Identity and Access Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft 365 Certified: Endpoint Administrator Associate</div>
+    <div style="text-align: center;">Microsoft Certified: Identity and Access Administrator Associate</div>
   </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/E724DDDADB705179?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-specialty-badge-avd.png" alt="Microsoft Certified: Azure Virtual Desktop Specialty" class="cert-image" style="width: 150px; height: 150px;"/>
