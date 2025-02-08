@@ -51,7 +51,10 @@ The only official documentation I’ve found so far for using Azure Local with N
 
 Below is a diagram illustrating the process for registering Nerdio and deploying AVD on Azure Local through Nerdio:
 
-![Nerdio-Azure Local Integration Process](/assets/img/post/2025-02-08-azure-local-nerdio/NerdioAzureLocalProcess.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/NerdioAzureLocalProcess.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/NerdioAzureLocalProcess.png" alt="Nerdio-Azure Local Integration Process" style="border: 2px solid grey;">
+</a>
+
 
 And here’s a reference architecture of the infrastructure which I´m using:
 
@@ -83,11 +86,15 @@ Once Nerdio is installed, you’ll need **Owner** permissions on the resources y
 
 You can register all of them from the same management window under **Settings > Azure environment**:
 
-![Azure Environment Configuration](/assets/img/post/2025-02-08-azure-local-nerdio/Azureenvironmentconfig.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Azureenvironmentconfig.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Azureenvironmentconfig.png" alt="Azure Environment Configuration" style="border: 2px solid grey;">
+</a>
 
 You’ll also need to connect your **Active Directory** (with a user who has the rights to join machines in the appropriate OU) and specify the **file share** for FSLogix profiles (in my case, a file share hosted on the domain controller(don´t replicate 😅)). This is done in **Settings > Integration**:
 
-![Integration Settings in Nerdio](/assets/img/post/2025-02-08-azure-local-nerdio/Integrations.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Integrations.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Integrations.png" alt="Integration Settings in Nerdio" style="border: 2px solid grey;">
+</a>
 
 ## Golden Image
 
@@ -97,7 +104,9 @@ The process of creating a **Golden Image** was outlined in the introduction, and
 
 2. **Import the VM image from the Azure gallery** by going to **Desktop Images > Add from Azure library**. Select both the vNet you just created and the Azure image you want to use as your Golden Image. My setup looked like this:
 
-![Golden Image Setup in Nerdio](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage01.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage01.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage01.png" alt="Golden Image Setup in Nerdio" style="border: 2px solid grey;">
+</a>
 
 Nerdio will then spend about 30 minutes creating a VM based on the parameters you provided. It places that VM in the specified vNet and Resource Group. By default, this VM won’t be accessible from the internet unless you assign it a public IP and configure RDP access in the Azure portal.
 
@@ -105,25 +114,42 @@ Now, you can modify this VM in two ways:
 - **Direct Access**: Connect to the VM (via VPN or public IP) to configure it manually.
 - **Run Scripts**: One of my favorite features in Nerdio. You can run scripts to install language packs or other software, either on demand or scheduled. (If you’re thinking what I’m thinking, this is perfect for scheduling and automating Windows Updates on your Golden Images!)
 
-![Run Scripts in Nerdio](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage02.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage02.png" alt="Run Scripts in Nerdio" style="border: 2px solid grey;">
+</a>
 
-![Script Scheduling in Nerdio](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage03.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage03.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage03.png" alt="Script Scheduling in Nerdio" style="border: 2px solid grey;">
+</a>
 
 That sets up your base VM to serve as your Golden Image. Next comes the more interesting part: deploying the image into a **Compute Gallery** and syncing (or uploading) it to **Azure Local** so it can be used on your Session Hosts.
 
 You can accomplish this by converting the VM into an Image and syncing it with Azure Local like so:
 
-![Convert to VM Image](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage04.png){: style="border: 2px solid grey;"}
-![Sync with Azure Local](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage05.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage04.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage04.png" alt="Convert to VM Image" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage05.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage05.png" alt="Sync with Azure Local" style="border: 2px solid grey;">
+</a>
+
 
 As you can see in the last screenshot, I’ve enabled **Geographic distribution & Azure compute gallery** because it allows me to pull the image down to Azure Local by selecting my custom location. In my case, I created the Compute Gallery automatically from within Nerdio and selected the custom location **azlfra**. If you wish, you can also configure a schedule so that this process runs automatically the day after Windows Updates are installed on the Golden Image:
 
-![Compute Gallery and Custom Location](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage06.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage06.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage06.png" alt="Compute Gallery and Custom Location" style="border: 2px solid grey;">
+</a>
 
 It took about 30 minutes for my image to sync. I really appreciate how Nerdio keeps you updated on the entire progress. Here’s what the result looks like:
 
-![Golden Image Sync Result 1](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage07.png){: style="border: 2px solid grey;"}
-![Golden Image Sync Result 2](/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage08.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage07.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage07.png" alt="Golden Image Sync Result 1" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage08.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/GoldenImage08.png" alt="Golden Image Sync Result 2" style="border: 2px solid grey;">
+</a>
 
 And that’s it! You now have a Golden Image you can generate periodically and automatically update through Nerdio. It saves you a ton of time and makes image management much more efficient and user-friendly.
 
@@ -131,16 +157,29 @@ And that’s it! You now have a Golden Image you can generate periodically and a
 
 We now have an image in **Azure Local** that we can use to provision a Session Host. So, what’s next? Since I’m starting from a clean deployment, I’ll create a **Workspace** dedicated to Azure Local, where I’ll implement a “Hybrid host pool”. I use quotes because, realistically, these host pools shouldn’t be mixed between on-prem and cloud (not supported yet), so they’ll reside solely in Azure Local. 
 
-![Workspace Creation - Step 1](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace01.png){: style="border: 2px solid grey;"}
-![Workspace Creation - Step 2](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace02.png){: style="border: 2px solid grey;"}
-![Workspace Creation - Step 3](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace03.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace01.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace01.png" alt="Workspace Creation - Step 1" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace02.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace02.png" alt="Workspace Creation - Step 2" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace03.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace03.png" alt="Workspace Creation - Step 3" style="border: 2px solid grey;">
+</a>
 
 ### Adding a Hybrid Host Pool
 
 After the Workspace is created, head to **Hybrid host pools** and add a new one. In my case, I chose **Multi user desktop (pooled)**. You’ll need to select the **Active Directory** and **FSLogix profile** you configured under Integrations, pick the **hybrid network** you set up in the Azure Environment settings, and finally select the **Desktop Image** we created earlier. I assigned three users manually via **Quick Assign**, but in a production environment, you’d typically assign users through security groups.
 
-![Host Pool Creation - Step 1](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace04.png){: style="border: 2px solid grey;"}
-![Host Pool Creation - Step 2](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace05.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace04.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace04.png" alt="Host Pool Creation - Step 1" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace05.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace05.png" alt="Host Pool Creation - Step 2" style="border: 2px solid grey;">
+</a>
 
 ### Configuring Autoscaling
 
@@ -170,26 +209,47 @@ Once the host pool is created, you’ll see a prompt to configure **Autoscale**.
 - **AUTO-HEAL BROKEN HOSTS**  
   A “killer feature” of Nerdio. If a Session Host VM isn’t recognized as Available by the AVD service, Nerdio Manager can try repairing it automatically. It performs this auto-heal after all scale-out tasks are finished and things are stable.
 
-![Autoscaling Configuration - Step 1](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace06.png){: style="border: 2px solid grey;"}
-![Autoscaling Configuration - Step 2](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace07.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace06.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace06.png" alt="Autoscaling Configuration - Step 1" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace07.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace07.png" alt="Autoscaling Configuration - Step 2" style="border: 2px solid grey;">
+</a>
 
 Upon configuring autoscaling, Nerdio provisions a Session Host according to your settings. In my test, the process took roughly **50 minutes** and (to my surprise) completed without any errors. Here’s a snapshot of the provisioning and its final result:
 
-![Workspace Provisioning - Step 1](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace08.png){: style="border: 2px solid grey;"}
-![Workspace Provisioning - Step 2](/assets/img/post/2025-02-08-azure-local-nerdio/Workspace09.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace08.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace08.png" alt="Workspace Provisioning - Step 1" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace09.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Workspace09.png" alt="Workspace Provisioning - Step 2" style="border: 2px solid grey;">
+</a>
 
 
 ### Post-Deployment Tweaks
 
 After the deployment, I realized I forgot to install the **multimedia redirection extension** and enable **RDP Shortpath** in my Golden Image. Ordinarily, I’d have to update the Golden Image and roll out a new deployment. But with Nerdio, I can use **Run Script** to fix these settings directly on the Session Host (or multiple Session Hosts simultaneously via bulk operations). Of course, I’ve also integrated these features into my Golden Image as well, but below are two screenshots showing how I added them directly to the Session Host:
 
-![Multimedia Redirection Script](/assets/img/post/2025-02-08-azure-local-nerdio/MultimediaRed.png){: style="border: 2px solid grey;"}
-![RDP Shortpath Script](/assets/img/post/2025-02-08-azure-local-nerdio/RDPShortparth.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/MultimediaRed.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/MultimediaRed.png" alt="Multimedia Redirection Script" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/RDPShortparth.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/RDPShortparth.png" alt="RDP Shortpath Script" style="border: 2px solid grey;">
+</a>
+
 
 Once everything was in place, I logged into the Virtual Desktop, and sure enough, it performed exactly as expected:
 
-![Result - Session Host Running](/assets/img/post/2025-02-08-azure-local-nerdio/Result01.png){: style="border: 2px solid grey;"}
-![Result - Azure Local AVD](/assets/img/post/2025-02-08-azure-local-nerdio/Result02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Result01.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Result01.png" alt="Result - Session Host Running" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/Result02.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/Result02.png" alt="Result - Azure Local AVD" style="border: 2px solid grey;">
+</a>
 
 ## Conclusion
 
