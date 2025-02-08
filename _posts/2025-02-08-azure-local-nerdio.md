@@ -55,7 +55,9 @@ Below is a diagram illustrating the process for registering Nerdio and deploying
 
 And here’s a reference architecture of the infrastructure which I´m using:
 
-![Azure Local Architecture with Nerdio](/assets/img/post/2025-02-08-azure-local-nerdio/NerdioAzureLocalArchitecture.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-02-08-azure-local-nerdio/NerdioAzureLocalArchitecture.png" target="_blank">
+  <img src="/assets/img/post/2025-02-08-azure-local-nerdio/NerdioAzureLocalArchitecture.png" alt="Azure Local Architecture with Nerdio" style="border: 2px solid grey;">
+</a>
 
 ## Configuring Nerdio for Azure Local
 
