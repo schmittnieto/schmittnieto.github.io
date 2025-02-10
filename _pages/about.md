@@ -62,6 +62,10 @@ As a part of my career in Azure I have carried out several certification, among 
     <img src="/assets/img/nerdio-nme-200.png" alt="Nerdio Manager for Enterprise Certified" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Nerdio Manager for Enterprise Certified</div>
   </a>
+  <a href="https://eu.badgr.com/public/assertions/nyYBb_cJS_yLso8m1pnOHQ?identity__email=cristian.schmitt.nieto@devoteam.com" target="_blank">
+    <img src="/assets/img/devoteam-digital-champion.png" alt="Digital Champion Devoteam" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Devoteam Digital Champion</div>
+  </a>
   <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/DEC07C6846AF65A7?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-fundamentals-badge-AI.png" alt="Microsoft Certified: Azure AI Fundamentals" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure AI Fundamentals</div>
