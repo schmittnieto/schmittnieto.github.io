@@ -8,53 +8,42 @@ subtitle: Welcome to My Azure Journey
   <img src="/assets/img/avatar-csn.jpeg" alt="Cristian Schmitt Nieto" style="width: 150px; height: 150px; border-radius: 50%;"/>
 </div>
 
-# Introduction
+## Introduction
 
-Hello! I'm **Cristian Schmitt Nieto**, originally from Spain, now living in Germany. My passion for technology started at a young age, and over the past decade, I've built a career in IT that I'm truly proud of. This blog is a space where I share my journey, insights, and experiences, particularly focusing on my work with Azure.
+Hello! I'm **Cristian Schmitt Nieto**, an IT professional originally from Spain and now based in Germany. With over a decade of experience, I currently serve as a **Lead Consultant at Devoteam**. My passion is to create innovative solutions that combine traditional on-premise infrastructures with modern cloud technologies, with a primary focus on Hybrid Cloud (using Azure Local) and Azure Virtual Desktop (AVD).
 
-# Early Career
+## Career Overview
 
-My professional journey began in the most basic way possible – handling client support, installing printers, and managing everyday IT tasks. These early experiences were crucial in building my foundational skills. However, it wasn’t long before I discovered my true interest in network infrastructures and servers, which set the course for my future career.
+### Early Beginnings
 
-# Professional Experience
+I started my IT journey with hands-on roles such as providing client support, installing printers, and resolving everyday technical issues. These experiences laid a strong foundation and sparked my interest in network infrastructures and server management.
 
-## Data Center Management
+### Data Center & Infrastructure Management
 
-For several years, I managed a small data center. This role involved a wide range of responsibilities, from maintaining firewalls and S2D clusters to managing Windows infrastructures and Citrix environments. Here are some of the key areas I worked on:
+I managed a small data center where I was responsible for:
+* **Firewalls:** Safeguarding network security and ensuring smooth data flow.
+* **S2D Clusters:** Overseeing storage solutions for data availability and reliability.
+* **Windows Servers:**
+  * **File Servers (DFS):** Handling distributed file systems.
+  * **Active Directory:** Managing user and resource administration.
+  * **DHCP/DNS:** Maintaining essential network services.
+* **Citrix:** Overseeing virtual desktops and applications.
 
-- **Firewalls**: Ensuring security and proper data flow.
-- **S2D Clusters**: Managing storage solutions to ensure data availability and reliability.
-- **Windows Servers**:
-  - **File Servers (DFS)**: Managing distributed file systems.
-  - **Active Directory**: Overseeing user and resource management.
-  - **DHCP/DNS**: Handling network services.
-- **Citrix**: Managing virtual desktops and applications.
+## Azure Journey and Current Role
 
-# Azure Journey
+Five years ago, I specialized in Microsoft Azure, a move that has been both challenging and rewarding. In my current role at Devoteam, I focus on:
+* **Hybrid Cloud Solutions:** Integrating on-premise (Azure Local) systems with cloud services to build agile and secure IT environments.
+* **Azure Virtual Desktop (AVD):** Designing and optimizing virtual desktop infrastructures to enhance efficiency and scalability.
 
-Five years ago, I decided to specialize in Azure, and it has been a remarkable journey since. My enthusiasm for cloud computing has only grown stronger over time. In this blog, I aim to share my personal experiences, the challenges I face, and the solutions I find in the Azure ecosystem.
+I also guide clients through their digital transformation journeys using modern tools like Azure DevOps, Terraform, and Bicep, along with frameworks such as the Cloud Adoption Framework (CAF) and the Well Architected Framework (WAF).
 
 ## Areas of Expertise
 
-### Hybrid Infrastructures
+* **Hybrid Cloud:** Merging on-premise and cloud environments to build robust IT solutions.
+* **Azure Infrastructure:** Specializing in Azure Virtual Desktop and public Azure services to meet diverse business needs.
+* **Client Solutions:** Delivering tailored strategies for successful cloud adoption.
 
-I have extensive experience with hybrid infrastructures, primarily focusing on Azure Stack HCI and AKS. These technologies bridge the gap between on-premises data centers and the cloud, offering flexibility and scalability.
-
-### Azure Infrastructures
-
-I specialize in various Azure services, with a particular focus on Azure Virtual Desktop and Azure Public Infrastructure. My work involves setting up, managing, and optimizing these environments to meet diverse client needs.
-
-### Client Solutions and Frameworks
-
-Over the years, I've helped numerous clients navigate their cloud journeys, implementing a range of solutions using technologies and frameworks such as:
-
-- **Azure DevOps**: Streamlining development and deployment processes.
-- **Terraform**: Automating infrastructure provisioning.
-- **Bicep**: Simplifying Azure resource management.
-- **Cloud Adoption Framework (CAF)**: Guiding clients through cloud adoption best practices.
-- **Well Architected Framework (WAF)**: Ensuring solutions are scalable, secure, and efficient.
-
-# Certifications
+## Certifications
 
 As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
 <div class="Certifications" style="text-align: center;">
@@ -100,6 +89,6 @@ As a part of my career in Azure I have carried out several certification, among 
   </a>
 </div>
 
-# Conclusion
+## Final Thoughts
 
-This blog is a reflection of my passion for IT and Azure. I hope you find the content informative and engaging, and that it helps you in your own IT journey. Thank you for joining me on this adventure. Enjoy the journey as much as I do!
+This is a personal blog. The views and opinions expressed here are solely my own and do not represent those of any organization or individual with whom I may be associated, either professionally or personally. All solutions, scripts, and guidance are provided as-is without any warranty, and their use is at the user's own risk. My journey in IT and cloud technologies is ever-evolving, and I'm excited to share every step with you. Whether you're just beginning or are already deep into your digital transformation, I hope my experiences and insights offer valuable guidance and inspiration. Thank you for joining me on this adventure, enjoy the journey as much as I do!
