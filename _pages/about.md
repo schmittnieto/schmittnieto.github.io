@@ -55,35 +55,35 @@ As a part of my career in Azure I have carried out several certification, among 
     <img src="/assets/img/nerdio-nme-200.png" alt="Nerdio Manager for Enterprise Certified" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Nerdio Manager for Enterprise Certified</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/DEC07C6846AF65A7?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/DEC07C6846AF65A7?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-fundamentals-badge-AI.png" alt="Microsoft Certified: Azure AI Fundamentals" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure AI Fundamentals</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/5FBC968AEABFC10B?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/5FBC968AEABFC10B?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-associate-badge-adm.png"  alt="Microsoft Certified: Azure Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure Administrator Associate</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/A3635D8F3BE9F9C2?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/A3635D8F3BE9F9C2?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-associate-badge-hybrid.png" alt="Microsoft Certified: Windows Server Hybrid Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Windows Server Hybrid Administrator Associate</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto-7357/923DF5023E108FBA?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto/923DF5023E108FBA?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-associate-badge-endpoint.png" alt="Microsoft 365 Certified: Endpoint Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft 365 Certified: Endpoint Administrator Associate</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto-7357/11278E3D76BB2B12?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto/11278E3D76BB2B12?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-associate-badge-identity-access.png" alt="Microsoft Certified: Identity and Access Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Identity and Access Administrator Associate</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/E724DDDADB705179?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/E724DDDADB705179?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-specialty-badge-avd.png" alt="Microsoft Certified: Azure Virtual Desktop Specialty" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure Virtual Desktop Specialty</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/225ACCA9CD499B3C?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/225ACCA9CD499B3C?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-expert-badge-DevOps.png" alt="Microsoft Certified: DevOps Engineer Expert" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: DevOps Engineer Expert</div>
   </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto-7357/B8D453727AF2E0FF?sharingId=24F0DC952D8EB05D" target="_blank">
+  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/B8D453727AF2E0FF?sharingId=24F0DC952D8EB05D" target="_blank">
     <img src="/assets/img/microsoft-certified-expert-badge-expert.png" alt="Microsoft Certified: Azure Solutions Architect Expert" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Certified: Azure Solutions Architect Expert</div>
   </a>
