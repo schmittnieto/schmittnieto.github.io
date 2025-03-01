@@ -23,3 +23,5 @@ Azurelocal:
       url: /blog/azure-local-aks/
     - title: "Lifecycle Management"
       url: /blog/azure-local-lifecycle/
+    - title: "Redundancy"
+      url: /blog/azure-local-redundancy/
