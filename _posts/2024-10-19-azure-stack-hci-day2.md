@@ -2,7 +2,7 @@
 title: "Azure Stack HCI: Day2 operations"
 excerpt: "Optimize your Azure Stack HCI deployment with Day 2 operations. Learn to configure networks, manage VM images, monitor, and secure your environment effectively."
 date: 2024-10-19
-last_modified_at: 2024-11-30
+last_modified_at: 2025-03-04
 categories:
   - Blog
 tags:
@@ -76,8 +76,12 @@ One of the most powerful aspects of the Arc Resource Bridge is that it projects 
 ### Azure Arc Resource Bridge Architecture
 
 The **Azure Arc Resource Bridge** is a complex yet elegant system that makes hybrid cloud management a reality. Here’s an architectural diagram that showcases the flow of data and services between Azure and your on-premises infrastructure.
-![Azure Arc Resource Bridge Architecture 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/Arc-Resource-Bridge-architecture-overview01.png){: style="border: 2px solid grey;"}
-![Azure Arc Resource Bridge Architecture 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/Arc-Resource-Bridge-architecture-overview02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/Arc-Resource-Bridge-architecture-overview01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/Arc-Resource-Bridge-architecture-overview01.png" alt="Azure Arc Resource Bridge Architecture 01" style="border: 2px solid grey;">
+</a>
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/Arc-Resource-Bridge-architecture-overview02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/Arc-Resource-Bridge-architecture-overview02.png" alt="Azure Arc Resource Bridge Architecture 02" style="border: 2px solid grey;">
+</a>
 The diagrams demonstrate the relationship between the layers of the Arc Resource Bridge and the Azure services it supports. 
 Special thanks to [Lior Kamrat](https://www.linkedin.com/in/liorkamrat/) for creating this detailed representation of the infrastructure in his insightful work. 
 
@@ -87,8 +91,13 @@ After provisioning Azure Stack HCI, you may notice that many features are not en
 
 Here’s a look at the Azure Stack HCI environment immediately after deployment:
 
-![Azure Stack HCI after provisioning 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci01.png){: style="border: 2px solid grey;"}
-![Azure Stack HCI after provisioning 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci01.png" alt="Azure Stack HCI after provisioning 01" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci02.png" alt="Azure Stack HCI after provisioning 02" style="border: 2px solid grey;">
+</a>
 
 As you can see, most features need to be activated to fully utilize Azure Stack HCI’s capabilities. Let's go through each step.
 
@@ -98,15 +107,23 @@ To start deploying services like AKS or VMs, you must first **create a logical n
 
 Here is a small guide on how to configure the logical network in our demolab: 
 - First we will go to the Logical Network section and add our first lnet:
-![Creating Logical Network 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet01.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet01.png" alt="Creating Logical Network 01" style="border: 2px solid grey;">
+</a>
 - We give a name to the lnet (which will appear later in Azure) and select the Virtual Switch using Dropdown:
-![Creating Logical Network 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet02.png" alt="Creating Logical Network 02" style="border: 2px solid grey;">
+</a>
 - And finally we add all the necessary network data. If you have made use of Demolab you can use the same as me 😉
-![Creating Logical Network 03](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet03.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet03.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/lnet03.png" alt="Creating Logical Network 03" style="border: 2px solid grey;">
+</a>
 
 Once you've created your first **Logical Network (lnet)**, you can deploy an AKS 🤖. But we will leave this point for another article because several considerations must be taken into account.
 
-![AKS deployment after lnet setup](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci03.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci03.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/azshci03.png" alt="AKS deployment after lnet setup" style="border: 2px solid grey;">
+</a>
 
 However, keep in mind that **VMs** and **Azure Automanage for Windows Server** still cannot be deployed at this point, as they depend on custom **VM images**, which we will address later.
 
@@ -128,19 +145,32 @@ More details on the Azure-based WAC can be found [here](https://learn.microsoft.
 
 Here is also a small guide on how to install and use the WAC extension in Azure:
 - In the Settings > Windows Admin Center (Preview) section. We proceed to install the extension, the port from which arc will be able to contact the cluster will be configured. Important this port is not accessible from the internet (no Port Forwarding is required), this port is only accessible to Azure in a reverse connection. 
-![Windows Admin Center Setup 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac01.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac01.png" alt="Windows Admin Center Setup 01" style="border: 2px solid grey;">
+</a>
+
 - After a few seconds you will be able to see how the extension is being installed (This process may take a few minutes and depending on when you perform it, it may be giving certain errors):
-![Windows Admin Center Setup 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac02.png){: style="border: 2px solid grey;"}
-![Windows Admin Center Setup 03](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac03.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac02.png" alt="Windows Admin Center Setup 02" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac03.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac03.png" alt="Windows Admin Center Setup 03" style="border: 2px solid grey;">
+</a>
 - To access the Windows Admin Center, the following RBAC permission "Windows Admin Center Administrator Login" is required (I usually grant them in the Resource Group of the Azure Stack HCI because I usually require this right in the other resources too):
-![Windows Admin Center Setup 04](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac04.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac04.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac04.png" alt="Windows Admin Center Setup 04" style="border: 2px solid grey;">
+</a>
+
 
 ~~After this process and provided that everything has gone as expected, you will be able to manage the WAC of the cluster through your EntraID user.
 I was unable to install the WAC extension (0.37.0.0) during this week because I received the following error:  `RetrieveCertificate: Failed to retrieve certificate from key vault using app service`, even though I have the correct permissions and have successfully completed this process in the past.~~ (That was related to the previous Azure Stack HCI version 2408)
 
 **Update** With the new version 10.2411.0.22 of AzureLocal (formerly known as Azure Stack HCI), it is now possible to use WAC again 🎉:
 
-![Windows Admin Center Setup 05](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac05.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac05.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wac05.png" alt="Windows Admin Center Setup 05" style="border: 2px solid grey;">
+</a>
 
 This means that WAC can be used once more to connect VMs remotely by accessing the host and pivoting to the VM through WAC.
 
@@ -168,13 +198,33 @@ Enabling Insights is straightforward:
 
 Here is a step by step guide on how I have configured insight in the cluster:
 
-![Monitoring 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon01.png){: style="border: 2px solid grey;"}
-![Monitoring 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon02.png){: style="border: 2px solid grey;"}
-![Monitoring 03](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon03.png){: style="border: 2px solid grey;"}
-![Monitoring 04](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon04.png){: style="border: 2px solid grey;"}
-![Monitoring 05](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon05.png){: style="border: 2px solid grey;"}
-![Monitoring 06](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon06.png){: style="border: 2px solid grey;"}
-![Monitoring 07](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon07.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon01.png" alt="Monitoring 01" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon02.png" alt="Monitoring 02" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon03.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon03.png" alt="Monitoring 03" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon04.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon04.png" alt="Monitoring 04" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon05.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon05.png" alt="Monitoring 05" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon06.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon06.png" alt="Monitoring 06" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon07.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon07.png" alt="Monitoring 07" style="border: 2px solid grey;">
+</a>
 
 Once you set it up, Insights will begin collecting information about your cluster’s performance. You’ll start seeing data like CPU usage, memory availability, and network activity, but remember it can take up to 15 minutes before data appears.
 
@@ -184,10 +234,14 @@ Since I'm experimenting with the possibility of creating a Workbook that include
 - `Microsoft-Windows-Hyper-V-Worker-Admin!*[System[(EventID=18500 or EventID=18501 or EventID=18530 or EventID=18531 or EventID=18560 or EventID=18561)]]`
    - These events capture detailed information about the VM operations at the worker level, including health status and operational issues.
 
-![Monitoring 08](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon08.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon08.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon08.png" alt="Monitoring 08" style="border: 2px solid grey;">
+</a>
 
 In the Workbook I will also add the current status of the extensions, because it does not seem to update automatically and it is not listed as “outdated” either:
-![Monitoring 09](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon09.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon09.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/mon09.png" alt="Monitoring 09" style="border: 2px solid grey;">
+</a>
 
 #### What Does It Monitor?
 
@@ -265,7 +319,9 @@ Enable-AsWdacPolicy -Mode Enforced
 
 In my **test environment**, I switched WDAC to **Audit Mode** to allow future testing, as shown in the image below:
 
-![WDAC switched to Audit Mode](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wdac.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wdac.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/wdac.png" alt="WDAC switched to Audit Mode" style="border: 2px solid grey;">
+</a>
 
 For **production environments**, always ensure **Enforced Mode** is enabled for maximum security and in case you need to install any application on the nodes (for example Veeam) make sure that the provider offers you the necessary policies for WDAC.
 
@@ -310,13 +366,18 @@ Here’s how I create a VM image using **Azure Marketplace** images in the **Azu
 1. I navigate to my **Azure Stack HCI cluster resource**.
 2. Then I go to **Resources > VM images** and select **+ Add VM Image**.
 3. I choose **Add VM Image from Azure Marketplace**.
-![VM Image Azure Stack HCI 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/vmimage01.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/vmimage01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/vmimage01.png" alt="VM Image Azure Stack HCI 01" style="border: 2px solid grey;">
+</a>
 4. On the **Create an image** page, I fill in the required information:
    - **Subscription** and **Resource Group**.
    - **Custom Location**: This matches the location of my Azure Stack HCI cluster.
    - **Image to download**:I have chosen `Windows Server 2022 Datacenter: Azure Edition` to show all checks in green, but later I will also download `Windows 11 MultiSession + M365 Apps` for the Azure Virtual Desktops PoC.
    - **Storage Path**: I can either let Azure choose this automatically or manually specify a path with enough storage.
-![VM Image Azure Stack HCI 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/vmimage02.png){: style="border: 2px solid grey;"}
+
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/vmimage02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/vmimage02.png" alt="VM Image Azure Stack HCI 02" style="border: 2px solid grey;">
+</a>
 5. After clicking **Review + Create**, the image creation starts. Depending on the image size and network speed, it may take some time.
 6. Once the image is downloaded, it shows up in the list as **Available**, and I can use it to deploy VMs.
 
@@ -332,9 +393,13 @@ Therefore, I've opted to perform this final step manually. After the script comp
 
 Here's are screenshots illustrating the manual addition of the VHDX image:
 
-![Manually Adding VM Image 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-01.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-01.png" alt="Manually Adding VM Image 01" style="border: 2px solid grey;">
+</a>
 
-![Manually Adding VM Image 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-02.png" alt="Manually Adding VM Image 02" style="border: 2px solid grey;">
+</a>
 
 I plan to revisit this automation in the future when the tools and support for Hyper-V Generation 2 images become more mature, potentially allowing for full automation without the need for complex scripting.
 
@@ -394,9 +459,13 @@ In my demo lab, I’ve shown how to manage these configurations, but in a real p
 
 Finally, after setting up everything correctly, your environment should look like this, with all services running and **green**:
 
-![Final Setup 01](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/final01.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/final01.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/final01.png" alt="Final Setup 01" style="border: 2px solid grey;">
+</a>
 
-![Final Setup 02](/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/final02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/final02.png" target="_blank">
+  <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/final02.png" alt="Final Setup 02" style="border: 2px solid grey;">
+</a>
 
 As I create the scripts (VM Images VHDX convertion) and workbooks (for VMs Monitoring) for the **AzSHCI** repository (which you can follow [here](https://github.com/schmittnieto/AzSHCI)), I’ll be updating this article with the new content. Keep an eye out for upcoming articles, where I’ll cover exciting topics such as:
 

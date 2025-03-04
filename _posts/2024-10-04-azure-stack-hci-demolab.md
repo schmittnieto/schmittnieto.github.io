@@ -2,7 +2,7 @@
 title: "Azure Stack HCI: Demolab"
 excerpt: "Streamline Azure Stack HCI deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2024-11-22
+last_modified_at: 2025-03-04
 categories:
   - Blog
 tags:
@@ -126,6 +126,8 @@ By utilizing Nested Virtualization, you can simulate a realistic Azure Stack HCI
 ### Repository Overview
 
 The **AzSHCI** scripts are hosted on GitHub: [github.com/schmittnieto/AzSHCI](https://github.com/schmittnieto/AzSHCI)
+
+<a href="https://github.com/schmittnieto/AzSHCI"><img src="https://badgen.net/https/raw.githubusercontent.com/schmittnieto/AzSHCI/refs/heads/main/lastdeployment.json"></a>
 
 The repository is structured as follows:
 
@@ -327,7 +329,9 @@ After running Script 02, the Azure Connected Machine extensions should begin ins
 - Go to the Azure Portal.
 - Navigate to the Azure Arc machines.
 - Check that all extensions are installed and in a successful state.
-- ![Extension](/assets/img/post/2024-10-04-azure-stack-hci-demolab/extensions.png)
+<a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/extensions.png" target="_blank">
+   <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/extensions.png" alt="Extension" style="border: 2px solid grey;">
+</a>
 
 If you encounter any issues or failures with the extensions, run Script 03:
 
@@ -370,17 +374,25 @@ Once the cluster node script completes and extensions are correctly installed, f
    
    - **Network Configuration:**
      - Apply the following network settings to the interfaces:
-       - ![Network Configuration](/assets/img/post/2024-10-04-azure-stack-hci-demolab/networkconfiguration.png)
+<a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/networkconfiguration.png" target="_blank">
+  <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/networkconfiguration.png" alt="Network Configuration" style="border: 2px solid grey;">
+</a>
      - Personally, I use the following IP configurations:
-       - ![IP Configuration](/assets/img/post/2024-10-04-azure-stack-hci-demolab/ipconfiguration.png)
+<a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/ipconfiguration.png" target="_blank">
+  <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/ipconfiguration.png" alt="IP Configuration" style="border: 2px solid grey;">
+</a>
 
    - **Custom Location and User Configuration:**
      - Configure users and custom locations as defined in the scripts (credentials are exposed in the scripts):
-       - ![AD Configuration](/assets/img/post/2024-10-04-azure-stack-hci-demolab/adconfiguration.png)
+<a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/adconfiguration.png" target="_blank">
+  <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/adconfiguration.png" alt="AD Configuration" style="border: 2px solid grey;">
+</a>
 
    - **Security Options:**
      - It's crucial to disable BitLocker to prevent excessive storage consumption (totaling 2.1 TB), which could render your system inoperable if you lack sufficient capacity:
-       - ![Security Options](/assets/img/post/2024-10-04-azure-stack-hci-demolab/securityoptions.png)
+<a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/securityoptions.png" target="_blank">
+  <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/securityoptions.png" alt="Security Options" style="border: 2px solid grey;">
+</a>
 
    - **Finalize Configuration:**
      - Leave the remaining settings at default. The system will be ready for provisioning after the validation, which take approximately 20 minutes.
