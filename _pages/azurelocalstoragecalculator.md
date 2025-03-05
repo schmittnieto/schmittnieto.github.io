@@ -3,26 +3,11 @@ permalink: /azl-storage-calculator/
 title: "Azure Local Storage Calculator"
 subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe storage only
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Azure Local S2D Capacity Calculator</title>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="az-local-calculator">
   <style>
-    body {
-      background-color: #f2f2f2;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .container {
+    /* Container styling for the calculator */
+    .az-local-calculator .container {
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -30,25 +15,26 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       max-width: 500px;
       width: 100%;
       text-align: center;
+      margin: 20px auto;
     }
-    h1 {
+    .az-local-calculator h1 {
       font-size: 1.5em;
       margin-bottom: 20px;
     }
-    .slider-container {
+    .az-local-calculator .slider-container {
       margin: 20px 0;
       text-align: left;
     }
-    label {
+    .az-local-calculator label {
       display: block;
       margin-bottom: 5px;
       font-weight: 600;
     }
-    input[type=range] {
+    .az-local-calculator input[type=range] {
       width: 100%;
       margin: 10px 0;
     }
-    input[type=number] {
+    .az-local-calculator input[type=number] {
       width: 100%;
       padding: 8px;
       border: 1px solid #ccc;
@@ -56,7 +42,7 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       box-sizing: border-box;
       margin-top: 5px;
     }
-    button {
+    .az-local-calculator button {
       background-color: #007aff;
       color: #fff;
       border: none;
@@ -66,10 +52,10 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       cursor: pointer;
       margin-top: 20px;
     }
-    button:hover {
+    .az-local-calculator button:hover {
       background-color: #005bb5;
     }
-    .result {
+    .az-local-calculator .result {
       background: #f8f8f8;
       border-radius: 8px;
       padding: 15px;
@@ -77,19 +63,18 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       text-align: left;
       font-size: 0.95em;
     }
-    .disclaimer {
+    .az-local-calculator .disclaimer {
       font-size: 0.8em;
       color: #777;
       margin-top: 20px;
       text-align: left;
     }
     /* Chart container styling */
-    #chartContainer {
+    .az-local-calculator #chartContainer {
       margin-top: 20px;
     }
   </style>
-</head>
-<body>
+
   <div class="container">
     <h1>Azure Local S2D Capacity Calculator</h1>
     <div class="slider-container">
@@ -234,5 +219,5 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       chart = new Chart(ctx, config);
     }
   </script>
-</body>
-</html>
+</div>
+
