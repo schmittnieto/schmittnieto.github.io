@@ -7,7 +7,7 @@ subtitle: "This is a calculator for Azure Local S2D, assuming you are using NVMe
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NVM S2D Calculator</title>
+  <title>NVMe S2D Calculator</title>
   <!-- Load Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -85,7 +85,7 @@ subtitle: "This is a calculator for Azure Local S2D, assuming you are using NVMe
 </head>
 <body>
   <div class="container">
-    <h2>NVM S2D Calculator</h2>
+    <h2>NVMe S2D Calculator</h2>
     <div class="slider-container">
       <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
       <input type="range" id="nodes" min="1" max="16" value="1" 
@@ -116,7 +116,7 @@ subtitle: "This is a calculator for Azure Local S2D, assuming you are using NVMe
     <div class="disclaimer">
       <p><strong>Redundancy Disclaimer:</strong> When using 1 or 2 nodes, S2D employs two-way mirror redundancy. When using 3 or more nodes, three-way mirror redundancy is used. For a single-node configuration, no storage network is required (<em>Optional – this pattern doesn't require a storage network</em>). We assume that in this case a local mirror is used to avoid data loss in case of disk failure, though no definitive documentation has been found regarding this.</p>
       <p><strong>Reserved Capacity Disclaimer:</strong> The calculation now reserves capacity equivalent to one disk per node in the cluster (i.e. <em>Reserved Capacity = Number of Nodes × Capacity per Disk</em>). This ensures there is sufficient unallocated space for repairs after a disk failure.</p>
-      <p><strong>NVMe & Performance:</strong> In Azure Local, NVMe drives are used as both cache and capacity. For optimal performance, RDMA must be employed. Increasing the number of NVMe drives per node enhances IOPS and throughput via parallelism—but it also requires proper RDMA network configuration to avoid potential bottlenecks.</p>
+      <p><strong>NVMe & Performance:</strong> In Azure Local, NVMe drives are used as both cache and capacity. For optimal performance, RDMA must be employed. Increasing the number of NVMe drives per node enhances IOPS and throughput via parallelism, but it also requires proper RDMA network configuration to avoid potential bottlenecks.</p>
       <p><strong>Storage Configuration:</strong> Storage is configured in Azure Local using the <code>configurationMode</code> parameter (
         <a href="https://learn.microsoft.com/en-us/azure/templates/microsoft.azurestackhci/clusters/deploymentsettings?pivots=deployment-language-arm-template#storage-1" target="_blank">Documentation</a>
       ). By default, this mode is set to <em>Express</em> and storage is configured as per best practices based on the number of nodes in the cluster. Allowed values are <em>'Express'</em>, <em>'InfraOnly'</em>, and <em>'KeepStorage'</em>. However, the exact best practices cannot be verified, and therefore the calculator assumes the reserved capacity as described.</p>
