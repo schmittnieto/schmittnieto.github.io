@@ -1,7 +1,7 @@
 ---
 permalink: /azl-storage-calculator/
 title: "Azure Local Storage Calculator"
-subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe storage only
+subtitle: "This is a calculator for Azure Local S2D, assuming you are using NVMe storage only"
 ---
 
 <html lang="en">
@@ -11,42 +11,30 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
   <!-- Load Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Dark Mode styling for the calculator */
+    /* Let the page background show through; remove custom background & color so it inherits from your blog */
     body {
-      background-color: #2e2e2e;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #f1f1f1;
     }
+    /* Container aligned left, no background/borders */
     .container {
-      background: #2e2e2e;
-      padding: 30px;
-      max-width: 500px;
-      width: 100%;
-      text-align: center;
-      margin: 20px auto;
-      color: #f1f1f1;
-    }
-    /* Remove borders/shadows */
-    .container {
-      border-radius: 0;
-      box-shadow: none;
+      margin: 20px 0;       /* vertical spacing */
+      width: auto;          /* let it expand or contract to your blog’s width */
+      text-align: center;   /* the contents (like the heading) remain centered, but the container is left-aligned */
     }
     h2 {
       font-size: 1.5em;
       margin-bottom: 20px;
-      color: #f1f1f1;
     }
     .slider-container {
       margin: 20px 0;
-      text-align: left;
+      text-align: left;     /* labels, etc. are left-aligned inside the container */
     }
     label {
       display: block;
       margin-bottom: 5px;
       font-weight: 600;
-      color: #f1f1f1;
     }
     input[type=range] {
       width: 100%;
@@ -59,8 +47,6 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       border-radius: 8px;
       box-sizing: border-box;
       margin-top: 5px;
-      background-color: #444;
-      color: #f1f1f1;
     }
     button {
       background-color: #007aff;
@@ -76,22 +62,25 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       background-color: #005bb5;
     }
     .result {
-      background: #3e3e3e;
       border-radius: 8px;
       padding: 15px;
       margin-top: 20px;
       text-align: left;
       font-size: 0.95em;
-      color: #f1f1f1;
+      /* No custom background: inherits blog’s background color */
     }
     .disclaimer {
       font-size: 0.8em;
-      color: #ccc;
       margin-top: 20px;
       text-align: left;
     }
     #chartContainer {
       margin-top: 20px;
+    }
+    /* Make the chart’s canvas have a white background for readability */
+    #chartContainer canvas {
+      background-color: #fff;
+      border-radius: 8px; /* optional rounding on the canvas */
     }
   </style>
 </head>
@@ -100,11 +89,13 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
     <h2>NVM S2D Calculator</h2>
     <div class="slider-container">
       <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
-      <input type="range" id="nodes" min="1" max="16" value="1" oninput="document.getElementById('nodesValue').innerText = this.value;">
+      <input type="range" id="nodes" min="1" max="16" value="1"
+             oninput="document.getElementById('nodesValue').innerText = this.value;">
     </div>
     <div class="slider-container">
       <label for="disks">Number of NVMe Disks per Node (<span id="disksValue">2</span>)</label>
-      <input type="range" id="disks" min="2" max="24" value="2" oninput="document.getElementById('disksValue').innerText = this.value;">
+      <input type="range" id="disks" min="2" max="24" value="2"
+             oninput="document.getElementById('disksValue').innerText = this.value;">
     </div>
     <div class="slider-container">
       <label for="capacity">Raw Capacity per Disk (TB)</label>
