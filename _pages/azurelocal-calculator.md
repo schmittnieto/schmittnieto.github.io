@@ -1,13 +1,30 @@
 ---
-permalink: /azl-storage-calculator/
-title: "Azure Local Storage Calculator"
-subtitle: "This is a calculator for Azure Local S2D, assuming you are using NVMe storage only"
+permalink: /azurelocal-calculator/
+title: "Azure Local Calculator"
+subtitle: "This is a calculator for Azure Local S2D, Pricing and CPU"
+redirect_from:
+  - /azl-storage-calculator/
+toc: true
+toc_label: "Topics Overview"
+toc_icon: "list-ul"
+
+sidebar:
+  nav: "Azurelocal"
 ---
+
+## Introduction
+
+On this page, I plan to set up a series of calculators to be used in the Azure Local environment. This page is still under development, so some calculators may not yet be available or their calculations might not be entirely accurate.
+
+I will try to implement the following calculators:
+- Storage Calculator 
+- CPU Calculator
+- Pricing Calculator
 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NVMe S2D Calculator</title>
+  <title>Azure Local S2D Calculator</title>
   <!-- Load Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -85,7 +102,7 @@ subtitle: "This is a calculator for Azure Local S2D, assuming you are using NVMe
 </head>
 <body>
   <div class="container">
-    <h2>NVMe S2D Calculator</h2>
+    <h2>Azure Local S2D Calculator</h2>
     <div class="slider-container">
       <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
       <input type="range" id="nodes" min="1" max="16" value="1" 
