@@ -81,7 +81,7 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
   </style>
 
   <div class="container">
-    <h2>Azure Local NVMe S2D Capacity Calculator</h2>
+    <h2>S2D Calculator</h2>
     <div class="slider-container">
       <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
       <input type="range" id="nodes" min="1" max="16" value="1" oninput="document.getElementById('nodesValue').innerText = this.value;">
@@ -97,6 +97,7 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
     <button onclick="calculateCapacity()">Calculate Capacity</button>
     <div id="result" class="result"></div>
     
+    <!-- Chart container -->
     <div id="chartContainer">
       <canvas id="capacityChart"></canvas>
     </div>
@@ -225,5 +226,3 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
     }
   </script>
 </div>
-
-
