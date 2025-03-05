@@ -4,13 +4,23 @@ title: "Azure Local Storage Calculator"
 subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe storage only
 ---
 
-<div class="az-local-calculator">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NVM S2D Calculator</title>
+  <!-- Load Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* Dark Mode styling for the calculator */
-    .az-local-calculator .container {
+    body {
+      background-color: #2e2e2e;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #f1f1f1;
+    }
+    .container {
       background: #2e2e2e;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       padding: 30px;
       max-width: 500px;
       width: 100%;
@@ -18,26 +28,31 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       margin: 20px auto;
       color: #f1f1f1;
     }
-    .az-local-calculator h1 {
+    /* Remove borders/shadows */
+    .container {
+      border-radius: 0;
+      box-shadow: none;
+    }
+    h2 {
       font-size: 1.5em;
       margin-bottom: 20px;
       color: #f1f1f1;
     }
-    .az-local-calculator .slider-container {
+    .slider-container {
       margin: 20px 0;
       text-align: left;
     }
-    .az-local-calculator label {
+    label {
       display: block;
       margin-bottom: 5px;
       font-weight: 600;
       color: #f1f1f1;
     }
-    .az-local-calculator input[type=range] {
+    input[type=range] {
       width: 100%;
       margin: 10px 0;
     }
-    .az-local-calculator input[type=number] {
+    input[type=number] {
       width: 100%;
       padding: 8px;
       border: 1px solid #555;
@@ -47,7 +62,7 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       background-color: #444;
       color: #f1f1f1;
     }
-    .az-local-calculator button {
+    button {
       background-color: #007aff;
       color: #fff;
       border: none;
@@ -57,10 +72,10 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       cursor: pointer;
       margin-top: 20px;
     }
-    .az-local-calculator button:hover {
+    button:hover {
       background-color: #005bb5;
     }
-    .az-local-calculator .result {
+    .result {
       background: #3e3e3e;
       border-radius: 8px;
       padding: 15px;
@@ -69,19 +84,20 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       font-size: 0.95em;
       color: #f1f1f1;
     }
-    .az-local-calculator .disclaimer {
+    .disclaimer {
       font-size: 0.8em;
       color: #ccc;
       margin-top: 20px;
       text-align: left;
     }
-    .az-local-calculator #chartContainer {
+    #chartContainer {
       margin-top: 20px;
     }
   </style>
-
+</head>
+<body>
   <div class="container">
-    <h2>S2D Calculator</h2>
+    <h2>NVM S2D Calculator</h2>
     <div class="slider-container">
       <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
       <input type="range" id="nodes" min="1" max="16" value="1" oninput="document.getElementById('nodesValue').innerText = this.value;">
@@ -97,7 +113,6 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
     <button onclick="calculateCapacity()">Calculate Capacity</button>
     <div id="result" class="result"></div>
     
-    <!-- Chart container -->
     <div id="chartContainer">
       <canvas id="capacityChart"></canvas>
     </div>
@@ -111,7 +126,7 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       ). By default, this mode is set to <em>Express</em> and storage is configured as per best practices based on the number of nodes in the cluster. Allowed values are <em>'Express'</em>, <em>'InfraOnly'</em>, and <em>'KeepStorage'</em>. However, the exact best practices cannot be verified, and therefore the calculator assumes the reserved capacity as described, as it is considered part of these best practices.</p>
     </div>
   </div>
-  
+
   <script>
     let chart; // Global variable for Chart.js instance
 
@@ -147,7 +162,7 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       var resultHtml = "<strong>Total Raw Capacity:</strong> " + totalRaw.toFixed(2) + " TB<br>" +
                        "<strong>Reserved Capacity:</strong> " + reserved.toFixed(2) + " TB<br>" +
                        "<strong>Effective Capacity:</strong> " + effective.toFixed(2) + " TB<br>" +
-                       "<strong>Redundancy:</strong> " + ((redundancyFactor === 2) ? "Two-Way Mirror" : "Three-Way Mirror") + "<br>" +
+                       "<strong>Redundancy:</strong> " + ((redundancyFactor === 2) ? 'Two-Way Mirror' : 'Three-Way Mirror') + "<br>" +
                        "<strong>Usable Capacity:</strong> " + usable.toFixed(2) + " TB";
       
       document.getElementById("result").innerHTML = resultHtml;
@@ -225,4 +240,5 @@ subtitle: This is a calculator for Azure Local S2D, assuming you are using NVMe 
       chart = new Chart(ctx, config);
     }
   </script>
-</div>
+</body>
+</html>
