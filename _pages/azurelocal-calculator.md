@@ -1,7 +1,7 @@
 ---
 permalink: /azurelocal-calculator/
 title: "Azure Local Calculator"
-subtitle: "This is a calculator for Azure Local S2D, Pricing and CPU"
+excerpt: "A comprehensive Azure Local Calculator covering S2D, CPU performance and pricing estimation."
 redirect_from:
   - /azl-storage-calculator/
 toc: true
@@ -10,6 +10,14 @@ toc_icon: "list-ul"
 
 sidebar:
   nav: "Azurelocal"
+
+header:
+  teaser: "/assets/img/AzureLocalCalculator.webp"
+  image: "/assets/img/AzureLocalCalculator.webp"
+  og_image: "/assets/img/AzureLocalCalculator.webp"
+  overlay_image: "/assets/img/AzureLocalCalculator.webp"
+  overlay_filter: 0.5
+  caption: "Photo credit: [ChatGPT](https://chatgpt.com)"
 ---
 
 ## Introduction
@@ -20,6 +28,8 @@ I will try to implement the following calculators:
 - Storage Calculator 
 - CPU Calculator
 - Pricing Calculator
+
+## Storage Caculator
 
 <html lang="en">
 <head>
