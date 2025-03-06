@@ -34,7 +34,6 @@ I will try to implement the following calculators:
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NVM S2D Calculator</title>
   <!-- Load Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -112,7 +111,6 @@ I will try to implement the following calculators:
 </head>
 <body>
   <div class="container">
-    <h2>NVM S2D Calculator</h2>
     <div class="slider-container">
       <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
       <input type="range" id="nodes" min="1" max="16" value="1" 
