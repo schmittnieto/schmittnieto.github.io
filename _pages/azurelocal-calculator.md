@@ -111,20 +111,30 @@ I will try to implement the following calculators:
 </head>
 <body>
   <div class="container">
+    
     <div class="slider-container">
       <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
       <input type="range" id="nodes" min="1" max="16" value="1" 
              oninput="document.getElementById('nodesValue').innerText = this.value;">
     </div>
+    
     <div class="slider-container">
       <label for="disks">Number of NVMe Disks per Node (<span id="disksValue">2</span>)</label>
       <input type="range" id="disks" min="2" max="24" value="2" 
              oninput="document.getElementById('disksValue').innerText = this.value;">
     </div>
+    
     <div class="slider-container">
-      <label for="capacity">Raw Capacity per Disk (TB)</label>
+      <label for="capacity">Specified Capacity per Disk (TB)</label>
       <input type="number" id="capacity" placeholder="e.g., 3.5" step="0.1" min="0.1">
     </div>
+    
+    <div class="slider-container">
+      <label for="efficiency">Capacity Efficiency (%) (<span id="efficiencyValue">92</span>%)</label>
+      <input type="range" id="efficiency" min="50" max="100" value="92" 
+             oninput="document.getElementById('efficiencyValue').innerText = this.value;">
+    </div>
+    
     <button onclick="calculateCapacity()">Calculate Capacity</button>
     <div id="result" class="result"></div>
     
@@ -139,14 +149,13 @@ I will try to implement the following calculators:
     </div>
     
     <div class="disclaimer">
-      <p><strong>Redundancy Disclaimer:</strong> When using 1 or 2 nodes, S2D employs two-way mirror redundancy. When using 3 or more nodes, three-way mirror redundancy is used. For a single-node configuration, no storage network is required (
-        <a href="https://learn.microsoft.com/en-us/azure/azure-local/plan/single-server-deployment?view=azloc-24112#storage-network-vlans" target="_blank"><em>Optional – this pattern doesn't require a storage network</em></a>
-      ). We assume that in this case a local mirror is used to avoid data loss in case of disk failure.</p>
+      <p><strong>Redundancy Disclaimer:</strong> When using 1 or 2 nodes, S2D employs two-way mirror redundancy. When using 3 or more nodes, three-way mirror redundancy is used. For a single-node configuration, no storage network is required (<em>Optional – this pattern doesn't require a storage network</em>). We assume that in this case a local mirror is used to avoid data loss in case of disk failure.</p>
       <p><strong>Reserved Capacity Disclaimer:</strong> For multi-node configurations, the calculation reserves capacity equivalent to one disk per node (i.e. <em>Reserved Capacity = Number of Nodes × Capacity per Disk</em>) to ensure there is sufficient unallocated space for repairs after a disk failure. For a single-node configuration, no reserved capacity is applied.</p>
-      <p><strong>NVMe & Performance Disclaimer:</strong> In Azure Local, NVMe drives are used as both cache and capacity. For optimal performance, RDMA must be used. Increasing the number of NVMe drives per node enhances IOPS and throughput via parallelism, but it also requires proper RDMA network configuration to avoid potential bottlenecks.</p>
+      <p><strong>NVMe & Performance Disclaimer:</strong> In Azure Local, NVMe drives are used solely as capacity devices. For optimal performance, RDMA must be used. Increasing the number of NVMe drives per node enhances IOPS and throughput via parallelism—but it also requires proper RDMA network configuration to avoid potential bottlenecks.</p>
+      <p><strong>Capacity Efficiency Factor:</strong> The specified capacity of an NVMe is typically higher than the usable capacity due to OS overhead, overprovisioning, spare sectors, and recovery partitions. In this calculator, a capacity efficiency factor (default 92%) is applied to convert the specified capacity to usable capacity. This value can be increased to 100% if you wish to use the full specified capacity.</p>
       <p><strong>Storage Configuration Disclaimer:</strong> Storage is configured in Azure Local using the <code>configurationMode</code> parameter (
         <a href="https://learn.microsoft.com/en-us/azure/templates/microsoft.azurestackhci/clusters/deploymentsettings?pivots=deployment-language-arm-template#storage-1" target="_blank">Documentation</a>
-      ). By default, this mode is set to <em>Express</em> and storage is configured as per best practices based on the number of nodes in the cluster. Allowed values are <em>'Express'</em>, <em>'InfraOnly'</em>, and <em>'KeepStorage'</em>. However, the exact best practices cannot be verified, and therefore the calculator assumes the reserved capacity as described.</p>
+      ). By default, this mode is set to <em>Express</em> and storage is configured as per best practices based on the number of nodes in the cluster. Allowed values are <em>'Express'</em>, <em>'InfraOnly'</em>, and <em>'KeepStorage'</em>. However, the exact best practices cannot be verified, and therefore the calculator assumes the reserved capacity and efficiency factor as described.</p>
       <p><strong>Volume Assignment Disclaimer:</strong> During cloud deployment, the assignment of volumes within the storage pool (named SU1_Pool) is automated. This includes a fixed 250 GB (<em>Infrastructure_1</em>) volume for the ARC Resource Bridge and AKS images, a 20 GB (<em>ClusterPerformanceHistory</em>) volume for cluster statistics, and the remaining usable capacity (minus an extra 7 GB) is divided equally among <em>UserStorage</em> volumes (one per node). These values are approximate and subject to change based on deployment specifics.</p>
     </div>
   </div>
@@ -158,18 +167,19 @@ I will try to implement the following calculators:
       var nodes = parseFloat(document.getElementById("nodes").value);
       var disks = parseFloat(document.getElementById("disks").value);
       var capacityPerDisk = parseFloat(document.getElementById("capacity").value);
+      var efficiency = parseFloat(document.getElementById("efficiency").value) / 100;
       
       if (isNaN(nodes) || isNaN(disks) || isNaN(capacityPerDisk) || capacityPerDisk <= 0) {
         alert("Please enter valid values for all fields.");
         return;
       }
       
-      // Total Raw Capacity calculation (in TB):
-      var totalRaw = nodes * disks * capacityPerDisk;
+      // Total Raw Capacity calculation (in TB) using the efficiency factor:
+      var totalRaw = nodes * disks * capacityPerDisk * efficiency;
       
       // For multi-node clusters, reserved capacity equals one disk per node.
       // For a single-node configuration, no reserved capacity is applied.
-      var reserved = (nodes === 1) ? 0 : nodes * capacityPerDisk;
+      var reserved = (nodes === 1) ? 0 : nodes * capacityPerDisk * efficiency;
       
       // Effective Capacity available for volumes:
       var effective = totalRaw - reserved;
@@ -309,4 +319,5 @@ I will try to implement the following calculators:
   </script>
 </body>
 </html>
+
 
