@@ -31,7 +31,6 @@ I will try to implement the following calculators:
 
 ## Storage Caculator
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
