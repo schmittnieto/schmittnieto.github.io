@@ -335,7 +335,6 @@ Please treat the results from these calculators as indicative and preliminary un
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Azure Local Pricing Calculator</title>
   <!-- Load Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
