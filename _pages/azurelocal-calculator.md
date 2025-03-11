@@ -462,7 +462,7 @@ Please treat the results from these calculators as indicative and preliminary un
     <h3>License Price</h3>
     <div class="slider-container">
       <label for="coresPerNode_price">Cores per Node (<span id="coresPerNodeValue_price">16</span>)</label>
-      <input type="range" id="coresPerNode_price" min="1" max="64" value="16"
+      <input type="range" id="coresPerNode_price" min="2" max="128" value="16"
              oninput="document.getElementById('coresPerNodeValue_price').innerText = this.value;">
     </div>
     <!-- Checkboxes in one row -->
@@ -504,8 +504,8 @@ Please treat the results from these calculators as indicative and preliminary un
       <input type="number" id="sqlVcores_price" placeholder="e.g., 4" step="1" min="0">
     </div>
     <div class="slider-container">
-      <label for="sqlHours_price">SQLmi Usage Hours (<span id="sqlHoursValue_price">280</span>)</label>
-      <input type="range" id="sqlHours_price" min="1" max="730" value="280"
+      <label for="sqlHours_price">SQLmi Usage Hours (<span id="sqlHoursValue_price">730</span>)</label>
+      <input type="range" id="sqlHours_price" min="1" max="730" value="730"
              oninput="document.getElementById('sqlHoursValue_price').innerText = this.value;">
     </div>
     <div class="slider-container">
