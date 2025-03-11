@@ -332,7 +332,6 @@ Please treat the results from these calculators as indicative and preliminary un
 
 ## Pricing Calculator
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
