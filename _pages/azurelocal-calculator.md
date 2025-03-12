@@ -385,7 +385,6 @@ Please treat the results from these calculators as indicative and preliminary un
       border-radius: 8px;
       box-sizing: border-box;
       margin-top: 5px;
-      /* Remove forced color so default styling applies */
     }
     /* Dark grey background for dropdown with white text */
     select {
@@ -477,9 +476,22 @@ Please treat the results from these calculators as indicative and preliminary un
       <label for="waiveWindowsLicense_price">Waive Windows Server License Fee (Saving €23.30/core)</label>
     </div>
     <div class="checkbox-container">
-      <input type="checkbox" id="customLicensePrice_price" onchange="toggleCustomLicenseFields_price()">
+      <input type="checkbox" id="customLicensePrice_price" onchange="linkCheckboxes()">
       <label for="customLicensePrice_price">Use Custom Windows License Pricing (per Node)</label>
     </div>
+    <script>
+      // Link the two checkboxes so that their states are always identical.
+      function linkCheckboxes() {
+        const waiveBox = document.getElementById("waiveWindowsLicense_price");
+        const customBox = document.getElementById("customLicensePrice_price");
+        waiveBox.checked = customBox.checked;
+        toggleCustomLicenseFields_price();
+      }
+      document.getElementById("waiveWindowsLicense_price").addEventListener("change", function() {
+        document.getElementById("customLicensePrice_price").checked = this.checked;
+        toggleCustomLicenseFields_price();
+      });
+    </script>
     <div class="slider-container" id="customLicenseContainer_price" style="display: none;">
       <label for="customWindowsPricePerNode_price">Windows Server Datacenter License (EUR/month) per Node</label>
       <input type="number" id="customWindowsPricePerNode_price" placeholder="e.g., 500" step="0.1" min="0">
@@ -633,13 +645,29 @@ Please treat the results from these calculators as indicative and preliminary un
 
     let costChart = null;           // Chart 1: Fixed vs. Variable Costs
     let oneTimeBreakdownChart = null; // Chart 2: Fixed Costs Breakdown
-    let costBreakdownChart = null;    // Chart 3: Recurring Costs Breakdown (non-stacked)
+    let costBreakdownChart = null;    // Chart 3: Recurring Costs Breakdown
 
     function toggleCustomLicenseFields_price() {
       const customCheckbox = document.getElementById("customLicensePrice_price");
       const displayStyle = customCheckbox.checked ? "block" : "none";
       document.getElementById("customLicenseContainer_price").style.display = displayStyle;
     }
+    
+    // Link the two checkboxes so they always share the same state.
+    function linkCheckboxes() {
+      const waiveBox = document.getElementById("waiveWindowsLicense_price");
+      const customBox = document.getElementById("customLicensePrice_price");
+      waiveBox.checked = customBox.checked;
+      toggleCustomLicenseFields_price();
+    }
+    document.getElementById("waiveWindowsLicense_price").addEventListener("change", function() {
+      document.getElementById("customLicensePrice_price").checked = this.checked;
+      toggleCustomLicenseFields_price();
+    });
+    document.getElementById("customLicensePrice_price").addEventListener("change", function() {
+      document.getElementById("waiveWindowsLicense_price").checked = this.checked;
+      toggleCustomLicenseFields_price();
+    });
     
     function calculatePricing_price() {
       // 1) Infrastructure Price (One-Time)
@@ -653,22 +681,22 @@ Please treat the results from these calculators as indicative and preliminary un
       const coresPerNode = parseFloat(document.getElementById("coresPerNode_price").value);
       const totalCores = nodes * coresPerNode;
       const waiveHostFee = document.getElementById("waiveHostFee_price").checked;
-      const waiveWindowsLicense = document.getElementById("waiveWindowsLicense_price").checked;
       const customLicensePriceChecked = document.getElementById("customLicensePrice_price").checked;
       
       const hostFee = waiveHostFee ? 0 : (totalCores * 10);
-      const defaultWindowsLicenseFee = waiveWindowsLicense ? 0 : (totalCores * 23.30);
       
-      let customWindowsLicenseFeeMonthly = 0;
-      let customWindowsLicenseFeeOneTime = 0;
+      let recurringWindowsLicense = 0;
+      let oneTimeWindowsLicense = 0;
       if (customLicensePriceChecked) {
         const customWindowsPricePerNode = parseFloat(document.getElementById("customWindowsPricePerNode_price").value) || 0;
         const oneTimeWindowsLicensePerNode = parseFloat(document.getElementById("oneTimeWindowsLicensePerNode_price").value) || 0;
-        customWindowsLicenseFeeMonthly = customWindowsPricePerNode * nodes;
-        customWindowsLicenseFeeOneTime = oneTimeWindowsLicensePerNode * nodes;
+        recurringWindowsLicense = customWindowsPricePerNode * nodes;
+        oneTimeWindowsLicense = oneTimeWindowsLicensePerNode * nodes;
+      } else {
+        recurringWindowsLicense = totalCores * 23.30;
+        oneTimeWindowsLicense = 0;
       }
       
-      const recurringWindowsLicense = customLicensePriceChecked ? customWindowsLicenseFeeMonthly : defaultWindowsLicenseFee;
       const licensingCost = hostFee + recurringWindowsLicense;
       
       // 3) Third-Party Costs
@@ -690,12 +718,12 @@ Please treat the results from these calculators as indicative and preliminary un
       const sqlCost = sqlVcores * sqlHourlyRate * sqlHours;
       
       // 5) Totals
-      const oneTimeTotal = hardwareCost + customWindowsLicenseFeeOneTime + thirdPartyOneTime;
+      const oneTimeTotal = hardwareCost + oneTimeWindowsLicense + thirdPartyOneTime;
       const recurringTotal = licensingCost + avdCost + sqlCost + thirdPartyMonthly;
       
       const resultHtml = 
         `<strong>One-Time Hardware Cost:</strong> €${hardwareCost.toFixed(2)}<br>` +
-        `<strong>One-Time Windows License:</strong> €${customWindowsLicenseFeeOneTime.toFixed(2)}<br>` +
+        `<strong>One-Time Windows License:</strong> €${oneTimeWindowsLicense.toFixed(2)}<br>` +
         `<strong>One-Time Third-Party Cost:</strong> €${thirdPartyOneTime.toFixed(2)}<br>` +
         `<strong>Total One-Time Cost:</strong> €${oneTimeTotal.toFixed(2)}<br><br>` +
         `<strong>Monthly Azure Local Host Fee:</strong> €${hostFee.toFixed(2)}<br>` +
@@ -708,7 +736,7 @@ Please treat the results from these calculators as indicative and preliminary un
       
       document.getElementById("result_price").innerHTML = resultHtml;
       
-      updateCharts(oneTimeTotal, recurringTotal, hardwareCost, customWindowsLicenseFeeOneTime, thirdPartyOneTime, licensingCost, avdCost, sqlCost, thirdPartyMonthly);
+      updateCharts(oneTimeTotal, recurringTotal, hardwareCost, oneTimeWindowsLicense, thirdPartyOneTime, licensingCost, avdCost, sqlCost, thirdPartyMonthly);
     }
     
     function updateCharts(oneTimeTotal, recurringTotal, hardwareCost, oneTimeWindows, thirdPartyOneTime, licensingCost, avdCost, sqlCost, thirdPartyMonthly) {
@@ -744,9 +772,7 @@ Please treat the results from these calculators as indicative and preliminary un
                 generateLabels: function(chart) {
                   const original = Chart.defaults.plugins.legend.labels.generateLabels;
                   const labels = original(chart);
-                  labels.forEach(label => {
-                    label.boxWidth = 0;
-                  });
+                  labels.forEach(label => { label.boxWidth = 0; });
                   return labels;
                 }
               }
@@ -772,7 +798,6 @@ Please treat the results from these calculators as indicative and preliminary un
       const ctx = document.getElementById("oneTimeBreakdownChart").getContext("2d");
       if (oneTimeBreakdownChart) { oneTimeBreakdownChart.destroy(); }
       
-      // Build items array and filter out zero values
       const items = [
         { label: "Hardware", value: hardwareCost, backgroundColor: "rgba(128,191,255,0.9)" },
         { label: "Windows License", value: windowsCost, backgroundColor: "rgba(179,209,255,0.9)" },
@@ -830,7 +855,7 @@ Please treat the results from these calculators as indicative and preliminary un
       oneTimeBreakdownChart = new Chart(ctx, config);
     }
     
-    // Chart 3: Recurring Costs Breakdown (Non-stacked, separate bars)
+    // Chart 3: Recurring Costs Breakdown (Separate bars for each element)
     function updateRecurringBreakdownChart(licensingCost, avdCost, sqlCost, thirdPartyMonthly) {
       const ctx2 = document.getElementById("costBreakdownChart").getContext("2d");
       if (costBreakdownChart) { costBreakdownChart.destroy(); }
