@@ -12,9 +12,6 @@ tags:
 
 sticky: false
 
-redirect_from:
-  - /blog/azure-local-nerdio/
-  - /blog/azure-stack-hci-nerdio/
 header:
   teaser: "/assets/img/post/2025-02-08-azure-local-nerdio.webp"
   image: "/assets/img/post/2025-02-08-azure-local-nerdio.webp"

@@ -12,9 +12,6 @@ tags:
 
 sticky: false
 
-redirect_from:
-  - /blog/azure-local-redundancy/
-
 header:
   teaser: "/assets/img/post/2025-03-29-azure-local-backup-and-disaster-recovery.webp"
   image: "/assets/img/post/2025-03-29-azure-local-backup-and-disaster-recovery.webp"

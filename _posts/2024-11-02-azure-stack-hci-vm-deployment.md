@@ -11,10 +11,6 @@ tags:
 
 sticky: false
 
-redirect_from:
-  - /blog/azure-stack-hci-vm-deployment/
-  - /blog/azure-local-vm-deployment/
-
 header:
   teaser: "/assets/img/post/2024-11-02-azure-stack-hci-vmdeployment.webp"
   image: "/assets/img/post/2024-11-02-azure-stack-hci-vmdeployment.webp"

@@ -11,10 +11,6 @@ tags:
 
 sticky: false
 
-redirect_from:
-  - /blog/azure-stack-hci-lifecycle/
-  - /blog/azure-local-lifecycle/
-
 header:
   teaser: "/assets/img/post/2025-01-25-azure-local-lifecycle.webp"
   image: "/assets/img/post/2025-01-25-azure-local-lifecycle.webp"

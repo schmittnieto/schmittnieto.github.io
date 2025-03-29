@@ -11,9 +11,6 @@ tags:
 
 sticky: false
 
-redirect_from:
-  - /blog/azure-local-redundancy/
-
 header:
   teaser: "/assets/img/post/2025-03-01-azure-local-redundancy.webp"
   image: "/assets/img/post/2025-03-01-azure-local-redundancy.webp"
