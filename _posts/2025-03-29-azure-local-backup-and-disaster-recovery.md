@@ -1,6 +1,6 @@
 ---
 title: "Azure Local: Backup and Disaster Recovery"
-excerpt: "Explore the possibilities and limitations of Backup and Disaster Recovery within Azure Local."
+excerpt: "Explore Backup & Disaster Recovery in Azure Local: Strategies for VM hydration, on-premises backup options and ASR for Disaster recovery."
 date: 2025-03-29
 categories:
   - Blog
