@@ -410,7 +410,7 @@ One of the advantages of using the **AzSHCI** scripts and Nested Virtualization 
   - I use my regular work laptop for deployment, so there are no additional hardware expenses.
 
 - **License Costs for the Domain Controller**: 0€
-  - We use the Windows Server 2025 Evaluation version, which is free for 90 days—ample time for testing and development.
+  - We use the Windows Server 2025 Evaluation version, which is free for 90 days, ample time for testing and development.
 
 - **License Costs for the Node**: 0€
   - The Azure Stack HCI OS does not incur costs until you register it with Azure Stack HCI.

@@ -247,11 +247,11 @@ This approach is useful for:
 - **Rollback and Retry**: Azure’s platform ensures failed upgrades are retried or rolled back to avoid disruptions.
 - **Manual Intervention**: If extensions repeatedly fail to upgrade, you can disable automatic upgrades to troubleshoot the issue before re-enabling them.
 
-Extensions are an integral part of Azure Local’s functionality, and their upgrade process—whether automatic or manual—ensures your cluster remains aligned with the latest features and updates.
+Extensions are an integral part of Azure Local’s functionality, and their upgrade process, whether automatic or manual, ensures your cluster remains aligned with the latest features and updates.
 
 ### Add a Node
 
-Adding a node to your Azure Local cluster is one of the most straightforward ways to scale up resources like compute and storage. While I don’t currently have the infrastructure to reproduce this process step by step, I’ve successfully carried it out in the past—transitioning from a single-node to a two-node system without any issues. Based on my experience and [this article from Microsoft](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server), let me guide you through the process.
+Adding a node to your Azure Local cluster is one of the most straightforward ways to scale up resources like compute and storage. While I don’t currently have the infrastructure to reproduce this process step by step, I’ve successfully carried it out in the past, transitioning from a single-node to a two-node system without any issues. Based on my experience and [this article from Microsoft](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server), let me guide you through the process.
 
 #### Overview
 
@@ -756,7 +756,7 @@ After the solution upgrade:
 
 ## Conclusion
 
-Lifecycle Management in **Azure Local** is a multidimensional topic that involves updates, upgrades, repairs, and ongoing maintenance. By following the guidelines in this article—whether you're **adding new nodes**, **expanding storage**, **repairing extensions**, or **rotating secrets**, you can ensure that your environment remains secure, stable, and ready for future needs. 
+Lifecycle Management in **Azure Local** is a multidimensional topic that involves updates, upgrades, repairs, and ongoing maintenance. By following the guidelines in this article, whether you're **adding new nodes**, **expanding storage**, **repairing extensions**, or **rotating secrets**, you can ensure that your environment remains secure, stable, and ready for future needs. 
 
 Before carrying out **any** updates or upgrades, it’s crucial to stay informed about the latest release information and known issues for Azure Local 23H2. Microsoft regularly publishes:
 

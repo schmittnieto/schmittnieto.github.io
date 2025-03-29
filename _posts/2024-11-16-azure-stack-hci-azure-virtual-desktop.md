@@ -36,7 +36,7 @@ sidebar:
 
 ## Azure Virtual Desktop on Azure Stack HCI
 
-Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! Continuing our journey with Azure Stack HCI, today we're diving into deploying **Azure Virtual Desktop (AVD) on Azure Stack HCI**. This article builds upon our previous ones—[Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), [Azure Stack HCI Day 2 Operations](/blog/azure-stack-hci-day2/), and [Azure Stack HCI VM Deployment](/blog/azure-stack-hci-vm-deployment/). If you've followed those, you're all set for what's next!
+Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! Continuing our journey with Azure Stack HCI, today we're diving into deploying **Azure Virtual Desktop (AVD) on Azure Stack HCI**. This article builds upon our previous ones, [Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), [Azure Stack HCI Day 2 Operations](/blog/azure-stack-hci-day2/), and [Azure Stack HCI VM Deployment](/blog/azure-stack-hci-vm-deployment/). If you've followed those, you're all set for what's next!
 
 In this installment, we'll explore how to set up AVD on Azure Stack HCI. While we'll touch on the essentials here, I'm planning a more in-depth series on AVD early next year, where we'll unpack all the concepts and features extensively. Until now, I haven't seen many blogs detailing the technical steps for provisioning AVD on Azure Stack HCI, which inspired me to document the process for you.
 
@@ -123,7 +123,7 @@ Referring back to the DemoLab architecture, client connectivity is achieved in t
 2. The client initiates a background thread to establish a parallel UDP-based transport directly to one of the Session Host's IPs.
 3. While probing, the client continues establishing the initial connection over the reverse connect transport.
 4. If the client has a direct connection, it establishes a secure connection using TLS over reliable UDP.
-5. After establishing RDP Shortpath, all Dynamic Virtual Channels (DVCs)—including graphics, input, and device redirection—move to the new transport.
+5. After establishing RDP Shortpath, all Dynamic Virtual Channels (DVCs), including graphics, input, and device redirection, move to the new transport.
 6. If direct UDP connectivity isn't possible due to firewall or network topology, the client continues with reverse connect transport.
 
 ## Deployment
@@ -196,7 +196,7 @@ To ensure seamless AVD functionality, the Active Directory user and the Entra ID
 ![Synchronized User](/assets/img/post/2024-11-17-azure-stack-hci-avd/aaduser.png){: style="border: 2px solid grey;"}  
 
 - **Assigning Licenses**:
-  - Assign the necessary license to the user. While you might get by without one for testing, it's like driving without insurance — not advisable 😜
+  - Assign the necessary license to the user. While you might get by without one for testing, it's like driving without insurance ,  not advisable 😜
 
 ### Deploying AVD on Azure Stack HCI via Azure Portal
 
@@ -265,7 +265,7 @@ If you're using other VPN types to connect to Azure, we recommend using a UDP-ba
 
 ## Conclusion
 
-Due to time constraints, I haven't gone into as much depth as I might have liked—otherwise, this article would be excessively long!
+Due to time constraints, I haven't gone into as much depth as I might have liked, otherwise, this article would be excessively long!
 
 There are many topics, like **FSLogix** for profile management and **Multimedia Redirection**, that I haven't touched on but plan to expand upon in future articles when we delve deeper into AVD next year.
 
@@ -273,6 +273,6 @@ I also haven't discussed third-party tools like **Hydra** or **Nerdio**, which s
 
 Because of the technical limitations of my DemoLab, I couldn't demonstrate the solution's fault tolerance. However, I can tell you that there is some downtime if a cluster node fails, and depending on your configuration, the default ResiliencyDefaultPeriod is 240 seconds (4 minutes).
 
-All that said, I believe this article is both informative and comprehensive. If you need help with any of the points or topics discussed, feel free to reach out through the usual channels—LinkedIn, BlueSky, or right here on the blog.
+All that said, I believe this article is both informative and comprehensive. If you need help with any of the points or topics discussed, feel free to reach out through the usual channels, LinkedIn, BlueSky, or right here on the blog.
 
 Thank you all for your time, and happy computing!

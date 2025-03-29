@@ -26,9 +26,9 @@ toc_icon: "list-ul"
 
 ## Introduction and Disclaimer
 
-This article is a bit different from my previous ones—it's not a technical deep dive but rather a community-focused piece where I'd like to introduce some of the tools I use daily as a consultant. Most of these tools are community-driven or managed by individuals on GitHub. While there are exceptions, I won't include commercial tools that are paid and lack community versions.
+This article is a bit different from my previous ones, it's not a technical deep dive but rather a community-focused piece where I'd like to introduce some of the tools I use daily as a consultant. Most of these tools are community-driven or managed by individuals on GitHub. While there are exceptions, I won't include commercial tools that are paid and lack community versions.
 
-There are areas and tools I'll cover more thoroughly in future posts, but the main goal of this blog entry is to present them in a basic way and show you their purpose. I'll also include "multi-link" entries—that is, collections of tools—as long as they are hosted on GitHub.
+There are areas and tools I'll cover more thoroughly in future posts, but the main goal of this blog entry is to present them in a basic way and show you their purpose. I'll also include "multi-link" entries, that is, collections of tools, as long as they are hosted on GitHub.
 
 I've decided to separate the categories into **IAM (Identity Access Management)**, **UEM (Unified Endpoint Management) & Modern Work (M365 and related services)**, and **Azure & Microsoft**. The reason is purely organizational, so those looking for IAM or UEM tools don't have to sift through Azure tools and vice versa.
 
@@ -36,7 +36,7 @@ I haven't included blogs because the list would be infinite 😅, but if you wan
 
 I'm not responsible for any errors in the tools or their functionalities. My goal with this post is to show you the tools I've used at some point (or even use daily) and have them centralized.
 
-The contact persons (along with their LinkedIn links) are not necessarily responsible for these repositories; they are mainly the people who created or introduced me to these repositories—that is, the people that I personally consider contributors. I'm sure I've forgotten to mention many of you; in that case, you can let me know, and I'll add the LinkedIn links—it's not a problem 😊.
+The contact persons (along with their LinkedIn links) are not necessarily responsible for these repositories; they are mainly the people who created or introduced me to these repositories, that is, the people that I personally consider contributors. I'm sure I've forgotten to mention many of you; in that case, you can let me know, and I'll add the LinkedIn links, it's not a problem 😊.
 
 I'll probably forget some tools, which I'll add over time, but if you want to add a tool that isn't listed (which I would greatly appreciate), you can do so via the following link: [Add Tool](https://github.com/schmittnieto/schmittnieto.github.io/issues/new?assignees=&labels=&projects=&template=add_tool.yml) or by sending an email to tools@schmitt-nieto.com with a brief description of the tool to add.
 
@@ -183,7 +183,7 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **GitHub**: [admindroid-community - powershell-scripts](https://github.com/admindroid-community/powershell-scripts)
   - **Type**: Office 365 Reporting PowerShell Scripts.
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/admindroid-community/powershell-scripts?style=plastic)
-  - **Note**: Hundreds of scripts to manage O365—simple, straightforward, and effective.
+  - **Note**: Hundreds of scripts to manage O365, simple, straightforward, and effective.
   - **LinkedIn**: [in/kavya-a-6bab27279](https://www.linkedin.com/in/kavya-a-6bab27279/)
 
 - **svrooij/WingetIntune**
@@ -218,7 +218,7 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **GitHub**: [canix1 - PIMSCAN](https://github.com/canix1/PIMSCAN)
   - **Type**: Tool for creating reports on Entra ID Role Assignments.
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/canix1/PIMSCAN?style=plastic)
-  - **Note**: I haven't been able to use this tool yet, but I'm looking forward to playing with it—it looks great.
+  - **Note**: I haven't been able to use this tool yet, but I'm looking forward to playing with it, it looks great.
   - **LinkedIn**: [in/robin-granberg](https://www.linkedin.com/in/robin-granberg/)
 
 - **lazywinadmin/PowerShell**
@@ -377,7 +377,7 @@ In this section, I'll cover the tools I frequently use for Azure and Microsoft t
   - **GitHub**: [lukemurraynz - awesome-azure-architecture](https://github.com/lukemurraynz/awesome-azure-architecture)
   - **Type**: A curated list of awesome blogs, videos, tutorials, code, tools, and scripts related to designing and implementing solutions in Microsoft Azure.
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/lukemurraynz/awesome-azure-architecture?style=plastic)
-  - **Note**: This is one of the main link collectors I've used throughout my career—one of the most complete and well-structured. It even has its own (aka.ms) shortcut: [AwesomeAzureArchitecture](https://aka.ms/AwesomeAzureArchitecture)
+  - **Note**: This is one of the main link collectors I've used throughout my career, one of the most complete and well-structured. It even has its own (aka.ms) shortcut: [AwesomeAzureArchitecture](https://aka.ms/AwesomeAzureArchitecture)
   - **LinkedIn**: [in/ljmurray](https://www.linkedin.com/in/ljmurray/)
 
 - **MarcelMeurer/WVD-Hydra**

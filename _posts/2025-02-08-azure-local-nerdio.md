@@ -33,7 +33,7 @@ sidebar:
 
 ## Introduction
 
-I decided to write this article outside of my usual Chronicloud series—though it does follow on from the [Azure Stack HCI: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop/) post. The reason? Image management for AVD and deploying those images in **Azure Local** can be a real pain point. Currently, the entire process is quite manual, involves tons of steps, and doesn’t offer much flexibility. So, I thought sharing how to use **Nerdio** for this might be helpful.
+I decided to write this article outside of my usual Chronicloud series, though it does follow on from the [Azure Stack HCI: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop/) post. The reason? Image management for AVD and deploying those images in **Azure Local** can be a real pain point. Currently, the entire process is quite manual, involves tons of steps, and doesn’t offer much flexibility. So, I thought sharing how to use **Nerdio** for this might be helpful.
 
 I was also inspired by attending the Nerdio Micro Hack in Frankfurt last Wednesday (kudos to **Bas van Kaam** ([@LinkedIn](https://www.linkedin.com/in/basvankaam/)) and **Bjørn M. Riiber** ([@LinkedIn](https://www.linkedin.com/in/riibern/)) for the excellent masterclass). Most attendees seemed to need a solution for running **AVD on-prem**. While it is indeed possible to manage these images without any extra tooling, just a handful of PowerShell scripts and some Azure DevOps pipelines, I find that approach clunky. Nerdio, on the other hand, does a great job by also offering more flexible autoscaling plans and simple scripted tasks that are far easier to configure.
 

@@ -45,7 +45,7 @@ In this post, we’ll tackle redundancy from several angles: **nodes** (physical
 I’m splitting the redundancy discussion into three main parts:
 
 1. **Nodes**: Physical node redundancy in the cluster. For instance, if you have three nodes and two fail, you’ll see a potential loss of data and cluster availability.  
-2. **Storage**: We’ll look at data resiliency on disks, such as how a two-node cluster might keep operating if one node fails—but if the remaining node’s single disk dies, data might still be lost.  
+2. **Storage**: We’ll look at data resiliency on disks, such as how a two-node cluster might keep operating if one node fails, but if the remaining node’s single disk dies, data might still be lost.  
 3. **Other Infrastructure**: Network design (no point having multiple nodes if everything relies on a single switch), multi-location data centers (e.g., rack-aware clusters) and Active Directory design (including why nesting domain controllers in the cluster can be problematic).
 
 Throughout, I’ll do some rough capacity and resource calculations using 2 x 1 TB NVMe capacity drives plus 1 TB RAM per node, just as an example.
@@ -128,12 +128,12 @@ And here’s the official diagram for that cabling method (props to whoever crea
   <img src="/assets/img/post/2025-03-01-azure-local-redundancy/4nodesSwitchless.png" alt="Four-node switchless design" style="border: 2px solid grey;">
 </a>
 
-In the image, each node has two connections to its neighbors, using six total network ports exclusively for storage. Because most network cards have two ports, you wouldn’t want to use both ports on a single NIC card to connect to the same node. If that NIC card fails, you’d lose the connection to the node entirely. Additionally, note that you can’t easily expand beyond two nodes in a “switchless” scenario—the only supported move is from a single node to a two-node cluster. Anything above two nodes requires a switch, as explained [here](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server?view=azloc-24112).
+In the image, each node has two connections to its neighbors, using six total network ports exclusively for storage. Because most network cards have two ports, you wouldn’t want to use both ports on a single NIC card to connect to the same node. If that NIC card fails, you’d lose the connection to the node entirely. Additionally, note that you can’t easily expand beyond two nodes in a “switchless” scenario, the only supported move is from a single node to a two-node cluster. Anything above two nodes requires a switch, as explained [here](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server?view=azloc-24112).
 
 
 ##### Multi-Location or Rack Aware
 
-After deciding how many switches to use, you also need to determine how many physical “locations” your cluster needs—e.g., is it all in one data center room, or multiple? Those familiar with the product already know this, but newcomers might be surprised to learn that **Azure Local (starting 23H2) doesn’t support stretch clusters**, meaning nodes should theoretically be in the same rack. I’ll mention a new way to set up Azure Local for two locations (really just two rooms in the same building) called **Rack Aware Cluster**.
+After deciding how many switches to use, you also need to determine how many physical “locations” your cluster needs, e.g., is it all in one data center room, or multiple? Those familiar with the product already know this, but newcomers might be surprised to learn that **Azure Local (starting 23H2) doesn’t support stretch clusters**, meaning nodes should theoretically be in the same rack. I’ll mention a new way to set up Azure Local for two locations (really just two rooms in the same building) called **Rack Aware Cluster**.
 
 In previous versions, you could configure a so-called **stretch cluster** for two sites, provided your round-trip latency didn’t exceed 5 ms (see [Microsoft docs](https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-local-dr#use-stretched-clusters-to-implement-automated-disaster-recovery-for-virtualized-workloads-and-file-shares-hosted-on-azure-local)). However, that’s now invalid because Azure Local 23H2 includes new cluster management elements (like **Azure ARC Resource Bridge**) that don’t support stretch clustering. In my opinion, there’s also no real need to expand clusters this way because Azure Local is more of an **Edge Datacenter** solution, not a typical “full” data center approach. If you want balanced infrastructure across two sites, **Windows Server 2025** might be a better option, or you could split Azure Local into two separate clusters.
 

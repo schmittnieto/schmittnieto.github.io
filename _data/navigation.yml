@@ -25,3 +25,5 @@ Azurelocal:
       url: /blog/azure-local-lifecycle/
     - title: "Redundancy"
       url: /blog/azure-local-redundancy/
+    - title: "Backup & Disaster Recovery"
+      url: /blog/azure-local-backup-and-disaster-recovery/

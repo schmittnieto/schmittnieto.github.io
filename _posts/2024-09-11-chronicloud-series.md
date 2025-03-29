@@ -54,8 +54,8 @@ Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that
    - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops. For more details, see [Azure Stack HCI: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop).
    - *AKS Hybrid and SQL Managed Instances*: Deploy and manage Azure Kubernetes Service (AKS) and SQL Managed Instances on Azure Local in a hybrid cloud setup. For more details, see [Azure Local: AKS and SQL Managed Instances](/blog/azure-local-aks).
    - *Lifecycle Management*: Best practices for managing updates, upgrades, and the entire lifecycle of your Azure Stack HCI infrastructure. For more details, see [Azure Local: Lifecycle Management](/blog/azure-local-lifecycle).
-   - *Redundancy*: Ensuring fault tolerance at every level—from physical nodes to storage, network design, and Active Directory—so your workloads remain operational even if multiple components fail. For more details, see [Azure Local: Redundancy](/blog/azure-local-redundancy).
-   - *Backup and Disaster Recovery*: Explore how to implement reliable backup and restore strategies using Azure services and HCI’s native tools.
+   - *Redundancy*: Ensuring fault tolerance at every level, from physical nodes to storage, network design, and Active Directory, so your workloads remain operational even if multiple components fail. For more details, see [Azure Local: Redundancy](/blog/azure-local-redundancy).
+   - *Backup and Disaster Recovery*: Explore how to implement reliable backup and restore strategies using Azure services and Azure Local’s native tools. For more details, see [Azure Local: Backup & Disaster Recovery](/blog/azure-local-backup-and-disaster-recovery).
    - *Migration to HCI*: Step-by-step guidance on migrating from traditional systems to Azure Stack HCI.
 
 2. **Azure Virtual Desktop (AVD)**  
@@ -88,7 +88,7 @@ Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that
 
 ## Scope of Each Article
 
-At the beginning of every article in this series, I will clearly define the **Scope**—the intended audience and level of expertise required. Whether you're a cloud architect, IT manager, or a developer, each article will target a specific audience, ensuring that the content is both relevant and informative for your professional needs. I’ll base this scope on industry standards, typical challenges faced by professionals, and feedback from readers.
+At the beginning of every article in this series, I will clearly define the **Scope**, the intended audience and level of expertise required. Whether you're a cloud architect, IT manager, or a developer, each article will target a specific audience, ensuring that the content is both relevant and informative for your professional needs. I’ll base this scope on industry standards, typical challenges faced by professionals, and feedback from readers.
 
 ### What's Next?
 

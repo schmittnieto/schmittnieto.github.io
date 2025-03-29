@@ -265,7 +265,7 @@ Deploying AKS on Windows Server or Azure Stack HCI 22H2 requires careful plannin
 
 ## Deployment on Azure Local
 
-The deployment process of AKS on Azure Local has been simplified to the bare minimum, making it significantly easier compared to previous versions like Azure Stack HCI or Windows Server. However, there are some key details worth noting as we go along. For instance, the load balancer, which used to be a separate VM in Azure Stack HCI (scaling only in odd numbers like 1/3/5 and with size limitations), is now handled by MetalLB within the control plane VM. This approach is not only more efficient but also requires fewer parameters, and the best part—you can manage it directly from the Azure Portal 😊.
+The deployment process of AKS on Azure Local has been simplified to the bare minimum, making it significantly easier compared to previous versions like Azure Stack HCI or Windows Server. However, there are some key details worth noting as we go along. For instance, the load balancer, which used to be a separate VM in Azure Stack HCI (scaling only in odd numbers like 1/3/5 and with size limitations), is now handled by MetalLB within the control plane VM. This approach is not only more efficient but also requires fewer parameters, and the best part, you can manage it directly from the Azure Portal 😊.
 
 ### Getting Started
 
@@ -289,7 +289,7 @@ Tests with larger sizes have reported problems to me:
 
 ### Deployment Process
 
-There are several ways to deploy AKS on Azure Local—via Bicep, ARM templates, Azure CLI, or the Azure Portal. For this guide, I’ll stick with the Azure Portal since it’s the most straightforward and visually intuitive option.
+There are several ways to deploy AKS on Azure Local, via Bicep, ARM templates, Azure CLI, or the Azure Portal. For this guide, I’ll stick with the Azure Portal since it’s the most straightforward and visually intuitive option.
 
 1. **Create a Logical Network (if not already done)**:
    - Go to the Azure Portal and define a logical network with the necessary IP range.
@@ -387,7 +387,7 @@ Yes, you heard that right. There’s a simple way to deploy a quick demonstratio
 ![AKS Deploy App 4](/assets/img/post/2025-01-09-azure-local-aks/20.png){: style="border: 2px solid grey;"}
 ![AKS Deploy App 5](/assets/img/post/2025-01-09-azure-local-aks/21.png){: style="border: 2px solid grey;"}
 ![AKS Deploy App 6](/assets/img/post/2025-01-09-azure-local-aks/22.png){: style="border: 2px solid grey;"}
-5. Click **Keep** to finalize the setup, and voilà—you now have a working dog-and-cat counter! 🎉
+5. Click **Keep** to finalize the setup, and voilà, you now have a working dog-and-cat counter! 🎉
 ![AKS Deploy App 7](/assets/img/post/2025-01-09-azure-local-aks/23.png){: style="border: 2px solid grey;"}
 
 To ensure everything is working:
@@ -407,11 +407,11 @@ When deploying the dog-and-cat counter via the Azure Portal, the process involve
 - As the admin user (me), send an API request to the AKS cluster through the Azure Portal.
 - This request provisions the YAML template for the application within the cluster.
 
-While this deployment is automated via the portal, it could also be done manually. Using the Azure CLI (`az aksarc`) to fetch credentials for your cluster ([reference](https://learn.microsoft.com/en-us/cli/azure/aksarc?view=azure-cli-latest#az-aksarc-get-credentials)), you could manage the cluster locally with `kubectl`. This approach opens up possibilities for GitOps, DevOps, and self-hosted agents—but that’s a topic for another post. 😅
+While this deployment is automated via the portal, it could also be done manually. Using the Azure CLI (`az aksarc`) to fetch credentials for your cluster ([reference](https://learn.microsoft.com/en-us/cli/azure/aksarc?view=azure-cli-latest#az-aksarc-get-credentials)), you could manage the cluster locally with `kubectl`. This approach opens up possibilities for GitOps, DevOps, and self-hosted agents, but that’s a topic for another post. 😅
 
 ### Deploying a More Complex Application: The AI-Generated Store
 
-I’m not giving up that easily! To make up for the counter’s limitations, let’s deploy a more robust application—a demo store with AI-generated products. Here’s how you can do it:
+I’m not giving up that easily! To make up for the counter’s limitations, let’s deploy a more robust application, a demo store with AI-generated products. Here’s how you can do it:
 
 1. **Create a New Namespace**:
    - Go to the **Namespaces** tab and click **+Add**.
@@ -1013,7 +1013,7 @@ Once deployed, the store runs perfectly, allowing you to explore its functionali
 
 The ability to manage applications and AKS clusters through ClickOps (directly in the Azure Portal) is a game-changer. 
 Whether you’re a fan of this approach or not, it’s undeniable that it simplifies the learning curve for newcomers. 
-Coming from the 22H2 version, where configurations were far from straightforward, I truly appreciate the improvements in manageability—whether through code or the portal. 
+Coming from the 22H2 version, where configurations were far from straightforward, I truly appreciate the improvements in manageability, whether through code or the portal. 
 These advancements make it easier to showcase AKS to clients and demonstrate its potential effectively.
 
 ## Installation of Arc Data Services and SQL Managed Instance

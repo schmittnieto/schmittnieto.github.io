@@ -37,7 +37,7 @@ sidebar:
 
 Welcome back to the [Chronicloud Series](/blog/chronicloud-series/)! If you've been following along, you should now have a fully provisioned **Azure Stack HCI DemoLab**. In the previous article, [Azure Stack HCI DemoLab](/blog/azure-stack-hci-demolab/), we took you through the process of setting up Azure Stack HCI in a clean environment, highlighting the steps necessary to bring your infrastructure online. But provisioning is just the beginning!
 
-Now that your HCI environment is up and running, it's time to explore the essential **Day 2 Operations**—the next steps that will bring your infrastructure to full functionality. These are the critical actions required after your deployment to ensure that your environment is secure, performant, and ready for production workloads. Whether you’re preparing to deploy virtual machines (VMs), Azure Virtual Desktop (AVD), or Kubernetes clusters, this guide will help you configure and activate all the necessary features.
+Now that your HCI environment is up and running, it's time to explore the essential **Day 2 Operations**, the next steps that will bring your infrastructure to full functionality. These are the critical actions required after your deployment to ensure that your environment is secure, performant, and ready for production workloads. Whether you’re preparing to deploy virtual machines (VMs), Azure Virtual Desktop (AVD), or Kubernetes clusters, this guide will help you configure and activate all the necessary features.
 
 In addition to setting up networking and management tools, we'll also cover the important task of **downloading and configuring VM images** required for VM workloads and AVD. These images are essential for deploying VMs and ensuring that Azure Stack HCI is ready to handle Windows Server workloads from the Azure Marketplace. 
 
@@ -178,13 +178,13 @@ Keep in mind that manual modifications (via Powershell or WAC) should be as mini
 
 ### Monitoring and Alerting with Azure Monitor Insights
 
-Monitoring your Azure Stack HCI cluster is a key part of keeping everything running smoothly. Azure Monitor **Insights** is a feature that helps you do just that by giving you visibility into the health, performance, and usage of your cluster—all within the **Azure portal**. While it’s a powerful tool, keep in mind that **Insights isn’t real-time**. It can take up to 15 minutes to collect data, so there may be a delay between what's happening on your system and when it shows up in the portal.
+Monitoring your Azure Stack HCI cluster is a key part of keeping everything running smoothly. Azure Monitor **Insights** is a feature that helps you do just that by giving you visibility into the health, performance, and usage of your cluster, all within the **Azure portal**. While it’s a powerful tool, keep in mind that **Insights isn’t real-time**. It can take up to 15 minutes to collect data, so there may be a delay between what's happening on your system and when it shows up in the portal.
 
 #### Why Use Insights?
 
 Insights offers several important benefits that make managing your HCI cluster easier:
 
-- **Managed by Azure**: No need to worry about setting up databases or custom software—everything is handled in the Azure portal, so it’s always up to date.
+- **Managed by Azure**: No need to worry about setting up databases or custom software, everything is handled in the Azure portal, so it’s always up to date.
 - **Scalability**: Whether you’re monitoring one cluster or hundreds, Insights scales easily across different clusters and locations.
 - **Customization**: You can tailor the monitoring views to suit your needs by changing thresholds, tweaking charts, or even adding new metrics to keep an eye on. All these changes can be saved and pinned to your **Azure dashboard** for quick access.
 
@@ -300,7 +300,7 @@ For more details on setting up alerts, check out the official guide on [Azure St
 
 ### Windows Defender Application Control (WDAC)
 
-**Windows Defender Application Control (WDAC)** helps secure your **Azure Stack HCI** environment by controlling which apps and drivers can run. It’s a great tool to reduce security risks, but sometimes managing installations can be tricky—especially when dealing with unsigned or new applications. For example, installing the **Disaster Recovery agent** (currently in preview) can fail due to signature issues, which we'll address in future articles (Backup and Disaster Recovery).
+**Windows Defender Application Control (WDAC)** helps secure your **Azure Stack HCI** environment by controlling which apps and drivers can run. It’s a great tool to reduce security risks, but sometimes managing installations can be tricky, especially when dealing with unsigned or new applications. For example, installing the **Disaster Recovery agent** (currently in preview) can fail due to signature issues, which we'll address in future articles (Backup and Disaster Recovery).
 
 #### WDAC Modes: Audit vs. Enforced
 
@@ -455,7 +455,7 @@ Now that we've walked through the essential **Day 2 Operations** for Azure Stack
 
 As you’ve seen, many of the features require manual activation after the initial deployment, and it’s crucial to configure them correctly to ensure your environment is ready for production workloads. Whether you’re deploying **AVD**, **AKS**, or just managing virtual machines, each feature we’ve covered plays a significant role in making sure your system is secure, performant, and scalable.
 
-In my demo lab, I’ve shown how to manage these configurations, but in a real production environment, you'll want to tailor these steps to meet your specific needs—especially when it comes to security features like **WDAC** and **BitLocker**.
+In my demo lab, I’ve shown how to manage these configurations, but in a real production environment, you'll want to tailor these steps to meet your specific needs, especially when it comes to security features like **WDAC** and **BitLocker**.
 
 Finally, after setting up everything correctly, your environment should look like this, with all services running and **green**:
 
