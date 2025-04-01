@@ -2,7 +2,7 @@
 title: "Azure Stack HCI: Demolab"
 excerpt: "Streamline Azure Stack HCI deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2025-03-04
+last_modified_at: 2025-04-01
 categories:
   - Blog
 tags:
@@ -319,6 +319,7 @@ The script will:
 - Register the node with Azure Arc.
 
 ### 9. Verify Node Extension Installation
+> ⚠️ **Warning:** This step is no longer required (Since April 2025) as the extension installation is now handled automatically during the cluster deployment starting from version **2503**. I will show how to perform this step in the next section.
 
 After running Script 02, the Azure Connected Machine extensions should begin installing automatically. This can take up to **20 minutes**. To verify:
 
@@ -367,7 +368,13 @@ Once the cluster node script completes and extensions are correctly installed, f
 2. **Initial Cluster Registration:**
 
    - Use the Azure Portal for initial cluster registration: [Azure Stack HCI Deployment via Portal](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deploy-via-portal)
-   
+
+   - **Extension Installation**
+     - Since April 2025, extensions must be installed manually during the cluster deployment. To do this, simply select the nodes and click the Install extensions button:
+<a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/2503.png" target="_blank">
+  <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/2503.png" alt="Extension Installation" style="border: 2px solid grey;">
+</a>
+
    - **Network Configuration:**
      - Apply the following network settings to the interfaces:
 <a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/networkconfiguration.png" target="_blank">
