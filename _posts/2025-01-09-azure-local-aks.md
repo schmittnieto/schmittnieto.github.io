@@ -1022,7 +1022,7 @@ In Azure Local, SQLmi leverages Azure Arc-enabled data services, seamlessly inte
 
 ### Pricing Overview
 
-The pricing for SQLmi in Azure Local is as follows:
+The [pricing for SQLmi](https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/) in Azure Local is as follows:
 
 | Service | Price (1 vCore/Month) | Notes |
 |---------|-----------------------|-------|
