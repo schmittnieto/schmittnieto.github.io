@@ -4,6 +4,7 @@ title: "Azure Local Calculator"
 excerpt: "Interactive calculators for Azure Local covering storage sizing, pricing estimation and CPU planning (upcoming). Ideal for architecture design and cost evaluation."
 redirect_from:
   - /azl-storage-calculator/
+  - /azure-local-calculator/
 toc: true
 toc_label: "Topics Overview"
 toc_icon: "list-ul"
