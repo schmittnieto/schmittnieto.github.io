@@ -686,4 +686,4 @@ function drawMonthlyChart(host,win,avd,sql,third){
   It is your responsibility to validate and test the results for your specific environment.
 
 - **Limitation of Liability:**  
-  Neither the author(s) nor Microsoft will be liable for any damages resulting from the use of these tools, including—but not limited to—loss of business, profits, or data.
+  Neither the author(s) nor Microsoft will be liable for any damages resulting from the use of these tools, including (but not limited to) loss of business, profits or data.
