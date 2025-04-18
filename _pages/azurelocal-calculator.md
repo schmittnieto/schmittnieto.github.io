@@ -1,7 +1,7 @@
 ---
 permalink: /azurelocal-calculator/
 title: "Azure Local Calculator"
-excerpt: "A comprehensive Azure Local Calculator covering Storage, CPU and Pricing estimation."
+excerpt: "Interactive calculators for Azure Local covering storage sizing, pricing estimation and CPU planning (upcoming). Ideal for architecture design and cost evaluation."
 redirect_from:
   - /azl-storage-calculator/
 toc: true
@@ -22,20 +22,21 @@ header:
 
 ## Introduction
 
-On this page, I plan to set up a series of calculators to be used in the Azure Local environment.
+This page presents a set of web-based calculators built to estimate key metrics within an **Azure Local** environment. These tools are custom-made and designed for storage planning, infrastructure cost estimation and license impact assessment.
 
-**Important Disclaimer:** These calculators are currently under active development and testing. Therefore, I cannot guarantee their accuracy, completeness, or the validity of their calculations until the testing phase concludes. The testing period is estimated to finish by the end of March or early April.  
-{: .notice--danger}
+While the calculators have been thoroughly tested, they are provided as-is and without any warranties. If you notice any inconsistencies or potential issues, I would greatly appreciate your feedback 🤗 feel free to get in touch!
 
-Currently planned calculators include:
+## Azure Local Calculator
 
-- Storage Calculator  
-- CPU Calculator  
-- Pricing Calculator  
+[**Azure Local Calculator**](https://github.com/schmittnieto/AzureLocal-Calculator) is a GitHub-based repository offering a collection of interactive calculators focused on the Azure Local with emphasis on **Storage**, **CPU (working on it)** and **Pricing** estimations.
 
-Please treat the results from these calculators as indicative and preliminary until official confirmation after the testing period.
+The source code for the calculators is available on GitHub, but the calculators themselves can be used interactively right here on this page.
 
-## Storage Calculator
+The storage configuration used in the calculator is based on the *Express* mode. While I acknowledge that this is not the most efficient setup in terms of capacity optimization, it serves well as a first approximation to get a general understanding of the storage architecture.
+
+If you aim to implement more advanced storage configurations, you will likely need to customize the deployment by manually configuring storage to suit your needs, and in those cases, you probably already have an Excel sheet from your vendor or internal team that provides more accurate figures than what this calculator is designed to offer. For this reason, configurations other than Two-Way and Three-Way Mirror have been intentionally excluded from the scope.
+
+### Storage Calculator
 
 <html lang="en">
 <head>
@@ -330,259 +331,152 @@ Please treat the results from these calculators as indicative and preliminary un
 
 
 
-## Pricing Calculator
+### Pricing Calculator
 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Load Chart.js -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Let the page background show through */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    /* Container aligned to the left in the article flow */
-    .container {
-      margin: 20px 0;
-      width: auto;
-      text-align: center;
-    }
-    h3 {
-      font-size: 1.5em;
-      margin-bottom: 20px;
-    }
-    .slider-container {
-      margin: 20px 0;
-      text-align: left;
-    }
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .checkbox-container input[type="checkbox"] {
-      margin-right: 8px;
-      transform: scale(1.2);
-      vertical-align: middle;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-    input[type=range] {
-      width: 100%;
-      margin: 10px 0;
-    }
-    input[type=number],
-    select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #555;
-      border-radius: 8px;
-      box-sizing: border-box;
-      margin-top: 5px;
-    }
-    /* Dark grey background for dropdown with white text */
-    select {
-      background-color: #444;
-      color: #fff;
-    }
-    button {
-      background-color: #007aff;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      font-size: 1em;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background-color: #005bb5;
-    }
-    /* Results shown directly (plain text) */
-    #result_price {
-      margin-top: 20px;
-      text-align: left;
-      font-size: 0.95em;
-    }
-    .chart-container {
-      margin-top: 20px;
-      text-align: center;
-      width: auto;
-    }
-    /* White background for chart canvases */
-    #oneTimeBreakdownChart,
-    #costChart,
-    #costBreakdownChart {
-      background-color: #fff;
-      border-radius: 8px;
-    }
-    .disclaimer {
-      font-size: 0.8em;
-      margin-top: 20px;
-      text-align: left;
-    }
-    .disclaimer a {
-      color: #007aff;
-      text-decoration: none;
-    }
-    .disclaimer a:hover {
-      text-decoration: underline;
-    }
+    body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    .container{margin:20px 0;text-align:center}
+    h3{font-size:1.5em;margin-bottom:20px}
+    .slider-container{margin:20px 0;text-align:left}
+    .checkbox-container{display:flex;align-items:center;margin-bottom:10px}
+    .checkbox-container input{margin-right:8px;transform:scale(1.2)}
+    label{display:block;margin-bottom:5px;font-weight:600}
+    input[type=range]{width:100%;margin:10px 0}
+    input[type=number],select{width:100%;padding:8px;border:1px solid #555;border-radius:8px;box-sizing:border-box;margin-top:5px}
+    select{background:#444;color:#fff}
+    button{background:#007aff;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:1em;cursor:pointer;margin-top:20px}
+    button:hover{background:#005bb5}
+    #result_price{margin-top:20px;text-align:left;font-size:.95em}
+    .chart-container{margin-top:20px;text-align:center;width:auto}
+    canvas{background:#fff;border-radius:8px}
+    .disclaimer{font-size:.8em;margin-top:20px;text-align:left}
+    .disclaimer a{color:#007aff;text-decoration:none}
+    .disclaimer a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
-  <div class="container">
-    
-    <!-- Infrastructure Price Section -->
-    <h3>Infrastructure Price</h3>
-    <div class="slider-container">
-      <label for="nodes_price">Number of Nodes (<span id="nodesValue_price">1</span>)</label>
-      <input type="range" id="nodes_price" min="1" max="16" value="1"
-             oninput="document.getElementById('nodesValue_price').innerText = this.value;">
-    </div>
-    <div class="slider-container">
-      <label for="pricePerNode_price">Price per Node (EUR)</label>
-      <input type="number" id="pricePerNode_price" placeholder="e.g., 15000" step="100" min="0">
-    </div>
-    <div class="slider-container">
-      <label for="switches_price">Number of Switches (<span id="switchesValue_price">0</span>)</label>
-      <input type="range" id="switches_price" min="0" max="8" value="0"
-             oninput="document.getElementById('switchesValue_price').innerText = this.value;">
-    </div>
-    <div class="slider-container">
-      <label for="pricePerSwitch_price">Price per Switch (EUR)</label>
-      <input type="number" id="pricePerSwitch_price" placeholder="e.g., 5000" step="50" min="0">
-    </div>
-    
-    <!-- License Price Section -->
-    <h3>License Price</h3>
-    <div class="slider-container">
-      <label for="coresPerNode_price">Cores per Node (<span id="coresPerNodeValue_price">16</span>)</label>
-      <input type="range" id="coresPerNode_price" min="1" max="64" value="16"
-             oninput="document.getElementById('coresPerNodeValue_price').innerText = this.value;">
-    </div>
-    <div class="checkbox-container">
-      <input type="checkbox" id="waiveHostFee_price">
-      <label for="waiveHostFee_price">Waive Azure Local Host Fee (Saving €10/core)</label>
-    </div>
-    <div class="checkbox-container">
-      <input type="checkbox" id="waiveWindowsLicense_price">
-      <label for="waiveWindowsLicense_price">Waive Windows Server License Fee (Saving €23.30/core)</label>
-    </div>
-    <div class="checkbox-container">
-      <input type="checkbox" id="customLicensePrice_price" onchange="linkCheckboxes()">
-      <label for="customLicensePrice_price">Use Custom Windows License Pricing (per Node)</label>
-    </div>
-    <script>
-      // Link the two checkboxes so that their states are always identical.
-      function linkCheckboxes() {
-        const waiveBox = document.getElementById("waiveWindowsLicense_price");
-        const customBox = document.getElementById("customLicensePrice_price");
-        waiveBox.checked = customBox.checked;
-        toggleCustomLicenseFields_price();
-      }
-      document.getElementById("waiveWindowsLicense_price").addEventListener("change", function() {
-        document.getElementById("customLicensePrice_price").checked = this.checked;
-        toggleCustomLicenseFields_price();
-      });
-    </script>
-    <div class="slider-container" id="customLicenseContainer_price" style="display: none;">
-      <label for="customWindowsPricePerNode_price">Windows Server Datacenter License (EUR/month) per Node</label>
-      <input type="number" id="customWindowsPricePerNode_price" placeholder="e.g., 500" step="0.1" min="0">
-      
-      <label for="oneTimeWindowsLicensePerNode_price">One-Time Datacenter License (EUR) per Node</label>
-      <input type="number" id="oneTimeWindowsLicensePerNode_price" placeholder="e.g., 3000" step="100" min="0">
-    </div>
-    
-    <!-- Third-Party Cost Section -->
-    <h3>Third-Party Licenses/Cost</h3>
-    <div class="slider-container">
-      <label for="thirdPartyOneTime_price">One-Time Third-Party Cost (EUR)</label>
-      <input type="number" id="thirdPartyOneTime_price" placeholder="e.g., 1000" step="100" min="0">
-    </div>
-    <div class="slider-container">
-      <label for="thirdPartyMonthly_price">Monthly Third-Party Cost (EUR)</label>
-      <input type="number" id="thirdPartyMonthly_price" placeholder="e.g., 50" step="10" min="0">
-    </div>
-    
-    <!-- Service Price Section -->
-    <h3>Service Price</h3>
-    <div class="slider-container">
-      <label for="avdVCPUs_price">AVD vCPUs</label>
-      <input type="number" id="avdVCPUs_price" placeholder="e.g., 32" step="1" min="0">
-    </div>
-    <div class="slider-container">
-      <label for="avdHours_price">AVD Usage Hours (<span id="avdHoursValue_price">280</span>)</label>
-      <input type="range" id="avdHours_price" min="1" max="730" value="280"
-             oninput="document.getElementById('avdHoursValue_price').innerText = this.value;">
-    </div>
-    <div class="slider-container">
-      <label for="sqlVcores_price">SQL Managed Instance (SQLmi) vCores</label>
-      <input type="number" id="sqlVcores_price" placeholder="e.g., 4" step="1" min="0">
-    </div>
-    <div class="slider-container">
-      <label for="sqlHours_price">SQLmi Usage Hours (<span id="sqlHoursValue_price">280</span>)</label>
-      <input type="range" id="sqlHours_price" min="1" max="730" value="280"
-             oninput="document.getElementById('sqlHoursValue_price').innerText = this.value;">
-    </div>
-    <div class="slider-container">
-      <label for="sqlTier_price">SQLmi Tier</label>
-      <select id="sqlTier_price">
-        <option value="General Purpose">General Purpose</option>
-        <option value="Business Critical">Business Critical</option>
-      </select>
-    </div>
-    <div class="slider-container">
-      <label for="sqlLicensing_price">SQLmi Licensing Model</label>
-      <select id="sqlLicensing_price">
-        <option value="License Included">License Included</option>
-        <option value="Azure Hybrid Benefit">Azure Hybrid Benefit</option>
-      </select>
-    </div>
-    <div class="slider-container">
-      <label for="sqlTerm_price">Reservation Term</label>
-      <select id="sqlTerm_price">
-        <option value="PAYG">PAYG</option>
-        <option value="1 Year RI">1 Year RI</option>
-        <option value="3 Year RI">3 Year RI</option>
-      </select>
-    </div>
-    
-    <button onclick="calculatePricing_price()">Calculate Pricing</button>
-    
-    <!-- Results: displayed directly (plain text) -->
-    <div id="result_price"></div>
-    
-    <!-- Chart 1: Fixed vs. Variable Costs -->
-    <div class="chart-container">
-      <canvas id="costChart"></canvas>
-    </div>
-    
-    <!-- Chart 2: Fixed Costs Breakdown -->
-    <div class="chart-container">
-      <canvas id="oneTimeBreakdownChart"></canvas>
-    </div>
-    
-    <!-- Chart 3: Recurring Costs Breakdown (separate bars) -->
-    <div class="chart-container">
-      <canvas id="costBreakdownChart"></canvas>
-    </div>
-    
+<div class="container">
+
+  <!-- ------------------  INPUTS  ------------------ -->
+  <h3>Infrastructure Price</h3>
+  <div class="slider-container">
+    <label for="nodes_price">Number of Nodes (<span id="nodesValue_price">1</span>)</label>
+    <input type="range" id="nodes_price" min="1" max="16" value="1"
+           oninput="nodesValue_price.innerText=this.value;">
+  </div>
+  <div class="slider-container">
+    <label for="pricePerNode_price">Price per Node (EUR)</label>
+    <input type="number" id="pricePerNode_price" placeholder="e.g., 15000" step="100" min="0">
+  </div>
+  <div class="slider-container">
+    <label for="switches_price">Number of Switches (<span id="switchesValue_price">0</span>)</label>
+    <input type="range" id="switches_price" min="0" max="8" value="0"
+           oninput="switchesValue_price.innerText=this.value;">
+  </div>
+  <div class="slider-container">
+    <label for="pricePerSwitch_price">Price per Switch (EUR)</label>
+    <input type="number" id="pricePerSwitch_price" placeholder="e.g., 5000" step="50" min="0">
+  </div>
+
+  <h3>License Price</h3>
+  <div class="slider-container">
+    <label for="coresPerNode_price">Cores per Node (<span id="coresPerNodeValue_price">16</span>)</label>
+    <input type="range" id="coresPerNode_price" min="1" max="128" value="16"
+           oninput="coresPerNodeValue_price.innerText=this.value;">
+  </div>
+  <div class="checkbox-container">
+    <input type="checkbox" id="waiveHostFee_price">
+    <label for="waiveHostFee_price">Waive Azure Local Host Fee (Saving €10 per core)</label>
+  </div>
+  <div class="checkbox-container">
+    <input type="checkbox" id="waiveWindowsLicense_price">
+    <label for="waiveWindowsLicense_price">Waive Windows Server License Fee (Saving €23.30 per core)</label>
+  </div>
+  <div class="checkbox-container">
+    <input type="checkbox" id="customLicensePrice_price" onchange="linkCheckboxes()">
+    <label for="customLicensePrice_price">Use Custom Windows License Pricing (per Node)</label>
+  </div>
+  <div class="slider-container" id="customLicenseContainer_price" style="display:none;">
+    <label for="customWindowsPricePerNode_price">Windows Server Datacenter License (EUR/month) per Node</label>
+    <input type="number" id="customWindowsPricePerNode_price" placeholder="e.g., 500" step="0.1" min="0">
+    <label for="oneTimeWindowsLicensePerNode_price">One‑Time Datacenter License (EUR) per Node</label>
+    <input type="number" id="oneTimeWindowsLicensePerNode_price" placeholder="e.g., 3000" step="100" min="0">
+  </div>
+
+  <h3>Related Licenses/Cost (e.g. third‑party SW or extra HW)</h3>
+  <div class="slider-container">
+    <label for="thirdPartyOneTime_price">One‑Time Cost (EUR)</label>
+    <input type="number" id="thirdPartyOneTime_price" placeholder="e.g., 15000" step="100" min="0">
+  </div>
+  <div class="slider-container">
+    <label for="thirdPartyMonthly_price">Monthly Cost (EUR)</label>
+    <input type="number" id="thirdPartyMonthly_price" placeholder="e.g., 500" step="10" min="0">
+  </div>
+
+  <h3>Azure Local services Price</h3>
+  <div class="slider-container">
+    <label for="avdVCPUs_price">AVD vCPUs</label>
+    <input type="number" id="avdVCPUs_price" placeholder="e.g., 32" step="1" min="0">
+  </div>
+  <div class="slider-container">
+    <label for="avdHours_price">AVD Usage Hours (<span id="avdHoursValue_price">280</span>)</label>
+    <input type="range" id="avdHours_price" min="1" max="730" value="280"
+           oninput="avdHoursValue_price.innerText=this.value;">
+  </div>
+  <div class="slider-container">
+    <label for="sqlVcores_price">SQL Managed Instance vCores</label>
+    <input type="number" id="sqlVcores_price" placeholder="e.g., 4" step="1" min="0">
+  </div>
+  <div class="slider-container">
+    <label for="sqlHours_price">SQLmi Usage Hours (<span id="sqlHoursValue_price">730</span>)</label>
+    <input type="range" id="sqlHours_price" min="1" max="730" value="730"
+           oninput="sqlHoursValue_price.innerText=this.value;">
+  </div>
+  <div class="slider-container">
+    <label for="sqlTier_price">SQLmi Tier</label>
+    <select id="sqlTier_price">
+      <option value="General Purpose">General Purpose</option>
+      <option value="Business Critical">Business Critical</option>
+    </select>
+  </div>
+  <div class="slider-container">
+    <label for="sqlLicensing_price">SQLmi Licensing Model</label>
+    <select id="sqlLicensing_price">
+      <option value="License Included">License Included</option>
+      <option value="Azure Hybrid Benefit">Azure Hybrid Benefit</option>
+    </select>
+  </div>
+  <div class="slider-container">
+    <label for="sqlTerm_price">Reservation Term</label>
+    <select id="sqlTerm_price">
+      <option value="PAYG">PAYG</option>
+      <option value="1 Year RI">1 Year RI</option>
+      <option value="3 Year RI">3 Year RI</option>
+    </select>
+  </div>
+
+  <button onclick="calculatePricing_price()">Calculate Pricing</button>
+
+  <!-- ------------------ OUTPUT ------------------ -->
+  <div id="result_price"></div>
+  <div class="chart-container"><canvas id="costChart"></canvas></div>
+  <div class="chart-container"><canvas id="oneTimeBreakdownChart"></canvas></div>
+  <div class="chart-container"><canvas id="costBreakdownChart"></canvas></div>
+
     <!-- Disclaimers -->
     <div class="disclaimer">
       <p>
-        <strong>Disclaimer – Pricing Calculator:</strong><br>
+        <strong>Disclaimer for Pricing Calculator:</strong><br>
         This <em>Pricing Calculator</em> is provided for informational purposes only and includes:
         <ul>
           <li><strong>Infrastructure Price:</strong> Node and switch costs (one‑time).</li>
           <li><strong>License Price:</strong> Host fee (€10/core), Windows Server fee (€23.30/core) – or, if using custom pricing, a monthly cost per node plus a one‑time cost per node for Datacenter licenses.</li>
-          <li><strong>Third‑Party Costs:</strong> Additional one‑time and monthly costs for external services (e.g., Backup, security software, etc.).</li>
+          <li><strong>Related Costs:</strong> Additional one‑time and monthly costs for external services (e.g., Backup, security software, etc.).</li>
           <li><strong>Service Price:</strong> Azure Virtual Desktop (AVD) and SQL Managed Instance (SQLmi) usage costs (monthly).</li>
         </ul>
         Actual costs may vary depending on vendor quotes, hardware configurations, and licensing agreements.
@@ -590,8 +484,8 @@ Please treat the results from these calculators as indicative and preliminary un
       <p>
         <strong>Hybrid Benefit Disclaimer:</strong><br>
         The Azure Local Host fee (€10/core) and Windows Server fee (€23.30/core) can be waived if you qualify for Azure Hybrid Benefit under an Enterprise Agreement (EA) or a Cloud Solution Provider (CSP) subscription. MPSA or OEM + SA is not supported, and Hybrid Benefit is not defined for Open Value. Consult the 
-        <a href="https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS" target="_blank">Microsoft Product Terms (EA/CSP)</a>, 
-        <a href="https://www.microsoft.com/licensing/terms/productoffering/WindowsServerStandardDatacenterEssentials/SS" target="_blank">Microsoft Product Terms for Windows Server</a>, and 
+        <a href="https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS" target="_blank">Microsoft Azure Product Terms (EA/CSP)</a>, 
+        <a href="https://www.microsoft.com/licensing/terms/productoffering/WindowsServerStandardDatacenterEssentials/EAEAS" target="_blank">Microsoft Product Terms for Windows Server (EA/CSP)</a>, and 
         <a href="https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit?tabs=azure-local#getting-azure-hybrid-benefit" target="_blank">Azure Hybrid Benefit for Windows Server</a>
         for specifics. Product Terms override general documentation.
       </p>
@@ -614,309 +508,181 @@ Please treat the results from these calculators as indicative and preliminary un
     </div>
   </div>
   
-  <script>
-    // SQL Managed Instance pricing data (per vCore/month in Euros)
-    const sqlPrices = {
-      "General Purpose": {
-        "License Included": {
-          "PAYG": 116.73,
-          "1 Year RI": 107.55,
-          "3 Year RI": 88.52
-        },
-        "Azure Hybrid Benefit": {
-          "PAYG": 47.25,
-          "1 Year RI": 38.07,
-          "3 Year RI": 19.04
-        }
-      },
-      "Business Critical": {
-        "License Included": {
-          "PAYG": 355.74,
-          "1 Year RI": 336.70,
-          "3 Year RI": 298.63
-        },
-        "Azure Hybrid Benefit": {
-          "PAYG": 95.19,
-          "1 Year RI": 76.15,
-          "3 Year RI": 38.07
-        }
-      }
-    };
+<script>
+/* ---------------- helper ---------------- */
+function toggleCustomLicenseFields_price(){
+  customLicenseContainer_price.style.display = customLicensePrice_price.checked ? "block" : "none";
+}
+function linkCheckboxes(){
+  waiveWindowsLicense_price.checked = customLicensePrice_price.checked;
+  toggleCustomLicenseFields_price();
+}
+waiveWindowsLicense_price.addEventListener("change",()=>{
+  customLicensePrice_price.checked = waiveWindowsLicense_price.checked;
+  toggleCustomLicenseFields_price();
+});
 
-    let costChart = null;           // Chart 1: Fixed vs. Variable Costs
-    let oneTimeBreakdownChart = null; // Chart 2: Fixed Costs Breakdown
-    let costBreakdownChart = null;    // Chart 3: Recurring Costs Breakdown
+/* -------------- SQL price table -------------- */
+const sqlPrices={
+  "General Purpose":{"License Included":{"PAYG":116.73,"1 Year RI":107.55,"3 Year RI":88.52},"Azure Hybrid Benefit":{"PAYG":47.25,"1 Year RI":38.07,"3 Year RI":19.04}},
+  "Business Critical":{"License Included":{"PAYG":355.74,"1 Year RI":336.70,"3 Year RI":298.63},"Azure Hybrid Benefit":{"PAYG":95.19,"1 Year RI":76.15,"3 Year RI":38.07}}
+};
 
-    function toggleCustomLicenseFields_price() {
-      const customCheckbox = document.getElementById("customLicensePrice_price");
-      const displayStyle = customCheckbox.checked ? "block" : "none";
-      document.getElementById("customLicenseContainer_price").style.display = displayStyle;
-    }
-    
-    // Link the two checkboxes so they always share the same state.
-    function linkCheckboxes() {
-      const waiveBox = document.getElementById("waiveWindowsLicense_price");
-      const customBox = document.getElementById("customLicensePrice_price");
-      waiveBox.checked = customBox.checked;
-      toggleCustomLicenseFields_price();
-    }
-    document.getElementById("waiveWindowsLicense_price").addEventListener("change", function() {
-      document.getElementById("customLicensePrice_price").checked = this.checked;
-      toggleCustomLicenseFields_price();
-    });
-    document.getElementById("customLicensePrice_price").addEventListener("change", function() {
-      document.getElementById("waiveWindowsLicense_price").checked = this.checked;
-      toggleCustomLicenseFields_price();
-    });
-    
-    function calculatePricing_price() {
-      // 1) Infrastructure Price (One-Time)
-      const nodes = parseFloat(document.getElementById("nodes_price").value);
-      const pricePerNode = parseFloat(document.getElementById("pricePerNode_price").value) || 0;
-      const switches = parseFloat(document.getElementById("switches_price").value);
-      const pricePerSwitch = parseFloat(document.getElementById("pricePerSwitch_price").value) || 0;
-      const hardwareCost = (nodes * pricePerNode) + (switches * pricePerSwitch);
-      
-      // 2) License Price
-      const coresPerNode = parseFloat(document.getElementById("coresPerNode_price").value);
-      const totalCores = nodes * coresPerNode;
-      const waiveHostFee = document.getElementById("waiveHostFee_price").checked;
-      const customLicensePriceChecked = document.getElementById("customLicensePrice_price").checked;
-      
-      const hostFee = waiveHostFee ? 0 : (totalCores * 10);
-      
-      let recurringWindowsLicense = 0;
-      let oneTimeWindowsLicense = 0;
-      if (customLicensePriceChecked) {
-        const customWindowsPricePerNode = parseFloat(document.getElementById("customWindowsPricePerNode_price").value) || 0;
-        const oneTimeWindowsLicensePerNode = parseFloat(document.getElementById("oneTimeWindowsLicensePerNode_price").value) || 0;
-        recurringWindowsLicense = customWindowsPricePerNode * nodes;
-        oneTimeWindowsLicense = oneTimeWindowsLicensePerNode * nodes;
-      } else {
-        recurringWindowsLicense = totalCores * 23.30;
-        oneTimeWindowsLicense = 0;
-      }
-      
-      const licensingCost = hostFee + recurringWindowsLicense;
-      
-      // 3) Third-Party Costs
-      const thirdPartyOneTime = parseFloat(document.getElementById("thirdPartyOneTime_price").value) || 0;
-      const thirdPartyMonthly = parseFloat(document.getElementById("thirdPartyMonthly_price").value) || 0;
-      
-      // 4) Service Price (Monthly)
-      const avdVCPUs = parseFloat(document.getElementById("avdVCPUs_price").value) || 0;
-      const avdHours = parseFloat(document.getElementById("avdHours_price").value);
-      const avdCost = avdVCPUs * 0.01 * avdHours;
-      
-      const sqlVcores = parseFloat(document.getElementById("sqlVcores_price").value) || 0;
-      const sqlHours = parseFloat(document.getElementById("sqlHours_price").value);
-      const sqlTier = document.getElementById("sqlTier_price").value;
-      const sqlLicensing = document.getElementById("sqlLicensing_price").value;
-      const sqlTerm = document.getElementById("sqlTerm_price").value;
-      const sqlRate = sqlPrices[sqlTier][sqlLicensing][sqlTerm];
-      const sqlHourlyRate = sqlRate / 730;
-      const sqlCost = sqlVcores * sqlHourlyRate * sqlHours;
-      
-      // 5) Totals
-      const oneTimeTotal = hardwareCost + oneTimeWindowsLicense + thirdPartyOneTime;
-      const recurringTotal = licensingCost + avdCost + sqlCost + thirdPartyMonthly;
-      
-      const resultHtml = 
-        `<strong>One-Time Hardware Cost:</strong> €${hardwareCost.toFixed(2)}<br>` +
-        `<strong>One-Time Windows License:</strong> €${oneTimeWindowsLicense.toFixed(2)}<br>` +
-        `<strong>One-Time Third-Party Cost:</strong> €${thirdPartyOneTime.toFixed(2)}<br>` +
-        `<strong>Total One-Time Cost:</strong> €${oneTimeTotal.toFixed(2)}<br><br>` +
-        `<strong>Monthly Azure Local Host Fee:</strong> €${hostFee.toFixed(2)}<br>` +
-        `<strong>Monthly Windows License:</strong> €${recurringWindowsLicense.toFixed(2)}<br>` +
-        `<strong>Monthly Licensing Cost (Total):</strong> €${licensingCost.toFixed(2)}<br>` +
-        `<strong>Monthly Third-Party Cost:</strong> €${thirdPartyMonthly.toFixed(2)}<br>` +
-        `<strong>Monthly AVD Cost:</strong> €${avdCost.toFixed(2)}<br>` +
-        `<strong>Monthly SQLmi Cost:</strong> €${sqlCost.toFixed(2)}<br>` +
-        `<strong>Total Monthly Recurring Cost:</strong> €${recurringTotal.toFixed(2)}`;
-      
-      document.getElementById("result_price").innerHTML = resultHtml;
-      
-      updateCharts(oneTimeTotal, recurringTotal, hardwareCost, oneTimeWindowsLicense, thirdPartyOneTime, licensingCost, avdCost, sqlCost, thirdPartyMonthly);
-    }
-    
-    function updateCharts(oneTimeTotal, recurringTotal, hardwareCost, oneTimeWindows, thirdPartyOneTime, licensingCost, avdCost, sqlCost, thirdPartyMonthly) {
-      updateFixedVsVariableChart(oneTimeTotal, recurringTotal);
-      updateOneTimeBreakdownChart(hardwareCost, oneTimeWindows, thirdPartyOneTime);
-      updateRecurringBreakdownChart(licensingCost, avdCost, sqlCost, thirdPartyMonthly);
-    }
-    
-    // Chart 1: Fixed vs. Variable Costs (Non-stacked, separate bars)
-    function updateFixedVsVariableChart(fixedCost, variableCost) {
-      const ctx = document.getElementById("costChart").getContext("2d");
-      if (costChart) { costChart.destroy(); }
-      
-      costChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ["Fixed Costs", "Monthly Costs"],
-          datasets: [
-            {
-              label: "Cost (€)",
-              data: [fixedCost, variableCost],
-              backgroundColor: ["rgba(128,191,255,0.9)", "rgba(211,211,211,0.9)"]
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: {
-                boxWidth: 0,
-                generateLabels: function(chart) {
-                  const original = Chart.defaults.plugins.legend.labels.generateLabels;
-                  const labels = original(chart);
-                  labels.forEach(label => { label.boxWidth = 0; });
-                  return labels;
-                }
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: { display: true, text: "Euros (€)" }
-            }
-          },
-          tooltips: {
-            callbacks: {
-              label: (context) => `€${context.parsed.y.toFixed(2)}`
-            }
-          }
-        }
-      });
-    }
-    
-    // Chart 2: Fixed Costs Breakdown (Non-stacked, separate bars)
-    function updateOneTimeBreakdownChart(hardwareCost, windowsCost, thirdPartyCost) {
-      const ctx = document.getElementById("oneTimeBreakdownChart").getContext("2d");
-      if (oneTimeBreakdownChart) { oneTimeBreakdownChart.destroy(); }
-      
-      const items = [
-        { label: "Hardware", value: hardwareCost, backgroundColor: "rgba(128,191,255,0.9)" },
-        { label: "Windows License", value: windowsCost, backgroundColor: "rgba(179,209,255,0.9)" },
-        { label: "Third-Party", value: thirdPartyCost, backgroundColor: "rgba(150,150,150,0.9)" }
-      ].filter(item => item.value > 0);
-      
-      const labels = items.map(item => item.label);
-      const dataValues = items.map(item => item.value);
-      const backgroundColors = items.map(item => item.backgroundColor);
-      
-      const data = {
-        labels: labels,
-        datasets: [
-          {
-            label: "Fixed Costs (€)",
-            data: dataValues,
-            backgroundColor: backgroundColors
-          }
-        ]
-      };
-      
-      const config = {
-        type: "bar",
-        data: data,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: {
-                boxWidth: 0,
-                generateLabels: function(chart) {
-                  const original = Chart.defaults.plugins.legend.labels.generateLabels;
-                  const labels = original(chart);
-                  labels.forEach(label => { label.boxWidth = 0; });
-                  return labels;
-                }
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: { display: true, text: "Euros (€)" }
-            }
-          },
-          tooltips: {
-            callbacks: {
-              label: (context) => `€${context.parsed.y.toFixed(2)}`
-            }
-          }
-        }
-      };
-      
-      oneTimeBreakdownChart = new Chart(ctx, config);
-    }
-    
-    // Chart 3: Recurring Costs Breakdown (Separate bars for each element)
-    function updateRecurringBreakdownChart(licensingCost, avdCost, sqlCost, thirdPartyMonthly) {
-      const ctx2 = document.getElementById("costBreakdownChart").getContext("2d");
-      if (costBreakdownChart) { costBreakdownChart.destroy(); }
-      
-      const items = [
-        { label: "Licensing Cost", value: licensingCost, backgroundColor: "rgba(128,191,255,0.9)" },
-        { label: "AVD Cost", value: avdCost, backgroundColor: "rgba(179,209,255,0.9)" },
-        { label: "SQLmi Cost", value: sqlCost, backgroundColor: "rgba(211,211,211,0.9)" },
-        { label: "3rd Party Cost", value: thirdPartyMonthly, backgroundColor: "rgba(150,150,150,0.9)" }
-      ].filter(item => item.value > 0);
-      
-      const labels = items.map(item => item.label);
-      const dataValues = items.map(item => item.value);
-      const backgroundColors = items.map(item => item.backgroundColor);
-      
-      const data = {
-        labels: labels,
-        datasets: [
-          {
-            label: "Recurring Costs (€)",
-            data: dataValues,
-            backgroundColor: backgroundColors
-          }
-        ]
-      };
-      
-      const config = {
-        type: "bar",
-        data: data,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: {
-                boxWidth: 0,
-                generateLabels: function(chart) {
-                  const original = Chart.defaults.plugins.legend.labels.generateLabels;
-                  const labels = original(chart);
-                  labels.forEach(label => { label.boxWidth = 0; });
-                  return labels;
-                }
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: { display: true, text: "Euros (€)" }
-            }
-          },
-          tooltips: {
-            callbacks: {
-              label: (context) => `€${context.parsed.y.toFixed(2)}`
-            }
-          }
-        }
-      };
-      
-      costBreakdownChart = new Chart(ctx2, config);
-    }
-  </script>
+/* ------------ chart instances ------------- */
+let costChart=null,oneTimeBreakdownChart=null,costBreakdownChart=null;
+
+/* ---------- calculation + chart draw ---------- */
+function calculatePricing_price(){
+  /* --- hardware --- */
+  const nodes=+nodes_price.value,
+        nodeUnit=+pricePerNode_price.value||0,
+        switches=+switches_price.value,
+        switchUnit=+pricePerSwitch_price.value||0;
+  const nodesCost=nodes*nodeUnit,
+        switchesCost=switches*switchUnit,
+        hardwareCost=nodesCost+switchesCost;
+
+  /* --- licensing --- */
+  const totalCores=nodes*(+coresPerNode_price.value),
+        hostFee=waiveHostFee_price.checked?0:totalCores*10;
+  let winMonthly=0,winOneTime=0;
+  if(customLicensePrice_price.checked){
+    winMonthly=(+customWindowsPricePerNode_price.value||0)*nodes;
+    winOneTime=(+oneTimeWindowsLicensePerNode_price.value||0)*nodes;
+  }else{
+    winMonthly=totalCores*23.30;
+  }
+
+  /* --- third‑party --- */
+  const thirdOneTime=+thirdPartyOneTime_price.value||0,
+        thirdMonthly=+thirdPartyMonthly_price.value||0;
+
+  /* --- services --- */
+  const avdCost=(+avdVCPUs_price.value||0)*0.01*(+avdHours_price.value),
+        sqlRate=sqlPrices[sqlTier_price.value][sqlLicensing_price.value][sqlTerm_price.value]/730,
+        sqlCost=(+sqlVcores_price.value||0)*sqlRate*(+sqlHours_price.value);
+
+  /* --- totals --- */
+  const oneTimeTotal=hardwareCost+winOneTime+thirdOneTime,
+        monthlyTotal=hostFee+winMonthly+thirdMonthly+avdCost+sqlCost;
+
+  /* --- text output --- */
+  result_price.innerHTML=
+    `<strong>One‑Time Hardware Cost:</strong> €${hardwareCost.toFixed(2)}<br>`+
+    `<strong>One‑Time Windows License:</strong> €${winOneTime.toFixed(2)}<br>`+
+    `<strong>One‑Time Third‑Party Cost:</strong> €${thirdOneTime.toFixed(2)}<br>`+
+    `<strong>Total One‑Time Cost:</strong> €${oneTimeTotal.toFixed(2)}<br><br>`+
+    `<strong>Monthly Host Fee:</strong> €${hostFee.toFixed(2)}<br>`+
+    `<strong>Monthly Windows License:</strong> €${winMonthly.toFixed(2)}<br>`+
+    `<strong>Monthly Third‑Party Cost:</strong> €${thirdMonthly.toFixed(2)}<br>`+
+    `<strong>Monthly AVD Cost:</strong> €${avdCost.toFixed(2)}<br>`+
+    `<strong>Monthly SQLmi Cost:</strong> €${sqlCost.toFixed(2)}<br>`+
+    `<strong>Total Monthly Cost:</strong> €${monthlyTotal.toFixed(2)}`;
+
+  drawTotalChart(oneTimeTotal,monthlyTotal);
+  drawOneTimeChart(nodesCost,switchesCost,winOneTime,thirdOneTime);
+  drawMonthlyChart(hostFee,winMonthly,avdCost,sqlCost,thirdMonthly);
+}
+
+/* ---------- util: create dataset only if value>0 ---------- */
+function addDS(list,label,vals,color,stack){
+  if(vals.some(v=>v>0)) list.push({label,data:vals,backgroundColor:color,stack});
+}
+
+/* ---------- util: remove empty categories ---------- */
+function filterCategories(labels,datasets){
+  const keepIdx=labels.map((_,i)=>datasets.some(ds=>ds.data[i]>0));
+  const newLabels=labels.filter((_,i)=>keepIdx[i]);
+  const newDatasets=datasets
+      .map(ds=>({...ds,data:ds.data.filter((_,i)=>keepIdx[i])}))
+      .filter(ds=>ds.data.some(v=>v>0));
+  return {labels:newLabels,datasets:newDatasets};
+}
+
+/* ---------- chart 1 ---------- */
+function drawTotalChart(oneT,monthT){
+  if(costChart)costChart.destroy();
+  costChart=new Chart(costChart?.ctx||document.getElementById("costChart").getContext("2d"),{
+    type:"bar",
+    data:{labels:["One‑Time","Monthly"],datasets:[{data:[oneT,monthT],backgroundColor:["rgba(128,191,255,.9)","rgba(211,211,211,.9)"]}]},
+    options:{responsive:true,plugins:{title:{display:true,text:"Total Costs (One‑Time vs Monthly)"},legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:"€"}}}}
+  });
+}
+
+/* ---------- chart 2 ---------- */
+function drawOneTimeChart(nodesCost,switchesCost,winOneTime,thirdOneTime){
+  if(oneTimeBreakdownChart)oneTimeBreakdownChart.destroy();
+  const baseLabels=["Hardware","Windows License","Third‑Party"];
+  const rawDS=[];
+  addDS(rawDS,"Nodes",[nodesCost,0,0],"rgba(128,191,255,.9)","HW");
+  addDS(rawDS,"Switches",[switchesCost,0,0],"rgba(179,209,255,.9)","HW");
+  addDS(rawDS,"Windows Lic.",[0,winOneTime,0],"rgba(150,150,150,.9)","WIN");
+  addDS(rawDS,"Third‑Party",[0,0,thirdOneTime],"rgba(211,211,211,.9)","3P");
+  const {labels,datasets}=filterCategories(baseLabels,rawDS);
+
+  oneTimeBreakdownChart=new Chart(document.getElementById("oneTimeBreakdownChart").getContext("2d"),{
+    type:"bar",
+    data:{labels,datasets},
+    options:{responsive:true,plugins:{title:{display:true,text:"One‑Time Cost Breakdown"},legend:{position:"bottom"}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,title:{display:true,text:"€"}}}}
+  });
+}
+
+/* ---------- chart 3 ---------- */
+function drawMonthlyChart(host,win,avd,sql,third){
+  if(costBreakdownChart)costBreakdownChart.destroy();
+  const baseLabels=["Licensing","AVD","SQLmi","Third‑Party"];
+  const rawDS=[];
+  addDS(rawDS,"Host Fee",[host,0,0,0],"rgba(128,191,255,.9)","LIC");
+  addDS(rawDS,"Windows Lic.",[win,0,0,0],"rgba(179,209,255,.9)","LIC");
+  addDS(rawDS,"AVD",[0,avd,0,0],"rgba(150,150,150,.9)","AVD");
+  addDS(rawDS,"SQLmi",[0,0,sql,0],"rgba(211,211,211,.9)","SQL");
+  addDS(rawDS,"Third‑Party",[0,0,0,third],"rgba(100,100,100,.9)","3P");
+  const {labels,datasets}=filterCategories(baseLabels,rawDS);
+
+  costBreakdownChart=new Chart(document.getElementById("costBreakdownChart").getContext("2d"),{
+    type:"bar",
+    data:{labels,datasets},
+    options:{responsive:true,plugins:{title:{display:true,text:"Monthly Cost Breakdown"},legend:{position:"bottom"}},scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,title:{display:true,text:"€"}}}}
+  });
+}
+</script>
 </body>
 </html>
+
+
+## Contributors
+
+- **Cristian Schmitt Nieto**  
+  Author of the calculators and blog.  
+  [LinkedIn](https://www.linkedin.com/in/cristian-schmitt-nieto/)
+
+- **Florian Hildesheim**  
+  Contributed insights and reference values for the **Storage Calculator**.  
+  [LinkedIn](https://www.linkedin.com/in/florian-hildesheim-757bb0273/)  
+
+- **Karl Wester-Ebbinghaus**  
+  Provided valuable feedback and data for the **Pricing Calculator** and early CPU modeling discussions.  
+  [LinkedIn](https://www.linkedin.com/in/karl-wester-ebbinghaus-a41507153/)
+
+> The **Storage Calculator** is inspired by Cosmos Darwin’s work on the S2D Calculator.  
+> [LinkedIn – Cosmos Darwin](https://www.linkedin.com/in/cosmosd/)
+
+## General Disclaimer
+
+- **Unofficial:**  
+  These calculators are community-built tools and do **not** represent official Microsoft products or documentation.
+
+- **No Endorsement:**  
+  They are provided as reference material only and do not imply endorsement of any architectural decision.
+
+- **Provided “AS IS”:**  
+  All code and tools are provided with no warranties, either express or implied.
+
+- **No Standard Support:**  
+  These tools are not covered by any Microsoft support program.
+
+- **Use at Your Own Risk:**  
+  It is your responsibility to validate and test the results for your specific environment.
+
+- **Limitation of Liability:**  
+  Neither the author(s) nor Microsoft will be liable for any damages resulting from the use of these tools, including—but not limited to—loss of business, profits, or data.
