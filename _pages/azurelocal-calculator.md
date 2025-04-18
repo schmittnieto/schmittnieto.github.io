@@ -653,10 +653,6 @@ function drawMonthlyChart(host,win,avd,sql,third){
 
 ## Contributors
 
-- **Cristian Schmitt Nieto**  
-  Author of the calculators and blog.  
-  [LinkedIn](https://www.linkedin.com/in/cristian-schmitt-nieto/)
-
 - **Florian Hildesheim**  
   Contributed insights and reference values for the **Storage Calculator**.  
   [LinkedIn](https://www.linkedin.com/in/florian-hildesheim-757bb0273/)  
@@ -667,6 +663,10 @@ function drawMonthlyChart(host,win,avd,sql,third){
 
 > The **Storage Calculator** is inspired by Cosmos Darwin’s work on the S2D Calculator.  
 > [LinkedIn – Cosmos Darwin](https://www.linkedin.com/in/cosmosd/)
+
+- **Cristian Schmitt Nieto**  
+  Author of the calculators and blog.  
+  [LinkedIn](https://www.linkedin.com/in/cristian-schmitt-nieto/)
 
 ## General Disclaimer
 
