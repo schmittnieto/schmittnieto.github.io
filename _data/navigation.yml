@@ -3,7 +3,7 @@ main:
     url: /posts/
   - title: "Tags"
     url: /tags/
-  - title: "AZL Calculator"
+  - title: "Azure Local Calculator"
     url: /azurelocal-calculator/
   - title: "About"
     url: /about/
