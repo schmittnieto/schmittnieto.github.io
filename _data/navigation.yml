@@ -27,3 +27,5 @@ Azurelocal:
       url: /blog/azure-local-redundancy/
     - title: "Backup & Disaster Recovery"
       url: /blog/azure-local-backup-and-disaster-recovery/
+    - title: "Azure Local Calculator"
+      url: /azurelocal-calculator/
