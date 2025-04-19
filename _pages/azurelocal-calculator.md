@@ -425,7 +425,7 @@ If you aim to implement more advanced storage configurations, you will likely ne
     <input type="number" id="avdVCPUs_price" placeholder="e.g., 32" step="1" min="0">
   </div>
   <div class="slider-container">
-    <label for="avdHours_price">AVD Usage Hours (<span id="avdHoursValue_price">280</span>)</label>
+    <label for="avdHours_price">AVD Usage Hours in Month(<span id="avdHoursValue_price">280</span>)</label>
     <input type="range" id="avdHours_price" min="1" max="730" value="280"
            oninput="avdHoursValue_price.innerText=this.value;">
   </div>
@@ -434,7 +434,7 @@ If you aim to implement more advanced storage configurations, you will likely ne
     <input type="number" id="sqlVcores_price" placeholder="e.g., 4" step="1" min="0">
   </div>
   <div class="slider-container">
-    <label for="sqlHours_price">SQLmi Usage Hours (<span id="sqlHoursValue_price">730</span>)</label>
+    <label for="sqlHours_price">SQLmi Usage Hours in Month (<span id="sqlHoursValue_price">730</span>)</label>
     <input type="range" id="sqlHours_price" min="1" max="730" value="730"
            oninput="sqlHoursValue_price.innerText=this.value;">
   </div>
