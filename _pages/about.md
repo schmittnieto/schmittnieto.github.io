@@ -47,6 +47,14 @@ I also guide clients through their digital transformation journeys using modern 
 
 As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
 <div class="Certifications" style="text-align: center;">
+  <a href="https://www.credly.com/badges/c9188d86-44a2-457b-bcb7-11423a24a97c/public_url" target="_blank">
+    <img src="/assets/img/mscc2025.png" alt="Microsoft Community Contributor 2025" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Microsoft Community Contributor 2025</div>
+  </a>
+  <a href="https://www.credly.com/badges/5c59cba2-abd4-49bf-99e4-4f72570851d0/public_url" target="_blank">
+    <img src="/assets/img/mscc2024.png" alt="Microsoft Community Contributor 2024" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Microsoft Community Contributor 2025</div>
+  </a>
   <a href="https://eu.badgr.com/public/assertions/nyYBb_cJS_yLso8m1pnOHQ?identity__email=cristian.schmitt.nieto@devoteam.com" target="_blank">
     <img src="/assets/img/devoteam-digital-champion.png" alt="Digital Champion Devoteam" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Devoteam Digital Champion</div>
