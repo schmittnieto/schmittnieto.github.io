@@ -43,6 +43,9 @@ If you aim to implement more advanced storage configurations, you will likely ne
 
 ### Storage Calculator
 
+The storage calculator I designed is now outdated, as [Armin](https://www.linkedin.com/in/aoberneder/) has created a much better one. For this reason, I will not continue developing mine, and I recommend using Armin’s calculator for this purpose: [s2d-calculator.com](https://s2d-calculator.com/).
+{: .notice--warning}
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
