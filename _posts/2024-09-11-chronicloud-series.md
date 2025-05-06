@@ -48,18 +48,18 @@ Each article in the **Chronicloud Series** will focus on specific Azure products
 This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
 {: .notice--info}
 
-1. **Azure Stack HCI**  
-Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that enables organizations to run virtualized workloads on-premises, with integration to Azure. In this series, we'll cover:
-   - **Understanding Azure Stack HCI**: For an in-depth exploration of what Azure Stack HCI is, its key use cases, and how it compares to traditional hyper-converged solutions, please read [Azure Stack HCI Evolution: Use Cases and Comparison](/blog/azure-stack-hci-evolution-use-cases-comparison/).
-   - Labs on deploying and managing an Azure Stack HCI cluster, please read [Azure Stack HCI: Demolab](/blog/azure-stack-hci-demolab/).
-   - Day 2 Operations: After deploying your cluster, this guide will walk you through the essential steps to configure, activate, and optimize your Azure Stack HCI environment, covering networking, security, monitoring, and more. For more details, see [Azure Stack HCI: Day 2 Operations](/blog/azure-stack-hci-day2).
-   - *VMs Deployment and management*: Learn how to create, manage, and optimize virtual machines (VMs) in your Azure Stack HCI environment.You'll also discover how to integrate with Azure Arc for advanced VM management, allowing you to manage VMs on-premises through the Azure portal. For more details, see [Azure Stack HCI: VM Deployment](/blog/azure-stack-hci-vm-deployment).
-   - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops. For more details, see [Azure Stack HCI: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop).
+1. **Azure Local**  
+Azure Local is a hyper-converged infrastructure solution from Microsoft that enables organizations to run virtualized workloads on-premises, with integration to Azure. In this series, we'll cover:
+   - **Understanding Azure Local**: For an in-depth exploration of what Azure Local is, its key use cases, and how it compares to traditional hyper-converged solutions, please read [Azure Local Evolution: Use Cases and Comparison](/blog/azure-stack-hci-evolution-use-cases-comparison/).
+   - Labs on deploying and managing an Azure Local cluster, please read [Azure Local: Demolab](/blog/azure-stack-hci-demolab/).
+   - Day 2 Operations: After deploying your cluster, this guide will walk you through the essential steps to configure, activate, and optimize your Azure Local environment, covering networking, security, monitoring, and more. For more details, see [Azure Local: Day 2 Operations](/blog/azure-stack-hci-day2).
+   - *VMs Deployment and management*: Learn how to create, manage, and optimize virtual machines (VMs) in your Azure Local environment.You'll also discover how to integrate with Azure Arc for advanced VM management, allowing you to manage VMs on-premises through the Azure portal. For more details, see [Azure Local: VM Deployment](/blog/azure-stack-hci-vm-deployment).
+   - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops. For more details, see [Azure Local: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop).
    - *AKS Hybrid and SQL Managed Instances*: Deploy and manage Azure Kubernetes Service (AKS) and SQL Managed Instances on Azure Local in a hybrid cloud setup. For more details, see [Azure Local: AKS and SQL Managed Instances](/blog/azure-local-aks).
-   - *Lifecycle Management*: Best practices for managing updates, upgrades, and the entire lifecycle of your Azure Stack HCI infrastructure. For more details, see [Azure Local: Lifecycle Management](/blog/azure-local-lifecycle).
+   - *Lifecycle Management*: Best practices for managing updates, upgrades, and the entire lifecycle of your Azure Local infrastructure. For more details, see [Azure Local: Lifecycle Management](/blog/azure-local-lifecycle).
    - *Redundancy*: Ensuring fault tolerance at every level, from physical nodes to storage, network design, and Active Directory, so your workloads remain operational even if multiple components fail. For more details, see [Azure Local: Redundancy](/blog/azure-local-redundancy).
    - *Backup and Disaster Recovery*: Explore how to implement reliable backup and restore strategies using Azure services and Azure Local’s native tools. For more details, see [Azure Local: Backup & Disaster Recovery](/blog/azure-local-backup-and-disaster-recovery).
-   - *Migration to HCI*: Step-by-step guidance on migrating from traditional systems to Azure Stack HCI.
+   - *Migration to HCI*: Step-by-step guidance on migrating from traditional systems to Azure Local.
 
 2. **Azure Virtual Desktop (AVD)**  
    AVD offers a virtualized desktop experience in the cloud, enabling secure remote work. In this series, I’ll explore:
