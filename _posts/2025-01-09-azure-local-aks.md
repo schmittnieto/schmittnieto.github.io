@@ -2,6 +2,7 @@
 title: "Azure Local: AKS and SQL Managed instances" 
 excerpt: "Discover how to deploy AKS and SQL Managed instances on Azure Local, including prerequisites, architecture, deployment steps and connectivity." 
 date: 2025-01-09
+last_modified_at: 2025-05-05
 categories:
   - Blog
 tags:
@@ -76,7 +77,9 @@ AKS is available in several deployment models, each catering to specific use cas
      - Suitable for industries like retail or manufacturing with specific compliance or latency requirements.
    - **Cost Considerations**:
      - Included in Azure Local Pricing, effective from January 2025.
-![Meme AKS on Azure Local Pikachu](/assets/img/post/2025-01-09-azure-local-aks/meme-pikachu-aks.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/meme-pikachu-aks.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/meme-pikachu-aks.png" alt="Meme AKS on Azure Local Pikachu" style="border: 2px solid grey;">
+</a>
 
 Regarding networking models, AKS offers different configurations across these platforms:
 
@@ -138,9 +141,16 @@ Implementing AKS on Azure Local empowers organizations to leverage the benefits 
 ## Technical Architecture of the Solution (AKS on Azure Local)
 
 Let's delve into the technical architecture of Azure Kubernetes Service (AKS) on Azure Local. Understanding these components will provide you with a clearer picture of how to effectively deploy and manage your containerized applications within your own data center.
-![Diagramm Azure Local by Azure Arc Jumpstart](/assets/img/post/2025-01-09-azure-local-aks/Diagramm01.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/Diagramm01.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/Diagramm01.png" alt="Diagramm Azure Local by Azure Arc Jumpstart" style="border: 2px solid grey;">
+</a>
+
 *Diagram courtesy of [Azure Arc Jumpstart](https://azurearcjumpstart.com/).*
-![Diagramm AKS on Azure Local by Microsoft Learn](/assets/img/post/2025-01-09-azure-local-aks/Diagramm02.png){: style="border: 2px solid grey;"}
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/Diagramm02.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/Diagramm02.png" alt="Diagramm AKS on Azure Local by Microsoft Learn" style="border: 2px solid grey;">
+</a>
+
 *Diagram courtesy of [Microsoft Learn](https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture).*
 
 ### Core Components
@@ -238,7 +248,9 @@ Deploying Azure Kubernetes Service (AKS) on Windows Server or Azure Stack HCI 22
   - **Kubernetes Services**:
     - 1 IP per service
 
-![Diagramm AKS on Azure Stack HCI 22H2](/assets/img/post/2025-01-09-azure-local-aks/diagramm03.svg){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/diagramm03.svg" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/diagramm03.svg" alt="Diagramm AKS on Azure Local 22H2" style="border: 2px solid grey;">
+</a>
 
 - **Networking Complexity**:
   - The networking setup can be intricate, especially when segregating the HCI cluster, management AKS cluster, and workload clusters.
@@ -281,7 +293,9 @@ Since my main goal is to demonstrate a straightforward deployment of AKS on Azur
    If you’ve got more horsepower than my humble setup, feel free to expand your cluster configuration.
 
 Tests with larger sizes have reported problems to me:
-![AKS RAM Lack](/assets/img/post/2025-01-09-azure-local-aks/LowRam.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/LowRam.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/LowRam.png" alt="AKS RAM Lack" style="border: 2px solid grey;">
+</a>
 
 ### Deployment Process
 
@@ -289,53 +303,79 @@ There are several ways to deploy AKS on Azure Local, via Bicep, ARM templates, A
 
 1. **Create a Logical Network (if not already done)**:
    - Go to the Azure Portal and define a logical network with the necessary IP range.
-![Creating logical network](/assets/img/post/2025-01-09-azure-local-aks/01.png){: style="border: 2px solid grey;"}
-![logical network configuration](/assets/img/post/2025-01-09-azure-local-aks/02.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/01.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/01.png" alt="Creating logical network" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/02.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/02.png" alt="Logical network configuration" style="border: 2px solid grey;">
+</a>
 
 2. **Use the Wizard to Create an AKS Cluster**:
    - Navigate to the Azure Local AKS wizard and provide the required parameters.
-![Creating AKS on Azure local](/assets/img/post/2025-01-09-azure-local-aks/03.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/03.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/03.png" alt="Creating AKS on Azure local" style="border: 2px solid grey;">
+</a>
 
 3. **Cluster Configuration**:
    - **Kubernetes Cluster Name**: Assign a meaningful name.
    - **Custom Location**: Select the predefined custom location.
    - **Kubernetes Version**: There are currently six versions available; I chose the default (1.28.9).
-![AKS Cluster details](/assets/img/post/2025-01-09-azure-local-aks/04.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/04.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/04.png" alt="AKS Cluster details" style="border: 2px solid grey;">
+</a>
 
 4. **Primary Node Pool**:
    - Configure the node pool where applications will run:
      - **Node Count**: 1
      - **vCPUs**: 4
      - **Memory**: 16 GB
-![Primary Node Pool](/assets/img/post/2025-01-09-azure-local-aks/05.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/05.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/05.png" alt="Primary Node Pool" style="border: 2px solid grey;">
+</a>
 
 5. **Control Plane**:
    - Assign resources to the control plane:
      - **vCPUs**: 2
      - **Memory**: 8 GB
-![Control Plane](/assets/img/post/2025-01-09-azure-local-aks/06.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/06.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/06.png" alt="Control Plane" style="border: 2px solid grey;">
+</a>
 
 6. **Access Configuration**:
    - Link the Entra ID group defined earlier to manage cluster access.
-![AKS Access EntraID](/assets/img/post/2025-01-09-azure-local-aks/07.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/07.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/07.png" alt="AKS Access EntraID" style="border: 2px solid grey;">
+</a>
 
 7. **Network Configuration**:
    - Ensure your logical network is selected, and verify that the control plane IP is outside the IP pool range.
    - If the IPs overlap, you’ll receive a validation error during setup.
    - We'll delve deeper into networking configurations shortly.
-![AKS Network Configuration](/assets/img/post/2025-01-09-azure-local-aks/08.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/08.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/08.png" alt="AKS Network Configuration" style="border: 2px solid grey;">
+</a>
 
 8. **Monitoring Setup**:
    - Enable monitoring options as per your requirements.
-![AKS Monitoring 01](/assets/img/post/2025-01-09-azure-local-aks/09.png){: style="border: 2px solid grey;"}
-![AKS Monitoring 02](/assets/img/post/2025-01-09-azure-local-aks/10.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/09.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/09.png" alt="AKS Monitoring 01" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/10.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/10.png" alt="AKS Monitoring 02" style="border: 2px solid grey;">
+</a>
 
 9. **Deployment**:
    - Once everything is configured, review the settings and hit **Deploy**.
-![AKS Deployment](/assets/img/post/2025-01-09-azure-local-aks/11.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/11.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/11.png" alt="AKS Deployment" style="border: 2px solid grey;">
+</a>
 
 By following these steps, you’ll have your AKS cluster up and running on Azure Local. 
-![AKS Deployment Completed](/assets/img/post/2025-01-09-azure-local-aks/12.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/12.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/12.png" alt="AKS Deployment Completed" style="border: 2px solid grey;">
+</a>
 
 In the next sections, we’ll explore load balancing, application testing, and other advanced configurations. For now, let’s celebrate the simplicity of this deployment process!
 
@@ -345,17 +385,25 @@ An AKS cluster without proper network configuration is of limited use, as it won
 
 1. **Activate the Networking Extension**: Navigate to the Azure portal and enable the networking extension for your AKS cluster.
 
-![AKS Networking Activation](/assets/img/post/2025-01-09-azure-local-aks/13.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/13.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/13.png" alt="AKS Networking Activation" style="border: 2px solid grey;">
+</a>
 
-![AKS Networking Extension](/assets/img/post/2025-01-09-azure-local-aks/14.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/14.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/14.png" alt="AKS Networking Extension" style="border: 2px solid grey;">
+</a>
 
   *Note*: Ensure that the resource provider **Microsoft.HybridConnectivity** is registered in your Azure subscription. This step is crucial; attempting to activate the extension without this provider will result in an error.
 
 2. **Configure External IP Addresses**: After activating the extension, go to the 'Networking' tab in your AKS cluster settings. Here, you can add external IP addresses that your applications will use upon deployment.
 
-![AKS Creating Load Balancer - Step 1](/assets/img/post/2025-01-09-azure-local-aks/15.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/15.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/15.png" alt="AKS Creating Load Balancer - Step 1" style="border: 2px solid grey;">
+</a>
 
-![AKS Creating Load Balancer - Step 2](/assets/img/post/2025-01-09-azure-local-aks/16.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/16.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/16.png" alt="AKS Creating Load Balancer - Step 2" style="border: 2px solid grey;">
+</a>
 
    In the example above, I've selected an IP range (172.19.19.120-172.19.19.124) for the Load Balancer to utilize. The accepted notation format is indicated in the information box.
 
@@ -374,26 +422,53 @@ Whenever I’ve set up AKS (especially in Azure Stack PoCs) with clients, the fi
 Yes, you heard that right. There’s a simple way to deploy a quick demonstration application, and it’s a crowd-pleaser. Here’s how you can get it running in no time:
 
 1. Go to the **Namespaces** tab in your AKS cluster and click **+Add**.
-![AKS Deploy App 1](/assets/img/post/2025-01-09-azure-local-aks/17.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/17.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/17.png" alt="AKS Deploy App 1" style="border: 2px solid grey;">
+</a>
+
 2. Select **Deploy a quickstart application to get up and running**.
-![AKS Deploy App 2](/assets/img/post/2025-01-09-azure-local-aks/18.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/18.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/18.png" alt="AKS Deploy App 2" style="border: 2px solid grey;">
+</a>
+
 3. Choose **Create a basic web application**.
-![AKS Deploy App 3](/assets/img/post/2025-01-09-azure-local-aks/19.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/19.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/19.png" alt="AKS Deploy App 3" style="border: 2px solid grey;">
+</a>
+
 4. Follow the tutorial by clicking **Next** on the three prompts.
-![AKS Deploy App 4](/assets/img/post/2025-01-09-azure-local-aks/20.png){: style="border: 2px solid grey;"}
-![AKS Deploy App 5](/assets/img/post/2025-01-09-azure-local-aks/21.png){: style="border: 2px solid grey;"}
-![AKS Deploy App 6](/assets/img/post/2025-01-09-azure-local-aks/22.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/20.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/20.png" alt="AKS Deploy App 4" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/21.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/21.png" alt="AKS Deploy App 5" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/22.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/22.png" alt="AKS Deploy App 6" style="border: 2px solid grey;">
+</a>
+
 5. Click **Keep** to finalize the setup, and voilà, you now have a working dog-and-cat counter! 🎉
-![AKS Deploy App 7](/assets/img/post/2025-01-09-azure-local-aks/23.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/23.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/23.png" alt="AKS Deploy App 7" style="border: 2px solid grey;">
+</a>
 
 To ensure everything is working:
 - Check the IP assigned to the application.
-![AKS Deploy App 8](/assets/img/post/2025-01-09-azure-local-aks/24.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/24.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/24.png" alt="AKS Deploy App 8" style="border: 2px solid grey;">
+</a>
+
 - Open it in your browser to test functionality.
-![AKS Deploy App 9](/assets/img/post/2025-01-09-azure-local-aks/25.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/25.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/25.png" alt="AKS Deploy App 9" style="border: 2px solid grey;">
+</a>
 
 Unfortunately, as of now, there’s an issue where the application can’t fetch the image assets correctly. 
-![AKS Deploy App 10](/assets/img/post/2025-01-09-azure-local-aks/26.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/26.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/26.png" alt="AKS Deploy App 10" style="border: 2px solid grey;">
+</a>
 
 While this might seem disappointing, it’s a fantastic opportunity to learn how AKS handles deployments behind the scenes.
 
@@ -1001,9 +1076,17 @@ This application features:
 
 Once deployed, the store runs perfectly, allowing you to explore its functionality without hiccups. 🤗
 
-![AKS Deploy App 11](/assets/img/post/2025-01-09-azure-local-aks/27.png){: style="border: 2px solid grey;"}
-![AKS Deploy App 12](/assets/img/post/2025-01-09-azure-local-aks/28.png){: style="border: 2px solid grey;"}
-![AKS Deploy App 13](/assets/img/post/2025-01-09-azure-local-aks/29.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/27.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/27.png" alt="AKS Deploy App 11" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/28.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/28.png" alt="AKS Deploy App 12" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/29.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/29.png" alt="AKS Deploy App 13" style="border: 2px solid grey;">
+</a>
 
 ### Thoughts on Managing Applications in AKS
 
@@ -1052,44 +1135,71 @@ For this demonstration, I’m using the same AKS cluster where I deployed the we
 
 #### 1. Prepare the Log Analytics Workspace (LAW)
 To deploy the data controller, you'll need a Log Analytics Workspace (LAW) and its primary key. Select your LAW (e.g., `akshybrid-law`) and copy the primary key:
-![Log Analytics Primary Key](/assets/img/post/2025-01-09-azure-local-aks/lawpk.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/lawpk.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/lawpk.png" alt="Log Analytics Primary Key" style="border: 2px solid grey;">
+</a>
 
 #### 2. Deploy the Azure Arc Data Controller
 - Navigate to the Azure Arc portal and select **Data Controllers**.
 - Click **Create** and choose **Azure Arc-enabled Kubernetes cluster (Direct connectivity mode)**:
-  ![Select Direct Connectivity Mode](/assets/img/post/2025-01-09-azure-local-aks/031.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/031.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/031.png" alt="Select Direct Connectivity Mode" style="border: 2px solid grey;">
+</a>
 
 - Specify the resource group and give the data controller a name:
-  ![Data Controller Details](/assets/img/post/2025-01-09-azure-local-aks/032.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/032.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/032.png" alt="Data Controller Details" style="border: 2px solid grey;">
+</a>
 
 - Create a new custom location specific to the data services. This differs technically from the Azure Local custom location as it’s not used for VM deployments. Ensure the custom location name differs from the namespace to avoid redundancy errors:
-  ![Create Custom Location](/assets/img/post/2025-01-09-azure-local-aks/033.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/033.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/033.png" alt="Create Custom Location" style="border: 2px solid grey;">
+</a>
 
 - Choose the **azure-arc-aks-hci** Kubernetes configuration and provide credentials for metrics and logs:
-  ![Kubernetes Configuration](/assets/img/post/2025-01-09-azure-local-aks/034.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/034.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/034.png" alt="Kubernetes Configuration" style="border: 2px solid grey;">
+</a>
 
 - Select the LAW and paste the primary key:
-  ![Attach LAW](/assets/img/post/2025-01-09-azure-local-aks/035.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/035.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/035.png" alt="Attach LAW" style="border: 2px solid grey;">
+</a>
 
 - Add tags if necessary and proceed to deployment:
-  ![Deploy Data Controller](/assets/img/post/2025-01-09-azure-local-aks/036.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/036.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/036.png" alt="Deploy Data Controller" style="border: 2px solid grey;">
+</a>
 
 #### 3. Deploy SQL Managed Instance
 - In the Azure Arc portal, navigate to **SQL Managed Instances** and click **Create**:
-  ![Create SQL Managed Instance](/assets/img/post/2025-01-09-azure-local-aks/041.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/041.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/041.png" alt="Create SQL Managed Instance" style="border: 2px solid grey;">
+</a>
 
 - Specify the subscription, resource group, and name. Select the custom location created earlier and ensure the load balancer uses the IP range configured during AKS networking setup:
-  ![SQLmi Configuration](/assets/img/post/2025-01-09-azure-local-aks/042.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/042.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/042.png" alt="SQLmi Configuration" style="border: 2px solid grey;">
+</a>
 
 - Select the service tier and size. For testing, you can opt for a **development-only** instance, which is free:
-  ![SQLmi Cost Selection](/assets/img/post/2025-01-09-azure-local-aks/044.png){: style="border: 2px solid grey;}
-  ![Development-Only Cost](/assets/img/post/2025-01-09-azure-local-aks/043.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/044.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/044.png" alt="SQLmi Cost Selection" style="border: 2px solid grey;">
+</a>
+
+<a href="/assets/img/post/2025-01-09-azure-local-aks/043.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/043.png" alt="Development-Only Cost" style="border: 2px solid grey;">
+</a>
 
 - Provide a username and password. Optionally, you can configure an AD connector if previously set up in the data controller. For simplicity, we’ll skip this:
-  ![SQLmi Credentials](/assets/img/post/2025-01-09-azure-local-aks/045.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/045.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/045.png" alt="SQLmi Credentials" style="border: 2px solid grey;">
+</a>
 
 - Review and complete the deployment:
-  ![Deployment Ready](/assets/img/post/2025-01-09-azure-local-aks/046.png){: style="border: 2px solid grey;"}
+<a href="/assets/img/post/2025-01-09-azure-local-aks/046.png" target="_blank">
+  <img src="/assets/img/post/2025-01-09-azure-local-aks/046.png" alt="Deployment Ready" style="border: 2px solid grey;">
+</a>
 
 ### Conclusion related to SQLmi
 As demonstrated, deploying SQL Managed Instance in Azure Local is a straightforward process, provided you meet the hardware requirements. Despite my lab limitations, I hope this walkthrough has shown how simple and effective it can be to leverage SQLmi and Arc Data Services on Azure Local.

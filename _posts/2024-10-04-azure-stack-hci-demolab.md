@@ -1,8 +1,8 @@
 ---
-title: "Azure Stack HCI: Demolab"
-excerpt: "Streamline Azure Stack HCI deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
+title: "Azure Local: Demolab"
+excerpt: "Streamline Azure Local deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2025-04-01
+last_modified_at: 2025-05-05
 categories:
   - Blog
 tags:
@@ -31,15 +31,18 @@ sidebar:
   
 ---
 
-## Azure Stack HCI: Demolab
+This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
+{: .notice--info}
 
-Azure Stack HCI is a hyperconverged infrastructure solution that combines software-defined compute, storage, and networking. While it's a powerful tool for modernizing your data center and integrating with Azure services, setting it up for testing or development can be resource-intensive.
+## Azure Local: Demolab
 
-Deploying Azure Stack HCI can often seem daunting, especially when constrained by hardware resources. Traditional methods typically require substantial infrastructure, making it challenging for individuals or small teams to set up testing and lab environments. In this article, I'll explore a streamlined approach using the **AzSHCI** scripts, which allow you to deploy Azure Stack HCI on minimal hardware setups, such as a laptop.
+Azure Local is a hyperconverged infrastructure solution that combines software-defined compute, storage, and networking. While it's a powerful tool for modernizing your data center and integrating with Azure services, setting it up for testing or development can be resource-intensive.
+
+Deploying Azure Local can often seem daunting, especially when constrained by hardware resources. Traditional methods typically require substantial infrastructure, making it challenging for individuals or small teams to set up testing and lab environments. In this article, I'll explore a streamlined approach using the **AzSHCI** scripts, which allow you to deploy Azure Local on minimal hardware setups, such as a laptop.
 
 ## Existing Solutions and Their Limitations
 
-Several tools and guides exist to help deploy Azure Stack HCI in lab environments. However, they often come with limitations that make them less suitable for minimal hardware setups.
+Several tools and guides exist to help deploy Azure Local in lab environments. However, they often come with limitations that make them less suitable for minimal hardware setups.
 
 ### MSLab by Jaromir Kaspar
 
@@ -54,7 +57,7 @@ Several tools and guides exist to help deploy Azure Stack HCI in lab environment
 - **Cons:**
   - Setup process involves more steps and hardware resources compared to AzSHCI.
 
-Additionally, the [DellGEOS Repository](https://github.com/DellGEOS/AzureStackHOLs) offers more current scenarios and use cases. Most scenarios in the DellGEOS repository are designed for infrastructures somewhat more robust than a simple laptop. In the past, DellGEOS has been the base for my configurations on Azure Stack HCI with Dell hardware, providing very current troubleshooting scenarios.
+Additionally, the [DellGEOS Repository](https://github.com/DellGEOS/AzureStackHOLs) offers more current scenarios and use cases. Most scenarios in the DellGEOS repository are designed for infrastructures somewhat more robust than a simple laptop. In the past, DellGEOS has been the base for my configurations on Azure Local with Dell hardware, providing very current troubleshooting scenarios.
 
 ### Azure Arc Jumpstart by Lior Kamrat
 
@@ -71,7 +74,7 @@ Additionally, the [DellGEOS Repository](https://github.com/DellGEOS/AzureStackHO
 
 ### Manual Deployment
 
-Deploying Azure Stack HCI manually using the [Deployment Guide](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-virtual) is another option. However, this manual approach has several drawbacks:
+Deploying Azure Local manually using the [Deployment Guide](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-virtual) is another option. However, this manual approach has several drawbacks:
 
 - **Pros:**
   - Direct control over the deployment process.
@@ -83,11 +86,11 @@ Deploying Azure Stack HCI manually using the [Deployment Guide](https://learn.mi
 
 ## Why AzSHCI?
 
-The **AzSHCI** scripts are designed to bridge this gap by providing a lightweight, efficient way to deploy Azure Stack HCI on minimal hardware. Key advantages include:
+The **AzSHCI** scripts are designed to bridge this gap by providing a lightweight, efficient way to deploy Azure Local on minimal hardware. Key advantages include:
 
 - **Resource Efficiency:** Optimized for environments with limited CPU, RAM, and storage.
 - **Simplicity:** Straightforward scripts that are easy to understand and modify.
-- **Quick Deployment:** Allows you to set up a single-node Azure Stack HCI cluster rapidly for testing and development.
+- **Quick Deployment:** Allows you to set up a single-node Azure Local cluster rapidly for testing and development.
 
 ## Prerequisites
 
@@ -108,15 +111,15 @@ Before you begin, ensure you meet the following requirements:
 
 ### Understanding Nested Virtualization
 
-The **AzSHCI** scripts leverage **Nested Virtualization** to create a fully functional Azure Stack HCI environment within your existing hypervisor setup. This means you can run virtual machines (VMs) inside other VMs, allowing you to simulate a complex infrastructure on minimal hardware.
+The **AzSHCI** scripts leverage **Nested Virtualization** to create a fully functional Azure Local environment within your existing hypervisor setup. This means you can run virtual machines (VMs) inside other VMs, allowing you to simulate a complex infrastructure on minimal hardware.
 
 The deployment process involves the following key steps:
 
-- **Installation of Windows Server 2025 Evaluation**: The scripts automate the setup of a Windows Server 2025 VM, which will be configured as an Active Directory Domain Controller (DC). This includes installing updates and preparing the environment for cluster registration, which is essential for setting up Azure Stack HCI.
+- **Installation of Windows Server 2025 Evaluation**: The scripts automate the setup of a Windows Server 2025 VM, which will be configured as an Active Directory Domain Controller (DC). This includes installing updates and preparing the environment for cluster registration, which is essential for setting up Azure Local.
 
-- **Setup of the Azure Stack HCI Node**: Another VM is created to serve as the Azure Stack HCI node. Thanks to Nested Virtualization, this node can act as a hypervisor itself, allowing you to run additional workloads or services on top of it.
+- **Setup of the Azure Local Node**: Another VM is created to serve as the Azure Local node. Thanks to Nested Virtualization, this node can act as a hypervisor itself, allowing you to run additional workloads or services on top of it.
 
-By utilizing Nested Virtualization, you can simulate a realistic Azure Stack HCI deployment without the need for extensive physical hardware, making it ideal for testing and development purposes.
+By utilizing Nested Virtualization, you can simulate a realistic Azure Local deployment without the need for extensive physical hardware, making it ideal for testing and development purposes.
 
 
 ### Repository Overview
@@ -170,7 +173,7 @@ AzSHCI/
 
 **Cluster Node Configuration Script**
 
-- **Purpose:** Configures the Azure Stack HCI node VM.
+- **Purpose:** Configures the Azure Local node VM.
 - **Features:**
   - Removes ISO media from the VM.
   - Creates a setup user and renames the VM.
@@ -205,7 +208,7 @@ AzSHCI/
 
 ## Step-by-Step Deployment Guide
 
-Below is the exact deployment process to set up your Azure Stack HCI environment using the **AzSHCI** scripts. This guide will help you get everything up and running smoothly.
+Below is the exact deployment process to set up your Azure Local environment using the **AzSHCI** scripts. This guide will help you get everything up and running smoothly.
 
 ### 1. Download the Scripts from the Repository
 
@@ -220,9 +223,9 @@ Or download the repository manually: [Download Here](https://github.com/schmittn
 ### 2. Download the Necessary ISO Files
 
 - **Windows Server 2025 Evaluation ISO**: [Download Here](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2025)
-- **Azure Stack HCI OS ISO**: Download directly from the Azure Portal.
+- **Azure Local OS ISO**: Download directly from the Azure Portal.
 
-Place both ISO files in the `C:\ISO` directory and rename the isos if you consider it convenient, for example I renamed the Azure Stack HCI iso to `HCI23H2.iso` and the Windows Server 2025 iso to `W2025.iso`.
+Place both ISO files in the `C:\ISO` directory and rename the isos if you consider it convenient, for example I renamed the Azure Local iso to `HCI23H2.iso` and the Windows Server 2025 iso to `W2025.iso`.
 
 ### 3. Preparing Your Environment
 
@@ -248,7 +251,7 @@ The you can run the script:
 .\00_Infra_AzHCI.ps1
 ```
 
-This script will set up the virtual networking, create necessary folder structures, and deploy the VMs for the Domain Controller (DC) and the Azure Stack HCI node.
+This script will set up the virtual networking, create necessary folder structures, and deploy the VMs for the Domain Controller (DC) and the Azure Local node.
 
 
 ### 5. Manual Installation of the DC Operating System
@@ -285,7 +288,7 @@ This process takes approximately **30 minutes** due to Windows Updates. The scri
 ### 7. Manual Installation of the Node Operating System
 
 - **Start the NODE VM**: Open Hyper-V Manager and start the `NODE` VM.
-- **Follow the Installation Wizard**: Proceed through the Azure Stack HCI OS installation wizard.
+- **Follow the Installation Wizard**: Proceed through the Azure Local OS installation wizard.
 - **Perform First Login**: Log in as the Administrator for the first time.
 
 No additional configuration is needed at this stage.
@@ -349,7 +352,7 @@ Once the cluster node script completes and extensions are correctly installed, f
 
    - **Subscription Level:**
      - If not an Owner or Contributor, assign the following roles to the user performing the registration:
-       - Azure Stack HCI Administrator
+       - Azure Local Administrator
        - Reader
 
    - **Resource Group Level:**
@@ -367,7 +370,7 @@ Once the cluster node script completes and extensions are correctly installed, f
 
 2. **Initial Cluster Registration:**
 
-   - Use the Azure Portal for initial cluster registration: [Azure Stack HCI Deployment via Portal](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deploy-via-portal)
+   - Use the Azure Portal for initial cluster registration: [Azure Local Deployment via Portal](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deploy-via-portal)
 
    - **Extension Installation**
      - Since April 2025, extensions must be installed manually during the cluster deployment. To do this, simply select the nodes and click the Install extensions button:
@@ -380,6 +383,7 @@ Once the cluster node script completes and extensions are correctly installed, f
 <a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/networkconfiguration.png" target="_blank">
   <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/networkconfiguration.png" alt="Network Configuration" style="border: 2px solid grey;">
 </a>
+
      - Personally, I use the following IP configurations:
 <a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/ipconfiguration.png" target="_blank">
   <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/ipconfiguration.png" alt="IP Configuration" style="border: 2px solid grey;">
@@ -407,7 +411,7 @@ Once the cluster node script completes and extensions are correctly installed, f
 
 ## Cost Considerations
 
-One of the advantages of using the **AzSHCI** scripts and Nested Virtualization is the minimal cost involved in setting up your Azure Stack HCI environment.
+One of the advantages of using the **AzSHCI** scripts and Nested Virtualization is the minimal cost involved in setting up your Azure Local environment.
 
 - **Hardware Costs**: 0€
   - I use my regular work laptop for deployment, so there are no additional hardware expenses.
@@ -416,17 +420,17 @@ One of the advantages of using the **AzSHCI** scripts and Nested Virtualization 
   - We use the Windows Server 2025 Evaluation version, which is free for 90 days, ample time for testing and development.
 
 - **License Costs for the Node**: 0€
-  - The Azure Stack HCI OS does not incur costs until you register it with Azure Stack HCI.
+  - The Azure Local OS does not incur costs.
 
-- **Azure Stack HCI Costs**: 0€
-  - Azure Stack HCI is free for the first 60 days. Since we won't exceed this period for our testing, no costs will be incurred.
+- **Azure Local Costs**: 0€
+  - Azure Local is free for the first 60 days. Since we won't exceed this period for our testing, no costs will be incurred.
 
 Additionally, every **2 to 3 weeks**, I delete all resources in the Resource Group and use Script `99_Offboarding.ps1` to remove all the infrastructure, allowing me to perform a fresh deployment. This practice helps avoid any unintended costs and keeps the environment clean for new tests.
 
 
 ## Conclusion
 
-By following these steps, you should have a functional Azure Stack HCI environment running on minimal hardware. The **AzSHCI** scripts are designed to make the deployment process as smooth as possible, allowing you to focus on exploring Azure Stack HCI features without worrying about extensive setup procedures.
+By following these steps, you should have a functional Azure Local environment running on minimal hardware. The **AzSHCI** scripts are designed to make the deployment process as smooth as possible, allowing you to focus on exploring Azure Local features without worrying about extensive setup procedures.
 
 
 ## Additional Resources
@@ -435,7 +439,7 @@ By following these steps, you should have a functional Azure Stack HCI environme
 - **MSLab Repository:** [github.com/microsoft/MSLab](https://github.com/microsoft/MSLab)
 - **DellGEOS AzureStackHOLs:** [github.com/DellGEOS/AzureStackHOLs](https://github.com/DellGEOS/AzureStackHOLs)
 - **Azure Arc Jumpstart:** [azurearcjumpstart.io](https://azurearcjumpstart.io/)
-- **Azure Stack HCI Documentation:** [Microsoft Docs](https://docs.microsoft.com/en-us/azure-stack/hci/)
+- **Azure Local Documentation:** [Microsoft Docs](https://docs.microsoft.com/en-us/azure-stack/hci/)
 
 
 ## Future Enhancements
@@ -463,7 +467,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 For any questions or issues, please open an [issue](https://github.com/schmittnieto/AzSHCI/issues) in the repository.
 
 
-Thank you for using **AzSHCI**! I hope these scripts simplify your Azure Stack HCI deployment process and enable efficient testing and development in your environment.
+Thank you for using **AzSHCI**! I hope these scripts simplify your Azure Local deployment process and enable efficient testing and development in your environment.
 
 ## RAW Scripts 
 

@@ -1,7 +1,7 @@
 ---
 title: "Chronicloud Series: A Journey through Azure Solutions"
 date: 2024-09-11
-last_modified_at: 2025-01-17
+last_modified_at: 2025-05-05
 excerpt: "Delve into Azure technologies with the Chronicloud Series. Access in-depth guides and hands-on labs to enhance your skills and understanding in cloud computing."
 categories:
   - Blog
@@ -44,6 +44,9 @@ Welcome to the **Chronicloud Series**, a comprehensive exploration of various Az
 Each article in the **Chronicloud Series** will focus on specific Azure products and solutions, dissecting them in 5-10 parts to provide a well-rounded understanding. From beginner-friendly overviews to advanced use cases, I will cover how these solutions can benefit your cloud infrastructure. I will link to relevant labs and hands-on exercises that I’ll create to provide you with a complete learning experience.
 
 ### Topics Covered
+
+This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
+{: .notice--info}
 
 1. **Azure Stack HCI**  
 Azure Stack HCI is a hyper-converged infrastructure solution from Microsoft that enables organizations to run virtualized workloads on-premises, with integration to Azure. In this series, we'll cover:

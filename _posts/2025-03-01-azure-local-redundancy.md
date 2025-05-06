@@ -2,6 +2,7 @@
 title: "Azure Local: Redundancy"
 excerpt: "Explore the different aspects of redundancy within Azure Local, including node resilience, storage durability, network design, and Active Directory considerations."
 date: 2025-03-01
+last_modified_at: 2025-05-05
 categories:
   - Blog
 tags:
@@ -93,6 +94,7 @@ Microsoft’s fault tolerance documentation for S2D (like [this link](https://le
 <a href="/assets/img/post/2025-03-01-azure-local-redundancy/S2DOnline1.png" target="_blank">
   <img src="/assets/img/post/2025-03-01-azure-local-redundancy/S2DOnline1.png" alt="S2D Online Tolerances" style="border: 2px solid grey;">
 </a>
+
 - Situations where everything goes offline (drives lost in three or more servers at once, or losing three nodes simultaneously):
 <a href="/assets/img/post/2025-03-01-azure-local-redundancy/S2DOffline1.png" target="_blank">
   <img src="/assets/img/post/2025-03-01-azure-local-redundancy/S2DOffline1.png" alt="S2D Offline Tolerances" style="border: 2px solid grey;">
