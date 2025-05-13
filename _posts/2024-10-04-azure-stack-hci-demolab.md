@@ -11,8 +11,8 @@ tags:
   - Azure Local
 
 redirect_from:
-  - /blog/azure-local-demolab
-  - /blog/azure-stack-hci-demolab
+  - /blog/azure-local-demolab/
+  - /blog/azure-stack-hci-demolab/
 
 sticky: false
 
