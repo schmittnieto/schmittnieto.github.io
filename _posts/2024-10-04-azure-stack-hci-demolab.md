@@ -13,6 +13,7 @@ tags:
 redirect_from:
   - /blog/azure-local-demolab/
   - /blog/azure-stack-hci-demolab/
+  - /azure-local-lab/
 
 sticky: false
 
