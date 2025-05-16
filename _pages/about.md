@@ -47,6 +47,10 @@ I also guide clients through their digital transformation journeys using modern 
 
 As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
 <div class="Certifications" style="text-align: center;">
+  <a href="https://www.credly.com/badges/1e812232-ae96-4aba-b1f3-ef021a1d562e/public_url" target="_blank">
+    <img src="/assets/img/mscca2025.png" alt="Microsoft Community Advocate 2025" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Microsoft Community Advocate 2025</div>
+  </a>
   <a href="https://www.credly.com/badges/c9188d86-44a2-457b-bcb7-11423a24a97c/public_url" target="_blank">
     <img src="/assets/img/mscc2025.png" alt="Microsoft Community Contributor 2025" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Microsoft Community Contributor 2025</div>
