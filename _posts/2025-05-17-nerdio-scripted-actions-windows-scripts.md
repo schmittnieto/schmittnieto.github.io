@@ -210,18 +210,20 @@ Currently, the repository shows three scripts, with three more in development. H
      <img src="/assets/img/post/2025-05-17-nerdio-scripted-actions-windows-scripts/script03.png" alt="OneDrive Remote App Configuration" style="border: 2px solid grey;">
    </a>
 
-### Using My Scripts Without Nerdio
+### Running My Scripts Independently of Nerdio
 
-You can run these scripts standalone on any Windows host:
+If you need to test or apply these scripts on a Windows VM without connecting to Nerdio Manager, you can execute them directly. This method is handy for quick troubleshooting or one-off tasks:
 
-1. Download the script file to your machine.  
-2. Open PowerShell as Administrator.  
-3. Bypass execution policy and run, for example:  
+1. **Download** the desired `.ps1` file from the GitHub repo to your local machine.  
+2. **Open** PowerShell as an Administrator.  
+3. **Bypass** the execution policy and run the script. For example, to hide drives “C” and “D”:
+
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force
 .\HideDrives.ps1 -Action Hide -DrivesToHide "C,D"
-```
+```  
 
+That’s it, your script will run immediately, just as it would within Nerdio’s framework.
 
 ### How to Collaborate
 
