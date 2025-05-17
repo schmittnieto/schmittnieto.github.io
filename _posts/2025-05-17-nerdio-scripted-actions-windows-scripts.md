@@ -131,14 +131,14 @@ Scripted Action Groups let you combine multiple scripted actions (Windows Script
 
 ## My Scripted Actions Repository
 
-I’ve created the “[nerdio-scripted-actions](https://github.com/schmittnieto/nerdio-scripted-actions)” repo on GitHub. Nerdio also maintains its own scripts under [NMW Scripted Actions](https://github.com/Get-Nerdio/NMW/tree/main/scripted-actions). Many of these are based on the [RDS-Templates](https://github.com/Azure/RDS-Templates/tree/master/CustomImageTemplateScripts/CustomImageTemplateScripts_2024-03-27) project. For example:
+To help you get started with Nerdio Scripted Actions, I’ve curated a dedicated GitHub repo at [nerdio-scripted-actions](https://github.com/schmittnieto/nerdio-scripted-actions). Inside, you’ll find a growing collection of PowerShell scripts designed for everything from image customization to day-to-day host-pool tasks.
 
-- **Install language packs.ps1** (Nerdio)  
-  https://github.com/Get-Nerdio/NMW/blob/main/scripted-actions/custom-image-template-scripts/Install%20language%20packs.ps1  
-- **InstallLanguagePacks.ps1** (RDS-Templates)  
-  https://github.com/Azure/RDS-Templates/blob/master/CustomImageTemplateScripts/CustomImageTemplateScripts_2024-03-27/InstallLanguagePacks.ps1  
+Nerdio maintains its own library under [NMW Scripted Actions](https://github.com/Get-Nerdio/NMW/tree/main/scripted-actions), many of which are drawn from Microsoft’s [RDS-Templates](https://github.com/Azure/RDS-Templates/tree/master/CustomImageTemplateScripts) project. To illustrate, here are two complementary scripts:
 
-Nerdio scripts include a header like this:
+- **Install language packs.ps1** (Nerdio): [Install language packs.ps1](https://github.com/Get-Nerdio/NMW/blob/main/scripted-actions/custom-image-template-scripts/Install%20language%20packs.ps1)  
+- **InstallLanguagePacks.ps1** (RDS-Templates): [InstallLanguagePacks.ps1](https://github.com/Azure/RDS-Templates/blob/master/CustomImageTemplateScripts/CustomImageTemplateScripts_2024-03-27/InstallLanguagePacks.ps1)  
+
+The Nerdio script begins with a standardized header that defines metadata and user-input variables. For example:
 
 ```powershell
 <#
@@ -157,13 +157,15 @@ Nerdio scripts include a header like this:
   }
 }
 #>
-```
+```  
 
-In the variables section you define fields for end users, in this case, a language picker:
+In the **variables** section, you define the fields that end users will interact with, here, a simple language picker:
 
 <a href="/assets/img/post/2025-05-17-nerdio-scripted-actions-windows-scripts/variables.png" target="_blank">
   <img src="/assets/img/post/2025-05-17-nerdio-scripted-actions-windows-scripts/variables.png" alt="Nerdio Scripted Actions Variables" style="border: 2px solid grey;">
-</a>
+</a>  
+
+By hosting these scripts in your own repo, you gain full control over versioning, customizations and integration with Nerdio’s “Script repositories” feature, making your AVD automation both transparent and repeatable.  
 
 ## Integrating the Repository in Nerdio
 
@@ -225,7 +227,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 I’ll keep this repo updated as new requests and use cases come up. I’m also working on integrating my scripts into the official Nerdio repository via this [pull request](https://github.com/Get-Nerdio/NMW/pull/40). If you want to contribute:
 
-- Open an **Issue** on the repo: https://github.com/schmittnieto/nerdio-scripted-actions/issues  
+- Open an **Issue** on the repo: [https://github.com/schmittnieto/nerdio-scripted-actions/issues}(https://github.com/schmittnieto/nerdio-scripted-actions/issues)  
 - Fork the repo and submit a **Pull Request** with your scripts  
 - Not comfortable on GitHub? Feel free to reach out to me on LinkedIn and we can collaborate privately.
 
