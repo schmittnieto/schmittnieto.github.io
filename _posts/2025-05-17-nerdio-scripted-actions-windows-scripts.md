@@ -167,7 +167,7 @@ In the **variables** section, you define the fields that end users will interact
 
 By hosting these scripts in your own repo, you gain full control over versioning, customizations and integration with Nerdio’s “Script repositories” feature, making your AVD automation both transparent and repeatable.  
 
-## Integrating the Repository in Nerdio
+### Integrating the Repository in Nerdio
 
 1. Go to **Settings > Environment > Integrations > Script repositories**:
 
