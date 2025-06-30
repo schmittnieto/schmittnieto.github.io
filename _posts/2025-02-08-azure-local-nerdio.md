@@ -8,6 +8,7 @@ tags:
   - Azure Local
   - Azure Stack HCI
   - Nerdio
+  - Azure Virtual Desktop
   - AVD
 
 sticky: false

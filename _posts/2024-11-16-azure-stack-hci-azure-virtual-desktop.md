@@ -10,6 +10,8 @@ tags:
   - Azure Stack HCI
   - Azure Local
   - Azure Virtual Desktop
+  - AVD
+  - RDP Shortpath
 
 sticky: false
 

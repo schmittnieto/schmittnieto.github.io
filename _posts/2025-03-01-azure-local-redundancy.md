@@ -9,7 +9,8 @@ tags:
   - Azure Local
   - Azure Stack HCI
   - Redundancy
-
+  - Azure Virtual Desktop
+  
 sticky: false
 
 header:
