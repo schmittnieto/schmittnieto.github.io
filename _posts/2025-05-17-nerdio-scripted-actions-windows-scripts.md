@@ -229,7 +229,7 @@ That’s it, your script will run immediately, just as it would within Nerdio’
 
 I’ll keep this repo updated as new requests and use cases come up. I’m also working on integrating my scripts into the official Nerdio repository via this [pull request](https://github.com/Get-Nerdio/NMW/pull/40). If you want to contribute:
 
-- Open an **Issue** on the repo: [https://github.com/schmittnieto/nerdio-scripted-actions/issues}(https://github.com/schmittnieto/nerdio-scripted-actions/issues)  
+- Open an **Issue** on the repo: [https://github.com/schmittnieto/nerdio-scripted-actions/issues](https://github.com/schmittnieto/nerdio-scripted-actions/issues)  
 - Fork the repo and submit a **Pull Request** with your scripts  
 - Not comfortable on GitHub? Feel free to reach out to me on LinkedIn and we can collaborate privately.
 
