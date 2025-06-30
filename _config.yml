@@ -25,7 +25,8 @@ masthead_title: "To Infinity and Azure"
 search: true
 lunr:
   search_within_pages: true
-
+  search_full_content: true
+  
 # Miscellaneous 
 enable_copy_code_button: true
 teaser: /assets/img/avatar-logo2.png
