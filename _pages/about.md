@@ -47,6 +47,10 @@ I also guide clients through their digital transformation journeys using modern 
 
 As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
 <div class="Certifications" style="text-align: center;">
+  <a href="/assets/img/cert/NMEPS-100.pdf" target="_blank">
+    <img src="/assets/img/nerdio-nmeps-100.png" alt="Nerdio Enterprise Partner Sales Fundamentals (NMEPS-100)" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Nerdio Enterprise Partner Sales Fundamentals (NMEPS-100)</div>
+  </a>
   <a href="/assets/img/cert/NME-201.pdf" target="_blank">
     <img src="/assets/img/nerdio-nme-201.png" alt="Nerdio Manager for Enterprise Foundations (NME-201)" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Nerdio Manager for Enterprise Foundations (NME-201)</div>
