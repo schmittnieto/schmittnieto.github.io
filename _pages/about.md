@@ -41,7 +41,7 @@ I also guide clients through their digital transformation journeys using modern 
 
 * **Hybrid Cloud:** Merging on-premise and cloud environments to build robust IT solutions.
 * **Azure Infrastructure:** Specializing in Azure Virtual Desktop and public Azure services to meet diverse business needs.
-* **Client Solutions:** Delivering tailored strategies for successful cloud adoption.
+* **Client Solutions:** Delivering tailored strategies for successful cloud adoption. 
 
 ## Certifications
 
