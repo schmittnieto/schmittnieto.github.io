@@ -31,3 +31,5 @@ Azurelocal:
       url: /blog/azure-local-backup-and-disaster-recovery/
     - title: "Azure Local Calculator"
       url: /azurelocal-calculator/
+    - title: "Awesome Azure Local"
+      url: https://github.com/schmittnieto/awesome-azure-local
