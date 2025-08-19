@@ -2,6 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "A curated list of links and resources for working with Azure Local and its related technologies. This post mirrors my GitHub repository for better search and indexing."
 date: 2025-08-09
+last_modified_at: 2025-08-19
 categories:
   - Blog
 tags:
@@ -50,7 +51,7 @@ GitHub source: [https://github.com/schmittnieto/awesome-azure-local](https://git
 * Press Ctrl F to search within the page
 * Open links in a new tab to keep your place
 
-_Last updated: {{ page.last_modified_at | date: '%Y-%m-%d' }}. If you spot a gap or a broken link, open an issue or pull request in the GitHub repo [link](https://github.com/schmittnieto/awesome-azure-local/issues/new/choose)._
+_If you spot a gap or a broken link, open an issue or pull request in the GitHub repo [link](https://github.com/schmittnieto/awesome-azure-local/issues/new/choose)._
 
 
 <!-- AWESOMEAZURELOCAL:START -->

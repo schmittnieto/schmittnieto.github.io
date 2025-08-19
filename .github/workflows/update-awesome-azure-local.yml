@@ -3,8 +3,7 @@ name: Update Awesome Azure Local article
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'assets/repo/awesome-azure-local/**'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,6 +15,8 @@ concurrency:
 jobs:
   update-article:
     runs-on: ubuntu-latest
+    # Do not run on our own "[skip ci]" commits; still allow manual runs
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]')
 
     steps:
       - name: Checkout blog
@@ -37,9 +38,13 @@ jobs:
           START = "<!-- AWESOMEAZURELOCAL:START -->"
           END   = "<!-- AWESOMEAZURELOCAL:END -->"
 
+          # Skip gracefully if files are not present on unrelated commits
           if not os.path.exists(README_PATH):
-            print(f"Missing {README_PATH}")
-            sys.exit(1)
+            print(f"README not found at {README_PATH}. Skipping.")
+            sys.exit(0)
+          if not os.path.exists(ARTICLE_PATH):
+            print(f"Article not found at {ARTICLE_PATH}. Skipping.")
+            sys.exit(0)
 
           # Read README and extract the block
           with open(README_PATH, "r", encoding="utf-8") as f:
@@ -48,8 +53,8 @@ jobs:
           m = re.search(r'<!--\s*AWESOMEAZURELOCAL:START\s*-->(.*?)<!--\s*AWESOMEAZURELOCAL:END\s*-->',
                         readme, flags=re.DOTALL | re.IGNORECASE)
           if not m:
-            print("Markers not found in README")
-            sys.exit(1)
+            print("Markers not found in README. Skipping.")
+            sys.exit(0)
 
           block = m.group(1).strip()
 
@@ -75,16 +80,13 @@ jobs:
             return f"[{text}]({BLOB_ROOT}{url})"
           block = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', link_repl, block)
 
-          if not os.path.exists(ARTICLE_PATH):
-            print(f"Missing article at {ARTICLE_PATH}")
-            sys.exit(1)
-
+          # Load article
           with open(ARTICLE_PATH, "r", encoding="utf-8") as f:
             article = f.read()
 
           if START not in article or END not in article:
-            print("Markers not found in article")
-            sys.exit(1)
+            print("Markers not found in article. Skipping.")
+            sys.exit(0)
 
           # Update last_modified_at in front matter
           def update_last_modified(text):
@@ -102,6 +104,7 @@ jobs:
                     fm = fm + f"\nlast_modified_at: {today}"
                 return f"---{fm}---{body}"
             return text
+
           article = update_last_modified(article)
 
           # Replace block between markers
@@ -109,11 +112,11 @@ jobs:
           new_article = pattern.sub(START + "\n\n" + block + "\n\n" + END, article)
 
           if new_article == article:
-            print("No changes to write")
+            print("No changes to write.")
           else:
             with open(ARTICLE_PATH, "w", encoding="utf-8") as f:
               f.write(new_article)
-            print("Article updated")
+            print("Article updated from README block.")
           PY
 
       - name: Commit and push
