@@ -1,0 +1,123 @@
+name: Update Awesome Azure Local article
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'assets/repo/awesome-azure-local/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-awesome-azure-local
+  cancel-in-progress: true
+
+jobs:
+  update-article:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout blog
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config user.name "schmittnieto"
+          git config user.email "cristian@schmitt-nieto.com"
+
+      - name: Insert README block into article
+        run: |
+          python3 - <<'PY'
+          import os, re, sys, datetime
+
+          ARTICLE_PATH = "_posts/2025-08-09-awesome-azure-local.md"
+          README_PATH  = "assets/repo/awesome-azure-local/README.md"
+
+          START = "<!-- AWESOMEAZURELOCAL:START -->"
+          END   = "<!-- AWESOMEAZURELOCAL:END -->"
+
+          if not os.path.exists(README_PATH):
+            print(f"Missing {README_PATH}")
+            sys.exit(1)
+
+          # Read README and extract the block
+          with open(README_PATH, "r", encoding="utf-8") as f:
+            readme = f.read()
+
+          m = re.search(r'<!--\s*AWESOMEAZURELOCAL:START\s*-->(.*?)<!--\s*AWESOMEAZURELOCAL:END\s*-->',
+                        readme, flags=re.DOTALL | re.IGNORECASE)
+          if not m:
+            print("Markers not found in README")
+            sys.exit(1)
+
+          block = m.group(1).strip()
+
+          # Rewrite image URLs to GitHub Raw when they are relative
+          RAW_ROOT = "https://raw.githubusercontent.com/schmittnieto/awesome-azure-local/main/"
+          def img_repl(m):
+            alt = m.group(1)
+            url = m.group(2).strip()
+            if re.match(r'^(https?|mailto):', url, flags=re.I) or url.startswith('#'):
+              return m.group(0)
+            url = re.sub(r'^\./', '', url).lstrip('/')
+            return f"![{alt}]({RAW_ROOT}{url})"
+          block = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', img_repl, block)
+
+          # Rewrite relative links to GitHub Blob
+          BLOB_ROOT = "https://github.com/schmittnieto/awesome-azure-local/blob/main/"
+          def link_repl(m):
+            text = m.group(1)
+            url  = m.group(2).strip()
+            if re.match(r'^(https?|mailto):', url, flags=re.I) or url.startswith('#'):
+              return m.group(0)
+            url = re.sub(r'^\./', '', url).lstrip('/')
+            return f"[{text}]({BLOB_ROOT}{url})"
+          block = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', link_repl, block)
+
+          if not os.path.exists(ARTICLE_PATH):
+            print(f"Missing article at {ARTICLE_PATH}")
+            sys.exit(1)
+
+          with open(ARTICLE_PATH, "r", encoding="utf-8") as f:
+            article = f.read()
+
+          if START not in article or END not in article:
+            print("Markers not found in article")
+            sys.exit(1)
+
+          # Update last_modified_at in front matter
+          def update_last_modified(text):
+            today = datetime.date.today().isoformat()
+            if text.startswith("---"):
+              parts = text.split("---", 2)
+              if len(parts) >= 3:
+                fm, body = parts[1], parts[2]
+                if re.search(r'(?m)^last_modified_at\s*:', fm):
+                  fm = re.sub(r'(?m)^(last_modified_at\s*:\s*).+$', r'\g<1>'+today, fm)
+                else:
+                  if re.search(r'(?m)^date\s*:', fm):
+                    fm = re.sub(r'(?m)^(date\s*:\s*.+)$', r'\1\nlast_modified_at: '+today, fm, count=1)
+                  else:
+                    fm = fm + f"\nlast_modified_at: {today}"
+                return f"---{fm}---{body}"
+            return text
+          article = update_last_modified(article)
+
+          # Replace block between markers
+          pattern = re.compile(re.escape(START) + r"(.*?)" + re.escape(END), flags=re.DOTALL)
+          new_article = pattern.sub(START + "\n\n" + block + "\n\n" + END, article)
+
+          if new_article == article:
+            print("No changes to write")
+          else:
+            with open(ARTICLE_PATH, "w", encoding="utf-8") as f:
+              f.write(new_article)
+            print("Article updated")
+          PY
+
+      - name: Commit and push
+        run: |
+          git add .
+          git commit -m "Update Awesome Azure Local block from README [skip ci]" || echo "No changes to commit"
+          git push origin main
