@@ -1,6 +1,6 @@
 ---
 title: "Awesome Azure Local"
-excerpt: "A curated list of links and resources for working with Azure Local and its related technologies. This post mirrors my GitHub repository for better search and indexing."
+excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
 last_modified_at: 2025-08-19
 categories:
