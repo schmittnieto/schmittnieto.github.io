@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-08-21
+last_modified_at: 2025-08-22
 categories:
   - Blog
 tags:
@@ -223,6 +223,11 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
   Hydra product overview from Login VSI.  
 - [Hydra - Imaging, Rollout and Manage Azure Virtual Desktop on Azure Local](https://blog.itprocloud.de/AVD-Hydra-For-Azure-Stack-HCI-Deplyoment-Management/)  
   Article by Marcel Meurer on configuring Hydra for Azure Local.  
+
+#### Citrix
+
+- [Citrix Virtual Desktop / App - Connecting Azure Local](https://docs.citrix.com/en-us/citrix-virtual-apps-desktops/2507-ltsr/install-configure/connections/connection-azure-local)  
+  As of August 22, 2025, Citrix has published a guide on how to use Citrix Virtual Desktop and Apps with Azure Local.
 
 ### Sizing
 
