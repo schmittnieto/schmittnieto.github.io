@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-08-22
+last_modified_at: 2025-08-26
 categories:
   - Blog
 tags:
@@ -339,6 +339,9 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
 
 ### Events
 
-- [Microsoft Ignite - Azure Hybrid Sessions](https://ignite.microsoft.com/en-US/home)
+| Name                               | Description                                                                 | Price       | Remote | Date |
+|------------------------------------|-----------------------------------------------------------------------------|-------------|--------|------|
+| [AVD Tech Fest - Berlin (Germany)](https://www.controlup.com/de/avd-techfest-2025/) | Community-driven event focused on Azure Virtual Desktop and Azure Local integration. | 99 € | No | September 10-11, 2025 |
+| [Microsoft Ignite - San Francisco (USA)](https://register.ignite.microsoft.com/) | Flagship Microsoft conference featuring hybrid cloud and Azure Local sessions. | 2325 $ | Yes (Digital pass are **Free**) | November 17-21, 2025 |
 
 <!-- AWESOMEAZURELOCAL:END -->
