@@ -131,7 +131,7 @@ By utilizing Nested Virtualization, you can simulate a realistic Azure Local dep
 
 The **AzSHCI** scripts are hosted on GitHub: [github.com/schmittnieto/AzSHCI](https://github.com/schmittnieto/AzSHCI)
 
-<a href="https://github.com/schmittnieto/AzSHCI"><img src="https://badgen.net/https/raw.githubusercontent.com/schmittnieto/AzSHCI/refs/heads/main/lastdeployment.json"></a>
+<a href="https://github.com/schmittnieto/AzSHCI"><img src="https://badgen.net/https/raw.githubusercontent.com/schmittnieto/AzSHCI/refs/heads/main/lastdeployment.json?cache=300"></a>
 
 The repository is structured as follows:
 
