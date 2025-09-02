@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-08-26
+last_modified_at: 2025-09-02
 categories:
   - Blog
 tags:
@@ -141,6 +141,9 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
   Main page that aggregates the Dell Azure Local resources mentioned above.  
 - [Dell - SBE Page](https://www.dell.com/support/kbdoc/en-us/000224407/dell-for-microsoft-azure-stack-hci-ax-hardware-updates-release-notes)  
   Page for managing firmware and driver updates on Dell hardware.  
+- [Dell - External Storage with PowerFlex for Azure Local (White Paper)](https://www.delltechnologies.com/asset/en-us/products/converged-infrastructure/technical-support/reliable-performance-at-scale-white-paper.pdf)  
+  White paper explaining the possibility and results of adding external storage to Azure Local as Cluster Storage using Dell PowerFlex (currently the only supported option).
+
 
 ### HPE
 
