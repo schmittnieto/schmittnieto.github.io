@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-09-05
+last_modified_at: 2025-09-08
 categories:
   - Blog
 tags:
@@ -256,6 +256,8 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
   Yes, naming my own blog first is bad form, but here I share hands-on content about Azure Local implementation and management.  
 - [hybridcore.ca](https://hybridcore.ca/posts/adopting-azlocal-vms/)  
   Blog by [Tiberiu Radu](https://www.linkedin.com/in/rtiberiu/)  featuring, in my opinion, the best article on how to adopt (indirectly migrate) a VM from Hyper-V to Azure Local.
+- [darifer.net](https://www.darifer.net/index.php/category/azure-local/)  
+  Blog by [David Rivera](https://www.linkedin.com/in/davidriverafer) with detailed posts in Spanish on Azure Local, covering version upgrades, deployment and comparisons with Windows Server.
 - [mikemdm.de](https://mikemdm.de/tag/azure-local/)  
   Blog by MVP [Michael Meier](https://www.linkedin.com/in/michael-meier-ba3b72210/) covering the topic Azure Local and AVD Labs.
 - [blog.graa.dev](https://blog.graa.dev/tags/azure-local/)  
