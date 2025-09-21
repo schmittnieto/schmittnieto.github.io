@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-09-17
+last_modified_at: 2025-09-21
 categories:
   - Blog
 tags:
@@ -345,6 +345,8 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
   Slack channel (the real Community) managed by Darryl van der Peijl that provides community support for all Azure Local questions.  
 
 ### Trainings
+- [Azure Local Accreditation 2025](https://learn.microsoft.com/en-us/training/paths/azure-local-accreditation-2025/)  
+  Part of the official Microsoft Learn documentation, this training path helps you get in touch with Azure Local and its core capabilities.
 - [Azure Local Training](https://360.articulate.com/review/content/6c4554d6-8ccc-4b9b-bc6b-328c7429efce/review)   
   Training module covering how to deploy and register Azure Local using OEM licenses, among other key topics.  
 
