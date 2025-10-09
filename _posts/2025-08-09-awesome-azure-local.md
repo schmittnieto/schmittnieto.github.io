@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-09-24
+last_modified_at: 2025-10-09
 categories:
   - Blog
 tags:
@@ -143,6 +143,8 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
   Page for managing firmware and driver updates on Dell hardware.  
 - [Dell - External Storage with PowerFlex for Azure Local (White Paper)](https://www.delltechnologies.com/asset/en-us/products/converged-infrastructure/technical-support/reliable-performance-at-scale-white-paper.pdf)  
   White paper explaining the possibility and results of adding external storage to Azure Local as Cluster Storage using Dell PowerFlex (currently the only supported option).
+- [Dell - How to Expand a CSV in PowerShell and Windows Admin Center](https://www.dell.com/support/kbdoc/en-us/000195872/how-to-expand-a-csv-in-ps-and-wac)  
+  Guide explaining how to expand a Cluster Shared Volume (CSV) or Virtual Disk in Storage Spaces Direct (S2D) using PowerShell and Windows Admin Center.
 
 
 ### HPE
