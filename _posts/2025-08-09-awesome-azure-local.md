@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-10-09
+last_modified_at: 2025-10-24
 categories:
   - Blog
 tags:
@@ -81,6 +81,8 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
   Overview of Azure Local solution types, outlining the differences between Validated Systems, Integrated Systems, and Premier solution.
 - [Azure Local Security Book (Microsoft Docs)](https://learn.microsoft.com/en-us/azure/azure-local/security-book/overview)  
   The Azure Local security book discusses in detail the built-in security layers found in Azure Local, from core to cloud.
+- [Optimize Azure Local using insights from a Well-Architected Review Assessment](https://techcommunity.microsoft.com/blog/AzureArchitectureBlog/optimize-azure-local-using-insights-from-a-well-architected-review-assessment/4458433)  
+  Guidance on evaluating Azure Local environments with the Well-Architected Framework assessment to identify risks, measure maturity, and improve architecture quality.
 
 ### AVD
 
