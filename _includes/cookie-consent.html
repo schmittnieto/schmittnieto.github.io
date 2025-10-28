@@ -1,161 +1,225 @@
+<!-- === Head: Consent defaults y bootstrap mínimo (colócalo antes de cualquier GA/Clarity) === -->
+<script>
+  // DataLayer y gtag bootstrap
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  // Consent Mode v2: valores por defecto en denegado
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    analytics_storage: 'denied'
+  });
+
+  // API de Clarity disponible antes de usar consentv2
+  window.clarity = window.clarity || function(){ (window.clarity.q = window.clarity.q || []).push(arguments); };
+</script>
+
 <style>
-    /* Existing CSS styles */
-    #cookie-notice {
-        font-weight: 900;
-        font-size: 1rem;
-        padding: 0.5rem 1rem;
-        display: none; /* Hidden by default */
-        text-align: center;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: #222;
-        color: rgba(255, 255, 255, 0.8);
-        z-index: 9000;
-        border-top: 2px solid #00a8ff;
-        box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.3);
-    }
+  /* Existing CSS styles */
+  #cookie-notice {
+      font-weight: 900;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      display: none; /* Hidden by default */
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #222;
+      color: rgba(255, 255, 255, 0.8);
+      z-index: 9000;
+      border-top: 2px solid #00a8ff;
+      box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.3);
+  }
 
-    #cookie-notice a {
-        color: #00a8ff;
-        margin-left: 1rem;
-        font-weight: 600;
-    }
+  #cookie-notice a {
+      color: #00a8ff;
+      margin-left: 1rem;
+      font-weight: 600;
+  }
 
-    #cookie-notice .btn {
-        background-color: #00a8ff;
-        border: none;
-        color: white;
-        padding: 0.5rem 1rem;
-        text-transform: uppercase;
-        cursor: pointer;
-        margin-left: 1rem;
-        border-radius: 4px;
-    }
+  #cookie-notice .btn {
+      background-color: #00a8ff;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-left: 1rem;
+      border-radius: 4px;
+  }
 
-    #cookie-notice .btn:hover {
-        background-color: #0073b1;
-    }
+  #cookie-notice .btn:hover {
+      background-color: #0073b1;
+  }
 
-    @media (max-width: 767px) {
-        #cookie-notice {
-            padding: 1rem;
-        }
+  @media (max-width: 767px) {
+      #cookie-notice {
+          padding: 1rem;
+      }
 
-        #cookie-notice span {
-            display: block;
-            margin-bottom: 10px;
-        }
+      #cookie-notice span {
+          display: block;
+          margin-bottom: 10px;
+      }
 
-        #cookie-notice .btn {
-            display: inline-block;
-            margin: 5px 0;
-        }
-    }
+      #cookie-notice .btn {
+          display: inline-block;
+          margin: 5px 0;
+      }
+  }
 
-    /* Cookie button that appears after user's decision */
-    #cookie-toggle {
-        position: fixed;
-        bottom: 20px;
-        right: 15px;
-        font-size: 32px; /* Emoji size */
-        cursor: pointer;
-        z-index: 9001;
-        display: none; /* Initially hidden */
-        background: none;
-        border: none;
-    }
+  /* Cookie button that appears after user's decision */
+  #cookie-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 15px;
+      font-size: 32px; /* Emoji size */
+      cursor: pointer;
+      z-index: 9001;
+      display: none; /* Initially hidden */
+      background: none;
+      border: none;
+  }
 </style>
 
 <!-- Cookie Policy Banner -->
 <div id="cookie-notice">
-    <span>We use cookies to enhance your experience. <a href="/privacy-policy/">Privacy Policy</a></span>
-    <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Accept</a>
-    <a id="cookie-notice-decline" class="btn btn-primary btn-sm">Decline</a>
+  <span>We use cookies to enhance your experience. <a href="/privacy-policy/">Privacy Policy</a></span>
+  <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Accept</a>
+  <a id="cookie-notice-decline" class="btn btn-primary btn-sm">Decline</a>
 </div>
 
 <!-- Cookie button 🍪 that appears after acceptance/rejection -->
 <button id="cookie-toggle">🍪</button>
 
 <script>
-    // Function to create a cookie
-    function createCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + value + expires + "; path=/";
+  // -------- Utilidades de cookies --------
+  function createCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
     }
+    document.cookie = name + "=" + value + expires + "; path=/; SameSite=Lax";
+  }
 
-    // Function to read a cookie
-    function readCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
     }
+    return null;
+  }
 
-    // Function to load Google Analytics and Microsoft Clarity
-    function loadAnalytics() {
-        // Load Google Analytics
-        var scriptGA = document.createElement("script");
-        scriptGA.src = "https://www.googletagmanager.com/gtag/js?id=G-0JC8WREF2K";
-        scriptGA.async = true;
-        document.head.appendChild(scriptGA);
+  // -------- Carga condicional de etiquetas --------
+  function loadGA() {
+    if (document.getElementById('ga4-loader')) return; // evita duplicados
+    var sGA = document.createElement('script');
+    sGA.id = 'ga4-loader';
+    sGA.src = 'https://www.googletagmanager.com/gtag/js?id=G-0JC8WREF2K';
+    sGA.async = true;
+    document.head.appendChild(sGA);
+    sGA.onload = function () {
+      // gtag ya está definido arriba
+      gtag('js', new Date());
+      gtag('config', 'G-0JC8WREF2K');
+    };
+  }
 
-        scriptGA.onload = function() {
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){ dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', 'G-0JC8WREF2K');
-        };
+  function loadClarity() {
+    if (document.getElementById('clarity-loader')) return; // evita duplicados
+    var sCl = document.createElement('script');
+    sCl.id = 'clarity-loader';
+    sCl.async = true;
+    sCl.src = 'https://www.clarity.ms/tag/odc6tt5gf3';
+    document.head.appendChild(sCl);
+  }
 
-        // Initialize Clarity
-        window.clarity = window.clarity || function() {
-            (window.clarity.q = window.clarity.q || []).push(arguments);
-        };
-
-        // Load Microsoft Clarity
-        var scriptClarity = document.createElement("script");
-        scriptClarity.type = "text/javascript";
-        scriptClarity.async = true;
-        scriptClarity.src = "https://www.clarity.ms/tag/odc6tt5gf3";
-        document.head.appendChild(scriptClarity);
-    }
-
-    // Check if cookies have been accepted or declined
+  function loadAnalyticsIfConsented() {
+    // Solo cargamos si el usuario ya otorgó consentimiento
     if (readCookie('cookie-notice-dismissed') === 'true') {
-        document.getElementById('cookie-toggle').style.display = 'block'; // Show the cookie button
-        loadAnalytics(); // Load Google Analytics and Clarity if cookies have been accepted
-    } else {
-        document.getElementById('cookie-notice').style.display = 'block'; // Show the cookie banner
+      loadGA();
+      loadClarity();
     }
+  }
 
-    // When "Accept" is clicked
-    document.getElementById('cookie-notice-accept').addEventListener("click", function() {
-        createCookie('cookie-notice-dismissed', 'true', 31); // Create the cookie for 31 days
-        document.getElementById('cookie-notice').style.display = 'none';
-        document.getElementById('cookie-toggle').style.display = 'block'; // Show the cookie button
-        loadAnalytics(); // Load Google Analytics and Clarity immediately
+  // -------- Gestión de consentimiento --------
+  function grantConsent() {
+    // Google Consent Mode
+    gtag('consent', 'update', {
+      ad_storage: 'granted',
+      analytics_storage: 'granted'
     });
 
-    // When "Decline" is clicked
-    document.getElementById('cookie-notice-decline').addEventListener("click", function() {
-        createCookie('cookie-notice-dismissed', 'false', 31); // Create cookie but do not load analytics
-        document.getElementById('cookie-notice').style.display = 'none';
-        document.getElementById('cookie-toggle').style.display = 'block'; // Show the cookie button
+    // Señal directa a Clarity
+    window.clarity('consentv2', {
+      ad_Storage: 'granted',
+      analytics_Storage: 'granted'
+    });
+  }
+
+  function denyConsent() {
+    gtag('consent', 'update', {
+      ad_storage: 'denied',
+      analytics_storage: 'denied'
     });
 
-    // When the cookie button is clicked
-    document.getElementById('cookie-toggle').addEventListener("click", function() {
-        document.getElementById('cookie-notice').style.display = 'block'; // Show the banner again
-        document.getElementById('cookie-toggle').style.display = 'none'; // Hide the cookie button
+    window.clarity('consentv2', {
+      ad_Storage: 'denied',
+      analytics_Storage: 'denied'
     });
+  }
+
+  // -------- Estado inicial --------
+  (function initConsentUI() {
+    var choice = readCookie('cookie-notice-dismissed');
+    var banner = document.getElementById('cookie-notice');
+    var toggleBtn = document.getElementById('cookie-toggle');
+
+    if (choice === 'true') {
+      // Usuario ya aceptó
+      toggleBtn.style.display = 'block';
+      grantConsent();
+      loadAnalyticsIfConsented();
+    } else if (choice === 'false') {
+      // Usuario ya denegó
+      toggleBtn.style.display = 'block';
+      denyConsent();
+      banner.style.display = 'block'; // Puedes ocultarlo si prefieres no re-pedir
+    } else {
+      // Usuario nuevo
+      banner.style.display = 'block';
+    }
+  })();
+
+  // -------- Eventos de UI --------
+  document.getElementById('cookie-notice-accept').addEventListener('click', function () {
+    createCookie('cookie-notice-dismissed', 'true', 31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    document.getElementById('cookie-toggle').style.display = 'block';
+    grantConsent();
+    loadAnalyticsIfConsented();
+  });
+
+  document.getElementById('cookie-notice-decline').addEventListener('click', function () {
+    var wasTrue = readCookie('cookie-notice-dismissed') === 'true';
+    createCookie('cookie-notice-dismissed', 'false', 31);
+    document.getElementById('cookie-notice').style.display = 'none';
+    document.getElementById('cookie-toggle').style.display = 'block';
+    denyConsent();
+
+    // Opcional: si el usuario revoca consentimiento, recarga para "apagar" etiquetas ya cargadas.
+    // if (wasTrue) location.reload();
+  });
+
+  document.getElementById('cookie-toggle').addEventListener('click', function () {
+    document.getElementById('cookie-notice').style.display = 'block';
+    document.getElementById('cookie-toggle').style.display = 'none';
+  });
 </script>
