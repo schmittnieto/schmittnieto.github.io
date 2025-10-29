@@ -1,10 +1,10 @@
-<!-- === Head: defaults de consentimiento y carga temprana de Clarity en modo restringido === -->
+<!-- === Head: Consent Mode por defecto y bootstrap mínimo (coloca este bloque en <head> antes de cualquier otro script) === -->
 <script>
-  // dataLayer + gtag bootstrap
+  // dataLayer + gtag
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
 
-  // Google Consent Mode v2: por defecto todo denegado
+  // Google Consent Mode v2: todo denegado por defecto
   gtag('consent', 'default', {
     ad_storage: 'denied',
     analytics_storage: 'denied',
@@ -12,32 +12,66 @@
     ad_personalization: 'denied'
   });
 
-  // Stub de Clarity + señal de no consentimiento por defecto
-  window.clarity = window.clarity || function(){ (window.clarity.q = window.clarity.q || []).push(arguments); };
-  window.clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'denied' });
+  // Flags para controlar Clarity
+  window.__CLARITY_ALLOWED__ = false;   // solo true tras "Accept"
+  window.__clarityLoaded = false;       // evita cargas duplicadas
 
-  // Carga SIEMPRE el tag de Clarity; operará sin cookies mientras no haya consentimiento
-  (function loadClarityEarly(){
-    if (document.getElementById('clarity-loader')) return;
+  // Carga condicional de Clarity: solo si hay consentimiento
+  function loadClarity(){
+    if (!window.__CLARITY_ALLOWED__ || window.__clarityLoaded) return;
+    // Stub de cola antes de cargar el script real (no envía datos por sí mismo)
+    window.clarity = window.clarity || function(){ (window.clarity.q = window.clarity.q || []).push(arguments); };
+
+    // Señal de consentimiento para Clarity antes de cargar el tag
+    window.clarity('consentv2', { ad_Storage: 'granted', analytics_Storage: 'granted' });
+
+    // Inserta el tag de Clarity
+    if (document.getElementById('clarity-loader')) { window.__clarityLoaded = true; return; }
     var sCl = document.createElement('script');
     sCl.id = 'clarity-loader';
     sCl.async = true;
     sCl.src = 'https://www.clarity.ms/tag/odc6tt5gf3';
+    sCl.onload = function(){ window.__clarityLoaded = true; };
     document.head.appendChild(sCl);
-  })();
+  }
 </script>
 
 <style>
-  /* Tu CSS original… */
-  #cookie-notice{font-weight:900;font-size:1rem;padding:.5rem 1rem;display:none;text-align:center;position:fixed;bottom:0;left:0;width:100%;background:#222;color:rgba(255,255,255,.8);z-index:9000;border-top:2px solid #00a8ff;box-shadow:0 -3px 5px rgba(0,0,0,.3)}
-  #cookie-notice a{color:#00a8ff;margin-left:1rem;font-weight:600}
-  #cookie-notice .btn{background-color:#00a8ff;border:none;color:#fff;padding:.5rem 1rem;text-transform:uppercase;cursor:pointer;margin-left:1rem;border-radius:4px}
-  #cookie-notice .btn:hover{background-color:#0073b1}
-  @media (max-width:767px){#cookie-notice{padding:1rem}#cookie-notice span{display:block;margin-bottom:10px}#cookie-notice .btn{display:inline-block;margin:5px 0}}
-  #cookie-toggle{position:fixed;bottom:20px;right:15px;font-size:32px;cursor:pointer;z-index:9001;display:none;background:none;border:none}
+  /* Existing CSS styles */
+  #cookie-notice {
+      font-weight: 900;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      display: none;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #222;
+      color: rgba(255, 255, 255, 0.8);
+      z-index: 9000;
+      border-top: 2px solid #00a8ff;
+      box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.3);
+  }
+  #cookie-notice a { color:#00a8ff; margin-left:1rem; font-weight:600; }
+  #cookie-notice .btn {
+      background-color:#00a8ff; border:none; color:#fff; padding:.5rem 1rem;
+      text-transform:uppercase; cursor:pointer; margin-left:1rem; border-radius:4px;
+  }
+  #cookie-notice .btn:hover { background-color:#0073b1; }
+  @media (max-width:767px){
+      #cookie-notice{ padding:1rem; }
+      #cookie-notice span{ display:block; margin-bottom:10px; }
+      #cookie-notice .btn{ display:inline-block; margin:5px 0; }
+  }
+  #cookie-toggle{
+      position:fixed; bottom:20px; right:15px; font-size:32px; cursor:pointer;
+      z-index:9001; display:none; background:none; border:none;
+  }
 </style>
 
-<!-- Banner -->
+<!-- Cookie Policy Banner -->
 <div id="cookie-notice">
   <span>We use cookies to enhance your experience. <a href="/privacy-policy/">Privacy Policy</a></span>
   <a id="cookie-notice-accept" class="btn btn-primary btn-sm">Accept</a>
@@ -46,7 +80,7 @@
 <button id="cookie-toggle">🍪</button>
 
 <script>
-  // --- Utils cookies ---
+  // -------- Utilidades de cookies --------
   function createCookie(name, value, days){
     var expires = "";
     if (days){
@@ -67,7 +101,7 @@
     return null;
   }
 
-  // --- GA4 solo tras consentimiento ---
+  // -------- GA4 solo tras consentimiento --------
   function loadGA(){
     if (document.getElementById('ga4-loader')) return;
     var sGA = document.createElement('script');
@@ -81,7 +115,7 @@
     };
   }
 
-  // --- Señales de consentimiento ---
+  // -------- Gestión de consentimiento --------
   function grantConsent(){
     // Google Consent Mode v2
     gtag('consent', 'update', {
@@ -90,21 +124,32 @@
       ad_user_data: 'granted',
       ad_personalization: 'granted'
     });
-    // Clarity: pasa a modo con cookies y sesión normal
-    window.clarity('consentv2', { ad_Storage: 'granted', analytics_Storage: 'granted' });
+
+    // Permite cargar Clarity y lánzalo
+    window.__CLARITY_ALLOWED__ = true;
+    loadClarity();
   }
+
   function denyConsent(){
+    // Google Consent Mode v2
     gtag('consent', 'update', {
       ad_storage: 'denied',
       analytics_storage: 'denied',
       ad_user_data: 'denied',
       ad_personalization: 'denied'
     });
-    window.clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'denied' });
+
+    // Si Clarity ya estaba cargado de una aceptación previa, corta su actividad
+    if (window.__clarityLoaded && typeof window.clarity === 'function'){
+      try { window.clarity('consentv2', { ad_Storage:'denied', analytics_Storage:'denied' }); } catch(e){}
+      // Recargar garantiza que no se vuelva a cargar Clarity
+      location.reload();
+    }
+    window.__CLARITY_ALLOWED__ = false;
   }
 
-  // --- Estado inicial UI ---
-  (function init(){
+  // -------- Estado inicial --------
+  (function initConsentUI(){
     var choice = readCookie('cookie-notice-dismissed');
     var banner = document.getElementById('cookie-notice');
     var toggle = document.getElementById('cookie-toggle');
@@ -115,14 +160,15 @@
       loadGA();
     } else if (choice === 'false'){
       toggle.style.display = 'block';
-      denyConsent();
-      banner.style.display = 'block'; // o 'none' si no quieres re-pedir
+      // Mantener todo bloqueado y mostrar el banner si quieres re-pedir
+      banner.style.display = 'block';
     } else {
+      // Usuario nuevo
       banner.style.display = 'block';
     }
   })();
 
-  // --- Eventos ---
+  // -------- Eventos --------
   document.getElementById('cookie-notice-accept').addEventListener('click', function(){
     createCookie('cookie-notice-dismissed', 'true', 31);
     document.getElementById('cookie-notice').style.display = 'none';
@@ -136,9 +182,13 @@
     createCookie('cookie-notice-dismissed', 'false', 31);
     document.getElementById('cookie-notice').style.display = 'none';
     document.getElementById('cookie-toggle').style.display = 'block';
-    denyConsent();
-    // Si el usuario revoca desde aceptado a denegado, puedes recargar:
-    // if (wasTrue) location.reload();
+    if (wasTrue){
+      // Revocación: pasa a denegado y recarga para cortar scripts activos
+      denyConsent();
+    } else {
+      // Primer rechazo: simplemente mantén denegado
+      denyConsent();
+    }
   });
 
   document.getElementById('cookie-toggle').addEventListener('click', function(){
