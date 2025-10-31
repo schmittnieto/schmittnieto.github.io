@@ -459,6 +459,10 @@
                       }
                     ]
                   },
+                  "conditionalVisibility": {
+                    "parameterName": "isHealthy",
+                    "comparison": "isNotEqualTo"
+                  },
                   "name": "Health"
                 },
                 {
@@ -471,26 +475,19 @@
                     "expanded": true,
                     "items": [
                       {
-                        "type": 18,
+                        "type": 1,
                         "content": {
-                          "version": "ImageItem/1.0",
-                          "imageUrl": "https://schmitt-nieto.com/assets/img/post/2025-10-31-azure-local-deep-insights/Version.1.0.0.png",
-                          "size": 3,
-                          "title": "Actual Version 1.0.0",
-                          "altText": "Version 1.0.0"
+                          "json": "## Version 1.0.0\r\n\r\n![Version 1.0.0](https://schmitt-nieto.com/assets/img/post/2025-10-31-azure-local-deep-insights/Version.1.0.0.png)\r\n\r\nIf update is needed, please redeploy\r\n\r\n[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fschmitt-nieto.com%2Fassets%2Fimg%2Fpost%2F2025-10-31-azure-local-deep-insights%2FAzureLocalDeepInsights.json)\r\n"
                         },
-                        "customWidth": "10",
-                        "name": "Actual Version 1.0.0",
-                        "styleSettings": {
-                          "maxWidth": "10"
-                        }
+                        "customWidth": "15",
+                        "name": "Current Version"
                       },
                       {
                         "type": 1,
                         "content": {
-                          "json": "# Azure Local Monitoring Workbook\r\n\r\n\r\n\r\nI built this workbook because I couldn’t find an Azure-provided workbook that covered the day-to-day needs I have for Azure Local clusters. This one brings together VM state, CPU, storage and network views in a single place and works across multiple subscriptions and workspaces.\r\n\r\nA step-by-step guide for configuration and deployment is here: <https://schmitt-nieto.com/azure-local-workbook>\r\n\r\n\r\n## What you get\r\n- **Azure Local VMs State**: latest state per VM, plus an expandable history of state changes.\r\n- **Azure Local CPU**: top VMs by guest CPU, per-vCPU drill-down for a selected VM, host CPU load and Virtual Processor totals.\r\n- **Azure Local Storage**: placeholders for latency, IOPS, throughput (ready for your counters).\r\n- **Azure Local Network**: placeholders for throughput and error rates (ready for your counters).\r\n- **Azure Local RAM**: placeholders for Memory (ready for your counters).\r\n\r\n## Global parameters\r\n- **Subscriptions**: one or more Azure subscriptions to scope queries.\r\n- **LogAnalyticsWorkspace**: one or more workspaces that hold your Azure Local logs and perf data.\r\n- **Time range**: select the amounts of hours you want to get the records. \r\n- **Azure Local Cluster**: if you want to specify a Cluster, default Value is all.\r\n- **Node**: if you want to specify a Cluster Node, default Value is all.\r\n\r\n## Required data collection (DCR)\r\nAdd these to your Data Collection Rules so the visuals have the signals they need.\r\n\r\n### **Event logs (paste XPaths without quotes)**\r\n\r\n** VM State Required Logs**\r\n```\r\nMicrosoft-Windows-Hyper-V-Worker-Admin![System[(EventID=18500 or EventID=18502 or EventID=18504 or EventID=18510 or EventID=18512 or EventID=18514 or EventID=18516 or EventID=18518 or EventID=18596 or EventID=18601)]]\r\nMicrosoft-Windows-Hyper-V-VMMS-Admin![System[(EventID=13002 or EventID=13003)]]\r\n```\r\n\r\n\r\n### **Performance counters**\r\n\r\n**VM CPU**\r\n```\r\n\\Hyper-V Hypervisor Virtual Processor()% Guest Run Time\r\n\\Hyper-V Hypervisor Virtual Processor()% Total Run Time\r\n\\Hyper-V Hypervisor Virtual Processor(*)% Hypervisor Run Time\r\n\\Hyper-V Hypervisor Logical Processor(_Total)% Total Run Time\r\n```\r\n\r\n**VM Network Throughput**\r\n```\r\n\\Hyper-V Virtual Network Adapter(*)\\Bytes Received/sec\r\n\\Hyper-V Virtual Network Adapter(*)\\Bytes Sent/sec\r\n\\Hyper-V Virtual Switch(*)\\Bytes Received/sec\r\n\\Hyper-V Virtual Switch(*)\\Bytes Sent/sec\r\n```\r\n\r\n**VM RAM**\r\n```\r\n\\Hyper-V Dynamic Memory VM(*)\\Guest Available Memory\r\n\\Hyper-V Dynamic Memory VM(*)\\Guest Visible Physical Memory\r\n```\r\n\r\n\r\n"
+                          "json": "# Azure Local Deep Insights Workbook\r\n\r\nI built this after not finding a single Azure Local workbook that met my day to day needs. It starts from the default Azure Local Insights workbook and extends it with a deeper view of VMs, including CPU, RAM, and network, all in one place. It works across multiple subscriptions and workspaces.\r\n\r\nA complete build and setup guide is on my blog: [https://schmitt-nieto.com/azure-local-workbook](https://schmitt-nieto.com/azure-local-workbook)\r\n\r\n## What you get\r\n\r\n* **Azure Local VM state**: the latest state for each VM, plus an expandable history of state changes.\r\n* **Azure Local CPU**: top VMs by guest CPU, per vCPU drill down for a selected VM, host CPU load, and virtual processor totals.\r\n* **Azure Local Storage**: cluster level latency, IOPS, and throughput.\r\n* **Azure Local Network**: throughput and traffic sent, from cluster and VMs.\r\n* **Azure Local RAM**: memory usage in Cluster and VMs.\r\n\r\n## Roadmap\r\n\r\n* Add **AKS** views.\r\n* Add **AVD** views. There are already strong AVD workbooks, but I will include an opinionated view here for convenience.\r\n\r\n## Notes and limits\r\n\r\nRight now I have not found a non disruptive way to measure VM storage from inside the guests without side effects. Because of that, storage is reported at the cluster level only for now.\r\n\r\n## Global parameters\r\n\r\n* **Subscriptions**: one or more Azure subscriptions to scope the queries.\r\n* **LogAnalyticsWorkspace**: one or more workspaces that hold your Azure Local logs and performance data.\r\n* **Time range**: choose how many hours of data to query.\r\n* **Azure Local Cluster**: optionally filter to a single cluster. Default is all.\r\n* **Node**: optionally filter to a single cluster node. Default is all.\r\n\r\n## Required data collection (DCR)\r\n\r\nAdd these to your Data Collection Rules so the visuals have the signals they need. I use a Sample rate from 60 seconds, but you can use more or less depending on your needs. \r\n\r\n### Event logs (XPaths)\r\n\r\n**VM state required logs**\r\n\r\n`Microsoft-Windows-Hyper-V-Worker-Admin![System[(EventID=18500 or EventID=18502 or EventID=18504 or EventID=18510 or EventID=18512 or EventID=18514 or EventID=18516 or EventID=18518 or EventID=18596 or EventID=18601)]]`\r\n\r\n`Microsoft-Windows-Hyper-V-VMMS-Admin![System[(EventID=13002 or EventID=13003)]]`\r\n\r\n### Performance counters\r\n\r\n**VM CPU**\r\n\r\n`\\Hyper-V Hypervisor Virtual Processor()% Guest Run Time`\r\n\r\n`\\Hyper-V Hypervisor Virtual Processor()% Total Run Time`\r\n\r\n`\\Hyper-V Hypervisor Virtual Processor(*)% Hypervisor Run Time`\r\n\r\n`\\Hyper-V Hypervisor Logical Processor(_Total)% Total Run Time`\r\n\r\n**VM Network throughput**\r\n\r\n`\\Hyper-V Virtual Network Adapter(*)\\Bytes Received/sec`\r\n\r\n`\\Hyper-V Virtual Network Adapter(*)\\Bytes Sent/sec`\r\n\r\n`\\Hyper-V Virtual Switch(*)\\Bytes Received/sec`\r\n\r\n`\\Hyper-V Virtual Switch(*)\\Bytes Sent/sec`\r\n\r\n**VM RAM**\r\n\r\n`\\Hyper-V Dynamic Memory VM(*)\\Guest Available Memory` \r\n\r\n`\\Hyper-V Dynamic Memory VM(*)\\Guest Visible Physical Memory`\r\n"
                         },
-                        "name": "text - 0"
+                        "name": "Intro"
                       }
                     ]
                   },
@@ -514,16 +511,16 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "# Azure Local VM State and Events\nThis workbook shows the latest state per VM and a raw event table you can search to see recent state changes. It uses events from **Microsoft-Windows-Hyper-V-Worker-Admin**.\n\n## Required DCR change\nAdd these XPaths to your Data Collection Rule under **windowsEventLogs** (paste without leading or trailing quotes):\n\n`Microsoft-Windows-Hyper-V-Worker-Admin!*[System[(EventID=18500 or EventID=18502 or EventID=18504 or EventID=18510 or EventID=18512 or EventID=18514 or EventID=18516 or EventID=18518 or EventID=18596 or EventID=18601)]]`\n\n`Microsoft-Windows-Hyper-V-VMMS-Admin!*[System[(EventID=13002 or EventID=13003)]]`\n"
+                    "json": "# Azure Local VM State and Events\nFast view of VM state across clusters and nodes, plus the latest status per VM such as running or paused. Use All VM state events to browse the full history grouped by state then VM, including entries for VMs that were deleted."
                   },
                   "name": "Intro"
                 },
                 {
                   "type": 1,
                   "content": {
-                    "json": "## VM State\r\n\r\nView the state of virtual machines on each node in the cluster. \r\n\r\n**Other VMs** could be in one of the following states: Starting, Snapshotting, Saving, Stopping, Pausing, Resuming, Paused, Suspended, or Unknown."
+                    "json": "## Cluster VMs Running"
                   },
-                  "name": "Header 1 - Copy"
+                  "name": "text - 7"
                 },
                 {
                   "type": 3,
@@ -532,7 +529,6 @@
                     "query": "let _start = todatetime('{TimeRange:start}');\r\nlet _end   = todatetime('{TimeRange:end}');\r\nlet s      = iff(isnull(_start), ago(30d), _start);\r\nlet e      = iff(isnull(_end),   now(),    _end);\r\n\r\nEvent\r\n| where TimeGenerated between (s .. e)\r\n| where _ResourceId !contains '/Microsoft.AzureStackHCI/'\r\n| where EventLog =~ \"Microsoft-Windows-SDDC-Management/Operational\" and EventID == \"3003\"\r\n| extend ClusterName  = tostring(parse_xml(EventData).DataItem.UserData.EventData[\"ClusterName\"])\r\n| extend ClusterArmId = tostring(parse_xml(EventData).DataItem.UserData.EventData[\"ArmId\"])\r\n| where ClusterArmId in~ ('{resource}')\r\n| summarize arg_max(TimeGenerated, *) by ClusterName\r\n| extend description      = parse_json(RenderedDescription)\r\n| extend VmsUnknown       = tolong(coalesce(description.m_totalVmsUnknown,       0))\r\n| extend VmsRunning       = tolong(coalesce(description.m_totalVmsRunning,       0))\r\n| extend VmsStopped       = tolong(coalesce(description.m_totalVmsStopped,       0))\r\n| extend VmsFailed        = tolong(coalesce(description.m_totalVmsFailed,        0))\r\n| extend VmsPaused        = tolong(coalesce(description.m_totalVmsPaused,        0))\r\n| extend VmsSuspended     = tolong(coalesce(description.m_totalVmsSuspended,     0))\r\n| extend VmsStarting      = tolong(coalesce(description.m_totalVmsStarting,      0))\r\n| extend VmsSnapshotting  = tolong(coalesce(description.m_totalVmsSnapshotting,  0))\r\n| extend VmsSaving        = tolong(coalesce(description.m_totalVmsSaving,        0))\r\n| extend VmsStopping      = tolong(coalesce(description.m_totalVmsStopping,      0))\r\n| extend VmsPausing       = tolong(coalesce(description.m_totalVmsPausing,       0))\r\n| extend VmsResuming      = tolong(coalesce(description.m_totalVmsResuming,      0))\r\n| project\r\n    VmsRunning,\r\n    VmsStopped,\r\n    VmsFailed,\r\n    VmsOther = VmsUnknown + VmsStarting + VmsSnapshotting + VmsSaving + VmsStopping + VmsPausing + VmsResuming + VmsPaused + VmsSuspended\r\n| evaluate narrow()\r\n| project Column, tolong(Value)\r\n",
                     "size": 3,
                     "showAnalytics": true,
-                    "title": "VM states",
                     "timeContextFromParameter": "TimeRange",
                     "showRefreshButton": true,
                     "showExportToExcel": true,
@@ -564,6 +560,13 @@
                     }
                   },
                   "name": "Virtual Machine Chart"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## Node VMs Running"
+                  },
+                  "name": "text - 8"
                 },
                 {
                   "type": 3,
@@ -995,7 +998,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "# Azure Local CPU Usage\nThis workbook shows per-VM CPU using **Hyper-V Hypervisor Virtual Processor** counters in the **Perf** table.\n\n**Required DCR perf counters:**\n```\n\\Hyper-V Hypervisor Virtual Processor(*)\\% Guest Run Time\n\\Hyper-V Hypervisor Virtual Processor(*)\\% Total Run Time\n\\Hyper-V Hypervisor Virtual Processor(*)\\% Hypervisor Run Time\n\\Hyper-V Hypervisor Logical Processor(_Total)\\% Total Run Time\n```"
+                    "json": "## Azure Local CPU\n\nQuick view of CPU across your environment: top VMs by guest CPU, a drill down to vCPU cores for any selected VM, and host level usage with virtual processor totals, Hyper V logical CPU, and physical CPU per node.\n"
                   },
                   "name": "Intro"
                 },
@@ -1518,7 +1521,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "<p>View the health of volumes and drives in the cluster. Select a cluster with the global <b>resource</b> picker. All queries honor the global <b>TimeRange</b>.</p>"
+                    "json": "## Azure Local Storage\r\nCluster level view of volume and drive health with status, capacity, resiliency, and filesystem, plus per volume performance. Charts track IOPS, throughput, and latency over your selected time range and cluster filter.\r\n"
                   },
                   "name": "storage intro"
                 },
@@ -2128,7 +2131,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "**DCR requirement: make sure you collect**\r\n\r\n```\r\n\\Hyper-V Virtual Network Adapter(*)\\Bytes Received/sec\r\n\\Hyper-V Virtual Network Adapter(*)\\Bytes Sent/sec\r\n\\Hyper-V Virtual Switch(*)\\Bytes Received/sec\r\n\\Hyper-V Virtual Switch(*)\\Bytes Sent/sec\r\n```"
+                    "json": "## Azure Local Network\r\nCluster and VM traffic at a glance: RDMA and non RDMA throughput per node, plus VM NIC throughput with a drill down for any selected VM. Honors your time range and cluster filters.\r\n"
                   },
                   "name": "Network Disclaimer"
                 },
