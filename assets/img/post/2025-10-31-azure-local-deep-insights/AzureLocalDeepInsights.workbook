@@ -2365,7 +2365,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## RAM\r\n\r\n**DCR Required**\r\n```\r\n\\Hyper-V Dynamic Memory VM(*)\\Guest Available Memory\r\n\\Hyper-V Dynamic Memory VM(*)\\Guest Visible Physical Memory\r\n```"
+                    "json": "## Azure Local RAM\r\nQuick view of memory across your environment: VM memory percent and bytes, plus a drill down for any selected VM. Honors your time range and filters.\r\n"
                   },
                   "name": "text - 0"
                 },
