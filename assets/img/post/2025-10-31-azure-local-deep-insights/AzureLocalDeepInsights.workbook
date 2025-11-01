@@ -667,6 +667,14 @@
                   "name": "Header 1"
                 },
                 {
+                  "type": 1,
+                  "content": {
+                    "json": "VMs will only be displayed after a successful operation, such as a reboot, creation, or moving the VM to another node in the cluster. If a VM is running but no changes are being registered (since the configuration from Data Collection Rule ), it will not appear. I am currently working on an alternative solution that relies on metrics already being collected for running VMs, such as RAM, CPU, or network usage. Once I implement this functionality, I will remove this disclaimer.\r\n",
+                    "style": "warning"
+                  },
+                  "name": "VM Disclaimer"
+                },
+                {
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
@@ -833,13 +841,20 @@
                   "name": "Header 2"
                 },
                 {
+                  "type": 1,
+                  "content": {
+                    "json": "VMs will only be displayed after a successful operation, such as a reboot, creation, or moving the VM to another node in the cluster. If a VM is running but no changes are being registered (since the configuration from Data Collection Rule ), it will not appear. I am currently working on an alternative solution that relies on metrics already being collected for running VMs, such as RAM, CPU, or network usage. Once I implement this functionality, I will remove this disclaimer.\r\n",
+                    "style": "warning"
+                  },
+                  "name": "All VM Disclaimer"
+                },
+                {
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
                     "query": "let lookback = 36500d;\n\n// Worker/Admin runtime states\nlet WorkerEv =\n    Event\n    | where TimeGenerated > ago(lookback)\n    | where EventLog in (\"Microsoft-Windows-Hyper-V-Worker-Admin\", \"Microsoft-Windows-Hyper-V-Worker/Admin\")\n    | where EventID in (18500,18502,18504,18510,18512,18514,18516,18518,18596,18601)\n    | extend _ed = tostring(column_ifexists(\"EventData\",\"\"))\n    | extend _rd = tostring(column_ifexists(\"RenderedDescription\",\"\"))\n    | extend xml = parse_xml(_ed)\n    | extend VM_from_xml = tostring(coalesce(xml.Event.UserData.VmlEventLog.VmName['#text'], xml.Event.UserData.VmlEventLog.VmName))\n    | extend VM = coalesce(VM_from_xml,\n                           extract(\"'([^']+)'\", 1, _rd),\n                           extract(@\"(?i)virtual machine '([^']+)'\", 1, _rd))\n    | where isnotempty(VM)\n    | extend VMStateEvent = case(\n        EventID in (18500,18518,18596,18601), \"Running\",\n        EventID in (18502,18504),            \"Off\",\n        EventID == 18510,                    \"Saved\",\n        EventID == 18516,                    \"Paused\",\n        EventID in (18512,18514),            \"Reset\",\n                                            \"Other\")\n    | project VM, TimeGenerated, VMStateEvent, EventID, Computer, RenderedDescription=_rd, Source=\"Worker\";\n\n// VMMS lifecycle (Deleted surfaced as a state; Created kept if you decide to include it)\nlet VMMSEv =\n    Event\n    | where TimeGenerated > ago(lookback)\n    | where EventLog in (\"Microsoft-Windows-Hyper-V-VMMS-Admin\", \"Microsoft-Windows-Hyper-V-VMMS/Admin\")\n    | where EventID in (13002,13003)  // 13002=Created, 13003=Deleted\n    | extend _ed = tostring(column_ifexists(\"EventData\",\"\"))\n    | extend _rd = tostring(column_ifexists(\"RenderedDescription\",\"\"))\n    | extend xml = parse_xml(_ed)\n    | extend VM_from_xml = tostring(coalesce(xml.Event.UserData.VmlEventLog.VmName['#text'], xml.Event.UserData.VmlEventLog.VmName))\n    | extend VM = coalesce(VM_from_xml,\n                           extract(\"'([^']+)'\", 1, _rd),\n                           extract(@\"(?i)virtual machine '([^']+)'\", 1, _rd))\n    | where isnotempty(VM)\n    | extend VMStateEvent = case(EventID == 13003, \"Deleted\",\n                                 EventID == 13002, \"Created\", \"Other\")\n    | project VM, TimeGenerated, VMStateEvent, EventID, Computer, RenderedDescription=_rd, Source=\"VMMS\";\n\n// Latest state per VM (label used for grouping)\nlet LastState =\n    union WorkerEv, VMMSEv\n    | where VMStateEvent in (\"Running\",\"Off\",\"Saved\",\"Paused\",\"Reset\",\"Deleted\")\n    | summarize arg_max(TimeGenerated, VMStateEvent) by VM\n    | project VM, LatestState = VMStateEvent\n    | extend LatestStateOrder = case(\n        LatestState == \"Running\", 1,\n        LatestState == \"Off\",     2,\n        LatestState == \"Saved\",   3,\n        LatestState == \"Paused\",  4,\n        LatestState == \"Reset\",   5,\n        LatestState == \"Deleted\", 6,\n        99);\n\n// All events, grouped by Current state > VM (history preserved)\nunion WorkerEv, VMMSEv\n| where VMStateEvent in (\"Running\",\"Off\",\"Saved\",\"Paused\",\"Reset\",\"Deleted\")\n| join kind=inner LastState on VM\n| order by LatestStateOrder asc, VM asc, TimeGenerated desc\n| project\n    VMState      = VMStateEvent,  // per-event state you want to see\n    TimeGenerated,\n    EventID,\n    Computer,\n    RenderedDescription,\n    Source,\n    VM,\n    VMStateGroup = LatestState   // used only for grouping\n\n",
                     "size": 2,
                     "showAnalytics": true,
-                    "title": "All VM state events",
                     "showRefreshButton": true,
                     "showExportToExcel": true,
                     "queryType": 0,
