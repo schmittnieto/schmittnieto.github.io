@@ -77,16 +77,16 @@ Open **Monitoring > Insights**, select **Get started**, then create:
 
 If you already use Insights you can keep your existing workspace and rule.
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted.png" alt="Get started with Insights" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted.webp" alt="Get started with Insights" style="border: 2px solid grey;">
 </a>
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/NewDataCollectionRule.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/NewDataCollectionRule.png" alt="Create Data Collection Rule" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/NewDataCollectionRule.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/NewDataCollectionRule.webp" alt="Create Data Collection Rule" style="border: 2px solid grey;">
 </a>
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted2.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted2.png" alt="Get started with Insights" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted2.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/InsightsGetStarted2.webp" alt="Get started with Insights" style="border: 2px solid grey;">
 </a>
 
 Once created, agents install on each node and a basic set of signals starts to flow. Initial ingestion can take about fifteen minutes. The default rule includes a few performance counters and event logs. The workbook extends this to include VM level views.
@@ -107,8 +107,8 @@ Microsoft-Windows-Hyper-V-Worker-Admin![System[(EventID=18500 or EventID=18502 o
 Microsoft-Windows-Hyper-V-VMMS-Admin![System[(EventID=13002 or EventID=13003)]]
 ```
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/WindowsEventlogs.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/WindowsEventlogs.png" alt="Windows Event Logs in DCR" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/WindowsEventlogs.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/WindowsEventlogs.webp" alt="Windows Event Logs in DCR" style="border: 2px solid grey;">
 </a>
 
 These events capture VM lifecycle from the Hyper-V view. The workbook uses them to build a timeline of **Running**, **Off**, **Saved**, **Paused**, **Deleted**, **Created** and more.
@@ -124,8 +124,8 @@ In your DCR open **Data sources > Performance Counters > Custom** and add the co
 \Hyper-V Hypervisor Logical Processor(_Total)% Total Run Time
 ```
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/CPUPerformanceCounters.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/CPUPerformanceCounters.png" alt="CPU performance counters" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/CPUPerformanceCounters.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/CPUPerformanceCounters.webp" alt="CPU performance counters" style="border: 2px solid grey;">
 </a>
 
 ### Performance counters for Network
@@ -137,8 +137,8 @@ In your DCR open **Data sources > Performance Counters > Custom** and add the co
 \Hyper-V Virtual Switch(*)\Bytes Sent/sec
 ```
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/NetworkPerformanceCounters.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/NetworkPerformanceCounters.png" alt="Network performance counters" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/NetworkPerformanceCounters.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/NetworkPerformanceCounters.webp" alt="Network performance counters" style="border: 2px solid grey;">
 </a>
 
 ### Performance counters for Memory
@@ -148,8 +148,8 @@ In your DCR open **Data sources > Performance Counters > Custom** and add the co
 \Hyper-V Dynamic Memory VM(*)\Guest Visible Physical Memory
 ```
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/RAMPerformanceCounters.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/RAMPerformanceCounters.png" alt="Memory performance counters" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/RAMPerformanceCounters.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/RAMPerformanceCounters.webp" alt="Memory performance counters" style="border: 2px solid grey;">
 </a>
 
 I plan to add more counters over time. When that happens I will update the workbook introduction and this post.
@@ -166,8 +166,8 @@ Import-Module VMFleet
 Watch-FleetCluster -Cluster <ClusterName> -Sets *
 ```
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/VMFleet.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/VMFleet.png" alt="VMFleet dashboard" style="border: 2px solid grey;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/VMFleet.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/VMFleet.webp" alt="VMFleet dashboard" style="border: 2px solid grey;">
 </a>
 
 The VMFleet view is a great way to validate what you see in the workbook and get a live insights from what´s happening in the cluster.
@@ -193,12 +193,12 @@ The workbook ships with the following sections:
 
 The workbook includes a simple image based version hint. If you see **Current Version** in green, you are on the latest release. If you see **Need Update** in blue, there is a newer build with fixes or features.
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/current-version.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/current-version.png" alt="Current Version" style="border: 2px solid grey; width: 20%; height: auto;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/current-version.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/current-version.webp" alt="Current Version" style="border: 2px solid grey; width: 20%; height: auto;">
 </a>
 
-<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/need-update.png" target="_blank">
-  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/need-update.png" alt="Need Update" style="border: 2px solid grey; width: 20%; height: auto;">
+<a href="/assets/img/post/2025-10-31-azure-local-deep-insights/need-update.webp" target="_blank">
+  <img src="/assets/img/post/2025-10-31-azure-local-deep-insights/need-update.webp" alt="Need Update" style="border: 2px solid grey; width: 20%; height: auto;">
 </a>
 
 ## Roadmap
