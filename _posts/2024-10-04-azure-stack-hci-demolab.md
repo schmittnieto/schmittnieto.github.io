@@ -521,7 +521,7 @@ $isoPath_HCI = "C:\ISO\HCI23H2.iso"    # Replace with the actual path to your HC
 $isoPath_DC = "C:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
 
 # HCI Node VM Configuration
-$HCIVMName = "NODE"
+$HCIVMName = "AZLNODE01"
 $HCI_Memory = 32GB
 $HCI_Processors = 8
 $HCI_Disks = @(
@@ -796,42 +796,20 @@ function Test-TPM {
 # Function to Test for Hyper-V Role
 function Test-HyperV {
     try {
-        # Query Win32_OptionalFeature for Hyper-V
-        $hyperVFeature = Get-CimInstance -ClassName Win32_OptionalFeature -Filter "Name='Microsoft-Hyper-V-All'" -ErrorAction Stop
-
-        if ($hyperVFeature.InstallState -eq 1) {
-            Write-Message "Hyper-V role is already installed on the host." -Type "Success"
+        $feature = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -ErrorAction Stop
+        if ($feature.State -eq "Enabled") {
+            Write-Message "Hyper-V role already installed." -Type Success
+            return
         }
-        else {
-            Write-Message "Hyper-V role is not installed on the host. Installing Hyper-V role and management tools..." -Type "Info"
 
-            # Determine OS type
-            $os = Get-CimInstance -ClassName Win32_OperatingSystem
-            $productType = $os.ProductType
-            # ProductType 1 = Workstation, 2 = Domain Controller, 3 = Server
+        Write-Message "Installing Hyper-V role and management tools..." -Type Info
+        Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart -ErrorAction Stop | Out-Null
 
-            if ($productType -eq 1) {
-                # Client OS - use Enable-WindowsOptionalFeature
-                Write-Message "Detected Client Operating System. Installing Hyper-V using Enable-WindowsOptionalFeature..." -Type "Info"
-                Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All -All -NoRestart -ErrorAction Stop
-            }
-            else {
-                # Server OS - use DISM
-                Write-Message "Detected Server Operating System. Installing Hyper-V using DISM..." -Type "Info"
-                dism.exe /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V /IncludeManagementTools /NoRestart | Out-Null
-            }
-
-            Write-Message "Hyper-V role and management tools installed successfully. A restart is required." -Type "Success"
-
-            # Optional: Implement a progress bar or sleep before restarting
-            Start-SleepWithProgress -Seconds 60 -Activity "Restarting Host" -Status "Please wait while the host restarts..."
-
-            # Restart the computer to apply changes
-            Restart-Computer -Force
-        }
+        Write-Message "Hyper-V installed. Please reboot and run the script again." -Type Warning
+        exit 0
     }
     catch {
-        Write-Message "Failed to check or install Hyper-V role. Error: $_" -Type "Error"
+        Write-Message "Failed to install Hyper-V. $($_)" -Type Error
         exit 1
     }
 }
@@ -1585,6 +1563,8 @@ Update-ProgressBar -CurrentStep $currentStep -TotalSteps $totalSteps -StatusMess
         - 2024/11/28: Changing Module Versions and ISO for 2411
         - 2025/07/01: Update the scripts for version 2505
         - 2025/07/03: Update the scripts for version 2506
+        - 2025/08/26: Update the scripts for version 2508
+        - 2025/09/15: Arc initialization now runs on node without ArmAccessToken or AccountID
 #>
 
 #region Variables
@@ -1599,7 +1579,7 @@ $setupUser = "Setupuser"
 $setupPwd = "dgemsc#utquMHDHp3M"
 
 # Node Configuration
-$nodeName = "NODE"
+$nodeName = "AZLNODE01"
 $NIC1 = "MGMT1"
 $NIC2 = "MGMT2"
 $nic1IP = "172.19.19.10"
@@ -1611,6 +1591,7 @@ $Location = "westeurope"
 $Cloud = "AzureCloud"
 $SubscriptionID = "000000-00000-000000-00000-0000000"  # Replace with your actual Subscription ID
 $resourceGroupName = "YourResourceGroupName"  # Replace with your actual Resource Group Name
+$TenantID = "000000-00000-000000-00000-0000000"  # Replace with your actual Tenant ID
 
 # Sleep durations in seconds
 $SleepRestart = 60    # Sleep after VM restart
@@ -1785,50 +1766,30 @@ try {
     Start-SleepWithProgress -Seconds $SleepModules -Activity "Waiting for PowerShell Modules" -Status "Preparing to register"
     Invoke-Command -VMName $nodeName -Credential $DefaultCredentials -ScriptBlock {
         param($Cloud, $Location, $SubscriptionID, $resourceGroupName)
-
-        <# Install required modules
-        $requiredModules = @("Az.Accounts")        
-        foreach ($module in $requiredModules) {
-            if (-not (Get-Module -Name $module -ListAvailable)) {
-                Write-Host "Installing module: $module 4.0.2" -ForegroundColor Cyan
-                Install-Module -Name $module -RequiredVersion 4.0.2 -Force -ErrorAction Stop | Out-Null
-              } else {
-                Write-Host "Module $module is already installed." -ForegroundColor Green
-            }
-        }
-        #>
-        # Connect and select resource group
-        Start-Sleep -Seconds 2
-        Connect-AzAccount -UseDeviceAuthentication -Subscription $SubscriptionID -ErrorAction Stop
-        Start-Sleep -Seconds 1
-        $TenantID = (Get-AzContext).Tenant.Id
-        $SubscriptionID = (Get-AzContext).Subscription.Id
-        $ARMToken = (Get-AzAccessToken).Token
-        $AccountId = (Get-AzContext).Account.Id
-        Start-Sleep -Seconds 10
-        
-        $task = Get-ScheduledTask -TaskName ImageCustomizationScheduledTask
-        if ($task.State -eq 'Ready') {
+        # Optional: start image customization task if present
+        $task = Get-ScheduledTask -TaskName ImageCustomizationScheduledTask -ErrorAction SilentlyContinue
+        if ($task -and $task.State -eq 'Ready') {
             Start-ScheduledTask -InputObject $task
             Write-Host "ImageCustomizationScheduledTask was in 'Ready' state and has been started." -ForegroundColor Cyan
         } else {
-            Write-Host "ImageCustomizationScheduledTask is not in 'Ready' state (current state: $($task.State)). Skipping start." -ForegroundColor Yellow
+            Write-Host "ImageCustomizationScheduledTask not started or not present." -ForegroundColor Yellow
         }
-        # Ensure the Azure Arc module is available
-        Start-Sleep -Seconds 40
-        # Invoke Arc initialization
+
+        # Ensure modules are ready
+        Start-Sleep -Seconds 20
+
+        # Register directly on the node without ArmAccessToken or AccountID
         Invoke-AzStackHciArcInitialization -SubscriptionID $SubscriptionID `
                                            -ResourceGroup $resourceGroupName `
                                            -TenantID $TenantID `
                                            -Cloud $Cloud `
                                            -Region $Location `
-                                           -ArmAccessToken $ARMToken `
-                                           -AccountID $AccountId -ErrorAction Stop | Out-Null
+                                           -ErrorAction Stop | Out-Null
 
         Write-Host "VM '$env:COMPUTERNAME' registered with Azure Arc successfully." -ForegroundColor Green
-    } -ArgumentList $Cloud, $Location, $SubscriptionID, $resourceGroupName -ErrorAction Stop
+    } -ArgumentList $Cloud, $Location, $SubscriptionID, $resourceGroupName, $TenantID -ErrorAction Stop | Out-Null
 } catch {
-    Write-Message "Version 2506 it´s a false postive error message: Failed to register VM '$nodeName' with Azure Arc. Error: $_" -Type "Error"
+    Write-Message "Failed to register VM '$nodeName' with Azure Arc. Error: $_" -Type "Error"
     exit 1
 }
 
@@ -2320,7 +2281,7 @@ Write-Message "Azure Connected Machine extensions troubleshooting completed succ
 #region Variables
 
 # Define VM Names
-$HCIVMName = "NODE"
+$HCIVMName = "AZLNODE01"
 $DCVMName = "DC"
 
 # Define Virtual Switch and NAT Configuration
