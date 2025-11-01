@@ -17,23 +17,47 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
 
-<!-- disabling disqus ads  -->
-
+<!-- Kill Disqus Taboola ads until Giscus is live -->
 <style>
-/* contenedores Taboola comunes alrededor de Disqus */
-#disqus_thread ~ #ad-container,
-#disqus_thread ~ #container-bottom,
-#disqus_thread .trc_related_container,
-#disqus_thread .tbl-trecs-container,
-#disqus_thread [id^="taboola"]
-{ display: none !important; }
+  /* oculta los iframes publicitarios de Disqus, arriba y abajo del hilo */
+  iframe[id^="dsq-app"][src*="//tempest.services.disqus.com/ads-iframe"],
+  iframe[id^="dsq-app"][src*="/ads-iframe/"],
+  #disqus_thread iframe[src*="ads-iframe"],
+  #disqus_thread iframe[src*="taboola"],
+  iframe[src*="taboola.com"] {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
 
-/* por si lo meten encima y debajo del hilo */
-#container-bottom,
-#ad-container { display: none !important; }
-
+  /* por si quedara algún contenedor fuera del iframe en el DOM del sitio */
+  #ad-container,
+  #container-bottom,
+  #disqus_thread .trc_related_container,
+  #disqus_thread .tbl-trecs-container,
+  #disqus_thread [id^="taboola"] {
+    display: none !important;
+  }
 </style>
 
+<script defer>
+  /* Fallback por si Disqus inyecta el iframe después del render */
+  (function () {
+    function killAds(root) {
+      root.querySelectorAll(
+        'iframe[src*="services.disqus.com/ads-iframe"], iframe[src*="/ads-iframe/"], #ad-container, #container-bottom, #taboola, .trc_related_container, .tbl-trecs-container'
+      ).forEach(function(el){ try { el.remove(); } catch(e) {} });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      killAds(document);
+      new MutationObserver(function(muts){
+        muts.forEach(function(m){ killAds(m.target); });
+      }).observe(document.body, { childList: true, subtree: true });
+    });
+  })();
+</script>
 
 <!-- end custom head snippets  -->
 
