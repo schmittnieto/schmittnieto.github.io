@@ -20,9 +20,18 @@
 <!-- disabling disqus ads  -->
 
 <style>
-  div#disqus_thread iframe[sandbox] {
-    max-height: 0 !important;
-  }
+/* contenedores Taboola comunes alrededor de Disqus */
+#disqus_thread ~ #ad-container,
+#disqus_thread ~ #container-bottom,
+#disqus_thread .trc_related_container,
+#disqus_thread .tbl-trecs-container,
+#disqus_thread [id^="taboola"]
+{ display: none !important; }
+
+/* por si lo meten encima y debajo del hilo */
+#container-bottom,
+#ad-container { display: none !important; }
+
 </style>
 
 
