@@ -15,7 +15,7 @@
 # in the templates via {{ site.myvariable }}.
 title: Cristian Schmitt Nieto´s Blog
 email: blog@schmitt-nieto.com
-description: Welcome to my blog, where you will find all kinds of information related to Azure, Azure Virtual Desktop and Azure Stack HCI.
+description: Welcome to my blog, where you will find all kinds of information related to Azure, Azure Virtual Desktop and Azure Local.
 github_username: schmittnieto
 minimal_mistakes_skin: "dark"
 logo: "/assets/img/logo3.png"
@@ -73,9 +73,6 @@ author:
   bio    : "Azure Consultant with over 10 years of IT experience, sharing insights and solutions here 😊"
   location: "Frankfurt"
   links:
-    - label: "schmitt-nieto.com"
-      icon: "fas fa-fw fa-link"
-      url: "https://schmitt-nieto.com/about"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/schmittnieto"
@@ -104,7 +101,7 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: true
       share: true
@@ -116,7 +113,12 @@ defaults:
       type: pages
     values:
       layout: single
-      author_profile: true
+      author_profile: false
+    # _assets 
+  - scope:
+      path: 'assets/**'
+    values:
+      sitemap: false
 
 category_archive:
   type: liquid
