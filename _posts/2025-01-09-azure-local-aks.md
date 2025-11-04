@@ -488,10 +488,10 @@ I’m not giving up that easily! To make up for the counter’s limitations, let
    - Go to the **Namespaces** tab and click **+Add**.
    - Use the following YAML code to define your namespace:
 ```yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: store-namespace
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: store-namespace
 ```
    - Apply this namespace in the portal.
 
