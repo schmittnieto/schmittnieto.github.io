@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-11-05
+last_modified_at: 2025-11-06
 categories:
   - Blog
 tags:
@@ -58,23 +58,6 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
 
 ## Official  
 *Only official links published or maintained by Microsoft or Azure.*
-
-### Azure Local release information
-
-This section is temporary due to the informational message advising the use of an older version. Once the issue is resolved, it will be removed. More information can be found at this [link.](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?view=azloc-2510&tabs=OS-build-25398-xxxx)
-
-> [!IMPORTANT]
-> **Azure Local Update 11.2510.1002.87 and 12.2510.1002.88**
->
-> We've temporarily disabled the update for Azure Local versions 11.2510.1002.87 and 12.2510.1002.88 for investigation.
->
-> The issues under review involve:
-> - A version mismatch between the current node platform version 10.0.25398.1849 and the expected version, which should be greater than or equal to 10.0.25398.1913.
-> - An issue in the Hyper-V socket that can cause a node to crash.
->
-> If you are affected by any of the two issues, see [GitHub AzureLocal-Supportability TSG](https://github.com/Azure/AzureLocal-Supportability/tree/main/TSG).
-> 
-> We anticipate that updates for both versions 11.2510 and 12.2510 will be available again in the next few days. During this time, we recommend that you use version 12.2509 for new deployments.
 
 ### What's new in Azure Local (version 2510)
 
