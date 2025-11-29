@@ -511,21 +511,21 @@ To make it easier to read I have moved all the RAW scripts to the end of the art
 #region Variables
 
 # Virtual Switch and Network Configuration
-$vSwitchName = "azurestackhci"
+$vSwitchName = "azurelocal"
 $vSwitchNIC = "vEthernet ($vSwitchName)"
-$vNetIPNetwork = "172.19.19.0/24"
+$vNetIPNetwork = "172.19.18.0/24"
 $vIPNetworkPrefixLength = ($vNetIPNetwork -split '/')[1]
-$natName = "azurestackhci"
+$natName = "azurelocal"
 $HCIRootFolder = "C:\HCI"
 
 # ISO Paths
-$isoPath_HCI = "C:\ISO\HCI23H2.iso"    # Replace with the actual path to your HCI Node ISO
-$isoPath_DC  = "C:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
+$isoPath_HCI = "D:\ISO\AzureLocal24H2.iso"    # Replace with the actual path to your HCI Node ISO
+$isoPath_DC  = "D:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
 
 # HCI Node VM Configuration
-$HCIVMName = "AZLNODE01"
-$HCI_Memory = 32GB
-$HCI_Processors = 8
+$HCIVMName = "AZLN01"
+$HCI_Memory = 48GB
+$HCI_Processors = 16
 $HCI_Disks = @(
     @{ Path = "${HCIVMName}_C.vhdx"; Size = 127GB },
     @{ Path = "s2d1.vhdx";            Size = 1024GB },
@@ -1043,13 +1043,13 @@ $DefaultCredentials = New-Object System.Management.Automation.PSCredential ($def
 
 # VM and Domain Variables
 $dcVMName  = "DC"
-$domainName = "azurestack.local"
-$netBIOSName = "AZURESTACK"
+$domainName = "azurelocal.local"
+$netBIOSName = "AZURELOCAL"
 
 $NIC1 = "MGMT1"
-$nic1IP = "172.19.19.2"
-$nic1GW = "172.19.19.1"
-$nic1DNS = "172.19.19.2"
+$nic1IP = "172.19.18.2"
+$nic1GW = "172.19.18.1"
+$nic1DNS = "172.19.18.2"
 
 # Variables for DNS forwarder and time zone
 $dnsForwarder = "8.8.8.8"
@@ -1611,12 +1611,12 @@ $setupUser = "Setupuser"
 $setupPwd = "dgemsc#utquMHDHp3M"
 
 # Node Configuration
-$nodeName = "AZLNODE01"
+$nodeName = "AZLN01"
 $NIC1 = "MGMT1"
 $NIC2 = "MGMT2"
-$nic1IP = "172.19.19.10"
-$nic1GW = "172.19.19.1"
-$nic1DNS = "172.19.19.2"
+$nic1IP = "172.19.18.10"
+$nic1GW = "172.19.18.1"
+$nic1DNS = "172.19.18.2"
 
 # Azure Configuration
 $Location = "westeurope"
