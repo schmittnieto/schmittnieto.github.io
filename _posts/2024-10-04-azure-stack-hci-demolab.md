@@ -2313,13 +2313,13 @@ Write-Message "Azure Connected Machine extensions troubleshooting completed succ
 #region Variables
 
 # Define VM Names
-$HCIVMName = "AZLNODE01"
+$HCIVMName = "AZLN01"
 $DCVMName = "DC"
 
 # Define Virtual Switch and NAT Configuration
-$vSwitchName = "azurestackhci"
+$vSwitchName = "azurelocal"
 $vSwitchNIC = "vEthernet ($vSwitchName)"
-$natName = "azurestackhci"
+$natName = "azurelocal"
 
 # Define Root Folder for VMs and Disks
 $HCIRootFolder = "C:\HCI"
