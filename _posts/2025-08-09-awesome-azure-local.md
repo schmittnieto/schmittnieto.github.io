@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2025-11-05
+last_modified_at: 2025-11-25
 categories:
   - Blog
 tags:
@@ -58,23 +58,6 @@ _If you spot a gap or a broken link, open an issue or pull request in the GitHub
 
 ## Official  
 *Only official links published or maintained by Microsoft or Azure.*
-
-### Azure Local release information
-
-This section is temporary due to the informational message advising the use of an older version. Once the issue is resolved, it will be removed. More information can be found at this [link.](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?view=azloc-2510&tabs=OS-build-25398-xxxx)
-
-> [!IMPORTANT]
-> **Azure Local Update 11.2510.1002.87 and 12.2510.1002.88**
->
-> We've temporarily disabled the update for Azure Local versions 11.2510.1002.87 and 12.2510.1002.88 for investigation.
->
-> The issues under review involve:
-> - A version mismatch between the current node platform version 10.0.25398.1849 and the expected version, which should be greater than or equal to 10.0.25398.1913.
-> - An issue in the Hyper-V socket that can cause a node to crash.
->
-> If you are affected by any of the two issues, see [GitHub AzureLocal-Supportability TSG](https://github.com/Azure/AzureLocal-Supportability/tree/main/TSG).
-> 
-> We anticipate that updates for both versions 11.2510 and 12.2510 will be available again in the next few days. During this time, we recommend that you use version 12.2509 for new deployments.
 
 ### What's new in Azure Local (version 2510)
 
@@ -144,6 +127,9 @@ This release introduces several important updates and improvements across the pl
   This article provides an overview of the Azure Local rack aware clustering feature, including its benefits, use cases, supported configurations, and deployment requirements. Applies only to new deployments of Azure Local.  
 - [SDN enabled by Arc on Azure Local (Microsoft Docs)](https://learn.microsoft.com/en-us/azure/azure-local/concepts/sdn-overview?view=azloc-2510)  
   This article explains Software Defined Networking (SDN) enabled by Azure Arc on Azure Local. It describes SDN management methods, guidance on when to use each approach, and outlines supported and unsupported SDN scenarios.  
+- [What's new in Azure Local for distributed locations (Tech Community)](https://techcommunity.microsoft.com/blog/azurearcblog/what%E2%80%99s-new-in-azure-local-cloud-infrastructure-for-distributed-locations-enabled/4469773)  
+  Summary of Azure Ignite 2025 announcements highlighting SAN support (Preview), rack aware clustering (Preview), NVIDIA RTX PRO 6000 Blackwell Server Edition GPU support (GA), Azure Local for larger deployments (Preview), network segmentation (GA) and local identity with Azure Key Vault (Preview).
+
 
 ### AVD
 
@@ -168,6 +154,8 @@ This release introduces several important updates and improvements across the pl
   Scenario describing how to design and implement a baseline architecture for Azure Kubernetes Service (AKS) running on Azure Local.  
 - [Deploy and operate apps with AKS enabled by Azure Arc on Azure Local](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-hybrid-azure-local)  
   Recommendations for building an app deployment pipeline for containerized workloads using AKS enabled by Azure Arc on Azure Local, with guidance for GitOps-based operations.
+- [AKS on Azure Local scale requirements](https://learn.microsoft.com/en-us/azure/aks/aksarc/scale-requirements)  
+  This article describes the minimum and maximum supported scale limits for AKS on Azure Local clusters and node pools.
 
 ### Backup and Disaster Recovery
 
@@ -424,8 +412,8 @@ This release introduces several important updates and improvements across the pl
 | Name                               | Description                                                                 | Price                | Remote | Date |
 |------------------------------------|-----------------------------------------------------------------------------|----------------------|--------|------|
 | ~~[AVD Tech Fest - Berlin (Germany)](https://www.controlup.com/de/avd-techfest-2025/)~~ | Community-driven event focused on Azure Virtual Desktop and Azure Local integration. | ~~99 €~~ | ~~No~~ | ~~September 10-11, 2025~~ |
-| [Microsoft Ignite - San Francisco (USA)](https://register.ignite.microsoft.com/) | Flagship Microsoft conference featuring hybrid cloud and Azure Local sessions. | 2325 $ | Yes (Digital pass are **Free**) | November 17-21, 2025 |
-| [Microsoft Ignite 2025 - Breakout Session BRK147](https://ignite.microsoft.com/en-US/sessions/BRK147?source=sessions) | Discover what's new in Azure Local, see a live demo, and hear from a customer modernizing operations and enabling AI in a regulated environment. | Included in Ignite pass | Yes | November 18, 2025 |
+| ~~[Microsoft Ignite - San Francisco (USA)](https://register.ignite.microsoft.com/)~~ | Flagship Microsoft conference featuring hybrid cloud and Azure Local sessions. | 2325 $ | Yes (Digital pass are **Free**) | November 17-21, 2025 |
+| ~~[Microsoft Ignite 2025 - Breakout Session BRK147](https://ignite.microsoft.com/en-US/sessions/BRK147?source=sessions)~~ | Discover what's new in Azure Local, see a live demo, and hear from a customer modernizing operations and enabling AI in a regulated environment. | Included in Ignite pass | Yes | November 18, 2025 |
 | [HybrIT - Würzburg (Germany)](https://www.manfredhelber.de/hybrit-conference-2025/) | Two-day conference in **German** on Microsoft hybrid infrastructure (Windows Server, Azure Local, and Azure Arc). | 299–599 € | No | November 26-27, 2025 |
 
 <!-- AWESOMEAZURELOCAL:END -->
