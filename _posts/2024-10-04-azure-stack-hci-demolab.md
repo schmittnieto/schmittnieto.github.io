@@ -516,15 +516,15 @@ $vSwitchNIC = "vEthernet ($vSwitchName)"
 $vNetIPNetwork = "172.19.18.0/24"
 $vIPNetworkPrefixLength = ($vNetIPNetwork -split '/')[1]
 $natName = "azurelocal"
-$HCIRootFolder = "C:\HCI"
+$HCIRootFolder = "E:\AzureLocalLab"
 
 # ISO Paths
-$isoPath_HCI = "D:\ISO\AzureLocal24H2.iso"    # Replace with the actual path to your HCI Node ISO
-$isoPath_DC  = "D:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
+$isoPath_HCI = "E:\ISO\AzureLocal24H2.iso"    # Replace with the actual path to your HCI Node ISO
+$isoPath_DC  = "E:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
 
 # HCI Node VM Configuration
 $HCIVMName = "AZLN01"
-$HCI_Memory = 48GB
+$HCI_Memory = 96GB
 $HCI_Processors = 16
 $HCI_Disks = @(
     @{ Path = "${HCIVMName}_C.vhdx"; Size = 127GB },
@@ -2322,7 +2322,7 @@ $vSwitchNIC = "vEthernet ($vSwitchName)"
 $natName = "azurelocal"
 
 # Define Root Folder for VMs and Disks
-$HCIRootFolder = "C:\HCI"
+$HCIRootFolder = "E:\AzureLocalLab"
 $HCIDiskFolder = Join-Path -Path $HCIRootFolder -ChildPath "Disk"
 
 # Define Tasks for Progress Bar
