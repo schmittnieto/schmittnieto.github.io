@@ -33,16 +33,16 @@ $vSwitchNIC = "vEthernet ($vSwitchName)"
 $vNetIPNetwork = "172.19.18.0/24"
 $vIPNetworkPrefixLength = ($vNetIPNetwork -split '/')[1]
 $natName = "azurelocal"
-$HCIRootFolder = "C:\HCI"
+$HCIRootFolder = "E:\AzureLocalLab"
 
 # ISO Paths
-$isoPath_HCI = "D:\ISO\AzureLocal24H2.iso"    # Replace with the actual path to your HCI Node ISO
-$isoPath_DC  = "D:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
+$isoPath_HCI = "E:\ISO\AzureLocal24H2.iso"    # Replace with the actual path to your HCI Node ISO
+$isoPath_DC  = "E:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
 
 # HCI Node VM Configuration
 $HCIVMName = "AZLN01"
-$HCI_Memory = 48GB
-$HCI_Processors = 16
+$HCI_Memory = 96GB
+$HCI_Processors = 32
 $HCI_Disks = @(
     @{ Path = "${HCIVMName}_C.vhdx"; Size = 127GB },
     @{ Path = "s2d1.vhdx";            Size = 1024GB },
@@ -53,7 +53,7 @@ $HCI_NetworkAdapters = @("MGMT1", "MGMT2")
 # Domain Controller VM Configuration
 $DCVMName = "DC"
 $DC_Memory = 4GB
-$DC_Processors = 2
+$DC_Processors = 4
 $DC_Disks = @(
     @{ Path = "${DCVMName}_C.vhdx"; Size = 60GB }
 )

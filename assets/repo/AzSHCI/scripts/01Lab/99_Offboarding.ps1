@@ -31,7 +31,7 @@ $vSwitchNIC = "vEthernet ($vSwitchName)"
 $natName = "azurelocal"
 
 # Define Root Folder for VMs and Disks
-$HCIRootFolder = "C:\HCI"
+$HCIRootFolder = "E:\AzureLocalLab"
 $HCIDiskFolder = Join-Path -Path $HCIRootFolder -ChildPath "Disk"
 
 # Define Tasks for Progress Bar
@@ -85,7 +85,7 @@ function Remove-VMResources {
     if ($null -ne $vm) {
         if ($vm.State -in @('Running', 'Paused', 'Suspended')) {
             try {
-                Stop-VM -Name $VMName -Force -ErrorAction Stop | Out-Null
+                Stop-VM -Name $VMName -TurnOff -ErrorAction Stop | Out-Null
                 Write-Message "VM '$VMName' stopped." -Type "Success"
             } catch {
                 Write-Message "Failed to stop VM '$VMName'. Error: $_" -Type "Error"
