@@ -10,7 +10,7 @@ subtitle: Welcome to My Azure Journey
 
 ## Introduction
 
-Hello! I'm **Cristian Schmitt Nieto**, an IT professional originally from Spain and now based in Germany. With over a decade of experience, I currently serve as a **Lead Consultant at Devoteam**. My passion is to create innovative solutions that combine traditional on-premise infrastructures with modern cloud technologies, with a primary focus on Hybrid Cloud (using Azure Local) and Azure Virtual Desktop (AVD).
+Hello! I'm **Cristian Schmitt Nieto**, an IT professional originally from Spain and now based in Germany. With over a decade of experience, I currently serve as a **Senior Consultant at adesso**. My passion is to create innovative solutions that combine traditional on-premise infrastructures with modern cloud technologies, with a primary focus on Hybrid Cloud (using Azure Local) and Azure Virtual Desktop (AVD).
 
 ## Career Overview
 
