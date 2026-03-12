@@ -31,7 +31,7 @@ I managed a small data center where I was responsible for:
 
 ## Azure Journey and Current Role
 
-Five years ago, I specialized in Microsoft Azure, a move that has been both challenging and rewarding. In my current role at Devoteam, I focus on:
+Five years ago, I specialized in Microsoft Azure, a move that has been both challenging and rewarding. In my current role at adesso, I focus on:
 * **Hybrid Cloud Solutions:** Integrating on-premise (Azure Local) systems with cloud services to build agile and secure IT environments.
 * **Azure Virtual Desktop (AVD):** Designing and optimizing virtual desktop infrastructures to enhance efficiency and scalability.
 
