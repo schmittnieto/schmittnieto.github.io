@@ -2,7 +2,7 @@
 title: "Awesome Azure Local"
 excerpt: "Curated catalog of Azure Local (formerly Azure Stack HCI), AVD and AKS with official and community resources updated regularly."
 date: 2025-08-09
-last_modified_at: 2026-03-20
+last_modified_at: 2026-03-24
 categories:
   - Blog
 tags:
@@ -384,6 +384,8 @@ A stability-focused release with updated platform components, AKS lifecycle chan
 
 *Channels that focus primarily on Azure Local rather than hosting only an occasional video.*
 
+- [Azure Hybrid Insider](https://youtube.com/@alexanderortha8490)  
+  YouTube channel managed by Alexander Ortha, focused on Azure Arc, Azure Local, and hybrid integrations across Azure.
 - [The Hybrid Friends](https://www.youtube.com/@thehybridfriends)  
   Practical use cases and deep dives in the Azure Local space.  
 - [Manfred Helber](https://www.youtube.com/@ManfredHelber)  
