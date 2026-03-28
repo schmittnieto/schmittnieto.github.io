@@ -33,13 +33,13 @@ More insights on planning, sizing, and migration strategies will be shared in my
 
 ## Azure Local Calculator
 
-[**Azure Local Calculator**](https://github.com/schmittnieto/AzureLocal-Calculator) is a GitHub-based repository offering a collection of interactive calculators focused on the Azure Local with emphasis on **Storage**, **CPU (working on it)** and **Pricing** estimations.
+[**Azure Local Calculator**](https://github.com/schmittnieto/AzureLocal-Calculator) is a GitHub-based repository offering a collection of interactive calculators focused on the Azure Local with emphasis on **Storage**, **CPU** and **Pricing** estimations.
 
 The source code for the calculators is available on GitHub, but the calculators themselves can be used interactively right here on this page.
 
 The storage configuration used in the calculator is based on the *Express* mode. While I acknowledge that this is not the most efficient setup in terms of capacity optimization, it serves well as a first approximation to get a general understanding of the storage architecture.
 
-If you aim to implement more advanced storage configurations, you will likely need to customize the deployment by manually configuring storage to suit your needs, and in those cases, you probably already have an Excel sheet from your vendor or internal team that provides more accurate figures than what this calculator is designed to offer. For this reason, configurations other than Two-Way and Three-Way Mirror have been intentionally excluded from the scope.
+If you aim to implement more advanced storage configurations, you will likely need to customize the deployment by manually configuring storage to suit your needs, and in those cases, you probably already have an Excel sheet from your vendor or internal team that provides more accurate figures than what this calculator is designed to offer.
 
 ### CPU
 
