@@ -817,294 +817,788 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Load Chart.js -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Let the page background show through */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    #storageV2_calcRoot,
+    #storageV2_calcRoot *{box-sizing:border-box}
+    #storageV2_calcRoot{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:20px auto;padding:0 16px;text-align:center}
+    #storageV2_calcRoot h3{font-size:1.5em;margin-bottom:20px}
+
+    #storageV2_calcRoot .card{margin:20px 0;padding:0;text-align:left}
+    #storageV2_calcRoot .card h3{margin:0 0 20px;font-size:1.5em}
+
+    #storageV2_calcRoot .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+    @media(max-width:700px){#storageV2_calcRoot .form-grid{grid-template-columns:1fr}}
+    #storageV2_calcRoot .form-group{display:flex;flex-direction:column}
+    #storageV2_calcRoot .form-group.full{grid-column:1/-1}
+    #storageV2_calcRoot .form-group label,
+    #storageV2_calcRoot label{display:block;margin-bottom:5px;font-weight:600}
+    #storageV2_calcRoot .form-group input[type=number],
+    #storageV2_calcRoot .form-group select{
+      width:100%;
+      padding:8px;
+      border:1px solid #555;
+      border-radius:8px;
+      box-sizing:border-box;
+      margin-top:5px
     }
-    /* Container aligned to the left in the article flow */
-    .container {
-      margin: 20px 0;
-      width: auto;
-      text-align: center;
-    }
-    h2 {
-      font-size: 1.5em;
-      margin-bottom: 20px;
-    }
-    .slider-container {
-      margin: 20px 0;
-      text-align: left;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-    input[type=range] {
-      width: 100%;
-      margin: 10px 0;
-    }
-    input[type=number] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #555;
-      border-radius: 8px;
-      box-sizing: border-box;
-      margin-top: 5px;
-    }
-    button {
-      background-color: #007aff;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      font-size: 1em;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background-color: #005bb5;
-    }
-    .result {
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 20px;
-      text-align: left;
-      font-size: 0.95em;
-    }
-    .disclaimer {
-      font-size: 0.8em;
-      margin-top: 20px;
-      text-align: left;
-    }
-    #chartContainer, #volumesChartContainer {
-      margin-top: 20px;
-    }
-    /* White background for chart canvases */
-    #chartContainer canvas, #volumesChartContainer canvas {
-      background-color: #fff;
-      border-radius: 8px;
+    #storageV2_calcRoot .form-group select{background:#444;color:#fff}
+    #storageV2_calcRoot .form-group input[type=number]:focus,
+    #storageV2_calcRoot .form-group select:focus{outline:none}
+
+    #storageV2_calcRoot .chk-row{display:flex;align-items:center;margin-bottom:10px}
+    #storageV2_calcRoot .chk-row input[type=checkbox]{margin-right:8px;transform:scale(1.2)}
+    #storageV2_calcRoot .chk-row label{margin:0;font-weight:600}
+
+    #storageV2_calcRoot .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    #storageV2_calcRoot .btn,
+    #storageV2_calcRoot button{background:#007aff;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:1em;cursor:pointer;margin-top:20px}
+    #storageV2_calcRoot .btn:hover,
+    #storageV2_calcRoot button:hover{background:#005bb5}
+    #storageV2_calcRoot .btn-secondary{background:#555;color:#fff}
+    #storageV2_calcRoot .btn-secondary:hover{background:#3d3d3d}
+
+    #storageV2_calcRoot .result-box{margin-top:20px;text-align:left;font-size:.95em;line-height:1.7}
+    #storageV2_calcRoot .warning{color:#cc3300;font-weight:600}
+    #storageV2_calcRoot .ok{color:#2e7d32;font-weight:600}
+
+    #storageV2_calcRoot .charts-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:20px}
+    @media(min-width:700px){#storageV2_calcRoot .charts-grid.two-col{grid-template-columns:1fr 1fr}}
+    #storageV2_calcRoot .chart-wrapper{position:relative;height:320px;text-align:center}
+    #storageV2_calcRoot .chart-wrapper canvas{background:#fff;border-radius:8px;width:100%!important;height:100%!important}
+
+    #storageV2_calcRoot .overview-table{width:100%;border-collapse:collapse;margin-top:15px;text-align:left;font-size:.9em}
+    #storageV2_calcRoot .overview-table th,
+    #storageV2_calcRoot .overview-table td{padding:8px 10px;border-bottom:1px solid #555}
+    #storageV2_calcRoot .overview-table th{font-weight:600}
+    #storageV2_calcRoot .overview-table td:last-child{text-align:right}
+    #storageV2_calcRoot .overview-table .section-header{font-weight:700;color:#007aff}
+    #storageV2_calcRoot .overview-table .total-row{font-weight:700}
+    #storageV2_calcRoot .overview-table .formula{font-size:.86em;opacity:.8}
+
+    #storageV2_calcRoot .res-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:8px}
+    #storageV2_calcRoot .res-option{border:1px solid #555;border-radius:8px;padding:12px;cursor:pointer;transition:border-color .2s}
+    #storageV2_calcRoot .res-option:hover:not(.disabled){border-color:#007aff}
+    #storageV2_calcRoot .res-option.selected{border-color:#007aff}
+    #storageV2_calcRoot .res-option.disabled{opacity:.4;cursor:not-allowed}
+    #storageV2_calcRoot .res-option .res-name{font-weight:700;font-size:.9em;margin-bottom:4px}
+    #storageV2_calcRoot .res-option .res-detail{font-size:.78em;line-height:1.4;opacity:.85}
+    #storageV2_calcRoot .res-option .res-eff{font-size:.82em;font-weight:600;color:#007aff;margin-top:4px}
+
+    #storageV2_calcRoot .mode-tabs{display:flex;border-radius:8px;overflow:hidden;border:1px solid #555;margin-bottom:16px}
+    #storageV2_calcRoot .mode-tab{flex:1;padding:10px 12px;border:none;cursor:pointer;font-weight:600;font-size:.88em;background:#444;color:#fff;margin-top:0;border-radius:0}
+    #storageV2_calcRoot .mode-tab:hover{background:#555}
+    #storageV2_calcRoot .mode-tab.active{background:#007aff;color:#fff}
+    #storageV2_calcRoot .mode-tab:not(:last-child){border-right:1px solid #555}
+
+    #storageV2_calcRoot .size-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:8px}
+    #storageV2_calcRoot .size-opt{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #555;border-radius:8px;cursor:pointer;transition:border-color .2s;user-select:none}
+    #storageV2_calcRoot .size-opt.checked{border-color:#007aff}
+    #storageV2_calcRoot .size-opt input[type=checkbox]{width:16px;height:16px;accent-color:#007aff;cursor:pointer;flex-shrink:0}
+    #storageV2_calcRoot .size-opt span{font-size:.88em;font-weight:500}
+
+    #storageV2_calcRoot .compare-table{width:100%;border-collapse:collapse;font-size:.88em;margin-top:4px}
+    #storageV2_calcRoot .compare-table th,
+    #storageV2_calcRoot .compare-table td{padding:8px 10px;text-align:right;border-bottom:1px solid #555}
+    #storageV2_calcRoot .compare-table th:first-child,
+    #storageV2_calcRoot .compare-table td:first-child{text-align:left}
+    #storageV2_calcRoot .compare-table th{font-weight:600}
+    #storageV2_calcRoot .compare-table .infeasible{opacity:.5}
+    #storageV2_calcRoot .compare-table .best td{color:#2e7d32;font-weight:700}
+
+    #storageV2_calcRoot .disclaimer{font-size:.8em;margin-top:20px;text-align:left;line-height:1.6}
+    #storageV2_calcRoot .disclaimer a{color:#007aff;text-decoration:none}
+    #storageV2_calcRoot .disclaimer a:hover{text-decoration:underline}
+
+    @media print{
+      #storageV2_calcRoot .btn-row,#storageV2_calcRoot .no-print{display:none!important}
+      #storageV2_calcRoot .card,#storageV2_calcRoot .chart-wrapper{break-inside:avoid}
+      #storageV2_calcRoot .chart-wrapper{height:260px}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    
-    <div class="slider-container">
-      <label for="nodes">Number of Nodes (<span id="nodesValue">1</span>)</label>
-      <input type="range" id="nodes" min="1" max="16" value="1" 
-             oninput="document.getElementById('nodesValue').innerText = this.value;">
-    </div>
-    
-    <div class="slider-container">
-      <label for="disks">Number of NVMe Disks per Node (<span id="disksValue">2</span>)</label>
-      <input type="range" id="disks" min="2" max="24" value="2" 
-             oninput="document.getElementById('disksValue').innerText = this.value;">
-    </div>
-    
-    <div class="slider-container">
-      <label for="capacity">Specified Capacity per Disk (TB)</label>
-      <input type="number" id="capacity" placeholder="e.g., 3.5" step="0.1" min="0.1">
-    </div>
-    
-    <div class="slider-container">
-      <label for="efficiency">Capacity Efficiency (%) (<span id="efficiencyValue">92</span>%)</label>
-      <input type="range" id="efficiency" min="50" max="100" value="92" 
-             oninput="document.getElementById('efficiencyValue').innerText = this.value;">
-    </div>
-    
-    <button onclick="calculateCapacity()">Calculate Capacity</button>
-    <div id="result" class="result"></div>
-    
-    <!-- Storage Capacity Chart (stacked) -->
-    <div id="chartContainer">
-      <canvas id="capacityChart"></canvas>
-    </div>
+<div class="container" id="storageV2_calcRoot">
 
-    <!-- Volumes Chart: horizontal, one bar per volume -->
-    <div id="volumesChartContainer">
-      <canvas id="volumesChart"></canvas>
-    </div>
-    
-    <div class="disclaimer">
-      <p><strong>Redundancy Disclaimer:</strong> When using 1 or 2 nodes, S2D employs two-way mirror redundancy. When using 3 or more nodes, three-way mirror redundancy is used. For a single-node configuration, no storage network is required (
-        <a href="https://learn.microsoft.com/en-us/azure/azure-local/plan/single-server-deployment?view=azloc-24112#storage-network-vlans" target="_blank"><em>Optional – this pattern doesn't require a storage network</em></a>
-      ). We assume that in this case a local mirror is used to avoid data loss in case of disk failure.</p>
-      <p><strong>Reserved Capacity Disclaimer:</strong> For multi-node configurations, the calculation reserves capacity equivalent to one disk per node (i.e. <em>Reserved Capacity = Number of Nodes × Capacity per Disk</em>) to ensure there is sufficient unallocated space for repairs after a disk failure. For a single-node configuration, no reserved capacity is applied.</p>
-      <p><strong>NVMe & Performance Disclaimer:</strong> In Azure Local, NVMe drives are used as both cache and capacity. For optimal performance, RDMA must be used. Increasing the number of NVMe drives per node enhances IOPS and throughput via parallelism, but it also requires proper RDMA network configuration to avoid potential bottlenecks.</p>
-      <p><strong>Capacity Efficiency Factor:</strong> The specified capacity of an NVMe is typically higher than the usable capacity due to OS overhead, overprovisioning, spare sectors, and recovery partitions. In this calculator, a capacity efficiency factor (default 92%) is applied to convert the specified capacity to usable capacity. This value can be increased to 100% if you wish to use the full specified capacity.</p>
-      <p><strong>Storage Configuration Disclaimer:</strong> Storage is configured in Azure Local using the <code>configurationMode</code> parameter (
-        <a href="https://learn.microsoft.com/en-us/azure/templates/microsoft.azurestackhci/clusters/deploymentsettings?pivots=deployment-language-arm-template#storage-1" target="_blank">Documentation</a>
-      ). By default, this mode is set to <em>Express</em> and storage is configured as per best practices based on the number of nodes in the cluster. Allowed values are <em>'Express'</em>, <em>'InfraOnly'</em>, and <em>'KeepStorage'</em>. However, the exact best practices cannot be verified, and therefore the calculator assumes the reserved capacity as described.</p>
-      <p><strong>Volume Assignment Disclaimer:</strong> During cloud deployment, the assignment of volumes within the storage pool (named SU1_Pool) is automated. This includes a fixed 250 GB (<em>Infrastructure_1</em>) volume for the ARC Resource Bridge and AKS images, a 20 GB (<em>ClusterPerformanceHistory</em>) volume for cluster statistics, and the remaining usable capacity (minus an extra 7 GB) is divided equally among <em>UserStorage</em> volumes (one per node). These values are approximate and subject to change based on deployment specifics.</p>
+  <!-- Card 1: Cluster Configuration -->
+  <div class="card">
+    <h3>Cluster Configuration</h3>
+    <div class="form-grid">
+      <div class="form-group full">
+        <div class="chk-row">
+          <input type="checkbox" id="storageV2_singleNode">
+          <label for="storageV2_singleNode">Single Node Cluster</label>
+        </div>
+      </div>
+      <div class="form-group" id="storageV2_nodeCountGroup">
+        <label for="storageV2_nodeCount">Number of Nodes</label>
+        <select id="storageV2_nodeCount"></select>
+      </div>
     </div>
   </div>
 
-  <script>
-    let chart, volumesChart; // Global variables for Chart.js instances
+  <!-- Card 2: Calculation Mode -->
+  <div class="card">
+    <h3>Calculation Mode</h3>
+    <p style="font-size:.85em;color:inherit;margin:0 0 12px">Choose your starting point: specify your drives to calculate effective storage, or set a storage target to find the required drives.</p>
 
-    function calculateCapacity() {
-      var nodes = parseFloat(document.getElementById("nodes").value);
-      var disks = parseFloat(document.getElementById("disks").value);
-      var capacityPerDisk = parseFloat(document.getElementById("capacity").value);
-      var efficiency = parseFloat(document.getElementById("efficiency").value) / 100;
-      
-      if (isNaN(nodes) || isNaN(disks) || isNaN(capacityPerDisk) || capacityPerDisk <= 0) {
-        alert("Please enter valid values for all fields.");
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="storageV2_modeABtn">I know my drives - calculate storage</button>
+      <button class="mode-tab" id="storageV2_modeBBtn">I have a storage target - calculate drives</button>
+    </div>
+
+    <!-- Mode A: Drive Configuration -->
+    <div id="storageV2_modeAPanel">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="storageV2_ffCount">NVMe Drives per Node</label>
+          <input type="number" id="storageV2_ffCount" value="4" min="1" max="24" step="1">
+        </div>
+        <div class="form-group">
+          <label for="storageV2_ffCapacity">NVMe Drive Capacity</label>
+          <select id="storageV2_ffCapacity">
+            <option value="0.96">0.96 TB (960 GB)</option>
+            <option value="1.92" selected>1.92 TB</option>
+            <option value="3.84">3.84 TB</option>
+            <option value="7.68">7.68 TB</option>
+            <option value="15.36">15.36 TB</option>
+            <option value="30.72">30.72 TB</option>
+            <option value="custom">Custom...</option>
+          </select>
+        </div>
+        <div class="form-group full" id="storageV2_ffCapacityCustomGroup" style="display:none">
+          <label for="storageV2_ffCapacityCustom">Custom Drive Capacity (TB)</label>
+          <input type="number" id="storageV2_ffCapacityCustom" value="1.92" min="0.01" max="61.44" step="0.01">
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode B: Target Storage -->
+    <div id="storageV2_modeBPanel" style="display:none">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label for="storageV2_targetStorage">Target Effective Storage (TB)</label>
+          <input type="number" id="storageV2_targetStorage" value="20" min="0.1" step="0.1">
+        </div>
+      </div>
+      <p style="font-size:.85em;font-weight:600;color:inherit;margin:14px 0 4px">NVMe Drive Sizes to Evaluate</p>
+      <div class="size-options" id="storageV2_driveSizeOptions"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap">
+        <label for="storageV2_customDriveSize" style="font-size:.85em;font-weight:600;color:inherit">Custom size (TB):</label>
+        <input type="number" id="storageV2_customDriveSize" placeholder="e.g. 3.84" min="0.01" step="0.01"
+          style="width:130px;padding:8px 10px;border:1px solid #555;border-radius:8px;font-size:.9em">
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Storage Resiliency -->
+  <div class="card">
+    <h3>Storage Resiliency</h3>
+    <p style="font-size:.85em;color:inherit;margin:0 0 10px">Available options depend on your cluster size.</p>
+    <div id="storageV2_resiliencyOptions" class="res-options"></div>
+  </div>
+
+  <!-- Actions -->
+  <div class="btn-row">
+    <button class="btn btn-primary" id="storageV2_calcBtn">Calculate</button>
+    <button class="btn btn-secondary" id="storageV2_exportPdfBtn" style="display:none">Export to PDF</button>
+  </div>
+
+  <!-- Results -->
+  <div id="storageV2_resultBox" class="result-box" style="display:none"></div>
+
+  <!-- Charts (Mode A) -->
+  <div id="storageV2_chartsSection" style="display:none">
+    <div class="charts-grid two-col">
+      <div class="chart-wrapper"><canvas id="storageV2_capacityChart"></canvas></div>
+      <div class="chart-wrapper"><canvas id="storageV2_volumesChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Comparison Table (Mode B) -->
+  <div id="storageV2_compareSection" class="card" style="display:none">
+    <h3>Drive Size Comparison</h3>
+    <p style="font-size:.82em;color:inherit;margin:0 0 8px">Minimum drives per node required to meet or exceed the target for each drive size. Rows marked with * require more than 24 drives per node and are not feasible in standard servers.</p>
+    <table class="compare-table" id="storageV2_compareTable"></table>
+  </div>
+
+  <!-- Overview (Mode A) -->
+  <div id="storageV2_overviewSection" class="card" style="display:none">
+    <h3>Full Overview</h3>
+    <table class="overview-table" id="storageV2_overviewTable"></table>
+  </div>
+
+  <!-- Disclaimers -->
+  <div class="disclaimer">
+    <p>
+      <strong>Storage Spaces Direct (S2D) Disclaimer:</strong><br>
+      This calculator estimates storage capacity for Storage Spaces Direct deployments on Azure Local using Full-Flash NVMe configurations. Calculations are based on current best practices and deployment guidelines. Actual results may vary depending on firmware, driver versions, and workload patterns. Always refer to the
+      <a href="https://learn.microsoft.com/en-us/azure-stack/hci/concepts/plan-volumes" target="_blank">official Microsoft documentation</a>
+      for the most up-to-date information.
+    </p>
+    <p>
+      <strong>Redundancy Disclaimer:</strong><br>
+      When using 1 or 2 nodes, S2D employs Two-Way Mirror redundancy, which stores 2 copies of data. With 3+ nodes, Three-Way Mirror becomes available, storing 3 copies across different fault domains. Dual Parity requires 4+ nodes and uses erasure coding with 2 parity stripes. For a single-node configuration, a local mirror is used across drives within the same node.
+    </p>
+    <p>
+      <strong>Dual Parity Warning:</strong><br>
+      Dual Parity deviates from the standard Azure Local recommended configuration. It provides better storage efficiency than mirroring but with significantly lower write performance and higher rebuild times after a failure. It is only suitable for specific use cases (e.g., cold or archival data workloads) and should only be used if you fully understand the implications. The standard recommendation for Azure Local production deployments is Three-Way Mirror.
+    </p>
+    <p>
+      <strong>Reserved Capacity Disclaimer:</strong><br>
+      For multi-node configurations, the calculator reserves capacity equivalent to one capacity drive per node to ensure sufficient unallocated space for automatic repairs after a drive failure. For single-node clusters, no reserved capacity is applied. Actual reserve behavior may differ based on
+      <a href="https://learn.microsoft.com/en-us/azure-stack/hci/concepts/plan-volumes#reserve-capacity" target="_blank">Microsoft reserve capacity documentation</a>.
+    </p>
+    <p>
+      <strong>Infrastructure Overhead:</strong><br>
+      Approximately 300 GB is reserved for infrastructure volumes including Infrastructure_1 (ARC Resource Bridge and AKS images, ~250 GB), ClusterPerformanceHistory (~20 GB), and additional system overhead (~7 GB). These values are approximate and may change based on deployment specifics.
+    </p>
+    <p>
+      <strong>Volume Distribution Disclaimer:</strong><br>
+      During cloud deployment, the assignment of volumes within the storage pool (SU1_Pool) is automated. The remaining usable capacity after infrastructure volumes is divided equally among UserStorage volumes (one per node). These values are approximate and subject to change.
+    </p>
+    <p>
+      <strong>Dual Parity Efficiency:</strong><br>
+      Dual parity efficiency depends on the number of fault domains (nodes). With N nodes, the efficiency is calculated as (N-2)/N, up to a maximum of 6 data columns + 2 parity columns (75% efficiency at 8+ nodes). Dual parity provides better storage efficiency than mirrors but with lower write performance.
+    </p>
+    <p>
+      <strong>No Warranty:</strong><br>
+      All information in this Storage Calculator is provided "as is" with no warranties, express or implied. It does not represent official Microsoft documentation. Always verify with your hardware vendor and Microsoft documentation for accurate sizing and configuration.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var $ = function(id) { return document.getElementById(id); };
+  var num = function(el) { return +(el.value) || 0; };
+
+  var capChart = null, volChart = null;
+  var selectedResiliency = "two-way";
+  var selectedResiliencyByMode = { A: "two-way", B: "two-way" };
+  var resiliencyUserSelectedByMode = { A: false, B: false };
+  var activeMode = "A";
+
+  var COMMON_SIZES  = [0.96, 1.92, 3.84, 7.68, 15.36, 30.72];
+  var MAX_DRIVES    = 24;
+  var INFRA_OVERHEAD = 0.30;
+
+  /* ================================================================
+     RESILIENCY DEFINITIONS
+     ================================================================ */
+  var resiliencyDefs = [
+    { id: "two-way",     name: "Two-Way Mirror",   desc: "Stores 2 copies of data across different nodes/drives",     minNodes: 1, maxNodes: 0, failures: 1 },
+    { id: "three-way",   name: "Three-Way Mirror", desc: "Stores 3 copies across 3 different fault domains",          minNodes: 3, maxNodes: 0, failures: 2 },
+    { id: "dual-parity", name: "Dual Parity",      desc: "Erasure coding with 2 parity stripes for space efficiency", minNodes: 4, maxNodes: 0, failures: 2 }
+  ];
+
+  function getEfficiency(resId, nodes) {
+    if (resId === "three-way")   return 1 / 3;
+    if (resId === "dual-parity") return (Math.min(nodes, 8) - 2) / Math.min(nodes, 8);
+    return 0.50; // two-way default
+  }
+
+  function isResAvailable(r, nodes) {
+    return nodes >= r.minNodes && (r.maxNodes === 0 || nodes <= r.maxNodes);
+  }
+
+  function resiliencyLabel(id) {
+    var r = resiliencyDefs.find(function(d) { return d.id === id; });
+    return r ? r.name : id;
+  }
+
+  function getDefaultResiliency(nodes) {
+    if (nodes >= 3 && isResAvailable(resiliencyDefs[1], nodes)) return "three-way";
+    if (isResAvailable(resiliencyDefs[0], nodes)) return "two-way";
+    return null;
+  }
+
+  /* ================================================================
+     INIT
+     ================================================================ */
+  (function init() {
+    // Node count dropdown
+    var sel = $("storageV2_nodeCount");
+    for (var i = 2; i <= 16; i++) {
+      var opt = document.createElement("option");
+      opt.value = i; opt.textContent = i;
+      sel.appendChild(opt);
+    }
+
+    // Drive size checkboxes for Mode B
+    var container = $("storageV2_driveSizeOptions");
+    COMMON_SIZES.forEach(function(size) {
+      var wrap = document.createElement("label");
+      wrap.className = "size-opt checked";
+      wrap.style.cssText = "border-color:#007aff";
+
+      var chk = document.createElement("input");
+      chk.type = "checkbox";
+      chk.className = "storageV2-drive-size-chk";
+      chk.value = size;
+      chk.checked = true;
+      chk.addEventListener("change", function() {
+        if (this.checked) {
+          wrap.classList.add("checked");
+          wrap.style.borderColor = "#007aff";
+        } else {
+          wrap.classList.remove("checked");
+          wrap.style.borderColor = "#555";
+        }
+      });
+
+      var lbl = document.createElement("span");
+      lbl.textContent = size + " TB";
+
+      wrap.appendChild(chk);
+      wrap.appendChild(lbl);
+      container.appendChild(wrap);
+    });
+
+    updateResiliencyOptions();
+  })();
+
+  /* ================================================================
+     HELPERS
+     ================================================================ */
+  function getNodes() {
+    return $("storageV2_singleNode").checked ? 1 : (parseInt($("storageV2_nodeCount").value) || 2);
+  }
+
+  function fmtTB(v) { return v.toFixed(2) + " TB"; }
+
+  function getDriveCapA() {
+    var sel = $("storageV2_ffCapacity");
+    if (sel.value === "custom") return Math.max(num($("storageV2_ffCapacityCustom")), 0.01);
+    return parseFloat(sel.value) || 1.92;
+  }
+
+  /* ================================================================
+     CAPACITY CALCULATION (shared)
+     ================================================================ */
+  function calcCapacity(nodes, drivesPerNode, driveCap, resId) {
+    var efficiency        = getEfficiency(resId, nodes);
+    var rawPerNode        = drivesPerNode * driveCap;
+    var totalRaw          = rawPerNode * nodes;
+    var reserveCapacity   = nodes > 1 ? nodes * driveCap : 0;
+    var effective         = Math.max(totalRaw - reserveCapacity, 0);
+    var usableAfterRes    = effective * efficiency;
+    var resiliencyOverhead = effective - usableAfterRes;
+    var netUsable         = Math.max(usableAfterRes - INFRA_OVERHEAD, 0);
+    var netUsableTiB      = netUsable * 0.909495;
+    var storageEff        = totalRaw > 0 ? (netUsable / totalRaw * 100) : 0;
+    var infra1            = 0.250;
+    var clusterPerf       = 0.020;
+    var extraReserve      = 0.007;
+    var volumeOH          = infra1 + clusterPerf + extraReserve;
+    var remainingForUser  = Math.max(netUsable - volumeOH, 0);
+    var userPerNode       = nodes > 0 ? remainingForUser / nodes : 0;
+
+    return {
+      nodes: nodes, drivesPerNode: drivesPerNode, driveCap: driveCap, resId: resId,
+      efficiency: efficiency, rawPerNode: rawPerNode, totalRaw: totalRaw,
+      reserveCapacity: reserveCapacity, effective: effective,
+      usableAfterRes: usableAfterRes, resiliencyOverhead: resiliencyOverhead,
+      netUsable: netUsable, netUsableTiB: netUsableTiB, storageEff: storageEff,
+      infra1: infra1, clusterPerf: clusterPerf, extraReserve: extraReserve,
+      volumeOH: volumeOH, remainingForUser: remainingForUser, userPerNode: userPerNode
+    };
+  }
+
+  /* Reverse: find minimum drivesPerNode to reach targetNetUsable */
+  function calcReverse(nodes, driveCap, targetNetUsable, resId) {
+    var efficiency = getEfficiency(resId, nodes);
+    var drivesPerNode;
+    if (nodes === 1) {
+      drivesPerNode = Math.ceil((targetNetUsable + INFRA_OVERHEAD) / (driveCap * efficiency));
+      drivesPerNode = Math.max(drivesPerNode, 1);
+    } else {
+      var needed = (targetNetUsable + INFRA_OVERHEAD) / (driveCap * nodes * efficiency);
+      drivesPerNode = Math.ceil(needed) + 1;
+      drivesPerNode = Math.max(drivesPerNode, 2);
+    }
+    var d = calcCapacity(nodes, drivesPerNode, driveCap, resId);
+    d.feasible = drivesPerNode <= MAX_DRIVES;
+    return d;
+  }
+
+  /* ================================================================
+     EVENT LISTENERS
+     ================================================================ */
+  $("storageV2_singleNode").addEventListener("change", function() {
+    $("storageV2_nodeCountGroup").style.display = this.checked ? "none" : "";
+    updateResiliencyOptions();
+  });
+
+  $("storageV2_nodeCount").addEventListener("change", updateResiliencyOptions);
+
+  $("storageV2_ffCapacity").addEventListener("change", function() {
+    $("storageV2_ffCapacityCustomGroup").style.display = this.value === "custom" ? "" : "none";
+  });
+
+  function switchMode(mode) {
+    activeMode = mode;
+    selectedResiliency = selectedResiliencyByMode[mode] || selectedResiliency;
+    $("storageV2_modeABtn").classList.toggle("active", mode === "A");
+    $("storageV2_modeBBtn").classList.toggle("active", mode === "B");
+    $("storageV2_modeAPanel").style.display = mode === "A" ? "" : "none";
+    $("storageV2_modeBPanel").style.display = mode === "B" ? "" : "none";
+    $("storageV2_resultBox").style.display       = "none";
+    $("storageV2_chartsSection").style.display   = "none";
+    $("storageV2_compareSection").style.display  = "none";
+    $("storageV2_overviewSection").style.display = "none";
+    $("storageV2_exportPdfBtn").style.display    = "none";
+    updateResiliencyOptions();
+  }
+
+  $("storageV2_modeABtn").addEventListener("click", function() { switchMode("A"); });
+  $("storageV2_modeBBtn").addEventListener("click", function() { switchMode("B"); });
+  $("storageV2_calcBtn").addEventListener("click", function() {
+    if (activeMode === "A") calculateForward();
+    else calculateReverse();
+  });
+  $("storageV2_exportPdfBtn").addEventListener("click", exportPdf);
+
+  /* ================================================================
+     RESILIENCY OPTIONS UI
+     ================================================================ */
+  function updateResiliencyOptions() {
+    var nodes = getNodes();
+    var container = $("storageV2_resiliencyOptions");
+    container.innerHTML = "";
+
+    var firstAvailable    = null;
+    var currentStillValid = false;
+    var preferredDefault  = getDefaultResiliency(nodes);
+
+    selectedResiliency = selectedResiliencyByMode[activeMode] || selectedResiliency;
+
+    resiliencyDefs.forEach(function(r) {
+      var available = isResAvailable(r, nodes);
+      var eff = getEfficiency(r.id, nodes);
+
+      var warning = r.id === "dual-parity"
+        ? '<div style="font-size:.74em;color:#cc3300;font-weight:600;margin-top:6px">Not recommended for standard deployments. Deviates from the standard configuration, only use if you know what you are doing.</div>'
+        : "";
+
+      var div = document.createElement("div");
+      div.className = "res-option"
+        + (available ? "" : " disabled")
+        + (selectedResiliency === r.id && available ? " selected" : "");
+      div.innerHTML =
+        '<div class="res-name">' + r.name + '</div>' +
+        '<div class="res-detail">' + r.desc + '</div>' +
+        '<div class="res-eff">Efficiency: ' + (eff * 100).toFixed(1) + '% | Tolerates: ' + r.failures + ' failure' + (r.failures > 1 ? 's' : '') + '</div>' +
+        warning;
+
+      if (available) {
+        if (!firstAvailable) firstAvailable = r.id;
+        if (selectedResiliency === r.id) currentStillValid = true;
+        (function(rid) {
+          div.addEventListener("click", function() {
+            resiliencyUserSelectedByMode[activeMode] = true;
+            selectedResiliency = rid;
+            selectedResiliencyByMode[activeMode] = rid;
+            updateResiliencyOptions();
+          });
+        })(r.id);
+      }
+      container.appendChild(div);
+    });
+
+    if (!currentStillValid && (preferredDefault || firstAvailable)) {
+      selectedResiliency = preferredDefault || firstAvailable;
+      selectedResiliencyByMode[activeMode] = selectedResiliency;
+      updateResiliencyOptions();
+      return;
+    }
+
+    if (!resiliencyUserSelectedByMode[activeMode] && preferredDefault && selectedResiliency !== preferredDefault) {
+      selectedResiliency = preferredDefault;
+      selectedResiliencyByMode[activeMode] = selectedResiliency;
+      updateResiliencyOptions();
+    }
+  }
+
+  /* ================================================================
+     MODE A: FORWARD CALCULATION
+     ================================================================ */
+  function calculateForward() {
+    var nodes      = getNodes();
+    var driveCap   = getDriveCapA();
+    var driveCount = Math.max(num($("storageV2_ffCount")), 1);
+    var d          = calcCapacity(nodes, driveCount, driveCap, selectedResiliency);
+
+    var rb = $("storageV2_resultBox");
+    rb.style.display = "block";
+    var h = "";
+    h += "<strong>Cluster:</strong> " + nodes + " node" + (nodes > 1 ? "s" : "") + (nodes === 1 ? " (Single Node)" : "") + "<br>";
+    h += "<strong>Storage:</strong> Full-Flash NVMe - " + driveCount + " x " + fmtTB(driveCap) + " per node<br>";
+    h += "<strong>Resiliency:</strong> " + resiliencyLabel(selectedResiliency) + " (" + (d.efficiency * 100).toFixed(1) + "% efficiency)<br>";
+    h += "<hr style='border:none;border-top:1px solid #555;margin:8px 0'>";
+    h += "<strong>Total Raw per Node:</strong> " + fmtTB(d.rawPerNode) + "<br>";
+    h += "<strong>Total Raw (Cluster):</strong> " + fmtTB(d.totalRaw) + "<br>";
+    h += "<strong>Reserve Capacity:</strong> " + fmtTB(d.reserveCapacity) + "<br>";
+    h += "<strong>Resiliency Overhead:</strong> " + fmtTB(d.resiliencyOverhead) + "<br>";
+    h += "<strong>Infrastructure Overhead:</strong> " + fmtTB(INFRA_OVERHEAD) + "<br>";
+    h += "<strong>Storage Efficiency:</strong> " + d.storageEff.toFixed(1) + "%<br>";
+    h += '<strong>Net Usable Capacity:</strong> <span class="ok">' + fmtTB(d.netUsable) + " (" + d.netUsableTiB.toFixed(2) + " TiB)</span>";
+    rb.innerHTML = h;
+
+    $("storageV2_chartsSection").style.display  = "block";
+    $("storageV2_compareSection").style.display = "none";
+    drawCapacityChart(d.netUsable, d.resiliencyOverhead, d.reserveCapacity, INFRA_OVERHEAD);
+    drawVolumesChart(d.infra1, d.clusterPerf, d.userPerNode, nodes);
+
+    buildOverview(d);
+    $("storageV2_exportPdfBtn").style.display = "inline-block";
+  }
+
+  /* ================================================================
+     MODE B: REVERSE CALCULATION
+     ================================================================ */
+  function calculateReverse() {
+    var nodes         = getNodes();
+    var targetStorage = Math.max(num($("storageV2_targetStorage")), 0.1);
+
+    var sizes = [];
+    $("storageV2_calcRoot").querySelectorAll(".storageV2-drive-size-chk").forEach(function(chk) {
+      if (chk.checked) sizes.push(parseFloat(chk.value));
+    });
+    var custom = num($("storageV2_customDriveSize"));
+    if (custom > 0 && sizes.indexOf(custom) === -1) sizes.push(custom);
+    sizes.sort(function(a, b) { return a - b; });
+
+    if (sizes.length === 0) {
+      alert("Please select at least one NVMe drive size to evaluate.");
+      return;
+    }
+
+    var rb = $("storageV2_resultBox");
+    rb.style.display = "block";
+    rb.innerHTML =
+      "<strong>Target Effective Storage:</strong> " + fmtTB(targetStorage) + "<br>" +
+      "<strong>Cluster:</strong> " + nodes + " node" + (nodes > 1 ? "s" : "") + "<br>" +
+      "<strong>Resiliency:</strong> " + resiliencyLabel(selectedResiliency) + " (" + (getEfficiency(selectedResiliency, nodes) * 100).toFixed(1) + "% efficiency)";
+
+    $("storageV2_chartsSection").style.display  = "none";
+    $("storageV2_overviewSection").style.display = "none";
+    $("storageV2_compareSection").style.display = "block";
+
+    var results = sizes.map(function(sz) {
+      return calcReverse(nodes, sz, targetStorage, selectedResiliency);
+    });
+
+    // Find minimum headroom among feasible results that meet the target (most efficient)
+    var minHeadroom = Infinity;
+    results.forEach(function(r) {
+      if (r.feasible && r.netUsable >= targetStorage) {
+        var h = r.netUsable - targetStorage;
+        if (h < minHeadroom) minHeadroom = h;
+      }
+    });
+
+    var rows = [];
+    rows.push(
+      "<thead><tr>" +
+      "<th>NVMe Size</th><th>Drives / Node</th><th>Total Drives</th>" +
+      "<th>Raw / Node</th><th>Total Raw</th><th>Net Usable</th><th>Headroom</th>" +
+      "</tr></thead><tbody>"
+    );
+
+    results.forEach(function(r) {
+      var headroom = r.netUsable - targetStorage;
+      var isBest   = r.feasible && r.netUsable >= targetStorage && Math.abs(headroom - minHeadroom) < 0.001;
+      var trClass  = !r.feasible ? ' class="infeasible"' : (isBest ? ' class="best"' : "");
+      var drivesCell = r.feasible
+        ? r.drivesPerNode
+        : r.drivesPerNode + " *";
+      var totalDrives = r.feasible ? (r.drivesPerNode * nodes) : "-";
+      var usableCell  = r.netUsable >= targetStorage
+        ? '<span style="color:#2e7d32;font-weight:600">' + fmtTB(r.netUsable) + "</span>"
+        : '<span style="color:#cc3300">' + fmtTB(r.netUsable) + "</span>";
+      var headroomCell = (r.feasible && r.netUsable >= targetStorage)
+        ? "+" + fmtTB(headroom)
+        : "n/a";
+
+      rows.push(
+        "<tr" + trClass + ">" +
+        "<td>" + r.driveCap + " TB</td>" +
+        "<td>" + drivesCell + "</td>" +
+        "<td>" + totalDrives + "</td>" +
+        "<td>" + fmtTB(r.rawPerNode) + "</td>" +
+        "<td>" + fmtTB(r.totalRaw) + "</td>" +
+        "<td>" + usableCell + "</td>" +
+        "<td>" + headroomCell + "</td>" +
+        "</tr>"
+      );
+    });
+
+    rows.push("</tbody>");
+    $("storageV2_compareTable").innerHTML = rows.join("");
+    $("storageV2_exportPdfBtn").style.display = "inline-block";
+  }
+
+  /* ================================================================
+     CHARTS
+     ================================================================ */
+  function drawCapacityChart(usable, resiliency, reserve, infra) {
+    var cfg = {
+      type: "doughnut",
+      data: {
+        labels: ["Net Usable", "Resiliency Overhead", "Reserve Capacity", "Infrastructure"],
+        datasets: [{ data: [usable, resiliency, reserve, infra], borderWidth: 1,
+          backgroundColor: ["rgba(0,122,255,.75)","rgba(90,200,250,.75)","rgba(175,175,175,.75)","rgba(255,149,0,.75)"] }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          title: { display: true, text: "Capacity Breakdown", font: { size: 14 } },
+          legend: { position: "bottom", labels: { boxWidth: 12 } }
+        }
+      }
+    };
+    if (capChart) capChart.destroy();
+    capChart = new Chart($("storageV2_capacityChart").getContext("2d"), cfg);
+  }
+
+  function drawVolumesChart(infra1, clusterPerf, userPerNode, nodes) {
+    var labels = ["Infrastructure_1", "ClusterPerfHistory"];
+    var data   = [infra1, clusterPerf];
+    for (var i = 1; i <= nodes; i++) { labels.push("UserStorage_" + i); data.push(userPerNode); }
+    var cfg = {
+      type: "bar",
+      data: { labels: labels, datasets: [{ label: "Volume Size (TB)", data: data, backgroundColor: "rgba(0,122,255,.75)" }] },
+      options: {
+        indexAxis: "y", responsive: true, maintainAspectRatio: false,
+        plugins: { title: { display: true, text: "Volume Distribution", font: { size: 14 } }, legend: { display: false } },
+        scales: { x: { title: { display: true, text: "TB" }, beginAtZero: true }, y: { ticks: { autoSkip: false, font: { size: 11 } } } }
+      }
+    };
+    if (volChart) volChart.destroy();
+    volChart = new Chart($("storageV2_volumesChart").getContext("2d"), cfg);
+  }
+
+  /* ================================================================
+     OVERVIEW TABLE (Mode A)
+     ================================================================ */
+  function buildOverview(d) {
+    $("storageV2_overviewSection").style.display = "block";
+    var rows = [];
+    function sec(t)     { rows.push('<tr class="section-header"><td colspan="3">' + t + '</td></tr>'); }
+    function row(l,f,v) { rows.push('<tr><td>' + l + '</td><td class="formula">' + f + '</td><td>' + v + '</td></tr>'); }
+    function total(l,v) { rows.push('<tr class="total-row"><td colspan="2">' + l + '</td><td>' + v + '</td></tr>'); }
+
+    rows.push('<thead><tr><th>Item</th><th>Calculation</th><th>Value</th></tr></thead><tbody>');
+
+    sec("Cluster Configuration");
+    row("Cluster Type", "", d.nodes === 1 ? "Single Node" : "Multi-Node");
+    row("Number of Nodes", "User-defined", d.nodes);
+    row("Storage", "Full-Flash NVMe", d.drivesPerNode + " drives x " + fmtTB(d.driveCap) + " per node");
+    row("Resiliency", resiliencyLabel(d.resId), (d.efficiency * 100).toFixed(1) + "% efficiency");
+
+    sec("Capacity Calculation");
+    row("Raw per Node", d.drivesPerNode + " drives x " + fmtTB(d.driveCap), fmtTB(d.rawPerNode));
+    row("Total Raw (Cluster)", fmtTB(d.rawPerNode) + " x " + d.nodes + " nodes", fmtTB(d.totalRaw));
+    if (d.nodes > 1) {
+      row("Reserve Capacity", d.nodes + " nodes x " + fmtTB(d.driveCap) + " (1 drive/node)", fmtTB(d.reserveCapacity));
+    } else {
+      row("Reserve Capacity", "Single node - no reserve", "0.00 TB");
+    }
+    row("Effective Capacity", fmtTB(d.totalRaw) + " - " + fmtTB(d.reserveCapacity), fmtTB(d.effective));
+    row("Resiliency Overhead", fmtTB(d.effective) + " x (1 - " + (d.efficiency * 100).toFixed(1) + "%)", fmtTB(d.resiliencyOverhead));
+    row("Usable after Resiliency", fmtTB(d.effective) + " x " + (d.efficiency * 100).toFixed(1) + "%", fmtTB(d.usableAfterRes));
+    row("Infrastructure Overhead", "ARC RB + AKS + Cluster services", fmtTB(INFRA_OVERHEAD));
+    total("Net Usable Capacity", fmtTB(d.netUsable) + " (" + d.netUsableTiB.toFixed(2) + " TiB)");
+    row("Storage Efficiency", fmtTB(d.netUsable) + " / " + fmtTB(d.totalRaw), d.storageEff.toFixed(1) + "%");
+
+    sec("Volume Distribution (estimated)");
+    row("Infrastructure_1", "ARC Resource Bridge + AKS images", (d.infra1 * 1000).toFixed(0) + " GB");
+    row("ClusterPerformanceHistory", "Cluster statistics", (d.clusterPerf * 1000).toFixed(0) + " GB");
+    row("Extra Reserved", "System overhead", (d.extraReserve * 1000).toFixed(0) + " GB");
+    for (var n = 1; n <= d.nodes; n++) {
+      row("UserStorage_" + n, fmtTB(d.remainingForUser) + " / " + d.nodes + " nodes", fmtTB(d.userPerNode));
+    }
+    total("Total Volume Allocation", fmtTB(d.volumeOH + d.remainingForUser));
+
+    rows.push("</tbody>");
+    $("storageV2_overviewTable").innerHTML = rows.join("");
+  }
+
+  /* ================================================================
+     PDF EXPORT
+     ================================================================ */
+  function exportPdf() {
+    var btn = $("storageV2_exportPdfBtn");
+    btn.textContent = "Generating...";
+    btn.disabled = true;
+
+    try {
+      var root = $("storageV2_calcRoot");
+      var chartImages = {};
+      root.querySelectorAll("canvas").forEach(function(c) {
+        try { chartImages[c.id] = c.toDataURL("image/png"); } catch(e) {}
+      });
+
+      var clone = root.cloneNode(true);
+      clone.querySelectorAll("canvas").forEach(function(c) {
+        var img = document.createElement("img");
+        img.src = chartImages[c.id] || "";
+        img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
+        c.parentNode.replaceChild(img, c);
+      });
+      clone.querySelectorAll(".btn-row,.no-print").forEach(function(el) {
+        el.style.display = "none";
+      });
+
+      var styles = "";
+      for (var i = 0; i < document.styleSheets.length; i++) {
+        try {
+          var rules = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
+          for (var j = 0; j < rules.length; j++) styles += rules[j].cssText + "\n";
+        } catch(e) {}
+      }
+
+      var win = window.open("", "_blank", "width=960,height=800");
+      if (!win) {
+        alert("Pop-up blocked. Allow pop-ups for this page and try again, or use Ctrl+P to print.");
+        btn.textContent = "Export to PDF";
+        btn.disabled = false;
         return;
       }
-      
-      // Total Raw Capacity calculation (in TB) using the efficiency factor:
-      var totalRaw = nodes * disks * capacityPerDisk * efficiency;
-      
-      // For multi-node clusters, reserved capacity equals one disk per node.
-      // For a single-node configuration, no reserved capacity is applied.
-      var reserved = (nodes === 1) ? 0 : nodes * capacityPerDisk * efficiency;
-      
-      // Effective Capacity available for volumes:
-      var effective = totalRaw - reserved;
-      
-      // Redundancy: 2-way if 1-2 nodes, 3-way if 3+ nodes.
-      var redundancyFactor = (nodes < 3) ? 2 : 3;
-      
-      // Usable Capacity: effective capacity divided by redundancy factor.
-      var usable = effective / redundancyFactor;
-      
-      // Resiliency is the remaining effective capacity after usable capacity.
-      var resiliency = effective - usable;
-      
-      var resultHtml = "<strong>Total Raw Capacity:</strong> " + totalRaw.toFixed(2) + " TB<br>" +
-                       "<strong>Reserved Capacity:</strong> " + reserved.toFixed(2) + " TB<br>" +
-                       "<strong>Effective Capacity:</strong> " + effective.toFixed(2) + " TB<br>" +
-                       "<strong>Redundancy:</strong> " + ((redundancyFactor === 2) ? 'Two-Way Mirror' : 'Three-Way Mirror') + "<br>" +
-                       "<strong>Usable Capacity:</strong> " + usable.toFixed(2) + " TB";
-      
-      document.getElementById("result").innerHTML = resultHtml;
-      
-      updateChart(totalRaw, usable, resiliency, reserved);
-      updateVolumesChart(usable, nodes);
+
+      win.document.write(
+        "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>" +
+        "<title>Azure Local Storage Calculator - Export</title>" +
+        "<style>" + styles + "</style>" +
+        "<style>body{margin:0;padding:16px}.btn-row,.no-print{display:none!important}" +
+        "@media print{.btn-row,.no-print{display:none!important}}</style>" +
+        "</head><body>" + clone.outerHTML + "</body></html>"
+      );
+      win.document.close();
+      setTimeout(function() { win.print(); }, 500);
+
+    } catch(err) {
+      console.error("Export failed:", err);
+      alert("Export failed: " + (err.message || err) + "\nUse Ctrl+P / Cmd+P to print instead.");
     }
-    
-    function updateChart(totalRaw, usable, resiliency, reserved) {
-      // Stacked bar chart for Storage Capacity
-      const data = {
-        labels: ['Capacity'],
-        datasets: [
-          {
-            label: 'Usable Capacity',
-            data: [usable],
-            backgroundColor: 'rgba(128,191,255,0.9)',
-            stack: 'combined',
-            order: 1
-          },
-          {
-            label: 'Resiliency',
-            data: [resiliency],
-            backgroundColor: 'rgba(179,209,255,0.9)',
-            stack: 'combined',
-            order: 2
-          },
-          {
-            label: 'Reserved Capacity',
-            data: [reserved],
-            backgroundColor: 'rgba(211,211,211,0.9)',
-            stack: 'combined',
-            order: 3
-          }
-        ]
-      };
-      
-      const config = {
-        type: 'bar',
-        data: data,
-        options: {
-          indexAxis: 'x',
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' }
-          },
-          scales: {
-            x: {
-              stacked: true,
-              title: { display: true, text: 'Capacity (TB)' }
-            },
-            y: { stacked: true, ticks: { display: false } }
-          }
-        }
-      };
-      
-      if (chart) { chart.destroy(); }
-      const ctx = document.getElementById('capacityChart').getContext('2d');
-      chart = new Chart(ctx, config);
-    }
-    
-    function updateVolumesChart(usable, nodes) {
-      // Fixed volumes (in TB)
-      var infrastructure = 0.25;      // 250 GB
-      var clusterPerformance = 0.02;    // 20 GB
-      var extra = 0.007;                // 7 GB
-      
-      // Remaining usable capacity for UserStorage volumes:
-      var remaining = usable - (infrastructure + clusterPerformance + extra);
-      if (remaining < 0) remaining = 0;
-      
-      // Each node gets an equal share of the remaining capacity:
-      var userStoragePerNode = remaining / nodes;
-      
-      // Prepare labels and data arrays:
-      var labels = ['Infrastructure_1', 'ClusterPerformanceHistory'];
-      var dataValues = [infrastructure, clusterPerformance];
-      
-      // Add a UserStorage volume for each node:
-      for (var i = 1; i <= nodes; i++) {
-        labels.push("UserStorage_" + i);
-        dataValues.push(userStoragePerNode);
-      }
-      
-      const data = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Volume Size (TB)',
-            data: dataValues,
-            backgroundColor: 'rgba(128,191,255,0.9)'
-          }
-        ]
-      };
-      
-      const config = {
-        type: 'bar',
-        data: data,
-        options: {
-          indexAxis: 'y', // Horizontal bars
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            x: {
-              title: { display: true, text: 'Volume Size (TB)' }
-            },
-            y: {
-              ticks: { autoSkip: false }
-            }
-          }
-        }
-      };
-      
-      if (volumesChart) { volumesChart.destroy(); }
-      const ctx = document.getElementById('volumesChart').getContext('2d');
-      volumesChart = new Chart(ctx, config);
-    }
-  </script>
+
+    btn.textContent = "Export to PDF";
+    btn.disabled = false;
+  }
+
+  /* ================================================================
+     INITIAL RENDER
+     ================================================================ */
+  updateResiliencyOptions();
+
+})();
+</script>
 </body>
 </html>
-
 
 
 ### Pricing Calculator
