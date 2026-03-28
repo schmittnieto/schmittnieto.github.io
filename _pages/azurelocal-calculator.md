@@ -50,12 +50,12 @@ If you aim to implement more advanced storage configurations, you will likely ne
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     *{box-sizing:border-box}
-    body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:inherit}
+    body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
     .container{margin:20px 0;text-align:center}
     h3{font-size:1.5em;margin-bottom:20px}
 
     .card{margin:20px 0;padding:0;text-align:left}
-    .card h3{margin:0 0 20px;font-size:1.5em;color:inherit}
+    .card h3{margin:0 0 20px;font-size:1.5em}
 
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
     @media(max-width:700px){.form-grid{grid-template-columns:1fr}}
@@ -63,52 +63,34 @@ If you aim to implement more advanced storage configurations, you will likely ne
     .form-group.full{grid-column:1/-1}
 
     .form-group label,
-    label{display:block;margin-bottom:5px;font-weight:600;color:inherit}
+    label{display:block;margin-bottom:5px;font-weight:600}
 
-    input[type=number],input[type=range],select{
-      width:100%;
-      box-sizing:border-box;
-      margin-top:5px
-    }
-    input[type=number],select{
-      padding:8px;
-      border:1px solid #707070;
-      border-radius:8px;
-      color:inherit
-    }
+    input[type=range]{width:100%;margin:10px 0}
+    input[type=number],select{width:100%;padding:8px;border:1px solid #555;border-radius:8px;box-sizing:border-box;margin-top:5px}
+    select{background:#444;color:#fff}
     input[type=range]{margin:10px 0}
-    select{appearance:auto}
-    input[type=number]:focus,select:focus{outline:none;border-color:#007aff}
+    input[type=number]:focus,select:focus{outline:none}
 
     .chk-row{display:flex;align-items:center;margin-bottom:10px}
     .chk-row input[type=checkbox]{margin-right:8px;transform:scale(1.2)}
-    .chk-row label{margin:0;font-weight:600;color:inherit}
+    .chk-row label{margin:0;font-weight:600}
 
     .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-    .btn,button{
-      border:1px solid #007aff;
-      border-radius:8px;
-      padding:10px 20px;
-      font-size:1em;
-      cursor:pointer;
-      color:#007aff;
-      margin-top:20px
-    }
-    .btn:hover,button:hover{border-color:#005bb5;color:#005bb5}
-    .btn-secondary{border-color:#8a8a8a;color:#8a8a8a}
-    .btn-secondary:hover{border-color:#6b6b6b;color:#6b6b6b}
+    .btn,button{background:#007aff;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:1em;cursor:pointer;margin-top:20px}
+    .btn:hover,button:hover{background:#005bb5}
+    .btn-secondary{background:#555;color:#fff}
+    .btn-secondary:hover{background:#3d3d3d}
 
-    .mode-tab{color:inherit}
-    .mode-tab.active{color:#007aff;font-weight:700}
+    .mode-tab{background:#444;color:#fff;margin-top:0;border-radius:0}
+    .mode-tab:hover{background:#555}
+    .mode-tab.active,
+    .mode-tab.active:hover{background:#007aff;color:#fff;font-weight:700}
 
     .result-box{
       margin-top:20px;
       text-align:left;
       font-size:.95em;
-      line-height:1.7;
-      border:1px solid #707070;
-      border-radius:8px;
-      padding:12px
+      line-height:1.7
     }
     .warning{color:#cc3300;font-weight:600}
     .ok{color:#2e7d32;font-weight:600}
@@ -116,29 +98,29 @@ If you aim to implement more advanced storage configurations, you will likely ne
     .charts-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:20px}
     @media(min-width:900px){.charts-grid.two-col{grid-template-columns:1fr 1fr}}
     .chart-wrapper{position:relative;height:320px;text-align:center}
-    .chart-wrapper canvas{border-radius:8px;width:100%!important;height:100%!important}
+    .chart-wrapper canvas{background:#fff;border-radius:8px;width:100%!important;height:100%!important}
 
     .overview-table{width:100%;border-collapse:collapse;margin-top:15px;text-align:left;font-size:.9em}
-    .overview-table th,.overview-table td{padding:8px 10px;border-bottom:1px solid #707070}
-    .overview-table th{font-weight:600;color:inherit}
+    .overview-table th,.overview-table td{padding:8px 10px;border-bottom:1px solid #555}
+    .overview-table th{font-weight:600}
     .overview-table td:last-child{text-align:right}
-    .overview-table .section-header{font-weight:700;color:#007aff}
+    .overview-table .section-header{font-weight:700}
     .overview-table .total-row{font-weight:700}
-    .overview-table .formula{color:#8a8a8a;font-size:.86em}
+    .overview-table .formula{font-size:.86em;opacity:.8}
 
     .cpu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:12px}
-    .cpu-card{border:1px solid #707070;border-radius:8px;padding:12px;font-size:.88em}
+    .cpu-card{border:1px solid #555;border-radius:8px;padding:12px;font-size:.88em}
     .cpu-card.match{border-color:#2e7d32}
     .cpu-card.tight{border-color:#cc7a00}
-    .cpu-card.no-fit{border-color:#8a8a8a;opacity:.65}
-    .cpu-card .cpu-name{font-weight:700;font-size:.95em;margin-bottom:6px;color:inherit}
-    .cpu-card .cpu-detail{color:inherit;line-height:1.5}
-    .cpu-tag{display:inline-block;font-size:.72em;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle;border:1px solid currentColor}
-    .cpu-tag.fit{color:#2e7d32}
-    .cpu-tag.tight-tag{color:#cc7a00}
-    .cpu-tag.small{color:#8a8a8a}
+    .cpu-card.no-fit{border-color:#888;opacity:.65}
+    .cpu-card .cpu-name{font-weight:700;font-size:.95em;margin-bottom:6px}
+    .cpu-card .cpu-detail{line-height:1.5}
+    .cpu-tag{display:inline-block;font-size:.72em;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
+    .cpu-tag.fit{background:#2e7d32;color:#fff}
+    .cpu-tag.tight-tag{background:#cc7a00;color:#fff}
+    .cpu-tag.small{background:#888;color:#fff}
 
-    .disclaimer{font-size:.8em;margin-top:20px;text-align:left;line-height:1.6;color:inherit}
+    .disclaimer{font-size:.8em;margin-top:20px;text-align:left;line-height:1.6}
     .disclaimer a{color:#007aff;text-decoration:none}
     .disclaimer a:hover{text-decoration:underline}
 
@@ -205,12 +187,12 @@ If you aim to implement more advanced storage configurations, you will likely ne
   <!-- Calculation Mode Selector -->
   <div class="card">
     <h3>Calculation Mode</h3>
-    <p style="font-size:.85em;color:inherit;margin:0 0 12px">Choose your starting point: either specify how many nodes you have and get CPU recommendations, or select a CPU model and find out how many nodes you need.</p>
+    <p style="font-size:.85em;margin:0 0 12px">Choose your starting point: either specify how many nodes you have and get CPU recommendations, or select a CPU model and find out how many nodes you need.</p>
 
     <!-- Mode tabs -->
-    <div style="display:flex;gap:0;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid #707070">
+    <div style="display:flex;gap:0;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid #555">
       <button id="modeNodesBtn" class="mode-tab active" style="flex:1;padding:10px;border:none;cursor:pointer;font-weight:600;font-size:.9em;transition:background .2s">I know my Nodes - recommend CPU</button>
-      <button id="modeCpuBtn" class="mode-tab" style="flex:1;padding:10px;border:none;border-left:1px solid #707070;cursor:pointer;font-weight:600;font-size:.9em;transition:background .2s">I know my CPU - recommend Nodes</button>
+      <button id="modeCpuBtn" class="mode-tab" style="flex:1;padding:10px;border:none;border-left:1px solid #555;cursor:pointer;font-weight:600;font-size:.9em;transition:background .2s">I know my CPU - recommend Nodes</button>
     </div>
 
     <!-- Mode A: By Nodes -->
@@ -234,7 +216,7 @@ If you aim to implement more advanced storage configurations, you will likely ne
           <select id="cpuSelect"></select>
         </div>
       </div>
-      <div id="cpuSelectInfo" style="font-size:.82em;color:inherit;margin-top:6px"></div>
+      <div id="cpuSelectInfo" style="font-size:.82em;margin-top:6px"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="calcByCpuBtn">Calculate Required Nodes</button>
       </div>
@@ -252,8 +234,8 @@ If you aim to implement more advanced storage configurations, you will likely ne
   <!-- CPU Recommendations -->
   <div id="cpuRecommendSection" class="card" style="display:none">
     <h3>CPU Recommendations</h3>
-    <p style="font-size:.85em;color:inherit;margin:0 0 4px">Based on the minimum cores required per socket, these are common server CPUs that could fit your workload.</p>
-    <p style="font-size:.82em;color:inherit;margin:0 0 10px;font-weight:600">Important: CPU availability depends on your OEM/server platform. Always confirm with your hardware vendor before purchasing. Newer generations offer better IPC and efficiency, enabling higher vCPU:core ratios.</p>
+    <p style="font-size:.85em;margin:0 0 4px">Based on the minimum cores required per socket, these are common server CPUs that could fit your workload.</p>
+    <p style="font-size:.82em;margin:0 0 10px;font-weight:600">Important: CPU availability depends on your OEM/server platform. Always confirm with your hardware vendor before purchasing. Newer generations offer better IPC and efficiency, enabling higher vCPU:core ratios.</p>
     <div id="cpuGrid" class="cpu-grid"></div>
   </div>
 
