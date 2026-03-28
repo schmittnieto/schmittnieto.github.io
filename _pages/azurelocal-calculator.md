@@ -18,7 +18,7 @@ header:
   og_image: "/assets/img/AzureLocalCalculator.webp"
   overlay_image: "/assets/img/AzureLocalCalculator.webp"
   overlay_filter: 0.5
-  caption: "Photo credit: [ChatGPT](https://chatgpt.com)"
+  caption: ""
 ---
 
 ## Introduction
