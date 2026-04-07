@@ -35,7 +35,7 @@ Five years ago, I specialized in Microsoft Azure, a move that has been both chal
 * **Hybrid Cloud Solutions:** Integrating on-premise (Azure Local) systems with cloud services to build agile and secure IT environments.
 * **Azure Virtual Desktop (AVD):** Designing and optimizing virtual desktop infrastructures to enhance efficiency and scalability.
 
-I also guide clients through their digital transformation journeys using modern tools like Azure DevOps, Terraform, and Bicep, along with frameworks such as the Cloud Adoption Framework (CAF) and the Well Architected Framework (WAF).
+I also guide clients through their digital transformation journeys using modern tools like Azure DevOps, Terraform and Bicep, along with frameworks such as the Cloud Adoption Framework (CAF) and the Well Architected Framework (WAF).
 
 ## Areas of Expertise
 
@@ -47,6 +47,10 @@ I also guide clients through their digital transformation journeys using modern 
 
 As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
 <div class="Certifications" style="text-align: center;">
+  <a href="https://credsverse.com/credentials/d09e0a2d-f249-4690-a9fa-4ede62537421" target="_blank">
+    <img src="/assets/img/NVP.webp" alt="Nerdio Valued Professional" class="cert-image" style="width: 150px; height: 150px;"/>
+    <div style="text-align: center;">Nerdio Valued Professional</div>
+  </a>
   <a href="/assets/img/cert/NMEPS-200.pdf" target="_blank">
     <img src="/assets/img/nerdio-nmeps-200.png" alt="Nerdio Enterprise Partner Sales Foundations (NMEPS-200)" class="cert-image" style="width: 150px; height: 150px;"/>
     <div style="text-align: center;">Nerdio Enterprise Partner Sales Foundations (NMEPS-200)</div>
