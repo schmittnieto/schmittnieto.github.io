@@ -71,7 +71,6 @@ author:
   name   : "Cristian Schmitt Nieto"
   avatar : "/assets/img/avatar-csn.jpeg"
   bio    : "Azure Consultant with over 10 years of IT experience, sharing insights and solutions here 😊"
-  location: "Frankfurt"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
