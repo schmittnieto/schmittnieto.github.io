@@ -1,6 +1,9 @@
-<!-- Cookie consent is only enabled on the production host -->
 <script>
-  window.__cookieConsentEnabled__ = /^(www\.)?schmitt-nieto\.com$/i.test(window.location.hostname);
+  var cookieConsentHost = window.location.hostname || "";
+  window.__cookieConsentProductionHost__ = /^(www\.)?schmitt-nieto\.com$/i.test(cookieConsentHost);
+  window.__cookieConsentLocalHost__ = /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/i.test(cookieConsentHost);
+  window.__cookieConsentEnabled__ = window.__cookieConsentProductionHost__ || window.__cookieConsentLocalHost__;
+  window.__cookieConsentAnalyticsEnabled__ = window.__cookieConsentProductionHost__;
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
 
@@ -8,7 +11,7 @@
   window.__clarityLoaded = false;
 
   function loadClarity(){
-    if (!window.__cookieConsentEnabled__ || !window.__CLARITY_ALLOWED__ || window.__clarityLoaded) return;
+    if (!window.__cookieConsentAnalyticsEnabled__ || !window.__CLARITY_ALLOWED__ || window.__clarityLoaded) return;
     window.clarity = window.clarity || function(){ (window.clarity.q = window.clarity.q || []).push(arguments); };
     window.clarity('consentv2', { ad_Storage: 'granted', analytics_Storage: 'granted' });
 
@@ -25,7 +28,7 @@
     document.head.appendChild(sCl);
   }
 
-  if (window.__cookieConsentEnabled__) {
+  if (window.__cookieConsentAnalyticsEnabled__) {
     gtag('consent', 'default', {
       ad_storage: 'denied',
       analytics_storage: 'denied',
@@ -133,6 +136,7 @@
   }
 
   function loadGA(){
+    if (!window.__cookieConsentAnalyticsEnabled__) return;
     if (document.getElementById('ga4-loader')) return;
     var sGA = document.createElement('script');
     sGA.id = 'ga4-loader';
