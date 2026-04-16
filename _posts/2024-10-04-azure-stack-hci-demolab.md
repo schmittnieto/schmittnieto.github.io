@@ -2,7 +2,7 @@
 title: "Azure Local: Demolab"
 excerpt: "Streamline Azure Local deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2025-05-05
+last_modified_at: 2026-04-16
 categories:
   - Blog
 tags:
@@ -139,28 +139,52 @@ The repository is structured as follows:
 AzSHCI/
 │
 ├── scripts/
-│   └── 01Lab/
-│       ├── 00_Infra_AzHCI.ps1
-│       ├── 01_DC.ps1
-│       ├── 02_Cluster.ps1
-│       ├── 03_TroubleshootingExtensions.ps1
-│       ├── 99_Offboarding.ps1
+│   ├── 01Lab/
+│   │   ├── 00_AzurePreRequisites.ps1
+│   │   ├── 00_Infra_AzHCI.ps1
+│   │   ├── 01_DC.ps1
+│   │   ├── 02_Cluster.ps1
+│   │   ├── 03_TroubleshootingExtensions.ps1
+│   │   └── 99_Offboarding.ps1
+│   ├── 02Day2/
+│   │   ├── 10_StartStopAzSHCI.ps1
+│   │   ├── 11_ImageBuilderAzSHCI.ps1
+│   │   ├── 12_AKSArcServiceToken.ps1
+│   │   └── 13_VHDXOptimization.ps1
+│   └── 03VMDeployment/
+│       └── 20_SSHRDPArcVM.ps1
 │
+├── terraform/
 ├── README.md
 └── LICENSE
 ```
 
 ### Script Breakdown
 
+#### 00_AzurePreRequisites.ps1
+
+**Azure Pre-requisites Setup Script**
+
+- **Purpose:** Automates all Azure-side preparation needed before the lab deployment starts. Run this once per subscription before executing any other script.
+- **Features:**
+  - Checks and installs required Az PowerShell modules (`Az.Accounts`, `Az.Resources`).
+  - Authenticates to Azure via device code login and prompts you to select a subscription.
+  - Lets you choose an existing resource group or create a new one (recommended name: `rg-azlocal-lab`).
+  - Assigns all required RBAC roles at subscription scope (`Azure Stack HCI Administrator`, `Reader`) and resource group scope (`Key Vault Data Access Administrator`, `Key Vault Secrets Officer`, `Key Vault Contributor`, `Storage Account Contributor`, `Azure Connected Machine Onboarding`, `Azure Connected Machine Resource Administrator`).
+  - Registers all necessary Azure resource providers (`Microsoft.AzureStackHCI`, `Microsoft.HybridCompute`, `Microsoft.KeyVault`, and others).
+  - Optionally creates a Service Principal (SPN). If created, the `AppId` and `Secret` are printed at the end -- save them to use with `02_Cluster.ps1` for non-interactive Arc registration.
+
 #### 00_Infra_AzHCI.ps1
 
 **Configuration and VM Creation Script**
 
-- **Purpose:** Sets up virtual networking, creates necessary folder structures, and deploys both the HCI node and Domain Controller VMs.
+- **Purpose:** Sets up virtual networking, creates necessary folder structures, and deploys both the HCI node (`AZLN01`) and Domain Controller (`DC`) VMs.
 - **Features:**
-  - Configures an internal virtual switch with NAT.
-  - Creates directories for VM and disk storage.
-  - Automates VM creation and initial configuration.
+  - Configures an internal virtual switch with NAT (`172.19.18.0/24`, gateway `172.19.18.1`).
+  - Adds an inbound ICMPv4 firewall rule so VMs can ping the NAT gateway.
+  - Creates the lab folder structure under `E:\AzureLocalLab` (subfolders `VM\` and `Disk\`).
+  - Automates VM creation with vTPM, nested virtualization, MAC spoofing, and boot-from-ISO configuration.
+  - Default ISO paths: `E:\ISO\AzureLocal24H2.iso` (HCI node) and `E:\ISO\WS2025.iso` (DC). Adjust `$isoPath_HCI`, `$isoPath_DC` and `$HCIRootFolder` if your paths differ.
 
 #### 01_DC.ps1
 
@@ -169,46 +193,51 @@ AzSHCI/
 - **Purpose:** Configures the Domain Controller VM, including network settings and Active Directory setup.
 - **Features:**
   - Removes ISO media from the VM.
-  - Renames the VM and sets static IP.
+  - Renames the VM and sets static IP (`172.19.18.2`).
   - Sets the time zone and installs necessary Windows features.
-  - Promotes the server to a Domain Controller.
-  - Configures DNS forwarders and creates Organizational Units (OUs) in Active Directory.
+  - Promotes the server to a Domain Controller (`azurelocal.local`).
+  - Configures DNS forwarders and creates a full Organizational Unit (OU) structure in Active Directory.
+  - Runs `New-HciAdObjectsPreCreation` to pre-create the AD objects required by Azure Local LCM.
 
 #### 02_Cluster.ps1
 
 **Cluster Node Configuration Script**
 
-- **Purpose:** Configures the Azure Local node VM.
+- **Purpose:** Configures the Azure Local node VM (`AZLN01`) and registers it with Azure Arc.
+- **Execution modes (selected interactively at startup):**
+  - **Mode 1 -- Full setup:** ISO removal, user creation, NIC configuration and Arc registration. Use on first run.
+  - **Mode 2 -- Arc only:** Retries only the Arc registration step without repeating node configuration. Use to recover from a failed registration without starting over.
 - **Features:**
   - Removes ISO media from the VM.
-  - Creates a setup user and renames the VM.
-  - Configures network adapters with static IPs and RDMA.
-  - Installs essential Windows features like Hyper-V and Failover Clustering.
-  - Registers the node with Azure Arc and integrates Azure services.
+  - Creates a local administrator account (`Setupuser`) and renames the VM to `AZLN01`.
+  - Configures network adapters with static IPs and RDMA (`MGMT1`: `172.19.18.10`, `MGMT2`: RDMA only).
+  - Installs essential Windows features.
+  - Registers the node with Azure Arc via `Invoke-AzStackHciArcInitialization`, with automatic retry for transient `BootstrapOobeService` connection errors.
+  - **Optional SPN authentication:** if `$SPNAppId` and `$SPNSecret` are set (output from `00_AzurePreRequisites.ps1`), the script authenticates non-interactively via Service Principal instead of an interactive device code prompt.
 
 #### 03_TroubleshootingExtensions.ps1
 
 **Troubleshooting Azure Connected Machine Extensions**
 
-- **Purpose:** Manages Azure Connected Machine extensions for the HCI nodes.
+- **Purpose:** Manages and reconciles Azure Connected Machine extensions for the HCI nodes. No longer required before portal deployment (extensions are installed automatically since version 2503), but still useful for troubleshooting failed or mismatched extensions.
 - **Features:**
   - Installs required PowerShell modules (`Az.Compute` and `Az.StackHCI`) if not already installed.
-  - Connects to Azure using device code authentication and allows you to select a subscription and resource group.
-  - Retrieves Azure Arc VMs from Azure using `Az.StackHCI`, filtering for machines with `CloudMetadataProvider` set to "AzSHCI".
-  - Validates that required Azure Connected Machine extensions are installed.
-  - Fixes any failed extensions by removing locks, deleting, and reinstalling them.
+  - Connects to Azure using device code authentication or SPN and allows you to select a subscription and resource group.
+  - Retrieves Azure Arc VMs filtering for machines with `CloudMetadataProvider` set to `AzSHCI`.
+  - Validates that required Azure Connected Machine extensions are installed and at the correct version.
+  - Fixes any failed or version-mismatched extensions by removing locks, deleting, and reinstalling them.
   - Adds any missing extensions based on a predefined list.
 
 #### 99_Offboarding.ps1
 
 **Offboarding Script to Clean Up Configurations**
 
-- **Purpose:** Cleans up the deployment by removing VMs, associated VHD files, virtual switches, NAT settings, and designated folder structures.
+- **Purpose:** Cleans up the entire lab deployment by removing VMs, VHD files, virtual switches, NAT settings, and the lab folder structure.
 - **Features:**
-  - Stops and removes specified VMs.
-  - Deletes associated virtual hard disk (VHD) files.
-  - Removes virtual switches and NAT configurations.
-  - Cleans up folder structures.
+  - Stops and removes `AZLN01` and `DC` VMs and their associated VHD files.
+  - Removes the HgsGuardian entries for both VMs.
+  - Removes the NAT object and virtual switch (`azurelocal`).
+  - Deletes the entire `E:\AzureLocalLab` folder tree.
 
 
 ## Step-by-Step Deployment Guide
@@ -230,7 +259,7 @@ Or download the repository manually: [Download Here](https://github.com/schmittn
 - **Windows Server 2025 Evaluation ISO**: [Download Here](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2025)
 - **Azure Local OS ISO**: Download directly from the Azure Portal.
 
-Place both ISO files in the `C:\ISO` directory and rename the isos if you consider it convenient, for example I renamed the Azure Local iso to `HCI23H2.iso` and the Windows Server 2025 iso to `W2025.iso`.
+Place both ISO files in a directory accessible to the host. The scripts default to `E:\ISO\AzureLocal24H2.iso` (Azure Local node) and `E:\ISO\WS2025.iso` (Domain Controller). If your drive letter or filenames differ, update the `$isoPath_HCI`, `$isoPath_DC`, and `$HCIRootFolder` variables in `00_Infra_AzHCI.ps1` before running it.
 
 ### 3. Preparing Your Environment
 
@@ -246,11 +275,26 @@ Ensure your execution policy allows script execution:
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### 4. Initial infrastructure script
+### 4. Prepare Azure Pre-requisites
 
-Considering that you are in the scripts folder, make sure to change the iso variables (`$isoPath_HCI = “C:\ISO\HCI23H2.iso”` and `$isoPath_DC = “C:\ISO\WS2025.iso”`) in the `00_Infra_AzHCI.ps1` script to match yours.
+Before setting up any local infrastructure, run `00_AzurePreRequisites.ps1` to automate all Azure-side setup:
 
-The you can run the script:
+```
+.\00_AzurePreRequisites.ps1
+```
+
+This interactive script will:
+
+- Install required Az modules if missing.
+- Authenticate to Azure and let you select a subscription.
+- Create or select the resource group (`rg-azlocal-lab` is the recommended default).
+- Assign all required RBAC roles at subscription and resource group scope.
+- Register all required Azure resource providers.
+- Optionally create a Service Principal (SPN). If you choose to create one, **save the `AppId` and `Secret`** that are printed at the end -- you will need them in Step 9 to enable non-interactive Arc registration.
+
+### 5. Initial infrastructure script
+
+Confirm the ISO paths and lab root folder match your environment. The script defaults to `$isoPath_HCI = “E:\ISO\AzureLocal24H2.iso”`, `$isoPath_DC = “E:\ISO\WS2025.iso”`, and `$HCIRootFolder = “E:\AzureLocalLab”`. Edit those variables at the top of `00_Infra_AzHCI.ps1` if your paths differ, then run the script:
 
 ```
 .\00_Infra_AzHCI.ps1
@@ -259,7 +303,7 @@ The you can run the script:
 This script will set up the virtual networking, create necessary folder structures, and deploy the VMs for the Domain Controller (DC) and the Azure Local node.
 
 
-### 5. Manual Installation of the DC Operating System
+### 6. Manual Installation of the DC Operating System
 
 - **Start the DC VM**: Open Hyper-V Manager and start the `DC` VM.
 - **Follow the Installation Wizard**: Proceed through the Windows Server 2025 installation wizard.
@@ -267,7 +311,7 @@ This script will set up the virtual networking, create necessary folder structur
 
 No additional configuration is needed at this stage.
 
-### 6. Domain Controller configuration script
+### 7. Domain Controller configuration script
 
 Before running the script, modify the `$defaultUser` and `$defaultPwd` variables in `01_DC.ps1` to match your administrator credentials.
 
@@ -290,43 +334,59 @@ This process takes approximately **30 minutes** due to Windows Updates. The scri
 - Promote the server to a Domain Controller.
 - Install updates and prepare the environment for cluster registration.
 
-### 7. Manual Installation of the Node Operating System
+### 8. Manual Installation of the Node Operating System
 
-- **Start the NODE VM**: Open Hyper-V Manager and start the `NODE` VM.
+- **Start the AZLN01 VM**: Open Hyper-V Manager and start the `AZLN01` VM.
 - **Follow the Installation Wizard**: Proceed through the Azure Local OS installation wizard.
 - **Perform First Login**: Log in as the Administrator for the first time.
 
 No additional configuration is needed at this stage.
 
-### 8. Node configuration and ARC registration
+### 9. Node configuration and ARC registration
 
-Before running the script, modify the `$defaultUser` and `$defaultPwd` variables in `02_Cluster.ps1` to match your administrator credentials.
+Before running the script, update the required variables at the top of `02_Cluster.ps1`:
 
-```
-# In 02_Cluster.ps1
+```powershell
+# Credentials (must match the password used during OS installation)
 $defaultUser = "Administrator"
-$defaultPwd = "YourAdminPassword"
+$defaultPwd  = "YourAdminPassword"
+
+# Azure identifiers
+$SubscriptionID    = "your-subscription-id"
+$TenantID          = "your-tenant-id"
+$resourceGroupName = "rg-azlocal-lab"
+$Location          = "westeurope"
 ```
 
-Then, execute the script:
+If you created a Service Principal in Step 4, you can enable non-interactive Arc registration by also setting:
+
+```powershell
+$SPNAppId  = "appid-from-00_AzurePreRequisites"
+$SPNSecret = "secret-from-00_AzurePreRequisites"
+```
+
+If both values are left empty, the script falls back to an interactive device code login on the node.
+
+Then execute the script:
 
 ```
 .\02_Cluster.ps1
 ```
 
-This process takes approximately **10 minutes** and will require you to:
+When prompted, select the execution mode:
 
-- Authenticate to Azure.
-- Select the Resource Group where the node will be registered.
+- **Mode 1 -- Full setup**: runs the complete flow (ISO removal, user creation, NIC configuration, Arc registration). Use this on the first run.
+- **Mode 2 -- Arc only**: retries only the Arc registration step without touching the node configuration. Use this to recover from a failed registration.
 
-The script will:
+This process takes approximately **10 minutes**. The script will:
 
 - Remove the ISO from the VM.
-- Configure network settings.
+- Create a setup user and rename the node to `AZLN01`.
+- Configure network adapters with static IPs and RDMA.
 - Install required Windows features.
-- Register the node with Azure Arc.
+- Register the node with Azure Arc (with automatic retry for transient connection errors).
 
-### 9. Verify Node Extension Installation
+### 10. Verify Node Extension Installation
 > ⚠️ **Warning:** This step is no longer required (Since April 2025) as the extension installation is now handled automatically during the cluster deployment starting from version **2503**. I will show how to perform this step in the next section.
 
 After running Script 02, the Azure Connected Machine extensions should begin installing automatically. This can take up to **20 minutes**. To verify:
@@ -347,31 +407,17 @@ If you encounter any issues or failures with the extensions, run Script 03:
 This script will troubleshoot and fix common extension issues.
 
 
-### 10. Registering the Cluster
-
-*This section will be detailed in a future update, complete with step-by-step instructions and screenshots.*
+### 11. Registering the Cluster
 
 Once the cluster node script completes and extensions are correctly installed, follow these steps to register your cluster in Azure:
 
 1. **Assign Required Rights:**
 
-   - **Subscription Level:**
-     - If not an Owner or Contributor, assign the following roles to the user performing the registration:
-       - Azure Local Administrator
-       - Reader
+   If you ran `00_AzurePreRequisites.ps1` in Step 4, all RBAC roles have already been assigned automatically and you can skip this step. If you skipped Step 4, assign the following roles manually:
 
-   - **Resource Group Level:**
-     - Assign the following roles to the user within the Resource Group where deployment will occur:
-       - Key Vault Data Access Administrator
-       - Key Vault Secrets Officer
-       - Key Vault Contributor
-       - Storage Account Contributor
-
-   - **Microsoft Entra Roles and Administrators:**
-     - Assign the following role to the user performing the deployment:
-       - Cloud Application Administrator
-
-   *In the near future, I plan to automate this process (granting granular rights to a user for deployment) using a script.*
+   - **Subscription Level:** `Azure Stack HCI Administrator`, `Reader`.
+   - **Resource Group Level:** `Key Vault Data Access Administrator`, `Key Vault Secrets Officer`, `Key Vault Contributor`, `Storage Account Contributor`.
+   - **Microsoft Entra Roles and Administrators:** `Cloud Application Administrator` for the user performing the deployment.
 
 2. **Initial Cluster Registration:**
 
@@ -412,6 +458,8 @@ Once the cluster node script completes and extensions are correctly installed, f
 3. **Perform Cloud Deployment:**
 
    - Initiate the cloud deployment and wait approximately 2 hours for the cluster to be ready for subsequent steps.
+
+> **Terraform alternative:** The repository also includes a `terraform/` folder that provides an Infrastructure-as-Code alternative to clicking through the portal wizard. It deploys the cluster using a local fork of the Azure Verified Module for Azure Local. A dedicated article covering the Terraform path end-to-end is in progress.
 
 
 ## Cost Considerations

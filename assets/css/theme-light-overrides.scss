@@ -237,6 +237,138 @@ html.light-theme #pricingV2_calcRoot .result-box {
   color: #1f2937;
 }
 
+/* =========================================================================
+   Light-theme code block improvements
+   ========================================================================= */
+
+/* Container: left accent + border + shadow */
+html.light-theme .highlighter-rouge,
+html.light-theme figure.highlight {
+  border: 1px solid #d1dae4;
+  border-left: 3px solid #0b63c9;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+html.light-theme code,
+html.light-theme pre,
+html.light-theme .highlight,
+html.light-theme .highlight pre {
+  background: #f1f5f9;
+  color: #24292e;
+}
+
+/* Inline code (not inside a block) */
+html.light-theme :not(pre) > code {
+  background: #edf0f3;
+  color: #c7254e;
+  padding: 0.12em 0.38em;
+  border-radius: 3px;
+  border: 1px solid #dde3ea;
+  font-size: 0.88em;
+}
+
+/* Scrollbar in light mode */
+html.light-theme .highlight pre::-webkit-scrollbar { height: 6px; }
+html.light-theme .highlight pre::-webkit-scrollbar-track { background: #e8edf2; }
+html.light-theme .highlight pre::-webkit-scrollbar-thumb { background: #b0bcc8; border-radius: 3px; }
+
+/* ---- GitHub-style syntax token overrides ---- */
+
+/* Comments */
+html.light-theme .highlight .c,
+html.light-theme .highlight .c1,
+html.light-theme .highlight .cm,
+html.light-theme .highlight .cs,
+html.light-theme .highlight .cp { color: #6a737d; font-style: italic; }
+
+/* Keywords */
+html.light-theme .highlight .k,
+html.light-theme .highlight .kd,
+html.light-theme .highlight .kn,
+html.light-theme .highlight .kp,
+html.light-theme .highlight .kr,
+html.light-theme .highlight .kc,
+html.light-theme .highlight .kt { color: #d73a49; }
+
+/* Strings */
+html.light-theme .highlight .s,
+html.light-theme .highlight .s1,
+html.light-theme .highlight .s2,
+html.light-theme .highlight .sb,
+html.light-theme .highlight .sc,
+html.light-theme .highlight .sd,
+html.light-theme .highlight .sh,
+html.light-theme .highlight .si,
+html.light-theme .highlight .sx,
+html.light-theme .highlight .sr,
+html.light-theme .highlight .ss { color: #032f62; }
+
+/* Numbers */
+html.light-theme .highlight .m,
+html.light-theme .highlight .mi,
+html.light-theme .highlight .mf,
+html.light-theme .highlight .mh,
+html.light-theme .highlight .mo,
+html.light-theme .highlight .il { color: #005cc5; }
+
+/* Function / method names */
+html.light-theme .highlight .nf,
+html.light-theme .highlight .nb { color: #6f42c1; }
+
+/* Types / classes */
+html.light-theme .highlight .nc,
+html.light-theme .highlight .nn { color: #6f42c1; }
+
+/* Constants */
+html.light-theme .highlight .no { color: #005cc5; }
+
+/* Operators */
+html.light-theme .highlight .o,
+html.light-theme .highlight .ow { color: #d73a49; }
+
+/* Variables / attributes */
+html.light-theme .highlight .nv,
+html.light-theme .highlight .na { color: #e36209; }
+
+/* Decorators / annotations */
+html.light-theme .highlight .nd { color: #6f42c1; }
+
+/* Generic names and punctuation */
+html.light-theme .highlight .n,
+html.light-theme .highlight .ni,
+html.light-theme .highlight .nl,
+html.light-theme .highlight .p { color: #24292e; }
+
+/* Diff lines */
+html.light-theme .highlight .gd { color: #b31d28; background: #ffeef0; }
+html.light-theme .highlight .gi { color: #22863a; background: #f0fff4; }
+
+/* Generic output / prompt */
+html.light-theme .highlight .go,
+html.light-theme .highlight .gp { color: #586069; }
+
+/* Errors */
+html.light-theme .highlight .err { color: #b31d28; background: none; }
+
+/* ---- Code-expand button overrides for light theme ---- */
+
+html.light-theme .sn-code-toggle {
+  color: #0b63c9;
+  border-color: #c8d4de;
+  background: #eef2f7;
+}
+
+html.light-theme .sn-code-toggle:hover {
+  background: #e2eaf4;
+  color: #084c99;
+}
+
+html.light-theme .sn-code-collapsible.is-collapsed {
+  box-shadow: inset 0 -4em 3em -0.5em rgba(241, 245, 249, 0.97);
+}
+
 html.light-theme #calcRoot input[type=number],
 html.light-theme #calcRoot select,
 html.light-theme #storageV2_calcRoot .form-group input[type=number],

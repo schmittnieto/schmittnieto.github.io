@@ -54,3 +54,53 @@
      "HTML-CSS": { availableFonts: ["TeX"] }
    });
 </script>
+
+<script>
+/* Code-block expand/collapse — show first 10 lines, reveal rest on click */
+(function () {
+  var LINE_THRESHOLD = 10;
+
+  function initCodeExpand() {
+    /* :not(pre) avoids the nested pre.highlight inside div.highlight */
+    document.querySelectorAll('.highlight:not(pre)').forEach(function (block) {
+      var codeEl = block.querySelector('code') || block;
+      var text = (codeEl.textContent || codeEl.innerText || '').replace(/\n$/, '');
+      var lines = text.split('\n');
+      if (lines.length <= LINE_THRESHOLD) return;
+
+      var extra = lines.length - LINE_THRESHOLD;
+      var pre = block.querySelector('pre') || block;
+      var lh = parseFloat(window.getComputedStyle(pre).lineHeight) || 22;
+      var maxH = LINE_THRESHOLD * lh;
+
+      block.classList.add('sn-code-collapsible', 'is-collapsed');
+      block.style.maxHeight = maxH + 'px';
+
+      var btn = document.createElement('button');
+      btn.className = 'sn-code-toggle';
+      btn.setAttribute('type', 'button');
+      btn.textContent = '\u25bc Show ' + extra + ' more lines\u2026';
+
+      btn.addEventListener('click', function () {
+        if (block.classList.contains('is-collapsed')) {
+          block.classList.remove('is-collapsed');
+          block.style.maxHeight = '';
+          btn.textContent = '\u25b2 Show less';
+        } else {
+          block.classList.add('is-collapsed');
+          block.style.maxHeight = maxH + 'px';
+          btn.textContent = '\u25bc Show ' + extra + ' more lines\u2026';
+        }
+      });
+
+      block.insertAdjacentElement('afterend', btn);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCodeExpand);
+  } else {
+    initCodeExpand();
+  }
+})();
+</script>
