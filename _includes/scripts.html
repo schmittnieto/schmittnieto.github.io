@@ -56,25 +56,31 @@
 </script>
 
 <script>
-/* Code-block expand/collapse — show first 10 lines, reveal rest on click */
+/* Code-block expand/collapse — show first 10 lines, reveal rest on click.
+   Targets pre.highlight directly: it is the scroll container that actually
+   clips content, and there is exactly one per fenced code block. */
 (function () {
   var LINE_THRESHOLD = 10;
 
   function initCodeExpand() {
-    /* :not(pre) avoids the nested pre.highlight inside div.highlight */
-    document.querySelectorAll('.highlight:not(pre)').forEach(function (block) {
-      var codeEl = block.querySelector('code') || block;
+    document.querySelectorAll('pre.highlight').forEach(function (pre) {
+      var codeEl = pre.querySelector('code') || pre;
       var text = (codeEl.textContent || codeEl.innerText || '').replace(/\n$/, '');
       var lines = text.split('\n');
       if (lines.length <= LINE_THRESHOLD) return;
 
       var extra = lines.length - LINE_THRESHOLD;
-      var pre = block.querySelector('pre') || block;
       var lh = parseFloat(window.getComputedStyle(pre).lineHeight) || 22;
       var maxH = LINE_THRESHOLD * lh;
 
-      block.classList.add('sn-code-collapsible', 'is-collapsed');
-      block.style.maxHeight = maxH + 'px';
+      /* Collapse the pre — inline styles beat any theme CSS */
+      pre.classList.add('sn-code-collapsible', 'is-collapsed');
+      pre.style.maxHeight = maxH + 'px';
+      pre.style.overflow  = 'hidden';
+
+      /* Insert button after the outermost wrapper (.highlighter-rouge),
+         falling back to the parent if no wrapper is found */
+      var anchor = pre.closest('.highlighter-rouge, figure.highlight') || pre.parentElement || pre;
 
       var btn = document.createElement('button');
       btn.className = 'sn-code-toggle';
@@ -82,18 +88,20 @@
       btn.textContent = '\u25bc Show ' + extra + ' more lines\u2026';
 
       btn.addEventListener('click', function () {
-        if (block.classList.contains('is-collapsed')) {
-          block.classList.remove('is-collapsed');
-          block.style.maxHeight = '';
+        if (pre.classList.contains('is-collapsed')) {
+          pre.classList.remove('is-collapsed');
+          pre.style.maxHeight = '';
+          pre.style.overflow  = '';
           btn.textContent = '\u25b2 Show less';
         } else {
-          block.classList.add('is-collapsed');
-          block.style.maxHeight = maxH + 'px';
+          pre.classList.add('is-collapsed');
+          pre.style.maxHeight = maxH + 'px';
+          pre.style.overflow  = 'hidden';
           btn.textContent = '\u25bc Show ' + extra + ' more lines\u2026';
         }
       });
 
-      block.insertAdjacentElement('afterend', btn);
+      anchor.insertAdjacentElement('afterend', btn);
     });
   }
 

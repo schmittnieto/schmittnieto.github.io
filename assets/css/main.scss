@@ -109,7 +109,7 @@ $caption-font-family        : $serif;
 }
 
 .sn-code-collapsible.is-collapsed {
-  overflow: hidden;
+  /* overflow and max-height are set inline by JS for max specificity */
   box-shadow: inset 0 -4em 3em -0.5em rgba(0, 0, 0, 0.88);
 }
 
