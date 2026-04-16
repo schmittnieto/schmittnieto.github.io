@@ -18,8 +18,17 @@ layout: default
   {% endunless %}
 {% endif %}
 
-<div id="main" role="main">
-  {% include sidebar.html %}
+{% assign has_page_sidebar = false %}
+{% if page.author_profile or layout.author_profile or page.sidebar %}
+  {% assign has_page_sidebar = true %}
+{% endif %}
+
+<div id="main"{% if has_page_sidebar %} class="has-page-sidebar"{% endif %} role="main">
+  {% if has_page_sidebar %}
+    <aside class="page__sidebar">
+      {% include sidebar.html %}
+    </aside>
+  {% endif %}
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork"{% if page.locale %} lang="{{ page.locale }}"{% endif %}>
     {% if page.title %}<meta itemprop="headline" content="{{ page.title | replace: '|', '&#124;' | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
@@ -39,17 +48,19 @@ layout: default
         </header>
       {% endunless %}
 
-      <section class="page__content" itemprop="text">
+      <section class="page__content{% if page.toc %} page__content--with-toc{% endif %}" itemprop="text">
         {% if page.toc %}
-          <aside class="sidebar__right {% if page.toc_sticky %}sticky{% endif %}">
+          <aside class="sidebar__right{% if page.toc_sticky != false %} sticky{% endif %}">
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-{{ page.toc_icon | default: 'file-alt' }}"></i> {{ page.toc_label | default: site.data.ui-text[site.locale].toc_label | default: "On this page" }}</h4></header>
               {% include toc.html sanitize=true html=content h_min=1 h_max=3 class="toc__menu" skip_no_ids=true %}
             </nav>
           </aside>
         {% endif %}
-        {{ content }}
-        {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
+        <div class="page__content-body">
+          {{ content }}
+          {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
+        </div>
       </section>
 
       <footer class="page__meta">
@@ -65,15 +76,8 @@ layout: default
       {% include post_pagination.html %}
     </div>
 
-    {% if site.comments.provider and page.comments %}
-      {% if jekyll.environment == 'production' %}
-        {% include comments.html %}
-      {% else %}
-        <p>
-          Comments are configured with provider: <strong>{{ site.comments.provider }}</strong>,
-          but are disabled in non-production environments.
-        </p>
-      {% endif %}
+    {% if site.comments.provider and page.comments and jekyll.environment == 'production' %}
+      {% include comments.html %}
     {% endif %}
   </article>
 

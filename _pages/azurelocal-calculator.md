@@ -59,8 +59,8 @@ If you aim to implement more advanced storage configurations, you will likely ne
 
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
     @media(max-width:700px){.form-grid{grid-template-columns:1fr}}
-    .form-group{display:flex;flex-direction:column}
-    .form-group.full{grid-column:1/-1}
+    .form-group{display:flex;flex-direction:column;min-width:0;max-width:100%}
+    .form-group.full{grid-column:1/-1;width:100%;min-width:0;max-width:100%}
 
     .form-group label,
     label{display:block;margin-bottom:5px;font-weight:600}
@@ -71,9 +71,9 @@ If you aim to implement more advanced storage configurations, you will likely ne
     input[type=range]{margin:10px 0}
     input[type=number]:focus,select:focus{outline:none}
 
-    .chk-row{display:flex;align-items:center;margin-bottom:10px}
+    .chk-row{display:flex;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:10px;max-width:100%}
     .chk-row input[type=checkbox]{margin-right:8px;transform:scale(1.2)}
-    .chk-row label{margin:0;font-weight:600}
+    .chk-row label{margin:0;font-weight:600;flex:1 1 14rem;min-width:0;overflow-wrap:anywhere}
 
     .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
     .btn,button{background:#007aff;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:1em;cursor:pointer;margin-top:20px}
@@ -830,8 +830,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
 
     #storageV2_calcRoot .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
     @media(max-width:700px){#storageV2_calcRoot .form-grid{grid-template-columns:1fr}}
-    #storageV2_calcRoot .form-group{display:flex;flex-direction:column}
-    #storageV2_calcRoot .form-group.full{grid-column:1/-1}
+    #storageV2_calcRoot .form-group{display:flex;flex-direction:column;min-width:0;max-width:100%}
+    #storageV2_calcRoot .form-group.full{grid-column:1/-1;width:100%;min-width:0;max-width:100%}
     #storageV2_calcRoot .form-group label,
     #storageV2_calcRoot label{display:block;margin-bottom:5px;font-weight:600}
     #storageV2_calcRoot .form-group input[type=number],
@@ -847,9 +847,9 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     #storageV2_calcRoot .form-group input[type=number]:focus,
     #storageV2_calcRoot .form-group select:focus{outline:none}
 
-    #storageV2_calcRoot .chk-row{display:flex;align-items:center;margin-bottom:10px}
+    #storageV2_calcRoot .chk-row{display:flex;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:10px;max-width:100%}
     #storageV2_calcRoot .chk-row input[type=checkbox]{margin-right:8px;transform:scale(1.2)}
-    #storageV2_calcRoot .chk-row label{margin:0;font-weight:600}
+    #storageV2_calcRoot .chk-row label{margin:0;font-weight:600;flex:1 1 14rem;min-width:0;overflow-wrap:anywhere}
 
     #storageV2_calcRoot .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
     #storageV2_calcRoot .btn,
@@ -1619,8 +1619,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
 
     #pricingV2_calcRoot .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
     @media(max-width:700px){#pricingV2_calcRoot .form-grid{grid-template-columns:1fr}}
-    #pricingV2_calcRoot .form-group{display:flex;flex-direction:column}
-    #pricingV2_calcRoot .form-group.full{grid-column:1/-1}
+    #pricingV2_calcRoot .form-group{display:flex;flex-direction:column;min-width:0;max-width:100%}
+    #pricingV2_calcRoot .form-group.full{grid-column:1/-1;width:100%;min-width:0;max-width:100%}
     #pricingV2_calcRoot .form-group label,
     #pricingV2_calcRoot .currency-bar label,
     #pricingV2_calcRoot label{display:block;margin-bottom:5px;font-weight:600}
@@ -1641,9 +1641,9 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     #pricingV2_calcRoot .form-group select:focus,
     #pricingV2_calcRoot .currency-bar select:focus{outline:none}
 
-    #pricingV2_calcRoot .chk-row{display:flex;align-items:center;margin-bottom:10px}
+    #pricingV2_calcRoot .chk-row{display:flex;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:10px;max-width:100%}
     #pricingV2_calcRoot .chk-row input[type=checkbox]{margin-right:8px;transform:scale(1.2)}
-    #pricingV2_calcRoot .chk-row label{margin:0;font-weight:600}
+    #pricingV2_calcRoot .chk-row label{margin:0;font-weight:600;flex:1 1 14rem;min-width:0;overflow-wrap:anywhere}
 
     #pricingV2_calcRoot .currency-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0;text-align:left}
     #pricingV2_calcRoot .currency-bar select{width:auto;min-width:110px}

@@ -1,111 +1,133 @@
-<!-- Scroll to Top Button -->
 <style>
-    /* Scroll to Top Button Styles */
+  #scroll-top-btn {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 70;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.92);
+    color: #f8fafc;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.28);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.35rem);
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  }
+
+  #scroll-top-btn.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  #scroll-top-btn:hover,
+  #scroll-top-btn:focus {
+    background: rgba(30, 41, 59, 0.98);
+  }
+
+  #scroll-top-btn:focus {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 2px;
+  }
+
+  #scroll-top-btn svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: currentColor;
+  }
+
+  html.light-theme #scroll-top-btn {
+    border-color: #d7dee6;
+    background: rgba(255, 255, 255, 0.96);
+    color: #1f2937;
+    box-shadow: 0 14px 30px rgba(148, 163, 184, 0.25);
+  }
+
+  html.light-theme #scroll-top-btn:hover,
+  html.light-theme #scroll-top-btn:focus {
+    background: #ffffff;
+  }
+
+  @media (max-width: 540px) {
     #scroll-top-btn {
-        display: none; /* Hidden by default */
-        position: fixed;
-        top: 20px; /* Position at the top */
-        right: 20px; /* Position at the right */
-        z-index: 9002; /* Ensure it sits above other elements */
-        background: transparent; /* No background */
-        border: none; /* No border */
-        border-radius: 0; /* No rounded corners */
-        cursor: pointer;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        padding: 0; /* No padding */
-        outline: none; /* Remove default outline */
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 2.85rem;
+      height: 2.85rem;
     }
+  }
 
-    #scroll-top-btn img {
-        width: 36px; /* Adjust size as needed */
-        height: 36px; /* Maintain aspect ratio */
+  @media print {
+    #scroll-top-btn {
+      display: none;
     }
-
-    #scroll-top-btn:hover,
-    #scroll-top-btn:focus {
-        opacity: 0.8;
-    }
+  }
 </style>
 
-<!-- Scroll to Top Button HTML -->
-<button id="scroll-top-btn" title="Go to top" aria-label="Scroll to top">
-    <img src="/assets/images/uparrow.png" alt="Scroll to top">
+<button id="scroll-top-btn" type="button" title="Go to top" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 4.5l-7 7 1.4 1.4 4.6-4.59V20h2V8.31l4.6 4.59 1.4-1.4z"/>
+  </svg>
 </button>
 
-<!-- Scroll to Top Button Script -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const scrollBtn = document.getElementById("scroll-top-btn");
-        let hideTimeout;
+  (function () {
+    function initScrollTop() {
+      var scrollBtn = document.getElementById("scroll-top-btn");
+      var hideTimer = null;
 
-        /**
-         * Shows the scroll button.
-         * This function is called on any scroll event, regardless of direction.
-         */
-        function showScrollBtn() {
-            if (window.innerWidth <= 767 && window.scrollY > 0) { // Ensure it's a mobile device and scrolled down
-                if (scrollBtn.style.display !== "block") {
-                    scrollBtn.style.display = "block";
-                    // Slight delay to allow display property to take effect before transitioning
-                    setTimeout(() => {
-                        scrollBtn.style.opacity = "1";
-                        scrollBtn.style.visibility = "visible";
-                    }, 10);
-                }
+      if (!scrollBtn) {
+        return;
+      }
 
-                // Reset the hide timer
-                clearTimeout(hideTimeout);
-                hideTimeout = setTimeout(hideScrollBtn, 800); // Visibility duration set to 0.8 seconds
-            }
+      function hideButton() {
+        scrollBtn.classList.remove("is-visible");
+      }
+
+      function scheduleHide() {
+        window.clearTimeout(hideTimer);
+
+        if (window.scrollY > 240) {
+          hideTimer = window.setTimeout(hideButton, 1000);
         }
+      }
 
-        /**
-         * Hides the scroll button.
-         */
-        function hideScrollBtn() {
-            scrollBtn.style.opacity = "0";
-            scrollBtn.style.visibility = "hidden";
-            setTimeout(() => {
-                scrollBtn.style.display = "none";
-            }, 300); // Match the CSS transition duration
+      function syncVisibility() {
+        if (window.scrollY > 240) {
+          scrollBtn.classList.add("is-visible");
+          scheduleHide();
+        } else {
+          window.clearTimeout(hideTimer);
+          hideButton();
         }
+      }
 
-        /**
-         * Handles scroll events to show/hide the button.
-         * Appears instantly on any scroll direction.
-         */
-        function handleScroll() {
-            showScrollBtn();
-        }
-
-        /**
-         * Smoothly scrolls to the top and hides the button immediately.
-         */
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-            hideScrollBtn();
-        }
-
-        // Attach the scroll event listener without debounce for instant response
-        window.addEventListener("scroll", handleScroll);
-
-        // Event listener for button click
-        scrollBtn.addEventListener("click", scrollToTop);
-
-        // Event listener for window resize to hide the button on larger screens
-        window.addEventListener("resize", function () {
-            if (window.innerWidth > 767) {
-                hideScrollBtn();
-                clearTimeout(hideTimeout);
-            }
+      scrollBtn.addEventListener("click", function () {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
         });
+      });
 
-        // Initial check to hide the button if the page is not scrolled
-        if (window.innerWidth > 767 || window.scrollY <= 0) {
-            hideScrollBtn();
-        }
-    });
+      window.addEventListener("scroll", syncVisibility, { passive: true });
+      window.addEventListener("resize", syncVisibility);
+      syncVisibility();
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initScrollTop);
+    } else {
+      initScrollTop();
+    }
+  })();
 </script>

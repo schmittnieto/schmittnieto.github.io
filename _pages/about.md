@@ -2,122 +2,295 @@
 permalink: /about/
 title: "About"
 subtitle: Welcome to My Azure Journey
+classes:
+  - wide
+  - about-page
 ---
 
-<div style="text-align: center;">
-  <img src="/assets/img/avatar-csn.jpeg" alt="Cristian Schmitt Nieto" style="width: 150px; height: 150px; border-radius: 50%;"/>
+<style>
+  .about-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .about-avatar {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  .about-certifications {
+    margin-top: 2rem;
+  }
+
+  .about-career-timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 52rem;
+    margin: 1.75rem auto 0;
+    padding-left: 2.25rem;
+  }
+
+  .about-career-timeline::before {
+    content: "";
+    position: absolute;
+    top: 0.45rem;
+    bottom: 0.45rem;
+    left: 0.65rem;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(96, 165, 250, 0.85) 0%, rgba(96, 165, 250, 0.18) 100%);
+  }
+
+  .about-career-card {
+    position: relative;
+    padding: 1.25rem 1.25rem 1.25rem 1.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .about-career-card::before {
+    content: "";
+    position: absolute;
+    top: 1.35rem;
+    left: -1.96rem;
+    width: 0.95rem;
+    height: 0.95rem;
+    border: 3px solid rgba(96, 165, 250, 0.95);
+    border-radius: 50%;
+    background: #0f172a;
+    box-shadow: 0 0 0 6px rgba(96, 165, 250, 0.12);
+  }
+
+  .about-career-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.2rem;
+    font-size: 1.05rem;
+  }
+
+  .about-career-role {
+    margin-bottom: 0.35rem;
+    font-size: 0.98rem;
+    font-weight: 700;
+  }
+
+  .about-career-period {
+    display: inline-block;
+    margin-bottom: 0.8rem;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(96, 165, 250, 0.12);
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .about-career-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-certification-group {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .about-certification-group h3 {
+    margin-top: 0;
+    margin-bottom: 0.35rem;
+  }
+
+  .about-certification-group p {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+  }
+
+  .about-certification-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .about-certification-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 100%;
+    padding: 1rem;
+    text-decoration: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .about-certification-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 123, 255, 0.55);
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .about-certification-card img {
+    width: clamp(120px, 16vw, 160px);
+    height: clamp(120px, 16vw, 160px);
+    object-fit: contain;
+    padding: 0.4rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .about-certification-card span {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  html.light-theme .about-career-card,
+  html.light-theme .about-certification-group {
+    border-color: #d7dee6;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 14px 28px rgba(148, 163, 184, 0.12);
+  }
+
+  html.light-theme .about-career-timeline::before {
+    background: linear-gradient(180deg, rgba(59, 130, 246, 0.9) 0%, rgba(59, 130, 246, 0.2) 100%);
+  }
+
+  html.light-theme .about-career-card::before {
+    background: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.12);
+  }
+
+  html.light-theme .about-career-period,
+  html.light-theme .about-certification-group p {
+    color: #475569;
+  }
+
+  html.light-theme .about-career-period {
+    background: rgba(59, 130, 246, 0.12);
+  }
+
+  html.light-theme .about-certification-card {
+    border-color: #d7dee6;
+    background: #f8fafc;
+  }
+
+  html.light-theme .about-certification-card:hover {
+    background: #ffffff;
+    border-color: #60a5fa;
+  }
+
+  html.light-theme .about-certification-card img {
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fa 100%);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.14);
+  }
+
+  @media (max-width: 540px) {
+    .about-career-timeline {
+      padding-left: 1.8rem;
+    }
+
+    .about-career-card::before {
+      left: -1.52rem;
+    }
+
+    .about-career-card,
+    .about-certification-group {
+      padding: 1rem;
+    }
+  }
+</style>
+
+<div class="about-hero">
+  <img src="/assets/img/avatar-csn.jpeg" alt="Cristian Schmitt Nieto" class="about-avatar" />
 </div>
 
 ## Introduction
 
-Hello! I'm **Cristian Schmitt Nieto**, an IT professional originally from Spain and now based in Germany. With over a decade of experience, I currently serve as a **Senior Consultant at adesso**. My passion is to create innovative solutions that combine traditional on-premise infrastructures with modern cloud technologies, with a primary focus on Hybrid Cloud (using Azure Local) and Azure Virtual Desktop (AVD).
+Hello! I'm **Cristian Schmitt Nieto**, an IT professional originally from Spain and now based in Germany. With more than a decade of experience, I currently work as a **Senior Consultant at adesso**. I enjoy building practical solutions that connect traditional on-premises infrastructure with modern cloud services, with a strong focus on **Azure Local**, **Hybrid Cloud**, and **Azure Virtual Desktop (AVD)**.
 
 ## Career Overview
 
-### Early Beginnings
+I started in hands-on support and infrastructure roles, where I learned how production environments really behave under pressure. Over time, that foundation in Windows Server, networking, virtualization, and customer operations evolved into a clear specialization in **Azure**, **Azure Local**, **Azure Arc**, and **Azure Virtual Desktop**.
 
-I started my IT journey with hands-on roles such as providing client support, installing printers, and resolving everyday technical issues. These experiences laid a strong foundation and sparked my interest in network infrastructures and server management.
+Today, my work sits at the intersection of hybrid architecture, delivery, automation, and customer enablement. I enjoy taking projects from assessment to go-live, translating complex technical dependencies into pragmatic roadmaps, and helping teams run secure, maintainable platforms after handover.
 
-### Data Center & Infrastructure Management
+## Employer Journey
 
-I managed a small data center where I was responsible for:
-* **Firewalls:** Safeguarding network security and ensuring smooth data flow.
-* **S2D Clusters:** Overseeing storage solutions for data availability and reliability.
-* **Windows Servers:**
-  * **File Servers (DFS):** Handling distributed file systems.
-  * **Active Directory:** Managing user and resource administration.
-  * **DHCP/DNS:** Maintaining essential network services.
-* **Citrix:** Overseeing virtual desktops and applications.
+<div class="about-career-timeline">
+  <section class="about-career-card">
+    <h3>adesso SE</h3>
+    <div class="about-career-role">Senior Consultant</div>
+    <div class="about-career-period">Mar 2026 to Present</div>
+    <p>I continue delivering the same kind of hybrid cloud and end-user computing work I was already leading before, now with a stronger focus on the German market. That includes Azure architecture, Azure Local, Azure Virtual Desktop, governance, automation, and structured customer delivery.</p>
+  </section>
+  <section class="about-career-card">
+    <h3>Devoteam M Cloud</h3>
+    <div class="about-career-role">Lead Consultant</div>
+    <div class="about-career-period">Jul 2024 to Mar 2026</div>
+    <p>I led international projects across Europe for mid-size and enterprise customers, covering discovery, design, implementation, validation, handover, and training. I also supported the evidence process behind Devoteam's Azure Virtual Desktop Specialization pass.</p>
+  </section>
+  <section class="about-career-card">
+    <h3>Medialine Group</h3>
+    <div class="about-career-role">Azure Consultant</div>
+    <div class="about-career-period">Jul 2021 to Jun 2024</div>
+    <p>This was the phase where I fully deepened my Azure specialization, delivering projects around Azure Virtual Desktop, Azure Stack HCI and later Azure Local, Azure Arc, landing zones, hybrid identity, and infrastructure automation.</p>
+  </section>
+  <section class="about-career-card">
+    <h3>mits group GmbH</h3>
+    <div class="about-career-role">IT Technician to IT Team Lead</div>
+    <div class="about-career-period">Mar 2014 to Jun 2021</div>
+    <p>I built my infrastructure foundation here, from support and systems administration to leading a small technical team. The work covered datacenter operations, Citrix, Hyper-V, firewalls, VPNs, Windows Server, Active Directory, and customer-facing project delivery.</p>
+  </section>
+</div>
 
-## Azure Journey and Current Role
+## Current Focus
 
-Five years ago, I specialized in Microsoft Azure, a move that has been both challenging and rewarding. In my current role at adesso, I focus on:
-* **Hybrid Cloud Solutions:** Integrating on-premise (Azure Local) systems with cloud services to build agile and secure IT environments.
-* **Azure Virtual Desktop (AVD):** Designing and optimizing virtual desktop infrastructures to enhance efficiency and scalability.
+I mainly work on:
 
-I also guide clients through their digital transformation journeys using modern tools like Azure DevOps, Terraform and Bicep, along with frameworks such as the Cloud Adoption Framework (CAF) and the Well Architected Framework (WAF).
+* **Hybrid Cloud Solutions:** Connecting Azure Local and on-premises platforms with public Azure services in a secure and operationally clean way.
+* **Azure Virtual Desktop:** Designing, deploying, and optimizing end-user computing platforms for performance, governance, and scale.
+* **Automation and Platform Delivery:** Using tools such as **PowerShell**, **Terraform**, **Bicep**, and **GitHub** to improve repeatability and reduce operational friction.
 
 ## Areas of Expertise
 
-* **Hybrid Cloud:** Merging on-premise and cloud environments to build robust IT solutions.
-* **Azure Infrastructure:** Specializing in Azure Virtual Desktop and public Azure services to meet diverse business needs.
-* **Client Solutions:** Delivering tailored strategies for successful cloud adoption. 
+* **Hybrid Cloud:** Combining on-premises and cloud capabilities into one coherent platform.
+* **Azure Infrastructure:** Working across Azure Local, Azure Virtual Desktop, and core public Azure services.
+* **Client Solutions:** Translating technical options into practical roadmaps for cloud adoption and modernization.
 
 ## Certifications
 
-As a part of my career in Azure I have carried out several certification, among them I would highlight the following:
-<div class="Certifications" style="text-align: center;">
-  <a href="https://credsverse.com/credentials/d09e0a2d-f249-4690-a9fa-4ede62537421" target="_blank">
-    <img src="/assets/img/NVP.webp" alt="Nerdio Valued Professional" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Nerdio Valued Professional</div>
-  </a>
-  <a href="/assets/img/cert/NMEPS-200.pdf" target="_blank">
-    <img src="/assets/img/nerdio-nmeps-200.png" alt="Nerdio Enterprise Partner Sales Foundations (NMEPS-200)" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Nerdio Enterprise Partner Sales Foundations (NMEPS-200)</div>
-  </a>
-  <a href="/assets/img/cert/NMEPS-100.pdf" target="_blank">
-    <img src="/assets/img/nerdio-nmeps-100.png" alt="Nerdio Enterprise Partner Sales Fundamentals (NMEPS-100)" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Nerdio Enterprise Partner Sales Fundamentals (NMEPS-100)</div>
-  </a>
-  <a href="/assets/img/cert/NME-201.pdf" target="_blank">
-    <img src="/assets/img/nerdio-nme-201.png" alt="Nerdio Manager for Enterprise Foundations (NME-201)" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Nerdio Manager for Enterprise Foundations (NME-201)</div>
-  </a>
-  <a href="https://www.credly.com/badges/1e812232-ae96-4aba-b1f3-ef021a1d562e/public_url" target="_blank">
-    <img src="/assets/img/mscca2025.png" alt="Microsoft Community Advocate 2025" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Community Advocate 2025</div>
-  </a>
-  <a href="https://www.credly.com/badges/c9188d86-44a2-457b-bcb7-11423a24a97c/public_url" target="_blank">
-    <img src="/assets/img/mscc2025.png" alt="Microsoft Community Contributor 2025" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Community Contributor 2025</div>
-  </a>
-  <a href="https://www.credly.com/badges/5c59cba2-abd4-49bf-99e4-4f72570851d0/public_url" target="_blank">
-    <img src="/assets/img/mscc2024.png" alt="Microsoft Community Contributor 2024" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Community Contributor 2025</div>
-  </a>
-  <a href="https://eu.badgr.com/public/assertions/nyYBb_cJS_yLso8m1pnOHQ?identity__email=cristian.schmitt.nieto@devoteam.com" target="_blank">
-    <img src="/assets/img/devoteam-digital-champion.png" alt="Digital Champion Devoteam" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Devoteam Digital Champion</div>
-  </a>
-  <a href="/assets/img/cert/NME-200.pdf" target="_blank">
-    <img src="/assets/img/nerdio-nme-200.png" alt="Nerdio Manager for Enterprise Certified" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Nerdio Manager for Enterprise Certified</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/DEC07C6846AF65A7?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-fundamentals-badge-AI.png" alt="Microsoft Certified: Azure AI Fundamentals" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Azure AI Fundamentals</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/5FBC968AEABFC10B?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-associate-badge-adm.png"  alt="Microsoft Certified: Azure Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Azure Administrator Associate</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/A3635D8F3BE9F9C2?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-associate-badge-hybrid.png" alt="Microsoft Certified: Windows Server Hybrid Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Windows Server Hybrid Administrator Associate</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto/923DF5023E108FBA?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-associate-badge-endpoint.png" alt="Microsoft 365 Certified: Endpoint Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft 365 Certified: Endpoint Administrator Associate</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-gb/CristianSchmittNieto/11278E3D76BB2B12?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-associate-badge-identity-access.png" alt="Microsoft Certified: Identity and Access Administrator Associate" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Identity and Access Administrator Associate</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/E724DDDADB705179?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-specialty-badge-avd.png" alt="Microsoft Certified: Azure Virtual Desktop Specialty" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Azure Virtual Desktop Specialty</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/225ACCA9CD499B3C?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-expert-badge-DevOps.png" alt="Microsoft Certified: DevOps Engineer Expert" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: DevOps Engineer Expert</div>
-  </a>
-  <a href="https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/B8D453727AF2E0FF?sharingId=24F0DC952D8EB05D" target="_blank">
-    <img src="/assets/img/microsoft-certified-expert-badge-expert.png" alt="Microsoft Certified: Azure Solutions Architect Expert" class="cert-image" style="width: 150px; height: 150px;"/>
-    <div style="text-align: center;">Microsoft Certified: Azure Solutions Architect Expert</div>
-  </a>
+Over the years, I have earned a combination of vendor certifications and community recognitions. I grouped them by issuing organization below so they are easier to browse on both desktop and mobile.
+
+<div class="about-certifications">
+  {% for issuer in site.data.certifications %}
+    <section class="about-certification-group">
+      <h3>{{ issuer.name }}</h3>
+      <p>{{ issuer.description }} <strong>{{ issuer.credentials.size }}</strong> credentials.</p>
+      <div class="about-certification-grid">
+        {% for certification in issuer.credentials %}
+          <a class="about-certification-card" href="{{ certification.url }}" target="_blank" rel="noopener noreferrer">
+            <img src="{{ certification.image }}" alt="{{ certification.title }}" />
+            <span>{{ certification.title }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
 </div>
 
 ## Final Thoughts
 
-This is a personal blog. The views and opinions expressed here are solely my own and do not represent those of any organization or individual with whom I may be associated, either professionally or personally. All solutions, scripts, and guidance are provided as-is without any warranty, and their use is at the user's own risk. 
-My journey in IT and cloud technologies is ever-evolving, and I'm excited to share every step with you. Whether you're just beginning or are already deep into your digital transformation, I hope my experiences and insights offer valuable guidance and inspiration. Thank you for joining me on this adventure, enjoy the journey as much as I do!
+This is a personal blog. The views and opinions expressed here are solely my own and do not represent those of any organization or individual with whom I may be associated, either professionally or personally. All solutions, scripts, and guidance are provided as-is without warranty, and their use is at the reader's own risk.
+
+My journey in IT and cloud technologies continues to evolve, and I am glad to share it here. Whether you are just getting started or already deep into your own transformation journey, I hope these experiences and lessons help in some small but meaningful way.

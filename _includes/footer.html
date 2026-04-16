@@ -1,0 +1,172 @@
+{% assign locale = include.locale | default: site.locale %}
+{% unless site.atom_feed.hide %}
+  {% assign show_atom = true %}
+{% endunless %}
+{% if site.footer.links or show_atom %}
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    {% if site.data.ui-text[locale].follow_label %}
+      <li><strong>{{ site.data.ui-text[locale].follow_label }}</strong></li>
+    {% endif %}
+
+    {% if site.footer.links %}
+      {% for link in site.footer.links %}
+        {% if link.label and link.url %}
+          {% assign footer_icon = link.icon | default: '' | downcase %}
+          {% assign footer_label = link.label | downcase %}
+          {% assign footer_url = link.url | downcase %}
+          <li><a href="{{ link.url }}" rel="nofollow noopener noreferrer{% if link.rel %} {{ link.rel }}{% endif %}">
+            {% if footer_icon contains 'fa-x-twitter' or footer_label == 'x' or footer_url contains 'x.com' %}
+              <svg class="social-icon-svg" viewBox="0 0 512 512" aria-hidden="true">
+                <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.6 48H172l100.6 129.3L389.2 48zm14.3 373.8h39.1L150.7 88h-42l294.8 333.8z"/>
+              </svg>
+            {% elsif footer_icon contains 'fa-bluesky' or footer_label contains 'bluesky' or footer_url contains 'bsky.app' %}
+              <svg class="social-icon-svg" viewBox="0 0 512 512" aria-hidden="true">
+                <path d="M123.1 34.6c45.2 34 93.9 102.8 132.1 182.8 38.2-79.9 86.9-148.8 132.1-182.8 32.7-24.5 85.6-43.4 85.6 17 0 12.1-6.9 101.3-11 115.8-14.1 50.4-65.5 63.2-111.2 55.4 79.9 13.6 100.2 58.7 56.3 103.7-83.4 85.6-119.8-21.5-129.1-48.9-1.7-5-2.5-7.4-2.7-5.4-.2-2-.9.4-2.7 5.4-9.3 27.5-45.8 134.5-129.1 48.9-43.9-45-23.6-90.1 56.3-103.7-45.7 7.8-97.1-5-111.2-55.4-4.1-14.5-11-103.7-11-115.8 0-60.4 52.9-41.5 85.6-17z"/>
+              </svg>
+            {% else %}
+              <i class="{{ link.icon | default: 'fas fa-link' }}" aria-hidden="true"></i>
+            {% endif %}
+            {{ link.label | escape_once | strip }}</a></li>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% unless site.atom_feed.hide %}
+      <li><a href="{% if site.atom_feed.path %}{{ site.atom_feed.path }}{% else %}{{ '/feed.xml' | relative_url }}{% endif %}">
+        <svg class="social-icon-svg" viewBox="0 0 448 512" aria-hidden="true">
+          <path d="M0 64C0 46.3 14.3 32 32 32c212.1 0 384 171.9 384 384 0 17.7-14.3 32-32 32s-32-14.3-32-32C352 239.3 208.7 96 32 96 14.3 96 0 81.7 0 64zm0 160c0-17.7 14.3-32 32-32 123.7 0 224 100.3 224 224 0 17.7-14.3 32-32 32s-32-14.3-32-32c0-88.4-71.6-160-160-160-17.7 0-32-14.3-32-32zm32 256a48 48 0 1 1 0-96 48 48 0 1 1 0 96z"/>
+        </svg> {{ site.data.ui-text[locale].feed_label | default: "Feed" }}</a></li>
+    {% endunless %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="page__footer-copyright">&copy; {% assign site_time = site.time | date: '%Y' %}{% if site.footer.since and site_time != site.footer.since %}{{ site.footer.since }} - {% endif %}{{ site_time }} <a href="{{ site.copyright_url | default: site.url }}">{{ site.copyright | default: site.title | escape_once | strip }}</a>. {{ site.data.ui-text[locale].powered_by | default: "Powered by" }} <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+<div class="site-tools">
+  <button class="site-tools__toggle" type="button" aria-label="Open settings" aria-expanded="false" aria-controls="site-tools-panel">
+    <span class="site-tools__gear" aria-hidden="true">⚙️</span>
+    <span class="sr-only">Settings</span>
+  </button>
+  <div class="site-tools__panel" id="site-tools-panel" hidden>
+    <button class="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+      <span class="theme-toggle__track" aria-hidden="true">
+        <span class="theme-toggle__thumb"></span>
+      </span>
+      <span class="theme-toggle__label">Dark</span>
+    </button>
+    <button class="site-tools__action site-tools__cookie" type="button">Cookies</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var storageKey = "sn-theme";
+    var root = document.documentElement;
+    var tools = document.querySelector(".site-tools");
+    var toolsToggle = tools ? tools.querySelector(".site-tools__toggle") : null;
+    var toolsPanel = tools ? tools.querySelector(".site-tools__panel") : null;
+    var button = document.querySelector(".theme-toggle");
+    var label = button ? button.querySelector(".theme-toggle__label") : null;
+    var cookieButton = document.querySelector(".site-tools__cookie");
+
+    if (!button || !label || !tools || !toolsToggle || !toolsPanel) {
+      return;
+    }
+
+    function setPanelOpen(open) {
+      tools.classList.toggle("is-open", open);
+      toolsPanel.hidden = !open;
+      toolsToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    function currentTheme() {
+      return root.classList.contains("light-theme") ? "light" : "dark";
+    }
+
+    function setTheme(theme, persist) {
+      var isLight = theme === "light";
+      root.classList.toggle("light-theme", isLight);
+      root.setAttribute("data-theme", theme);
+      root.style.colorScheme = isLight ? "light" : "dark";
+      button.setAttribute("aria-pressed", isLight ? "true" : "false");
+      label.textContent = isLight ? "Light" : "Dark";
+
+      if (persist) {
+        try {
+          localStorage.setItem(storageKey, theme);
+        } catch (error) {
+        }
+      }
+    }
+
+    button.addEventListener("click", function () {
+      setTheme(currentTheme() === "light" ? "dark" : "light", true);
+    });
+
+    toolsToggle.addEventListener("click", function () {
+      setPanelOpen(!tools.classList.contains("is-open"));
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!tools.contains(event.target)) {
+        setPanelOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        setPanelOpen(false);
+      }
+    });
+
+    if (cookieButton) {
+      cookieButton.addEventListener("click", function () {
+        if (typeof window.openCookiePreferences === "function") {
+          window.openCookiePreferences();
+          setPanelOpen(false);
+        }
+      });
+    }
+
+    if (window.matchMedia) {
+      var mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+      var syncSystemPreference = function (event) {
+        var savedTheme = null;
+
+        try {
+          savedTheme = localStorage.getItem(storageKey);
+        } catch (error) {
+        }
+
+        if (savedTheme) {
+          return;
+        }
+
+        setTheme(event.matches ? "light" : "dark", false);
+      };
+
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener("change", syncSystemPreference);
+      } else if (mediaQuery.addListener) {
+        mediaQuery.addListener(syncSystemPreference);
+      }
+    }
+
+    window.addEventListener("load", function () {
+      if (!cookieButton) {
+        return;
+      }
+
+      if (!window.__cookieConsentEnabled__ || typeof window.openCookiePreferences !== "function") {
+        cookieButton.hidden = true;
+      }
+    });
+
+    setTheme(currentTheme(), false);
+    setPanelOpen(false);
+  })();
+</script>
+
+{% include scroll-top.html %}

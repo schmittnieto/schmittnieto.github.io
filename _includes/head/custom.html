@@ -1,68 +1,22 @@
-<!-- start custom head snippets -->
-
-<!-- insert favicons. use https://realfavicongenerator.net/ 
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="msapplication-TileColor" content="#da532c">
-<meta name="theme-color" content="#ffffff">
--->
-
-<!-- insert favicons. use https://realfavicongenerator.net/ -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
-
-<!-- Kill Disqus Taboola ads until Giscus is live -->
-<style>
-  /* oculta los iframes publicitarios de Disqus, arriba y abajo del hilo */
-  iframe[id^="dsq-app"][src*="//tempest.services.disqus.com/ads-iframe"],
-  iframe[id^="dsq-app"][src*="/ads-iframe/"],
-  #disqus_thread iframe[src*="ads-iframe"],
-  #disqus_thread iframe[src*="taboola"],
-  iframe[src*="taboola.com"] {
-    display: none !important;
-    height: 0 !important;
-    max-height: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  /* por si quedara algún contenedor fuera del iframe en el DOM del sitio */
-  #ad-container,
-  #container-bottom,
-  #disqus_thread .trc_related_container,
-  #disqus_thread .tbl-trecs-container,
-  #disqus_thread [id^="taboola"] {
-    display: none !important;
-  }
-</style>
-
-<script defer>
-  /* Fallback por si Disqus inyecta el iframe después del render */
+<link rel="stylesheet" href="{{ '/assets/css/theme-light-overrides.css' | relative_url }}">
+<script>
   (function () {
-    function killAds(root) {
-      root.querySelectorAll(
-        'iframe[src*="services.disqus.com/ads-iframe"], iframe[src*="/ads-iframe/"], #ad-container, #container-bottom, #taboola, .trc_related_container, .tbl-trecs-container'
-      ).forEach(function(el){ try { el.remove(); } catch(e) {} });
+    var storageKey = "sn-theme";
+    var root = document.documentElement;
+
+    function applyTheme(theme) {
+      var isLight = theme === "light";
+      root.classList.toggle("light-theme", isLight);
+      root.setAttribute("data-theme", theme);
+      root.style.colorScheme = isLight ? "light" : "dark";
     }
-    document.addEventListener('DOMContentLoaded', function () {
-      killAds(document);
-      new MutationObserver(function(muts){
-        muts.forEach(function(m){ killAds(m.target); });
-      }).observe(document.body, { childList: true, subtree: true });
-    });
+
+    try {
+      var savedTheme = localStorage.getItem(storageKey);
+      var prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+      applyTheme(savedTheme || (prefersLight ? "light" : "dark"));
+    } catch (error) {
+      applyTheme("dark");
+    }
   })();
 </script>
-
-<!-- end custom head snippets  -->
-
-{% include cookie-consent.html %}
-
-{% include scroll-top.html %}
-
-<!-- Below is the link that users can use to open Preferences Center to change their preferences. Do not modify the ID parameter. Place it where appropriate, style it as needed. -->
