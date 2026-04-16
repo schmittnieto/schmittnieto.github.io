@@ -110,6 +110,8 @@
     setCookieNoticeVisibility(false);
   };
 
+  document.dispatchEvent(new CustomEvent('sn:cookie-consent-ready'));
+
   function createCookie(name, value, days){
     var expires = "";
     if (days){

@@ -81,6 +81,14 @@
       toolsToggle.setAttribute("aria-expanded", open ? "true" : "false");
     }
 
+    function syncCookieButton() {
+      if (!cookieButton) {
+        return;
+      }
+
+      cookieButton.hidden = !window.__cookieConsentEnabled__;
+    }
+
     function currentTheme() {
       return root.classList.contains("light-theme") ? "light" : "dark";
     }
@@ -126,6 +134,14 @@
         if (typeof window.openCookiePreferences === "function") {
           window.openCookiePreferences();
           setPanelOpen(false);
+          return;
+        }
+
+        var banner = document.getElementById("cookie-notice");
+        if (banner) {
+          banner.style.display = "block";
+          root.classList.add("cookie-banner-open");
+          setPanelOpen(false);
         }
       });
     }
@@ -154,18 +170,12 @@
       }
     }
 
-    window.addEventListener("load", function () {
-      if (!cookieButton) {
-        return;
-      }
-
-      if (!window.__cookieConsentEnabled__ || typeof window.openCookiePreferences !== "function") {
-        cookieButton.hidden = true;
-      }
-    });
+    document.addEventListener("sn:cookie-consent-ready", syncCookieButton);
+    window.addEventListener("load", syncCookieButton);
 
     setTheme(currentTheme(), false);
     setPanelOpen(false);
+    syncCookieButton();
   })();
 </script>
 
