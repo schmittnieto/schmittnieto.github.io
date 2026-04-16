@@ -62,6 +62,10 @@ html.light-theme .page__hero--overlay a {
   color: #ffffff;
 }
 
+html.light-theme .page__hero--overlay .page__meta {
+  background: transparent;
+}
+
 html.light-theme .sidebar,
 html.light-theme .toc,
 html.light-theme .nav__list,
