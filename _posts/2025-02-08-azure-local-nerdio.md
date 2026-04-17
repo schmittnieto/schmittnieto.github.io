@@ -19,7 +19,6 @@ header:
   og_image: "/assets/img/post/2025-02-08-azure-local-nerdio.webp"
   overlay_image: "/assets/img/post/2025-02-08-azure-local-nerdio.webp"
   overlay_filter: 0.5
-  caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true
 toc_label: "Topics Overview"

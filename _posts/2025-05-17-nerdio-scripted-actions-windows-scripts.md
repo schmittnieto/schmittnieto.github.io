@@ -17,7 +17,6 @@ header:
   og_image: "/assets/img/post/2025-05-17-nerdio-scripted-actions-windows-scripts.webp"
   overlay_image: "/assets/img/post/2025-05-17-nerdio-scripted-actions-windows-scripts.webp"
   overlay_filter: 0.5
-  caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true
 toc_label: "Topics Overview"

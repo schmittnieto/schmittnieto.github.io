@@ -19,7 +19,6 @@ header:
   og_image: "/assets/img/post/2025-01-09-azure-local-aks.webp"
   overlay_image: "/assets/img/post/2025-01-09-azure-local-aks.webp"
   overlay_filter: 0.5
-  caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true
 toc_label: "Topics Overview" 

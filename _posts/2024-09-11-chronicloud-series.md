@@ -23,7 +23,6 @@ header:
   overlay_image: "/assets/img/post/2024-09-11-chronicloud-series.webp"
   overlay_filter: 0.5  
   teaser: "/assets/img/post/2024-09-11-chronicloud-series.webp"
-  caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true
 toc_label: "Topics Overview" 

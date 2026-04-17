@@ -22,7 +22,6 @@ header:
   og_image: "/assets/img/post/2024-09-15-azure-stack-hci.webp"
   overlay_image: "/assets/img/post/2024-09-15-azure-stack-hci.webp"
   overlay_filter: 0.5
-  caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true
 toc_label: "Topics Overview" 

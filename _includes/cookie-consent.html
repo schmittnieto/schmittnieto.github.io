@@ -157,9 +157,9 @@
       ad_personalization: 'granted'
     });
 
-    // Permite cargar Clarity y lánzalo
     window.__CLARITY_ALLOWED__ = true;
     loadClarity();
+    if (typeof window.loadDisqus === 'function') window.loadDisqus();
   }
 
   function denyConsent(){

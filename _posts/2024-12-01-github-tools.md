@@ -17,7 +17,6 @@ header:
   og_image: "/assets/img/post/2024-12-01-github-tools.webp"
   overlay_image: "/assets/img/post/2024-12-01-github-tools.webp"
   overlay_filter: 0.5
-  caption: "Photo credit: [**ChatGPT**](https://chatgpt.com)"
 
 toc: true
 toc_label: "Overview"

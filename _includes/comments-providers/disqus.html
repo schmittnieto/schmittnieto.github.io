@@ -1,0 +1,50 @@
+<script>
+(function () {
+  var shortname = '{{ site.comments.disqus.shortname }}';
+  var loaded = false;
+
+  window.loadDisqus = function () {
+    if (loaded) return;
+    loaded = true;
+    var thread = document.getElementById('disqus_thread');
+    if (thread) thread.innerHTML = '';
+    window.disqus_config = function () {
+      this.page.url        = '{{ page.url | absolute_url }}';
+      this.page.identifier = '{{ page.id }}';
+    };
+    var s = document.createElement('script');
+    s.src = 'https://' + shortname + '.disqus.com/embed.js';
+    s.async = true;
+    s.setAttribute('data-timestamp', +new Date());
+    (document.head || document.body).appendChild(s);
+  };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var thread = document.getElementById('disqus_thread');
+    if (!thread) return; // not a post page or not a production build
+
+    /* If consent management is not active (preview environments), load directly */
+    if (!window.__cookieConsentEnabled__) {
+      window.loadDisqus();
+      return;
+    }
+
+    var accepted = document.cookie.split(';').some(function (c) {
+      return c.trim() === 'cookie-notice-dismissed=true';
+    });
+
+    if (accepted) {
+      window.loadDisqus();
+    } else {
+      thread.innerHTML =
+        '<p style="padding:1.2em;text-align:center;font-size:0.9em;">' +
+        'Comments are powered by Disqus and require cookie consent to load. ' +
+        '<button type="button" ' +
+        'onclick="window.openCookiePreferences&&window.openCookiePreferences()" ' +
+        'style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;padding:0;">' +
+        'Update your preferences</button> to view them.' +
+        '</p>';
+    }
+  });
+})();
+</script>

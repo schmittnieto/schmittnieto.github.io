@@ -26,7 +26,6 @@ header:
   og_image: "/assets/img/post/2024-11-17-azure-stack-hci-avd.webp"
   overlay_image: "/assets/img/post/2024-11-17-azure-stack-hci-avd.webp"
   overlay_filter: 0.5
-  caption: "Photo credit: [**Flux**](https://flux1.ai/)"
 
 toc: true
 toc_label: "Topics Overview" 
