@@ -19,9 +19,12 @@
     (document.head || document.body).appendChild(s);
   };
 
-  /* Fires when the user accepts cookies live (without a page reload). */
+  /* When the user accepts cookies live, reload the page so Disqus
+     initialises cleanly with the correct consent state. */
   document.addEventListener('sn:consent-granted', function () {
-    window.loadDisqus();
+    if (document.getElementById('disqus_thread')) {
+      location.reload();
+    }
   });
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -43,11 +46,11 @@
     } else {
       thread.innerHTML =
         '<p style="padding:1.2em;text-align:center;font-size:0.9em;">' +
-        'Comments are powered by Disqus and require cookie consent to load. ' +
+        'Comments are powered by Disqus and require cookie consent. ' +
         '<button type="button" ' +
         'onclick="window.openCookiePreferences&&window.openCookiePreferences()" ' +
         'style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;font-size:inherit;padding:0;">' +
-        'Update your preferences</button> to view them.' +
+        'Accept cookies</button> to load them. The page will refresh automatically.' +
         '</p>';
     }
   });
