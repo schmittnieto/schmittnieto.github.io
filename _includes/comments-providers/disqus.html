@@ -19,6 +19,11 @@
     (document.head || document.body).appendChild(s);
   };
 
+  /* Fires when the user accepts cookies live (without a page reload). */
+  document.addEventListener('sn:consent-granted', function () {
+    window.loadDisqus();
+  });
+
   document.addEventListener('DOMContentLoaded', function () {
     var thread = document.getElementById('disqus_thread');
     if (!thread) return; // not a post page or not a production build

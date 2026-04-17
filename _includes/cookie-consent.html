@@ -159,7 +159,11 @@
 
     window.__CLARITY_ALLOWED__ = true;
     loadClarity();
+    /* Belt-and-suspenders: call loadDisqus directly if already defined,
+       and also fire an event so disqus.html can react even if the call
+       above ran before scripts.html had a chance to define loadDisqus. */
     if (typeof window.loadDisqus === 'function') window.loadDisqus();
+    document.dispatchEvent(new CustomEvent('sn:consent-granted'));
   }
 
   function denyConsent(){
@@ -185,8 +189,10 @@
       grantConsent();
       loadGA();
     } else if (choice === 'false'){
-      setCookieNoticeVisibility(true);
+      /* Decline decision is still within its 24-hour window — respect it silently. */
+      setCookieNoticeVisibility(false);
     } else {
+      /* No decision yet (first visit) or decline window has expired — show banner. */
       setCookieNoticeVisibility(true);
     }
   })();
@@ -199,14 +205,10 @@
   });
 
   document.getElementById('cookie-notice-decline').addEventListener('click', function(){
-    var wasTrue = readCookie('cookie-notice-dismissed') === 'true';
-    createCookie('cookie-notice-dismissed', 'false', 31);
+    /* Decline is remembered for 24 hours, then the banner reappears. */
+    createCookie('cookie-notice-dismissed', 'false', 1);
     setCookieNoticeVisibility(false);
-    if (wasTrue){
-      denyConsent();
-    } else {
-      denyConsent();
-    }
+    denyConsent();
   });
   }
 </script>
