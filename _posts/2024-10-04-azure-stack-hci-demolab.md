@@ -458,7 +458,7 @@ Once the cluster node script completes and extensions are correctly installed, f
 
    - Initiate the cloud deployment and wait approximately 2 hours for the cluster to be ready for subsequent steps.
 
-> **Terraform alternative:** The repository also includes a `terraform/` folder that provides an Infrastructure-as-Code alternative to clicking through the portal wizard. It deploys the cluster using a local fork of the Azure Verified Module for Azure Local. A dedicated article covering the Terraform path end-to-end is in progress.
+> **Terraform alternative:** The repository also includes a `terraform/` folder that provides an Infrastructure-as-Code alternative to clicking through the portal wizard. It deploys the cluster using a local fork of the Azure Verified Module for Azure Local. For a full walkthrough of that path, including the bugs I hit and how I fixed them, see [Azure Local: Terraform Deployment](/blog/azure-local-terraform/).
 
 
 ## Cost Considerations

@@ -37,3 +37,5 @@ Azurelocal:
       url: /blog/azure-local-deep-insights-workbook/
     - title: "LLM on AKS inside Azure Local"
       url: /blog/azure-local-llm/
+    - title: "Terraform Deployment"
+      url: /blog/azure-local-terraform/
