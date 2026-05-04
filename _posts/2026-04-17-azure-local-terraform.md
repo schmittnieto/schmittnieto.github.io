@@ -40,7 +40,11 @@ This article covers what I built, what broke, how I fixed it and how the deploym
 
 ## The AzSHCI Repository
 
-All of the automation lives in my [AzSHCI repository](https://github.com/schmittnieto/AzSHCI). It has two parallel paths that work together:
+All of the automation lives in my [AzSHCI repository](https://github.com/schmittnieto/AzSHCI). 
+
+<a href="https://github.com/schmittnieto/AzSHCI"><img src="https://badgen.net/https/raw.githubusercontent.com/schmittnieto/AzSHCI/refs/heads/main/terraform/lastdeployment.json?cache=300"></a>
+
+It has two parallel paths that work together:
 
 - **`scripts/01Lab/`**: PowerShell scripts that handle everything from Azure prerequisites through Hyper-V infrastructure setup, domain controller configuration and Arc registration. These run before Terraform comes into the picture.
 - **`terraform/`**: A root Terraform configuration that calls a local fork of the AVM module. The fork carries the fixes and additions that were needed to make the deployment work against the current Azure API.
