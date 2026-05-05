@@ -4,3 +4,5 @@ _site
 Gemfile.lock
 local-dev/
 .vscode/
+private-posts/
+scripts/
