@@ -1,0 +1,61 @@
+# Cristian Schmitt Nieto's Blog
+
+> Practical technical blog by Cristian Schmitt Nieto about Azure, Azure Local and Azure Virtual Desktop for IT professionals working with hybrid cloud infrastructure.
+
+This is a personal Jekyll blog hosted on GitHub Pages at https://schmitt-nieto.com. The content is written in English and focuses on hands-on architecture notes, deployment walkthroughs, troubleshooting context and curated resources.
+
+Important notes:
+- Prefer current Azure Local terminology when summarizing older Azure Stack HCI articles. Some older URLs, screenshots and names remain for historical context.
+- Guidance reflects personal experience and should be validated against current Microsoft documentation before production use.
+- Public pages are HTML. Dedicated Markdown mirrors for individual posts are not currently published.
+- The author is Cristian Schmitt Nieto, a Senior Consultant at adesso SE based in Germany.
+- Contact address for the blog is blog@schmitt-nieto.com.
+- This file was last reviewed on 2026-05-23.
+
+## Core Pages
+
+- [Home](https://schmitt-nieto.com/): Latest posts and main entry point.
+- [About](https://schmitt-nieto.com/about/): Author background, professional focus, employer journey and certifications.
+- [Azure Local Calculator](https://schmitt-nieto.com/azurelocal-calculator/): Interactive calculators for Azure Local storage sizing, pricing estimation and CPU planning.
+- [Privacy Policy](https://schmitt-nieto.com/privacy-policy/): Privacy, analytics and cookie information for the site.
+
+## Azure Local Series
+
+- [Azure Local: Evolution, Use Cases and Comparison with Other Solutions](https://schmitt-nieto.com/blog/azure-stack-hci-evolution-use-cases-comparison/): Overview of Azure Local evolution, use cases and comparison with VMware vSAN, Nutanix, Proxmox and Windows Server Hyper-V.
+- [Azure Local: Demolab](https://schmitt-nieto.com/blog/azure-stack-hci-demolab/): Step-by-step lab deployment approach for Azure Local on minimal hardware using AzSHCI scripts.
+- [Azure Local: Day2 operations](https://schmitt-nieto.com/blog/azure-stack-hci-day2/): Post-deployment operations such as networking, VM images, monitoring and security.
+- [Azure Local: VM Deployment](https://schmitt-nieto.com/blog/azure-stack-hci-vm-deployment/): VM deployment and management on Azure Local.
+- [Azure Local: Azure Virtual Desktop](https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/): Azure Virtual Desktop deployment on Azure Local with prerequisites, architecture and connectivity options.
+- [Azure Local: AKS and SQL Managed instances](https://schmitt-nieto.com/blog/azure-local-aks/): AKS and SQL Managed Instance deployment on Azure Local.
+- [Azure Local: Lifecycle Management](https://schmitt-nieto.com/blog/azure-local-lifecycle/): Updates, upgrades, node repair and lifecycle processes for Azure Local.
+- [Azure Local: Redundancy](https://schmitt-nieto.com/blog/azure-local-redundancy/): Node resilience, storage durability, network design and Active Directory considerations.
+- [Azure Local: Backup and Disaster Recovery](https://schmitt-nieto.com/blog/azure-local-backup-and-disaster-recovery/): Backup and disaster recovery patterns, VM hydration and Azure Site Recovery context.
+- [Awesome Azure Local](https://schmitt-nieto.com/blog/awesome-azure-local/): Curated Azure Local, AVD and AKS resources from official and community sources.
+- [Azure Local Deep Insights Workbook](https://schmitt-nieto.com/blog/azure-local-deep-insights-workbook/): Azure Workbook for Azure Local with guest VM visibility and richer performance counters.
+- [Azure Local: How to Deploy LLMs on AKS](https://schmitt-nieto.com/blog/azure-local-llm/): Walkthrough for deploying lightweight LLMs on AKS inside Azure Local.
+- [Azure Local: Terraform Deployment](https://schmitt-nieto.com/blog/azure-local-terraform/): Terraform-based Azure Local deployment using a fixed AVM fork, staged validation and pipeline-ready automation.
+
+## Adjacent Technical Articles
+
+- [Nerdio Scripted Actions: Windows Scripts](https://schmitt-nieto.com/blog/nerdio-scripted-actions-windows-scripts/): Automation with Nerdio Scripted Actions and Windows scripts for Azure Virtual Desktop deployments.
+- [Azure Local meets Nerdio](https://schmitt-nieto.com/blog/azure-local-nerdio/): Using Nerdio to simplify Azure Virtual Desktop management on Azure Local.
+- [My Work Environment: Tools and Customizations](https://schmitt-nieto.com/blog/my-work-environment-tools/): Tools and PowerShell customizations used in day-to-day work.
+- [GitHub Tools and Repositories that I use](https://schmitt-nieto.com/blog/github-tools/): Personal overview of useful GitHub tools and repositories.
+- [Creating My Azure Journey Blog: A Step-by-Step Guide](https://schmitt-nieto.com/blog/creating-my-azure-journey-blog/): How this Jekyll and GitHub Pages blog was built and customized.
+- [Chronicloud Series: A Journey through Azure Solutions](https://schmitt-nieto.com/blog/chronicloud-series/): Context and entry point for the Azure solution series.
+
+## Related Repositories
+
+- [AzSHCI](https://github.com/schmittnieto/AzSHCI): Public Azure Local automation repository used by the lab and Terraform articles.
+- [Awesome Azure Local](https://github.com/schmittnieto/awesome-azure-local): Public curated resource list mirrored by the blog article.
+- [Blog source repository](https://github.com/schmittnieto/schmittnieto.github.io): Public source for this GitHub Pages site.
+
+## Optional
+
+- [Posts archive](https://schmitt-nieto.com/posts/): Chronological archive of all public posts.
+- [Categories archive](https://schmitt-nieto.com/categories/): Archive grouped by category.
+- [Tags archive](https://schmitt-nieto.com/tags/): Archive grouped by tag.
+- [RSS feed](https://schmitt-nieto.com/feed.xml): Machine-readable feed for recent posts.
+- [Welcome to My Azure Journey](https://schmitt-nieto.com/blog/welcome-to-my-blog/): Introductory post explaining the purpose of the blog.
+- [Reflecting on 2024 and Goals for 2025](https://schmitt-nieto.com/blog/new-year/): Personal yearly recap.
+- [Reflecting on 2025 and Goals for 2026](https://schmitt-nieto.com/blog/year-recap-2025/): Personal yearly recap.
