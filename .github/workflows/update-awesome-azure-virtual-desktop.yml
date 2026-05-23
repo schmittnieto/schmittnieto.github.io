@@ -1,4 +1,4 @@
-name: Update Awesome Azure Local article
+name: Update Awesome Azure Virtual Desktop article
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-awesome-azure-local
+  group: update-awesome-azure-virtual-desktop
   cancel-in-progress: true
 
 jobs:
@@ -32,11 +32,11 @@ jobs:
           python3 - <<'PY'
           import os, re, sys, datetime
 
-          ARTICLE_PATH = "_posts/2025-08-09-awesome-azure-local.md"
-          README_PATH  = "assets/repo/awesome-azure-local/README.md"
+          ARTICLE_PATH = "_posts/2026-05-23-awesome-azure-virtual-desktop.md"
+          README_PATH  = "assets/repo/awesome-azure-virtual-desktop/README.md"
 
-          START = "<!-- AWESOMEAZURELOCAL:START -->"
-          END   = "<!-- AWESOMEAZURELOCAL:END -->"
+          START = "<!-- AWESOMEAZUREVIRTUALDESKTOP:START -->"
+          END   = "<!-- AWESOMEAZUREVIRTUALDESKTOP:END -->"
 
           # Skip gracefully if files are not present on unrelated commits
           if not os.path.exists(README_PATH):
@@ -50,7 +50,7 @@ jobs:
           with open(README_PATH, "r", encoding="utf-8") as f:
             readme = f.read()
 
-          m = re.search(r'<!--\s*AWESOMEAZURELOCAL:START\s*-->(.*?)<!--\s*AWESOMEAZURELOCAL:END\s*-->',
+          m = re.search(r'<!--\s*AWESOMEAZUREVIRTUALDESKTOP:START\s*-->(.*?)<!--\s*AWESOMEAZUREVIRTUALDESKTOP:END\s*-->',
                         readme, flags=re.DOTALL | re.IGNORECASE)
           if not m:
             print("Markers not found in README. Skipping.")
@@ -59,7 +59,7 @@ jobs:
           block = m.group(1).strip()
 
           # Rewrite image URLs to GitHub Raw when they are relative
-          RAW_ROOT = "https://raw.githubusercontent.com/schmittnieto/awesome-azure-local/main/"
+          RAW_ROOT = "https://raw.githubusercontent.com/schmittnieto/awesome-azure-virtual-desktop/main/"
           def img_repl(m):
             alt = m.group(1)
             url = m.group(2).strip()
@@ -70,7 +70,7 @@ jobs:
           block = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', img_repl, block)
 
           # Rewrite relative links to GitHub Blob
-          BLOB_ROOT = "https://github.com/schmittnieto/awesome-azure-local/blob/main/"
+          BLOB_ROOT = "https://github.com/schmittnieto/awesome-azure-virtual-desktop/blob/main/"
           def link_repl(m):
             text = m.group(1)
             url  = m.group(2).strip()
@@ -122,5 +122,5 @@ jobs:
       - name: Commit and push
         run: |
           git add .
-          git commit -m "Update Awesome Azure Local block from README [skip ci]" || echo "No changes to commit"
+          git commit -m "Update Awesome Azure Virtual Desktop block from README [skip ci]" || echo "No changes to commit"
           git push origin main

@@ -39,3 +39,15 @@ Azurelocal:
       url: /blog/azure-local-llm/
     - title: "Terraform Deployment"
       url: /blog/azure-local-terraform/
+
+Avd:
+- title: Azure Virtual Desktop
+  children:
+    - title: "Awesome Azure Virtual Desktop"
+      url: /blog/awesome-azure-virtual-desktop/
+    - title: "AVD on Azure Local"
+      url: /blog/azure-stack-hci-azure-virtual-desktop/
+    - title: "Azure Local meets Nerdio"
+      url: /blog/azure-local-nerdio/
+    - title: "Nerdio Scripted Actions: Windows Scripts"
+      url: /blog/nerdio-scripted-actions-windows-scripts/
