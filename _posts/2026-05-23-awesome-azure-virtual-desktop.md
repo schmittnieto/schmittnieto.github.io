@@ -2,7 +2,7 @@
 title: "Awesome Azure Virtual Desktop"
 excerpt: "Curated catalog of Azure Virtual Desktop and Windows 365 with official, vendor and community resources updated regularly."
 date: 2026-05-23
-last_modified_at: 2026-05-23
+last_modified_at: 2026-05-24
 categories:
   - Blog
 tags:
@@ -461,6 +461,8 @@ Azure Virtual Desktop receives continuous monthly service updates. Below is a su
   Multi-author blog covering endpoint management including AVD image management, Intune integration and application packaging for virtual environments.
 - [michaelsendpoint.com](https://michaelsendpoint.com/)  
   Blog by [Michael Frank](https://www.linkedin.com/in/michaelsendpoint/) with step-by-step Microsoft guides covering Intune, Microsoft Entra ID, Windows 365, security and PowerShell automation relevant to endpoint and AVD management.
+- [Observability for Azure Virtual Desktop](https://blog.rjz.de/observability_for_avd/)  
+  Blog post by RubenZ covering Azure Virtual Desktop observability with SquaredUp Cloud, Log Analytics and focused KQL queries for VM state, agent health, performance metrics, user connections, configuration changes and session usage.
 
 ### LinkedIn
 
