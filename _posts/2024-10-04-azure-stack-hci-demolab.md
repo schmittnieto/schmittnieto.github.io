@@ -557,37 +557,50 @@ To make it easier to read I have moved all the RAW scripts to the end of the art
 
 #region Variables
 
+# Load the lab configuration into this session if it has not been loaded yet.
+# Tip: run scripts\01Lab\Set-LabEnv.ps1 once per session to set everything from
+# scripts\01Lab\.env. See scripts\01Lab\.env.example for the full list of keys.
+if ($env:AZSHCI_ENV_LOADED -ne '1') { & "$PSScriptRoot\Set-LabEnv.ps1" }
+
 # Virtual Switch and Network Configuration
-$vSwitchName = "azurelocal"
+$vSwitchName = $env:AZSHCI_VSWITCH_NAME
 $vSwitchNIC = "vEthernet ($vSwitchName)"
-$vNetIPNetwork = "172.19.18.0/24"
+$vNetIPNetwork = $env:AZSHCI_LAB_SUBNET
 $vIPNetworkPrefixLength = ($vNetIPNetwork -split '/')[1]
-$natName = "azurelocal"
-$HCIRootFolder = "E:\AzureLocalLab"
+$natName = $env:AZSHCI_NAT_NAME
+$HCIRootFolder = $env:AZSHCI_LAB_ROOT_FOLDER
 
 # ISO Paths
-$isoPath_HCI = "E:\ISO\AzureLocal24H2.iso"    # Replace with the actual path to your HCI Node ISO
-$isoPath_DC  = "E:\ISO\WS2025.iso"      # Replace with the actual path to your Domain Controller ISO
+$isoPath_HCI = $env:AZSHCI_ISO_PATH_HCI   # HCI Node ISO
+$isoPath_DC  = $env:AZSHCI_ISO_PATH_DC    # Domain Controller ISO
+
+# Management network adapter names (shared by both VMs)
+$NIC1 = $env:AZSHCI_MGMT_NIC1
+$NIC2 = $env:AZSHCI_MGMT_NIC2
 
 # HCI Node VM Configuration
-$HCIVMName = "AZLN01"
-$HCI_Memory = 96GB
-$HCI_Processors = 32
+$HCIVMName = $env:AZSHCI_HCI_VM_NAME
+$HCI_Memory = [int64]$env:AZSHCI_HCI_VM_MEMORY_GB * 1GB
+$HCI_Processors = [int]$env:AZSHCI_HCI_VM_PROCESSORS
+$HCI_OSDiskSize   = [int64]$env:AZSHCI_HCI_OS_DISK_GB * 1GB
+$HCI_S2DDiskSize  = [int64]$env:AZSHCI_HCI_S2D_DISK_GB * 1GB
+$HCI_S2DDiskCount = [int]$env:AZSHCI_HCI_S2D_DISK_COUNT
 $HCI_Disks = @(
-    @{ Path = "${HCIVMName}_C.vhdx"; Size = 127GB },
-    @{ Path = "s2d1.vhdx";            Size = 1024GB },
-    @{ Path = "s2d2.vhdx";            Size = 1024GB }
+    @{ Path = "${HCIVMName}_C.vhdx"; Size = $HCI_OSDiskSize }
 )
-$HCI_NetworkAdapters = @("MGMT1", "MGMT2")
+for ($s2d = 1; $s2d -le $HCI_S2DDiskCount; $s2d++) {
+    $HCI_Disks += @{ Path = "s2d$s2d.vhdx"; Size = $HCI_S2DDiskSize }
+}
+$HCI_NetworkAdapters = @($NIC1, $NIC2)
 
 # Domain Controller VM Configuration
-$DCVMName = "DC"
-$DC_Memory = 4GB
-$DC_Processors = 4
+$DCVMName = $env:AZSHCI_DC_VM_NAME
+$DC_Memory = [int64]$env:AZSHCI_DC_VM_MEMORY_GB * 1GB
+$DC_Processors = [int]$env:AZSHCI_DC_VM_PROCESSORS
 $DC_Disks = @(
-    @{ Path = "${DCVMName}_C.vhdx"; Size = 60GB }
+    @{ Path = "${DCVMName}_C.vhdx"; Size = [int64]$env:AZSHCI_DC_OS_DISK_GB * 1GB }
 )
-$DC_NetworkAdapters = @("MGMT1")
+$DC_NetworkAdapters = @($NIC1)
 
 # Tasks for Progress Bar
 $tasks = @(
@@ -1081,34 +1094,39 @@ Write-Message "All configurations and VM creations completed successfully." -Typ
 
 #region Variables
 
+# Load the lab configuration into this session if it has not been loaded yet.
+# Tip: run scripts\01Lab\Set-LabEnv.ps1 once per session to set everything from
+# scripts\01Lab\.env. See scripts\01Lab\.env.example for the full list of keys.
+if ($env:AZSHCI_ENV_LOADED -ne '1') { & "$PSScriptRoot\Set-LabEnv.ps1" }
+
 # Define credentials and variables
-$defaultUser = "Administrator"
-$defaultPwd = "Start#1234"
+$defaultUser = $env:AZSHCI_DEFAULT_ADMIN_USER
+$defaultPwd = $env:AZSHCI_DEFAULT_ADMIN_PASSWORD
 $DefaultSecuredPassword = ConvertTo-SecureString $defaultPwd -AsPlainText -Force
 $DefaultCredentials = New-Object System.Management.Automation.PSCredential ($defaultUser, $DefaultSecuredPassword)
 
 # VM and Domain Variables
-$dcVMName  = "DC"
-$domainName = "azurelocal.local"
-$netBIOSName = "AZURELOCAL"
+$dcVMName  = $env:AZSHCI_DC_VM_NAME
+$domainName = $env:AZSHCI_DOMAIN_NAME
+$netBIOSName = $env:AZSHCI_DOMAIN_NETBIOS
 
-$NIC1 = "MGMT1"
-$nic1IP = "172.19.18.2"
-$nic1GW = "172.19.18.1"
-$nic1DNS = "172.19.18.2"
+$NIC1 = $env:AZSHCI_MGMT_NIC1
+$nic1IP = $env:AZSHCI_DC_IP
+$nic1GW = $env:AZSHCI_LAB_GATEWAY
+$nic1DNS = $env:AZSHCI_DC_IP
 
 # Variables for DNS forwarder and time zone
-$dnsForwarder = "8.8.8.8"
-$timeZone = "W. Europe Standard Time" # Use "Get-TimeZone -ListAvailable" to get a list of available Time Zones
+$dnsForwarder = $env:AZSHCI_DNS_FORWARDER
+$timeZone = $env:AZSHCI_DC_TIMEZONE # Use "Get-TimeZone -ListAvailable" to get a list of available Time Zones
 
 # User for Azure Local LCM User (to be used later)
-$setupUser = "hciadmin"
-$setupPwd = "dgemsc#utquMHDHp3M"
+$setupUser = $env:AZSHCI_DC_LCM_USER
+$setupPwd = $env:AZSHCI_DC_LCM_PASSWORD
 
 # Sleep durations in seconds
-$SleepRename = 20     # Sleep Timer for after PC Renaming
-$SleepDomain = 360    # Sleep Timer for after Domain Making
-$SleepUpdates = 240   # Sleep Timer for after Update Installation
+$SleepRename = [int]$env:AZSHCI_DC_SLEEP_RENAME     # Sleep Timer for after PC Renaming
+$SleepDomain = [int]$env:AZSHCI_DC_SLEEP_DOMAIN    # Sleep Timer for after Domain Making
+$SleepUpdates = [int]$env:AZSHCI_DC_SLEEP_UPDATES   # Sleep Timer for after Update Installation
 # $SleepADServices = 30 # Increased Sleep Timer after DC promotion before configuring AD
 
 # Total number of steps for progress calculation
@@ -1702,48 +1720,53 @@ Update-ProgressBar -CurrentStep $currentStep -TotalSteps $totalSteps -StatusMess
 
 #region Variables
 
+# Load the lab configuration into this session if it has not been loaded yet.
+# Tip: run scripts\01Lab\Set-LabEnv.ps1 once per session to set everything from
+# scripts\01Lab\.env. See scripts\01Lab\.env.example for the full list of keys.
+if ($env:AZSHCI_ENV_LOADED -ne '1') { & "$PSScriptRoot\Set-LabEnv.ps1" }
+
 # Credentials and User Configuration
-$defaultUser = "Administrator"
-$defaultPwd = "Start#1234"
+$defaultUser = $env:AZSHCI_DEFAULT_ADMIN_USER
+$defaultPwd = $env:AZSHCI_DEFAULT_ADMIN_PASSWORD
 $DefaultSecuredPassword = ConvertTo-SecureString $defaultPwd -AsPlainText -Force
 $DefaultCredentials = New-Object System.Management.Automation.PSCredential ($defaultUser, $DefaultSecuredPassword)
 
-$setupUser = "Setupuser"
-$setupPwd = "dgemsc#utquMHDHp3M"
+$setupUser = $env:AZSHCI_NODE_SETUP_USER
+$setupPwd = $env:AZSHCI_NODE_SETUP_PASSWORD
 
 # Node Configuration
-$nodeName = "AZLN01"
-$NIC1 = "MGMT1"
-$NIC2 = "MGMT2"
-$nic1IP = "172.19.18.10"
-$nic1GW = "172.19.18.1"
-$nic1DNS = "172.19.18.2"
+$nodeName = $env:AZSHCI_HCI_VM_NAME
+$NIC1 = $env:AZSHCI_MGMT_NIC1
+$NIC2 = $env:AZSHCI_MGMT_NIC2
+$nic1IP = $env:AZSHCI_NODE_IP
+$nic1GW = $env:AZSHCI_LAB_GATEWAY
+$nic1DNS = $env:AZSHCI_DC_IP
 
-# Azure Configuration
-$Location = "westeurope"
-$Cloud = "AzureCloud"
-$SubscriptionID = "000000-00000-000000-00000-0000000"  # Replace with your actual Subscription ID
-$resourceGroupName = "rg-azlocal-lab"                      # Replace with your actual Resource Group Name
-$TenantID = "000000-00000-000000-00000-0000000"         # Replace with your actual Tenant ID
+# Azure Configuration (set these in scripts\01Lab\.env)
+$Location = $env:AZSHCI_LOCATION
+$Cloud = $env:AZSHCI_CLOUD
+$SubscriptionID = [string]$env:AZSHCI_SUBSCRIPTION_ID
+$resourceGroupName = [string]$env:AZSHCI_RESOURCE_GROUP
+$TenantID = [string]$env:AZSHCI_TENANT_ID
 
 # SPN Configuration (optional)
 # If both values are set, the script obtains an ARM access token from the SPN
 # and passes it to Invoke-AzStackHciArcInitialization via -AccountId / -ArmAccessToken.
 # If either is empty, the node falls back to an interactive device code login.
 # Use the AppId and Secret generated by scripts/01Lab/00_AzurePreRequisites.ps1.
-$SPNAppId  = ""   # Application (client) ID
-$SPNSecret = ""   # Client secret
+$SPNAppId  = [string]$env:AZSHCI_SPN_APP_ID   # Application (client) ID
+$SPNSecret = [string]$env:AZSHCI_SPN_SECRET   # Client secret
 
 # Sleep durations in seconds
-$SleepRestart  = 60    # Sleep after VM restart
-$SleepFeatures = 60    # Sleep after feature installation and restart
-$SleepModules  = 60    # Sleep after module installation
+$SleepRestart  = [int]$env:AZSHCI_NODE_SLEEP_RESTART    # Sleep after VM restart
+$SleepFeatures = [int]$env:AZSHCI_NODE_SLEEP_FEATURES   # Sleep after feature installation and restart
+$SleepModules  = [int]$env:AZSHCI_NODE_SLEEP_MODULES    # Sleep after module installation
 
 # Arc registration retry settings
 # If Invoke-AzStackHciArcInitialization fails with a BootstrapOobeService
 # connection error, the script waits $SleepBootstrap seconds and retries.
-$ArcRetryCount   = 3    # Maximum number of attempts
-$SleepBootstrap  = 30   # Seconds to wait between retries
+$ArcRetryCount   = [int]$env:AZSHCI_ARC_RETRY_COUNT      # Maximum number of attempts
+$SleepBootstrap  = [int]$env:AZSHCI_ARC_SLEEP_BOOTSTRAP  # Seconds to wait between retries
 
 #endregion
 
@@ -2094,27 +2117,32 @@ Write-Message "Cluster node configuration completed successfully." -Type "Succes
 
 #region Variables
 
+# Load the lab configuration into this session if it has not been loaded yet.
+# Tip: run scripts\01Lab\Set-LabEnv.ps1 once per session to set everything from
+# scripts\01Lab\.env. See scripts\01Lab\.env.example for the full list of keys.
+if ($env:AZSHCI_ENV_LOADED -ne '1') { & "$PSScriptRoot\Set-LabEnv.ps1" }
+
 # Azure Configuration
-# Leave $SubscriptionID empty to select interactively from available subscriptions.
-# Leave $ResourceGroupName empty to select interactively from available resource groups.
-$SubscriptionID    = ""                # Replace with your actual Subscription ID or leave empty to select interactively
-$ResourceGroupName = "rg-azlocal-lab"  # default lab resource group
-$TenantID          = ""                # required only when authenticating via SPN
+# Leave AZSHCI_SUBSCRIPTION_ID empty in scripts\01Lab\.env to select interactively from available subscriptions.
+# Leave AZSHCI_RESOURCE_GROUP empty to select interactively from available resource groups.
+$SubscriptionID    = [string]$env:AZSHCI_SUBSCRIPTION_ID   # empty selects interactively
+$ResourceGroupName = [string]$env:AZSHCI_RESOURCE_GROUP    # default lab resource group
+$TenantID          = [string]$env:AZSHCI_TENANT_ID         # required only when authenticating via SPN
 
 # SPN Configuration (optional)
 # If both values are set, the script authenticates via SPN.
 # If either is empty, an existing Az session is reused or device code login is used as fallback.
 # Use the AppId and Secret generated by scripts/01Lab/00_AzurePreRequisites.ps1.
-$SPNAppId  = ""   # Application (client) ID
-$SPNSecret = ""   # Client secret
+$SPNAppId  = [string]$env:AZSHCI_SPN_APP_ID   # Application (client) ID
+$SPNSecret = [string]$env:AZSHCI_SPN_SECRET   # Client secret
 
 # Extension Settings
-$Location = "westeurope"
+$Location = $env:AZSHCI_LOCATION
 
-$Settings = @{ 
-    "CloudName" = "AzureCloud"; 
-    "RegionName" = $Location; 
-    "DeviceType" = "AzureEdge" 
+$Settings = @{
+    "CloudName" = $env:AZSHCI_CLOUD;
+    "RegionName" = $Location;
+    "DeviceType" = "AzureEdge"
 }
 
 $ExtensionList = @(
@@ -2751,18 +2779,24 @@ Write-Message "Azure Connected Machine extensions troubleshooting completed succ
 
 #region Variables
 
+# Load the lab configuration into this session if it has not been loaded yet.
+# These values must match the ones used during deployment so teardown targets
+# the right objects. Run scripts\01Lab\Set-LabEnv.ps1 once per session to set
+# everything from scripts\01Lab\.env.
+if ($env:AZSHCI_ENV_LOADED -ne '1') { & "$PSScriptRoot\Set-LabEnv.ps1" }
+
 # Define VM Names
-$HCIVMName = "AZLN01"
-$DCVMName = "DC"
+$HCIVMName = $env:AZSHCI_HCI_VM_NAME
+$DCVMName = $env:AZSHCI_DC_VM_NAME
 
 # Define Virtual Switch and NAT Configuration
-$vSwitchName    = "azurelocal"
+$vSwitchName    = $env:AZSHCI_VSWITCH_NAME
 $vSwitchNIC     = "vEthernet ($vSwitchName)"
-$natName        = "azurelocal"
-$vNetIPNetwork  = "172.19.18.0/24"
+$natName        = $env:AZSHCI_NAT_NAME
+$vNetIPNetwork  = $env:AZSHCI_LAB_SUBNET
 
 # Define Root Folder for VMs and Disks
-$HCIRootFolder = "E:\AzureLocalLab"
+$HCIRootFolder = $env:AZSHCI_LAB_ROOT_FOLDER
 $HCIDiskFolder = Join-Path -Path $HCIRootFolder -ChildPath "Disk"
 
 # Define Tasks for Progress Bar
