@@ -2,6 +2,7 @@
 title: "Azure Local: Terraform Deployment"
 excerpt: "Deploy Azure Local with Terraform using a fixed AVM fork, staged validation and a service principal ready for pipeline-driven AVD and AKS automation."
 date: 2026-04-17
+last_modified_at: 2026-07-01
 categories:
   - Blog
 tags:
@@ -191,6 +192,8 @@ With the Azure side ready, the next scripts prepare the local environment:
 - **`01_DC.ps1`** sets up the domain controller that the cluster needs for Active Directory integration.
 - **`02_Cluster.ps1`** performs the Arc registration of the node. After this script completes, the machine appears in Azure as an Arc-enabled server and is ready for the Terraform deployment step.
 
+These three scripts now read their configuration from a single `scripts/01Lab/.env` file that you load once per session with `Set-LabEnv.ps1`. That way you set every value (subscription and tenant ids, VM sizing, ISO paths, credentials) in one place instead of editing each script. Only `00_AzurePreRequisites.ps1` stays fully interactive and does not use `.env`. The full list of keys and the workflow are documented in the AzSHCI repository README.
+
 ## The Terraform Architecture
 
 The Terraform configuration is a thin root module that creates a few shared prerequisites and then calls the Azure Local cluster module. The shared prerequisites are:
@@ -255,6 +258,8 @@ The root cause is a type-checking bug in `DownloadHelpers.psm1` inside the `Azur
 
 One important lesson from this: the four required Arc extensions (`AzureEdgeTelemetryAndDiagnostics`, `AzureEdgeDeviceManagement`, `AzureEdgeLifecycleManager`, `AzureEdgeRemoteSupport`) must be installed through the cluster creation process itself. Trying to pre-stage them manually before `terraform apply` is not only unnecessary, it can leave the node in a state where validation rejects it. Let Terraform handle the extension installation as part of Stage 1. The `03_TroubleshootingExtensions.ps1` script remains in the repository as a troubleshooting tool for environments where extensions end up in a `Failed` state after a previous failed apply, not as a required step in the normal flow.
 
+Alongside the extension repair logic, the script now also applies a targeted LcmController hotfix on the node through Azure Arc Run Command, so it does not need direct network access to the node. The hotfix patches the exact `DownloadHelpers.psm1` line responsible for the null-check bug described above and restarts the LcmController service. It is idempotent, so it is safe to rerun after any extension recovery.
+
 ## Step-by-Step Deployment
 
 With all of the above in place, here is the actual deployment flow.
@@ -297,6 +302,9 @@ Copy `terraform/terraform.tfvars.example` to `terraform/terraform.tfvars`. Repla
 
 ```hcl
 management_adapters = ["MGMT1"]
+storage_networks    = [
+  { name = "MGMT1", networkAdapterName = "MGMT1", vlanId = "711" }
+]
 rdma_enabled        = false
 networking_type     = ""
 networking_pattern  = ""
@@ -316,6 +324,8 @@ az login --service-principal `
     --tenant "<tenant-id>"
 az account set --subscription "<subscription-id>"
 ```
+
+There is also a small helper in the `terraform/` folder, `Connect-Spn.ps1`, that automates this login. Copy `Connect-Spn.ps1.example` to `Connect-Spn.ps1` and run it at the start of each session. It clears any cached Azure CLI session first, then logs in as the service principal using the values from `terraform.tfvars` and the tenant id from `scripts/01Lab/.env`, so a stale login from another tenant cannot leak into the run.
 
 ### Step 7: Initialize and run Stage 1 (Validate)
 
@@ -383,6 +393,8 @@ If a `terraform apply` times out or you lose Terraform state after a successful 
 
 - **`import_machine_rg_role_assignment_ids`** (`map(string)`, default `{}`): When the `machine_rg_role_assign` role assignments already exist in Azure and a new apply would fail with `409 Conflict`, populate this map with the existing assignment GUIDs (visible in the 409 error message) and run `terraform apply` to import them. Reset to `{}` afterward.
 
+- **`import_service_principal_role_assignment_ids`** (`map(string)`, default `{}`): When you tear the lab down with `99_Offboarding.ps1` alone (or lose state), the `Azure Connected Machine Resource Manager` assignment on the Microsoft.AzureStackHCI resource provider service principal survives and the next apply fails with `409 RoleAssignmentExists` on `service_principal_role_assign["ACMRM"]`. Take the GUID from the error and import it as `{ "ACMRM" = "<guid>" }`, then reset to `{}` after a successful apply.
+
 If the Arc machine was manually deleted from Azure and you need to run `terraform destroy`, set `enable_cluster_module = false` to skip the cluster module and avoid failing Arc data-source lookups.
 
 It is also worth noting that the cluster deployment creates additional Azure resources such as Arc extensions and logical networks that are lifecycle-managed by the cluster resource itself: they are created and destroyed together with it, so they do not need to be imported separately. The custom location is the exception, it is the only post-deployment resource that Terraform captures in state and exposes as an output, since workload modules (AVD, AKS) need to reference it. Everything else is handled by Azure as part of the cluster's own lifecycle.
@@ -394,5 +406,6 @@ The cluster deployment is the foundation. The repository's goal from the start h
 - **Azure Virtual Desktop**: A Terraform module for AVD host pools, session hosts and workspace configuration, deployable against the custom location created by the cluster deployment.
 - **AKS on Azure Local**: Terraform for AKS cluster creation using the Arc-enabled Kubernetes stack, scoped to the same resource group and custom location.
 - **Pipelines**: GitHub Actions or Azure DevOps pipeline definitions that call these Terraform configurations using the service principal created by `00_AzurePreRequisites.ps1`. The goal is a single pipeline trigger that goes from a fresh Arc-registered node to a fully deployed cluster with workloads.
+- **Dedicated Terraform repository**: what lives today in `AzSHCI/terraform` is still a proof of concept sitting next to the PowerShell scripts. Once it stabilises, the Terraform path will move to its own repository with a remote state backend on Azure Blob Storage, a modular pipeline structure and full Day-2 lifecycle operations (upgrades, node management, monitoring).
 
 If you have questions, hit issues, or have already gone through a similar Terraform journey with Azure Local, I would love to hear from you in the comments below. The repository is public and pull requests are welcome.

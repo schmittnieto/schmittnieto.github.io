@@ -2,7 +2,7 @@
 title: "Azure Local: Demolab"
 excerpt: "Streamline Azure Local deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2026-04-16
+last_modified_at: 2026-07-01
 categories:
   - Blog
 tags:
@@ -139,6 +139,8 @@ AzSHCI/
 │
 ├── scripts/
 │   ├── 01Lab/
+│   │   ├── Set-LabEnv.ps1
+│   │   ├── .env.example
 │   │   ├── 00_AzurePreRequisites.ps1
 │   │   ├── 00_Infra_AzHCI.ps1
 │   │   ├── 01_DC.ps1
@@ -148,6 +150,7 @@ AzSHCI/
 │   ├── 02Day2/
 │   │   ├── 10_StartStopAzSHCI.ps1
 │   │   ├── 11_ImageBuilderAzSHCI.ps1
+│   │   ├── 11_ImageBuilderAL.ps1
 │   │   ├── 12_AKSArcServiceToken.ps1
 │   │   └── 13_VHDXOptimization.ps1
 │   └── 03VMDeployment/
@@ -157,6 +160,31 @@ AzSHCI/
 ├── README.md
 └── LICENSE
 ```
+
+### Configuration with the .env file
+
+The 01Lab scripts now read their configuration from a single `scripts/01Lab/.env` file that you load once per session with `Set-LabEnv.ps1`. Every value lives in that one file: Azure identifiers, ISO paths, lab root folder, VM sizing and lab credentials. The fully interactive `00_AzurePreRequisites.ps1` is the only script that does not use `.env`, because it selects subscription, resource group and principal through prompts.
+
+Copy the template once per machine:
+
+```powershell
+Copy-Item scripts\01Lab\.env.example scripts\01Lab\.env
+notepad scripts\01Lab\.env
+```
+
+At a minimum set these keys before running any script:
+
+- `AZSHCI_LAB_ROOT_FOLDER`, `AZSHCI_ISO_PATH_HCI`, `AZSHCI_ISO_PATH_DC` for the local infrastructure
+- `AZSHCI_SUBSCRIPTION_ID`, `AZSHCI_TENANT_ID`, `AZSHCI_RESOURCE_GROUP`, `AZSHCI_LOCATION` for the Arc registration
+- `AZSHCI_DEFAULT_ADMIN_PASSWORD`, `AZSHCI_DC_LCM_PASSWORD`, `AZSHCI_NODE_SETUP_PASSWORD` for the lab credentials
+
+At the start of each session, load the variables once:
+
+```powershell
+.\scripts\01Lab\Set-LabEnv.ps1
+```
+
+Every script you run afterwards picks them up automatically. If you forget to run it, each script loads the file on its first use. Secrets are loaded but never printed. `scripts/01Lab/.env` is listed in `.gitignore` and must never be committed. Share configuration only through `.env.example`.
 
 ### Script Breakdown
 
@@ -183,7 +211,7 @@ AzSHCI/
   - Adds an inbound ICMPv4 firewall rule so VMs can ping the NAT gateway.
   - Creates the lab folder structure under `E:\AzureLocalLab` (subfolders `VM\` and `Disk\`).
   - Automates VM creation with vTPM, nested virtualization, MAC spoofing, and boot-from-ISO configuration.
-  - Default ISO paths: `E:\ISO\AzureLocal24H2.iso` (HCI node) and `E:\ISO\WS2025.iso` (DC). Adjust `$isoPath_HCI`, `$isoPath_DC` and `$HCIRootFolder` if your paths differ.
+  - Default ISO paths: `E:\ISO\AzureLocal24H2.iso` (HCI node) and `E:\ISO\WS2025.iso` (DC). Adjust `AZSHCI_ISO_PATH_HCI`, `AZSHCI_ISO_PATH_DC` and `AZSHCI_LAB_ROOT_FOLDER` in `scripts/01Lab/.env` if your paths differ.
 
 #### 01_DC.ps1
 
@@ -212,7 +240,7 @@ AzSHCI/
   - Configures network adapters with static IPs and RDMA (`MGMT1`: `172.19.18.10`, `MGMT2`: RDMA only).
   - Installs essential Windows features.
   - Registers the node with Azure Arc via `Invoke-AzStackHciArcInitialization`, with automatic retry for transient `BootstrapOobeService` connection errors.
-  - **Optional SPN authentication:** if `$SPNAppId` and `$SPNSecret` are set (output from `00_AzurePreRequisites.ps1`), the script authenticates non-interactively via Service Principal instead of an interactive device code prompt.
+  - **Optional SPN authentication:** if `AZSHCI_SPN_APP_ID` and `AZSHCI_SPN_SECRET` are set in `scripts/01Lab/.env` (output from `00_AzurePreRequisites.ps1`), the script authenticates non-interactively via Service Principal instead of an interactive device code prompt.
 
 #### 03_TroubleshootingExtensions.ps1
 
@@ -226,6 +254,7 @@ AzSHCI/
   - Validates that required Azure Connected Machine extensions are installed and at the correct version.
   - Fixes any failed or version-mismatched extensions by removing locks, deleting, and reinstalling them.
   - Adds any missing extensions based on a predefined list.
+  - Once all four required extensions reach `Succeeded`, applies a targeted LcmController hotfix on the node through Azure Arc Run Command to patch a known `DownloadHelpers.psm1` bug that can break deployment validation. The step is idempotent and safe to rerun.
 
 #### 99_Offboarding.ps1
 
@@ -258,7 +287,7 @@ Or download the repository manually: [Download Here](https://github.com/schmittn
 - **Windows Server 2025 Evaluation ISO**: [Download Here](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2025)
 - **Azure Local OS ISO**: Download directly from the Azure Portal.
 
-Place both ISO files in a directory accessible to the host. The scripts default to `E:\ISO\AzureLocal24H2.iso` (Azure Local node) and `E:\ISO\WS2025.iso` (Domain Controller). If your drive letter or filenames differ, update the `$isoPath_HCI`, `$isoPath_DC`, and `$HCIRootFolder` variables in `00_Infra_AzHCI.ps1` before running it.
+Place both ISO files in a directory accessible to the host. The scripts default to `E:\ISO\AzureLocal24H2.iso` (Azure Local node) and `E:\ISO\WS2025.iso` (Domain Controller). If your drive letter or filenames differ, set `AZSHCI_ISO_PATH_HCI`, `AZSHCI_ISO_PATH_DC` and `AZSHCI_LAB_ROOT_FOLDER` in `scripts/01Lab/.env` before running the scripts. See the [Configuration with the .env file](#configuration-with-the-env-file) section above.
 
 ### 3. Preparing Your Environment
 
@@ -273,6 +302,21 @@ Ensure your execution policy allows script execution:
 ```
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
+
+Copy the environment template and open it. Fill in your ISO paths, Azure identifiers and lab credentials as described in [Configuration with the .env file](#configuration-with-the-env-file):
+
+```powershell
+Copy-Item .env.example .env
+notepad .env
+```
+
+Then load the variables into the current session:
+
+```powershell
+.\Set-LabEnv.ps1
+```
+
+Every 01Lab script you run afterwards picks the values up automatically.
 
 ### 4. Prepare Azure Pre-requisites
 
@@ -293,7 +337,13 @@ This interactive script will:
 
 ### 5. Initial infrastructure script
 
-Confirm the ISO paths and lab root folder match your environment. The script defaults to `$isoPath_HCI = “E:\ISO\AzureLocal24H2.iso”`, `$isoPath_DC = “E:\ISO\WS2025.iso”`, and `$HCIRootFolder = “E:\AzureLocalLab”`. Edit those variables at the top of `00_Infra_AzHCI.ps1` if your paths differ, then run the script:
+If you have not loaded the lab configuration yet in this session, run it once so the AZSHCI_* variables are available to every script:
+
+```powershell
+.\Set-LabEnv.ps1
+```
+
+Then run the infrastructure script:
 
 ```
 .\00_Infra_AzHCI.ps1
@@ -312,15 +362,15 @@ No additional configuration is needed at this stage.
 
 ### 7. Domain Controller configuration script
 
-Before running the script, modify the `$defaultUser` and `$defaultPwd` variables in `01_DC.ps1` to match your administrator credentials.
+Make sure `AZSHCI_DEFAULT_ADMIN_USER` and `AZSHCI_DEFAULT_ADMIN_PASSWORD` in `scripts/01Lab/.env` match the local administrator credentials you set during the Windows Server 2025 installation on the DC VM.
 
-```
-# In 01_DC.ps1
-$defaultUser = "Administrator"
-$defaultPwd = "YourAdminPassword"
+```dotenv
+# In scripts/01Lab/.env
+AZSHCI_DEFAULT_ADMIN_USER="Administrator"
+AZSHCI_DEFAULT_ADMIN_PASSWORD="YourAdminPassword"
 ```
 
-Then, execute the script:
+Then execute the script:
 
 ```
 .\01_DC.ps1
@@ -343,30 +393,28 @@ No additional configuration is needed at this stage.
 
 ### 9. Node configuration and ARC registration
 
-Before running the script, update the required variables at the top of `02_Cluster.ps1`:
+All values for this script live in `scripts/01Lab/.env`. Confirm the following keys are set:
 
-```powershell
+```dotenv
 # Credentials (must match the password used during OS installation)
-$defaultUser = "Administrator"
-$defaultPwd  = "YourAdminPassword"
+AZSHCI_DEFAULT_ADMIN_USER="Administrator"
+AZSHCI_DEFAULT_ADMIN_PASSWORD="YourAdminPassword"
 
 # Azure identifiers
-$SubscriptionID    = "your-subscription-id"
-$TenantID          = "your-tenant-id"
-$resourceGroupName = "rg-azlocal-lab"
-$Location          = "westeurope"
+AZSHCI_SUBSCRIPTION_ID="your-subscription-id"
+AZSHCI_TENANT_ID="your-tenant-id"
+AZSHCI_RESOURCE_GROUP="rg-azlocal-lab"
+AZSHCI_LOCATION="westeurope"
 ```
 
 If you created a Service Principal in Step 4, you can enable non-interactive Arc registration by also setting:
 
-```powershell
-$SPNAppId  = "appid-from-00_AzurePreRequisites"
-$SPNSecret = "secret-from-00_AzurePreRequisites"
+```dotenv
+AZSHCI_SPN_APP_ID="appid-from-00_AzurePreRequisites"
+AZSHCI_SPN_SECRET="secret-from-00_AzurePreRequisites"
 ```
 
-If both values are left empty, the script falls back to an interactive device code login on the node.
-
-Then execute the script:
+If both values are left empty, the script falls back to an interactive device code login on the node. Once the values are in place, execute the script:
 
 ```
 .\02_Cluster.ps1
