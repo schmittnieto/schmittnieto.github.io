@@ -2,7 +2,7 @@
 title: "Azure Local: AKS and SQL Managed instances" 
 excerpt: "Discover how to deploy AKS and SQL Managed instances on Azure Local, including prerequisites, architecture, deployment steps and connectivity." 
 date: 2025-01-09
-last_modified_at: 2025-05-05
+last_modified_at: 2025-11-06
 categories:
   - Blog
 tags:
