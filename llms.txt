@@ -10,13 +10,13 @@ Important notes:
 - Public pages are HTML. Dedicated Markdown mirrors for individual posts are not currently published.
 - The author is Cristian Schmitt Nieto, a Senior Consultant at adesso SE based in Germany.
 - Contact address for the blog is blog@schmitt-nieto.com.
-- This file was last reviewed on 2026-05-23.
+- This file was last reviewed on 2026-08-08.
 
 ## Core Pages
 
 - [Home](https://schmitt-nieto.com/): Latest posts and main entry point.
 - [About](https://schmitt-nieto.com/about/): Author background, professional focus, employer journey and certifications.
-- [Azure Local Calculator](https://schmitt-nieto.com/azurelocal-calculator/): Interactive calculators for Azure Local storage sizing, pricing estimation and CPU planning.
+- [Azure Local Calculator](https://schmitt-nieto.com/azurelocal-calculator/): Interactive calculators for Azure Local covering CPU planning, storage sizing and pricing estimation, including the L1, L2 and L3 deployment models and Azure Hybrid Benefit eligibility.
 - [Privacy Policy](https://schmitt-nieto.com/privacy-policy/): Privacy, analytics and cookie information for the site.
 
 ## Azure Local Series
@@ -34,11 +34,17 @@ Important notes:
 - [Azure Local Deep Insights Workbook](https://schmitt-nieto.com/blog/azure-local-deep-insights-workbook/): Azure Workbook for Azure Local with guest VM visibility and richer performance counters.
 - [Azure Local: How to Deploy LLMs on AKS](https://schmitt-nieto.com/blog/azure-local-llm/): Walkthrough for deploying lightweight LLMs on AKS inside Azure Local.
 - [Azure Local: Terraform Deployment](https://schmitt-nieto.com/blog/azure-local-terraform/): Terraform-based Azure Local deployment using a fixed AVM fork, staged validation and pipeline-ready automation.
+- [How to Build Your Own Azure Local Lab](https://schmitt-nieto.com/blog/how-to-build-your-azure-local-lab/): Hardware guide for an Azure Local lab, comparing laptops, mini PCs and second-hand servers, with the full build, costs and host configuration of a dedicated lab server.
+
+## Azure Virtual Desktop Series
+
+- [Awesome Azure Virtual Desktop](https://schmitt-nieto.com/blog/awesome-azure-virtual-desktop/): Curated catalog of Azure Virtual Desktop and Windows 365 resources from official, vendor and community sources.
+- [Azure Local: Azure Virtual Desktop](https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/): Azure Virtual Desktop on Azure Local, also listed in the Azure Local series above.
+- [Azure Local meets Nerdio](https://schmitt-nieto.com/blog/azure-local-nerdio/): Using Nerdio to simplify Azure Virtual Desktop management on Azure Local.
+- [Nerdio Scripted Actions: Windows Scripts](https://schmitt-nieto.com/blog/nerdio-scripted-actions-windows-scripts/): Automation with Nerdio Scripted Actions and Windows scripts for Azure Virtual Desktop deployments.
 
 ## Adjacent Technical Articles
 
-- [Nerdio Scripted Actions: Windows Scripts](https://schmitt-nieto.com/blog/nerdio-scripted-actions-windows-scripts/): Automation with Nerdio Scripted Actions and Windows scripts for Azure Virtual Desktop deployments.
-- [Azure Local meets Nerdio](https://schmitt-nieto.com/blog/azure-local-nerdio/): Using Nerdio to simplify Azure Virtual Desktop management on Azure Local.
 - [My Work Environment: Tools and Customizations](https://schmitt-nieto.com/blog/my-work-environment-tools/): Tools and PowerShell customizations used in day-to-day work.
 - [GitHub Tools and Repositories that I use](https://schmitt-nieto.com/blog/github-tools/): Personal overview of useful GitHub tools and repositories.
 - [Creating My Azure Journey Blog: A Step-by-Step Guide](https://schmitt-nieto.com/blog/creating-my-azure-journey-blog/): How this Jekyll and GitHub Pages blog was built and customized.
@@ -48,6 +54,7 @@ Important notes:
 
 - [AzSHCI](https://github.com/schmittnieto/AzSHCI): Public Azure Local automation repository used by the lab and Terraform articles.
 - [Awesome Azure Local](https://github.com/schmittnieto/awesome-azure-local): Public curated resource list mirrored by the blog article.
+- [Awesome Azure Virtual Desktop](https://github.com/schmittnieto/awesome-azure-virtual-desktop): Public curated Azure Virtual Desktop and Windows 365 resource list mirrored by the blog article.
 - [Blog source repository](https://github.com/schmittnieto/schmittnieto.github.io): Public source for this GitHub Pages site.
 
 ## Optional

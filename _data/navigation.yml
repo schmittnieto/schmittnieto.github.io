@@ -39,6 +39,8 @@ Azurelocal:
       url: /blog/azure-local-llm/
     - title: "Terraform Deployment"
       url: /blog/azure-local-terraform/
+    - title: "Build Your Own Lab Server"
+      url: /blog/how-to-build-your-azure-local-lab/
 
 Avd:
 - title: Azure Virtual Desktop
