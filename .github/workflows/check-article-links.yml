@@ -36,7 +36,6 @@ jobs:
             --timeout 30
             --base-url https://schmitt-nieto.com
             --accept 200,206,429
-            --exclude-mail
             --exclude "linkedin\.com"
             --exclude-path "_posts/2025-08-09-awesome-azure-local.md"
             --exclude-path "_posts/2026-05-23-awesome-azure-virtual-desktop.md"
