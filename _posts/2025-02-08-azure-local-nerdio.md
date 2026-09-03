@@ -36,7 +36,7 @@ I was also inspired by attending the Nerdio Micro Hack in Frankfurt last Wednesd
 
 For those unfamiliar with **Nerdio** ( [getnerdio.com](https://getnerdio.com/) ), it’s a company that specializes in a simple, straightforward way to manage AVD, Windows 365 Cloud PCs, and Intune (no DevOps overhead or IaC expertise needed). Because I want to specifically focus on the **Azure Local** integration (and there isn’t much up-to-date documentation on this topic), I’m documenting the process here. I won’t be covering the Nerdio installation in your Azure subscription, my friend **Michael Frank** ([@LinkedIn](https://www.linkedin.com/in/michael-frank-26b86222b/)) and **Neil McLoughlin** ([@LinkedIn](https://www.linkedin.com/in/neilmcloughlin/)) have you covered:
 
-- Michael’s blog on how to install Nerdio: [Blog Link](https://michaelsendpoint.com/nerdio/nerdio.html)  
+- Michael’s blog on how to install Nerdio: [Blog Link](https://michaelsendpoint.com/virtualization/nerdio/nerdio.html)  
 - Neil’s YouTube video on setup and basic config: 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/PwxYiYjCW6s?si=4py_H69BVYps3hGn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 

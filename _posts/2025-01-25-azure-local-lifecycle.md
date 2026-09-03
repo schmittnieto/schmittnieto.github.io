@@ -261,7 +261,7 @@ Here are some important highlights:
 #### Key Steps to Add a Node
 
 1. **Prepare the Node**:
-   - Install the operating system and required drivers on the new node. Follow the guidance for [Installing the Azure Local Operating System, version 23H2](https://learn.microsoft.com/en-us/azure/azure-local/install-os?wt.mc_id=MVP_579217).
+   - Install the operating system and required drivers on the new node. Follow the guidance for [Installing the Azure Local Operating System, version 23H2](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-install-os?wt.mc_id=MVP_579217).
    - Register the new node with Azure Arc. Ensure the same parameters (e.g., Resource Group, Region, Subscription, Tenant) as the existing nodes are used.
    - Assign the following permissions:
      - **Azure Local Device Management Role**
