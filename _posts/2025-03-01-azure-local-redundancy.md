@@ -71,7 +71,7 @@ With bigger clusters, more resources are available for workloads, and you get mo
 
 ### Redundancy and Resiliency in the Storage
 
-For raw vs. usable storage capacity calculations, I use the S2D calculator by **Cosmos Darwin** ([LinkedIn](https://www.linkedin.com/in/cosmosd/)):  [https://aka.ms/s2dcalc](https://aka.ms/s2dcalc)
+For raw vs. usable storage capacity calculations, I used the S2D calculator by **Cosmos Darwin** ([LinkedIn](https://www.linkedin.com/in/cosmosd/)). That tool has since been taken offline, so the worked examples below cover the same ground.
 
 **Important**: Azure Local requires **a minimum of two capacity drives per node** ([hardware requirements](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/storage-spaces-direct-hardware-requirements?wt.mc_id=MVP_579217#physical-deployments)). For two nodes, you’ll generally have a **two-way mirror**, and for three or more nodes, a **three-way mirror**. All nodes should have the same number of disks (same capacity and model).
 

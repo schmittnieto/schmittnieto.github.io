@@ -164,10 +164,9 @@ In this section, I'll cover the tools I usually use when carrying out infrastruc
   - **Note**: Rock My Printers will save you a lot of time when it comes to moving away from those pesky GPOs to a more modern approach. Use Intune to install both drivers and printers; remember that we can still use a print server for the queues.
   - **LinkedIn**: [in/nicklasahlberg](https://www.linkedin.com/in/nicklasahlberg/)
 
-- **merill/idPowerToys**
-  - **GitHub**: [merill - idPowerToys](https://github.com/merill/idPowerToys)
-  - **Type**: Repository for idPowerToys, an app for Entra admins.
-  - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/merill/idPowerToys?style=plastic)
+- **idPowerToys**
+  - **Website**: [idpowertoys.merill.net](https://idpowertoys.merill.net/)
+  - **Type**: App for Entra admins. The GitHub repository is no longer public, the hosted app is still running.
   - **Note**: This is undoubtedly the perfect tool if you have to carry out an inventory of Conditional Access Policies, and best of all, the export is in PowerPoint!
   - **LinkedIn**: [in/merill](https://www.linkedin.com/in/merill/)
 
