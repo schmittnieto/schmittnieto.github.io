@@ -1,6 +1,9 @@
 - name: Microsoft
   description: Role-based certifications and community recognitions across Azure, Microsoft 365, and the wider Microsoft ecosystem.
   credentials:
+    - title: "2026-2027 Microsoft Most Valuable Professional (MVP) Azure Hybrid & Migration"
+      image: "/assets/img/MVP.png"
+      url: "https://mvp.microsoft.com/de-DE/mvp/profile/d7826ef0-769b-4a66-acad-2091e0500275"
     - title: "Microsoft Certified: Azure Solutions Architect Expert"
       image: "/assets/img/microsoft-certified-expert-badge-expert.png"
       url: "https://learn.microsoft.com/api/credentials/share/en-us/CristianSchmittNieto/B8D453727AF2E0FF?sharingId=24F0DC952D8EB05D"

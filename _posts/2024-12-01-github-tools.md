@@ -411,7 +411,7 @@ In this section, I'll cover the tools I frequently use for Azure and Microsoft t
   - **GitHub**: [Azure - AVDSessionHostReplacer](https://github.com/Azure/AVDSessionHostReplacer)
   - **Type**: Automates the deployment and replacement of session hosts in an Azure Virtual Desktop host pool.
   - **Last Update**: ![Commits](https://img.shields.io/github/last-commit/Azure/AVDSessionHostReplacer?style=plastic)
-  - **Note**: In the past, I've used this tool several times, especially when updating AVD infrastructures through code managed in GitHub or Azure DevOps repositories. Considering the Session Host Update ([Session Host Update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update)), it has been losing "importance," although I still find the SessionHostReplacer more functional.
+  - **Note**: In the past, I've used this tool several times, especially when updating AVD infrastructures through code managed in GitHub or Azure DevOps repositories. Considering the Session Host Update ([Session Host Update](https://learn.microsoft.com/en-us/azure/virtual-desktop/session-host-update?wt.mc_id=MVP_579217)), it has been losing "importance," although I still find the SessionHostReplacer more functional.
   - **LinkedIn**: [in/almoselhy](https://www.linkedin.com/in/almoselhy/)
 
 - **dolevshor/azure-orphan-resources**

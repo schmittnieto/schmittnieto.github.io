@@ -204,7 +204,7 @@ Currently, the repository shows three scripts, with three more in development. H
    </a>
 
 - **OneDrive Remote App Configuration**  
-  Apply the settings required to run OneDrive in AVD Remote App pools ([Microsoft documentation](https://learn.microsoft.com/azure/virtual-desktop/onedrive-remoteapp)). This script also supports reverting the changes.
+  Apply the settings required to run OneDrive in AVD Remote App pools ([Microsoft documentation](https://learn.microsoft.com/azure/virtual-desktop/onedrive-remoteapp?wt.mc_id=MVP_579217)). This script also supports reverting the changes.
    <a href="/assets/img/post/2025-05-17-nerdio-scripted-actions-windows-scripts/script03.png" target="_blank">
      <img src="/assets/img/post/2025-05-17-nerdio-scripted-actions-windows-scripts/script03.png" alt="OneDrive Remote App Configuration" style="border: 2px solid grey;">
    </a>
@@ -250,6 +250,6 @@ Nerdio Scripted Actions, especially Windows Scripts, can significantly streamlin
 | Install language packs.ps1               | https://github.com/Get-Nerdio/NMW/blob/main/scripted-actions/custom-image-template-scripts/Install%20language%20packs.ps1 |
 | RDS-Templates                            | https://github.com/Azure/RDS-Templates/tree/master/CustomImageTemplateScripts/CustomImageTemplateScripts_2024-03-27 |
 | InstallLanguagePacks.ps1 (RDS-Templates) | https://github.com/Azure/RDS-Templates/blob/master/CustomImageTemplateScripts/CustomImageTemplateScripts_2024-03-27/InstallLanguagePacks.ps1 |
-| Microsoft documentation                  | https://learn.microsoft.com/azure/virtual-desktop/onedrive-remoteapp                                    |
+| Microsoft documentation                  | https://learn.microsoft.com/azure/virtual-desktop/onedrive-remoteapp?wt.mc_id=MVP_579217                                    |
 | Pull request                             | https://github.com/Get-Nerdio/NMW/pull/40                                                              |
 | Issues                                   | https://github.com/schmittnieto/nerdio-scripted-actions/issues                                         |

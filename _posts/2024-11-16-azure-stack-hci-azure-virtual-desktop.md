@@ -36,7 +36,7 @@ sidebar:
   
 ---
 
-This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
+This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112&wt.mc_id=MVP_579217)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
 {: .notice--info}
 
 ## Azure Virtual Desktop on Azure Local
@@ -49,7 +49,7 @@ So, let's get started!
 
 ## Prerequisites, Limitations, and Licenses
 
-Before we dive in, it's important to understand some prerequisites and limitations of the solution as outlined [here](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-stack-hci-overview#limitations). I've combined them for clarity.
+Before we dive in, it's important to understand some prerequisites and limitations of the solution as outlined [here](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-stack-hci-overview?wt.mc_id=MVP_579217#limitations). I've combined them for clarity.
 
 ### Active Directory
 
@@ -59,7 +59,7 @@ Before we dive in, it's important to understand some prerequisites and limitatio
 
 ### License Requirements for AVD
 
-To use AVD on Azure Local, you'll need the same licenses required for AVD in Azure Public, as detailed [here](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing#eligible-licenses-to-use-azure-virtual-desktop). 
+To use AVD on Azure Local, you'll need the same licenses required for AVD in Azure Public, as detailed [here](https://learn.microsoft.com/en-us/azure/virtual-desktop/licensing?wt.mc_id=MVP_579217#eligible-licenses-to-use-azure-virtual-desktop). 
 
 For AVD on Windows 10/11:
 
@@ -107,7 +107,7 @@ Referring back to the DemoLab architecture, client connectivity is achieved in t
 
 ### Client Connection Sequence
 
-*(Based on information from [Microsoft Docs](https://learn.microsoft.com/en-us/azure/virtual-desktop/network-connectivity#client-connection-sequence))*
+*(Based on information from [Microsoft Docs](https://learn.microsoft.com/en-us/azure/virtual-desktop/network-connectivity?wt.mc_id=MVP_579217#client-connection-sequence))*
 
 1. The user subscribes to the Azure Virtual Desktop Workspace using a supported client.
 2. Entra ID authenticates the user and returns a token to enumerate available resources.
@@ -124,7 +124,7 @@ Referring back to the DemoLab architecture, client connectivity is achieved in t
 
 ### RDP Shortpath Connection Sequence
 
-*(Based on information from [Microsoft Docs](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath?tabs=managed-networks#connection-sequence))*
+*(Based on information from [Microsoft Docs](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath?tabs=managed-networks&wt.mc_id=MVP_579217#connection-sequence))*
 
 1. The Session Host sends its list of IPv4 (e.g., 172.19.19.101) and IPv6 addresses to the client.
 2. The client initiates a background thread to establish a parallel UDP-based transport directly to one of the Session Host's IPs.
@@ -315,10 +315,10 @@ This is the easiest access method, but keep in mind that all traffic will be enc
 Currently, there are two clients:
 
 - **Remote Desktop App**:
-  - The classic client, downloadable [here](https://learn.microsoft.com/en-us/azure/virtual-desktop/users/connect-remote-desktop-client?tabs=windows#download-and-install-the-remote-desktop-client-for-windows-msi).
+  - The classic client, downloadable [here](https://learn.microsoft.com/en-us/azure/virtual-desktop/users/connect-remote-desktop-client?tabs=windows&wt.mc_id=MVP_579217#download-and-install-the-remote-desktop-client-for-windows-msi).
 
 - **Windows App**:
-  - The newer, more polished client (my personal favorite), available [here](https://learn.microsoft.com/en-us/windows-app/whats-new?tabs=windows#latest-release).
+  - The newer, more polished client (my personal favorite), available [here](https://learn.microsoft.com/en-us/windows-app/whats-new?tabs=windows&wt.mc_id=MVP_579217#latest-release).
 
 After downloading and logging in with the appropriate user, you'll see the Session Host as configured.
 
@@ -334,7 +334,7 @@ After downloading and logging in with the appropriate user, you'll see the Sessi
 
 ## Configuring RDP Shortpath
 In order for RDP Shortpath to function as desired, several modifications must be made:
-  - We will download and configure the GPOs on the domain controller as shown in this guide ([RDP Shortpath GPO guide](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-rdp-shortpath?tabs=group-policy%2Cportal%2Cconnection-information#enable-the-rdp-shortpath-listener-for-rdp-shortpath-for-managed-networks)).  
+  - We will download and configure the GPOs on the domain controller as shown in this guide ([RDP Shortpath GPO guide](https://learn.microsoft.com/en-us/azure/virtual-desktop/configure-rdp-shortpath?tabs=group-policy%2Cportal%2Cconnection-information&wt.mc_id=MVP_579217#enable-the-rdp-shortpath-listener-for-rdp-shortpath-for-managed-networks)).  
   - The direct download of the GPOs can be done from [here](https://aka.ms/avdgpo)
   - After assigning them as shown in the following image, the firewall must be opened with port 3390 UDP inbound on the Session Host. 
 <a href="/assets/img/post/2024-11-17-azure-stack-hci-avd/rdpsp01.png" target="_blank">
@@ -353,7 +353,7 @@ In order for RDP Shortpath to function as desired, several modifications must be
 
 
 This concludes our review of RDP Shortpath and the advantages it provides. 
-An interesting comment from microsoft that goes unnoticed is that it is not recommended to use RDP Sortpath via TCP VPNs because it congests the TCP ([link to the warning](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath?tabs=managed-networks#how-rdp-shortpath-works)).
+An interesting comment from microsoft that goes unnoticed is that it is not recommended to use RDP Sortpath via TCP VPNs because it congests the TCP ([link to the warning](https://learn.microsoft.com/en-us/azure/virtual-desktop/rdp-shortpath?tabs=managed-networks&wt.mc_id=MVP_579217#how-rdp-shortpath-works)).
 
 If you're using other VPN types to connect to Azure, we recommend using a UDP-based VPN. While most TCP-based VPN solutions support nested UDP, they add inherited overhead of TCP congestion control, which slows down RDP performance.
 {: .notice--info}

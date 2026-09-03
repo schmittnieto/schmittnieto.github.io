@@ -32,7 +32,7 @@ sidebar:
   
 ---
 
-This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
+This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112&wt.mc_id=MVP_579217)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
 {: .notice--info}
 
 ## Azure Local Day 2 Operations
@@ -56,7 +56,7 @@ Each of these steps is crucial for ensuring your Azure Local environment is full
 
 ## The Magic Behind Azure Local: Azure Arc Resource Bridge
 
-Azure Local integrates seamlessly with Azure using the [Azure Arc Resource Bridge](https://learn.microsoft.com/en-us/azure/azure-arc/resource-bridge/overview). This bridge is essential in enabling your on-premises infrastructure to act like a cloud, hosting various Azure services and solutions in your private cloud environment.
+Azure Local integrates seamlessly with Azure using the [Azure Arc Resource Bridge](https://learn.microsoft.com/en-us/azure/azure-arc/resource-bridge/overview?wt.mc_id=MVP_579217). This bridge is essential in enabling your on-premises infrastructure to act like a cloud, hosting various Azure services and solutions in your private cloud environment.
 
 ### Key Components of the Arc Resource Bridge
 
@@ -147,7 +147,7 @@ However, starting with Azure Local version **23H2**, the responsibility for mana
 
 Azure Arc-based WAC is currently in preview and built on **EntraID** (formerly Azure Active Directory). Unlike Local WAC, it doesn’t require an Active Directory connection or direct access to the cluster. Instead, it routes connections through Azure, which acts as an intermediary, similar to how **TeamViewer** works. This simplifies remote management by removing the need to open ports manually. Although the Arc-based version represents the future of hybrid cloud management, it's still in preview and can be unstable. The goal is to eventually manage everything via the Azure portal, and Arc-based WAC is a step toward that future, though it's not fully reliable yet.
 
-More details on the Azure-based WAC can be found [here](https://learn.microsoft.com/en-us/windows-server/manage/windows-admin-center/azure/manage-arc-hybrid-machines).
+More details on the Azure-based WAC can be found [here](https://learn.microsoft.com/en-us/windows-server/manage/windows-admin-center/azure/manage-arc-hybrid-machines?wt.mc_id=MVP_579217).
 
 Here is also a small guide on how to install and use the WAC extension in Azure:
 - In the Settings > Windows Admin Center (Preview) section. We proceed to install the extension, the port from which arc will be able to contact the cluster will be configured. Important this port is not accessible from the internet (no Port Forwarding is required), this port is only accessible to Azure in a reverse connection. 
@@ -259,7 +259,7 @@ Insights tracks several key metrics to give you a comprehensive view of how your
 
 Insights also collects data from important **Windows Event Logs**, which helps identify issues with hardware, VMs, or storage components in your cluster.
 
-For more information, you can check the official documentation on [Monitoring Azure Local](https://learn.microsoft.com/en-us/azure-stack/hci/manage/monitor-hci-single-23h2).
+For more information, you can check the official documentation on [Monitoring Azure Local](https://learn.microsoft.com/en-us/azure-stack/hci/manage/monitor-hci-single-23h2?wt.mc_id=MVP_579217).
 
 ### Setting Up Alerts
 
@@ -300,7 +300,7 @@ Here are some of the common recommended alert rules that you can enable for your
 
 These alerts provide a good starting point for monitoring the health of your cluster, but you can always customize them based on your specific needs.
 
-For more details on setting up alerts, check out the official guide on [Azure Local Recommended alert rules](https://learn.microsoft.com/en-us/azure-stack/hci/manage/set-up-recommended-alert-rules).
+For more details on setting up alerts, check out the official guide on [Azure Local Recommended alert rules](https://learn.microsoft.com/en-us/azure-stack/hci/manage/set-up-recommended-alert-rules?wt.mc_id=MVP_579217).
 
 
 ### Windows Defender Application Control (WDAC)
@@ -330,7 +330,7 @@ In my **test environment**, I switched WDAC to **Audit Mode** to allow future te
 
 For **production environments**, always ensure **Enforced Mode** is enabled for maximum security and in case you need to install any application on the nodes (for example Veeam) make sure that the provider offers you the necessary policies for WDAC.
 
-More information can be found at the following link: [Azure Local 23H2 Manage WDAC](https://learn.microsoft.com/en-us/azure-stack/hci/manage/manage-wdac)
+More information can be found at the following link: [Azure Local 23H2 Manage WDAC](https://learn.microsoft.com/en-us/azure-stack/hci/manage/manage-wdac?wt.mc_id=MVP_579217)
 
 ### BitLocker in Azure Local
 
@@ -387,7 +387,7 @@ Here’s how I create a VM image using **Azure Marketplace** images in the **Azu
 5. After clicking **Review + Create**, the image creation starts. Depending on the image size and network speed, it may take some time.
 6. Once the image is downloaded, it shows up in the list as **Available**, and I can use it to deploy VMs.
 
-For more details, you can always refer to the [official guide](https://learn.microsoft.com/en-us/azure-stack/hci/manage/virtual-machine-image-azure-marketplace).
+For more details, you can always refer to the [official guide](https://learn.microsoft.com/en-us/azure-stack/hci/manage/virtual-machine-image-azure-marketplace?wt.mc_id=MVP_579217).
 
 #### Custom Images Script
 

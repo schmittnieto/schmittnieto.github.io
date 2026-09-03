@@ -32,7 +32,7 @@ sidebar:
   
 ---
 
-This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
+This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112&wt.mc_id=MVP_579217)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
 {: .notice--info}
 
 ## Azure Local: Evolution, Use Cases, and Comparison with Other Solutions
@@ -42,7 +42,7 @@ This article was created before Azure Stack HCI was renamed to Azure Local ([lin
 
 This article is intended for IT professionals, system administrators and decision-makers looking to explore the potential of Azure Local for modernizing their on-premises infrastructure. Whether you're considering hybrid cloud solutions or comparing various hyper-converged infrastructure options, this post will provide valuable insights into the evolution, use cases and comparisons of Azure Local against other major solutions such as VMware vSAN, Nutanix, Dell EMC VxRail, Proxmox, Windows Server Hyper-V with System Center, OpenShift and other hyper-converged infrastructure solutions.
 
-Note that **this article is not a general introduction to Azure Local**. If you are looking for a description of what Azure Local is, how it works or how to deploy it, the [official Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-local/overview) is the right starting point. The focus here is on **use cases and competitive comparisons**: where Azure Local fits, where it excels and how it stacks up against the alternatives available on the market today.
+Note that **this article is not a general introduction to Azure Local**. If you are looking for a description of what Azure Local is, how it works or how to deploy it, the [official Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-local/overview?wt.mc_id=MVP_579217) is the right starting point. The focus here is on **use cases and competitive comparisons**: where Azure Local fits, where it excels and how it stacks up against the alternatives available on the market today.
 
 ## History of Azure Local
 
@@ -60,7 +60,7 @@ Initially, Azure Local focused on virtualizing workloads and providing software-
 - **Platform Services**: Azure Data Controller, SQL Managed Instances, PostgreSQL Managed Instances and Machine Learning services.
 - **Rack-Aware Clustering**: Define local availability zones based on physical racks in your datacenter, enhancing cluster resilience against rack-level failures. Generally Available and applicable to new deployments.
 - **Managed Identity Authentication**: Azure Local clusters now use system-assigned managed identity (SMI) instead of service principals with self-signed certificates, significantly improving the security posture and eliminating certificate rotation overhead.
-- **Local Identity with Azure Key Vault**: Starting with version 2604, Azure Local can be deployed without any Active Directory dependency. Using [local identity with Azure Key Vault](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-local-identity-with-key-vault?view=azloc-2604), the cluster authenticates entirely through Microsoft Entra ID, removing a long-standing requirement that forced organizations to maintain a domain controller on-premises.
+- **Local Identity with Azure Key Vault**: Starting with version 2604, Azure Local can be deployed without any Active Directory dependency. Using [local identity with Azure Key Vault](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-local-identity-with-key-vault?view=azloc-2604&wt.mc_id=MVP_579217), the cluster authenticates entirely through Microsoft Entra ID, removing a long-standing requirement that forced organizations to maintain a domain controller on-premises.
 - **Disaggregated Deployments**: Support for SAN-attached storage and disaggregated architectures is expanding, broadening the hardware configurations Azure Local can target.
 
 These services allow organizations to run modern workloads and benefit from cloud innovation while still utilizing on-premises infrastructure. Azure Local now ships on a **monthly release cadence** (e.g., 2408, 2411, 2503, 2509, 2511, 2512), making it one of the most actively developed on-premises infrastructure platforms available.
@@ -219,16 +219,16 @@ The content of this article is based on my own experiences and understanding of 
 
 ## Sources
 
-- [Azure Local - What's New (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/whats-new?view=azloc-2512)
-- [Azure Local - Release Information (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?view=azloc-24113)
-- [Azure Local - Local Identity with Azure Key Vault (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-local-identity-with-key-vault?view=azloc-2604)
-- [AKS enabled by Azure Arc - What's New (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-whats-new-local)
-- [What's new in Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new)
-- [Announcing new hybrid deployment options for Azure Virtual Desktop (Microsoft Tech Community)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/announcing-new-hybrid-deployment-options-for-azure-virtual-desktop/4468781)
+- [Azure Local - What's New (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/whats-new?view=azloc-2512&wt.mc_id=MVP_579217)
+- [Azure Local - Release Information (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?view=azloc-24113&wt.mc_id=MVP_579217)
+- [Azure Local - Local Identity with Azure Key Vault (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-local-identity-with-key-vault?view=azloc-2604&wt.mc_id=MVP_579217)
+- [AKS enabled by Azure Arc - What's New (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-whats-new-local?wt.mc_id=MVP_579217)
+- [What's new in Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new?wt.mc_id=MVP_579217)
+- [Announcing new hybrid deployment options for Azure Virtual Desktop (Microsoft Tech Community)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/announcing-new-hybrid-deployment-options-for-azure-virtual-desktop/4468781?wt.mc_id=MVP_579217)
 - [Azure Virtual Desktop Goes Fully Hybrid with Arc-Enabled Servers (InfoQ)](https://www.infoq.com/news/2025/11/azure-avd-fully-hybrid-arc/)
-- [What is Azure Arc-enabled VMware vSphere (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-arc/vmware-vsphere/overview)
-- [What's new in System Center Virtual Machine Manager 2025 (Microsoft Learn)](https://learn.microsoft.com/en-us/system-center/vmm/whats-new-in-vmm?view=sc-vmm-2025)
-- [Manage Azure Local instances in VMM (Microsoft Learn)](https://learn.microsoft.com/en-us/system-center/vmm/manage-azure-stack-hci?view=sc-vmm-2025)
+- [What is Azure Arc-enabled VMware vSphere (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-arc/vmware-vsphere/overview?wt.mc_id=MVP_579217)
+- [What's new in System Center Virtual Machine Manager 2025 (Microsoft Learn)](https://learn.microsoft.com/en-us/system-center/vmm/whats-new-in-vmm?view=sc-vmm-2025&wt.mc_id=MVP_579217)
+- [Manage Azure Local instances in VMM (Microsoft Learn)](https://learn.microsoft.com/en-us/system-center/vmm/manage-azure-stack-hci?view=sc-vmm-2025&wt.mc_id=MVP_579217)
 - [Awesome Azure Local (GitHub)](https://github.com/schmittnieto/awesome-azure-local)
 
 *Thank you for reading. If you have any questions or need assistance with Azure Local, feel free to reach out or leave a comment below.*

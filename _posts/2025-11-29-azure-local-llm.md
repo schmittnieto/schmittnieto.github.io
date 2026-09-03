@@ -41,7 +41,7 @@ If I had the right hardware, I would have deployed KAITO ([Kubernetes AI Toolcha
   <img src="/assets/img/post/2025-11-29-azure-local-llm/Kaito.png" alt="KAITO" style="border: 2px solid grey;">
 </a>
 
-To make the architecture of my lab easier to understand, I prepared a diagram based on the one shown in the official [Baseline Architecture for AKS on Azure Local](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-baseline).
+To make the architecture of my lab easier to understand, I prepared a diagram based on the one shown in the official [Baseline Architecture for AKS on Azure Local](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-baseline?wt.mc_id=MVP_579217).
 
 <a href="/assets/img/post/2025-11-29-azure-local-llm/AKS-Architecture.png" target="_blank">
   <img src="/assets/img/post/2025-11-29-azure-local-llm/AKS-Architecture.png" alt="AKS Architecture" style="border: 2px solid grey;">
@@ -69,7 +69,7 @@ This is the workload architecture inside AKS:
 The whole deployment is carried out from my laptop, which has direct Layer 2 network access to the AKS cluster. I use Az CLI, kubectl and Helm. Throughout the process I’ll point out which tool is used and why. The goal here is to test LLM capabilities in this specific environment, not to deploy a standardized production-grade AKS hybrid application.
 
 If you’re interested in the proper deployment approach for production AKS hybrid applications, I recommend reading:  
-[Deploy and operate apps with AKS enabled by Azure Arc on Azure Local](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-hybrid-azure-local).  
+[Deploy and operate apps with AKS enabled by Azure Arc on Azure Local](https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-hybrid-azure-local?wt.mc_id=MVP_579217).  
 That article covers pipelines, GitOps, Flux, Helm and other components, giving you a great high-level overview of the possibilities.
 
 Another option would be a hybrid model using self-hosted agents and a Service Bearer Token (which we’ll create later in this article under “Creating a Service Account to Manage AKS Locally”). This can give you more flexibility, though I personally recommend the GitOps approach.

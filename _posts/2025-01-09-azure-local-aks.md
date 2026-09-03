@@ -30,7 +30,7 @@ sidebar:
 
 ## Introduction
 
-Welcome back to another article in the Chronicloud Series. This time, we're shifting our focus from Azure Stack HCI to Azure Local 😜. As many of you may already know (and if not, now you do), the Azure Stack family has been rebranded to Azure Local. You can read more about this renaming in the following article: [New name for Azure Stack HCI](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local).
+Welcome back to another article in the Chronicloud Series. This time, we're shifting our focus from Azure Stack HCI to Azure Local 😜. As many of you may already know (and if not, now you do), the Azure Stack family has been rebranded to Azure Local. You can read more about this renaming in the following article: [New name for Azure Stack HCI](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?wt.mc_id=MVP_579217).
 
 Now, focusing on today's topic, due to the limited literature available, I want to explore the possibilities of implementing AKS (Azure Kubernetes Service) on Azure Local and highlight how it differs from implementations on Azure Public or Windows Server. I will discuss the creation and deployment process of AKS, and the advantages of implementing it on Azure Local compared to other options. Finally, I'll share insights on a service I've implemented multiple times in client infrastructures, which is gaining popularity over time: SQL Managed Instances. This PaaS offering provides the capability to utilize SQL at a competitive price while reducing the complexity of its management and deployment.
 
@@ -89,12 +89,12 @@ Regarding networking models, AKS offers different configurations across these pl
 
 - **AKS on Windows Server and Azure Stack HCI**:
   - **Networking Provisioning**:
-    - Network infrastructure is provisioned using PowerShell scripts or through Windows Admin Center, allowing administrators to set up and manage networking components tailored to their environment. [Learn more](https://learn.microsoft.com/en-us/azure/aks/aksarc/overview)
+    - Network infrastructure is provisioned using PowerShell scripts or through Windows Admin Center, allowing administrators to set up and manage networking components tailored to their environment. [Learn more](https://learn.microsoft.com/en-us/azure/aks/aksarc/overview?wt.mc_id=MVP_579217)
     - These deployments utilize the organization's local network infrastructure, ensuring integration with existing on-premises resources and compliance with internal networking policies.
 
 - **AKS on Azure Local**:
   - **Networking Considerations**:
-    - Similar to AKS on Windows Server, with network provisioning managed through Azure Arc Resource Bridge, which facilitates connectivity between on-premises environments and Azure services, enabling hybrid capabilities. [Learn more](https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-hci-network-system-requirements)
+    - Similar to AKS on Windows Server, with network provisioning managed through Azure Arc Resource Bridge, which facilitates connectivity between on-premises environments and Azure services, enabling hybrid capabilities. [Learn more](https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-hci-network-system-requirements?wt.mc_id=MVP_579217)
     - This setup also leverages the local network infrastructure, ensuring seamless integration with existing systems and adherence to organizational networking standards.
 
 Having understood the various AKS deployment models, we will now delve deeper into AKS on Azure Local, analyzing its advantages and disadvantages to provide a comprehensive understanding of its suitability for different scenarios.
@@ -150,7 +150,7 @@ Let's delve into the technical architecture of Azure Kubernetes Service (AKS) on
   <img src="/assets/img/post/2025-01-09-azure-local-aks/Diagramm02.png" alt="Diagramm AKS on Azure Local by Microsoft Learn" style="border: 2px solid grey;">
 </a>
 
-*Diagram courtesy of [Microsoft Learn](https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture).*
+*Diagram courtesy of [Microsoft Learn](https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture?wt.mc_id=MVP_579217).*
 
 ### Core Components
 
@@ -477,7 +477,7 @@ When deploying the dog-and-cat counter via the Azure Portal, the process involve
 - As the admin user (me), send an API request to the AKS cluster through the Azure Portal.
 - This request provisions the YAML template for the application within the cluster.
 
-While this deployment is automated via the portal, it could also be done manually. Using the Azure CLI (`az aksarc`) to fetch credentials for your cluster ([reference](https://learn.microsoft.com/en-us/cli/azure/aksarc?view=azure-cli-latest#az-aksarc-get-credentials)), you could manage the cluster locally with `kubectl`. This approach opens up possibilities for GitOps, DevOps, and self-hosted agents, but that’s a topic for another post. 😅
+While this deployment is automated via the portal, it could also be done manually. Using the Azure CLI (`az aksarc`) to fetch credentials for your cluster ([reference](https://learn.microsoft.com/en-us/cli/azure/aksarc?view=azure-cli-latest&wt.mc_id=MVP_579217#az-aksarc-get-credentials)), you could manage the cluster locally with `kubectl`. This approach opens up possibilities for GitOps, DevOps, and self-hosted agents, but that’s a topic for another post. 😅
 
 ### Deploying a More Complex Application: The AI-Generated Store
 
@@ -1125,7 +1125,7 @@ To deploy SQLmi in Azure Local, the process involves the following steps:
 
 ### Deployment Limitations
 
-Unfortunately, deploying Arc Data Services requires a worker node of at least `Standard_D8s_v3`, which demands 8 vCPUs and 32 GB of RAM ([Link](https://learn.microsoft.com/en-us/azure/azure-arc/data/plan-azure-arc-data-services#deployment-requirements)). While vCPU requirements aren't a problem in my lab, the 32 GB memory requirement exceeds my laptop’s capacity, which only has 64 GB in total. As such, I can't perform a functional deployment but will demonstrate the process for educational purposes.
+Unfortunately, deploying Arc Data Services requires a worker node of at least `Standard_D8s_v3`, which demands 8 vCPUs and 32 GB of RAM ([Link](https://learn.microsoft.com/en-us/azure/azure-arc/data/plan-azure-arc-data-services?wt.mc_id=MVP_579217#deployment-requirements)). While vCPU requirements aren't a problem in my lab, the 32 GB memory requirement exceeds my laptop’s capacity, which only has 64 GB in total. As such, I can't perform a functional deployment but will demonstrate the process for educational purposes.
 
 ### Disclaimer: Separate AKS Clusters for SQLmi
 
@@ -1241,20 +1241,20 @@ Thank you for following along, and I look forward to sharing more insights in fu
 ``` text
 https://schmitt-nieto.com/blog/azure-stack-hci-demolab/
 https://schmitt-nieto.com/blog/azure-stack-hci-day2/
-https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-baseline
-https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network
-https://learn.microsoft.com/en-us/azure/aks/hybrid/system-requirements?tabs=allow-table#stretched-clusters-in-aks
-https://techcommunity.microsoft.com/blog/azurestackblog/distributing-virtual-machines-across-multiple-cluster-shared-volumes-in-aks-on-a/2760713
-https://techcommunity.microsoft.com/blog/azurestackblog/disable-automatic-distribution-of-data-across-csvs-on-aks-on-azure-stack-hci-and/3597392
-https://learn.microsoft.com/en-us/azure/aks/hybrid/concepts-support
-https://learn.microsoft.com/en-us/azure/aks/hybrid/set-proxy-settings#configure-an-aks-host-for-a-proxy-server-with-basic-authentication
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-baseline?wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network?wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/aks/hybrid/system-requirements?tabs=allow-table&wt.mc_id=MVP_579217#stretched-clusters-in-aks
+https://techcommunity.microsoft.com/blog/azurestackblog/distributing-virtual-machines-across-multiple-cluster-shared-volumes-in-aks-on-a/2760713?wt.mc_id=MVP_579217
+https://techcommunity.microsoft.com/blog/azurestackblog/disable-automatic-distribution-of-data-across-csvs-on-aks-on-azure-stack-hci-and/3597392?wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/aks/hybrid/concepts-support?wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/aks/hybrid/set-proxy-settings?wt.mc_id=MVP_579217#configure-an-aks-host-for-a-proxy-server-with-basic-authentication
 https://azure.microsoft.com/en-us/pricing/details/kubernetes-service/
-https://learn.microsoft.com/en-us/azure/aks/hybrid/azure-hybrid-benefit-22h2?tabs=powershell
-https://learn.microsoft.com/en-us/azure/aks/hybrid/pricing
-https://learn.microsoft.com/en-us/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview?view=azuresql
-https://learn.microsoft.com/en-us/azure/azure-arc/data/plan-azure-arc-data-services#deployment-requirements
+https://learn.microsoft.com/en-us/azure/aks/hybrid/azure-hybrid-benefit-22h2?tabs=powershell&wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/aks/hybrid/pricing?wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview?view=azuresql&wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/azure-arc/data/plan-azure-arc-data-services?wt.mc_id=MVP_579217#deployment-requirements
 https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/
-https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-create-clusters-portal
-https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network
-https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture
+https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-create-clusters-portal?wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network?wt.mc_id=MVP_579217
+https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture?wt.mc_id=MVP_579217
 ```

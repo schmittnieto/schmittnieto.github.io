@@ -35,7 +35,7 @@ sidebar:
   
 ---
 
-This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
+This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112&wt.mc_id=MVP_579217)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
 {: .notice--info}
 
 ## Azure Local: Demolab
@@ -78,7 +78,7 @@ Additionally, the [DellGEOS Repository](https://github.com/DellGEOS/AzureStackHO
 
 ### Manual Deployment
 
-Deploying Azure Local manually using the [Deployment Guide](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-virtual) is another option. However, this manual approach has several drawbacks:
+Deploying Azure Local manually using the [Deployment Guide](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deployment-virtual?wt.mc_id=MVP_579217) is another option. However, this manual approach has several drawbacks:
 
 - **Pros:**
   - Direct control over the deployment process.
@@ -468,7 +468,7 @@ Once the cluster node script completes and extensions are correctly installed, f
 
 2. **Initial Cluster Registration:**
 
-   - Use the Azure Portal for initial cluster registration: [Azure Local Deployment via Portal](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deploy-via-portal)
+   - Use the Azure Portal for initial cluster registration: [Azure Local Deployment via Portal](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/deploy-via-portal?wt.mc_id=MVP_579217)
 
    - **Extension Installation**
      - Since April 2025, extensions must be installed manually during the cluster deployment. To do this, simply select the nodes and click the Install extensions button:

@@ -262,7 +262,7 @@ If you aim to implement more advanced storage configurations, you will likely ne
     <p>
       <strong>Management Overhead Disclaimer:</strong><br>
       Each Azure Local node reserves CPU cores for the host OS, Azure Arc agents, Storage Spaces Direct, and cluster services. The default of 4 cores is a reasonable estimate, but actual overhead may vary based on enabled features (e.g., AKS-HCI, ARC Resource Bridge). Consult
-      <a href="https://learn.microsoft.com/en-us/azure/azure-local/concepts/host-network-requirements" target="_blank">Azure Local system requirements</a>
+      <a href="https://learn.microsoft.com/en-us/azure/azure-local/concepts/host-network-requirements?wt.mc_id=MVP_579217" target="_blank">Azure Local system requirements</a>
       for specifics.
     </p>
     <p>
@@ -1034,7 +1034,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     <p>
       <strong>Storage Spaces Direct (S2D) Disclaimer:</strong><br>
       This calculator estimates storage capacity for Storage Spaces Direct deployments on Azure Local using Full-Flash NVMe configurations. Calculations are based on current best practices and deployment guidelines. Actual results may vary depending on firmware, driver versions, and workload patterns. Always refer to the
-      <a href="https://learn.microsoft.com/en-us/azure-stack/hci/concepts/plan-volumes" target="_blank">official Microsoft documentation</a>
+      <a href="https://learn.microsoft.com/en-us/azure-stack/hci/concepts/plan-volumes?wt.mc_id=MVP_579217" target="_blank">official Microsoft documentation</a>
       for the most up-to-date information.
     </p>
     <p>
@@ -1048,7 +1048,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     <p>
       <strong>Reserved Capacity Disclaimer:</strong><br>
       For multi-node configurations, the calculator reserves capacity equivalent to one capacity drive per node to ensure sufficient unallocated space for automatic repairs after a drive failure. For single-node clusters, no reserved capacity is applied. Actual reserve behavior may differ based on
-      <a href="https://learn.microsoft.com/en-us/azure-stack/hci/concepts/plan-volumes#reserve-capacity" target="_blank">Microsoft reserve capacity documentation</a>.
+      <a href="https://learn.microsoft.com/en-us/azure-stack/hci/concepts/plan-volumes?wt.mc_id=MVP_579217#reserve-capacity" target="_blank">Microsoft reserve capacity documentation</a>.
     </p>
     <p>
       <strong>Infrastructure Overhead:</strong><br>
@@ -1943,8 +1943,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       <strong>Azure Local Deployment Model Disclaimer:</strong><br>
       L1 applies to cloud-connected hyperconverged deployments without external storage. L2 applies to disaggregated deployments or hyperconverged deployments with external storage. An Azure Local OEM license with external storage uses the listed 10/core/month special rate. L3 applies to disconnected operations with a locally hosted control plane. Microsoft does not publish an L3 host fee, so the calculator requires a user-provided planning rate or account-specific quote. Azure Local host fees and the Windows Server subscription have a free trial for the first 60 days after registration. See the
       <a href="https://azure.microsoft.com/en-us/pricing/details/azure-local/#pricing" target="_blank">Azure Local pricing page</a>,
-      <a href="https://learn.microsoft.com/en-us/azure/azure-local/overview/disaggregated-overview?view=azloc-2606" target="_blank">disaggregated deployment overview</a> and
-      <a href="https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-overview?view=azloc-2606" target="_blank">disconnected operations overview</a>.
+      <a href="https://learn.microsoft.com/en-us/azure/azure-local/overview/disaggregated-overview?view=azloc-2606&wt.mc_id=MVP_579217" target="_blank">disaggregated deployment overview</a> and
+      <a href="https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-overview?view=azloc-2606&wt.mc_id=MVP_579217" target="_blank">disconnected operations overview</a>.
       Fixed Azure rates are treated as values in the selected calculator currency. Currency selection does not perform foreign exchange conversion.
     </p>
     <p>
@@ -1952,7 +1952,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       Azure Hybrid Benefit can waive the Azure Local host fee only for L1 cloud-connected hyperconverged deployments without external storage. It does not waive the L2 or L3 host fee. Eligible customers can exchange Windows Server Datacenter core licenses with active Software Assurance through Enterprise Agreement or CSP to waive the L1 host fee and Windows Server subscription. Consult the
       <a href="https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS" target="_blank">Microsoft Product Terms (EA/CSP)</a>,
       <a href="https://www.microsoft.com/licensing/terms/productoffering/WindowsServerStandardDatacenterEssentials/SS" target="_blank">Microsoft Product Terms for Windows Server</a>, and
-      <a href="https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit?tabs=azure-local#getting-azure-hybrid-benefit" target="_blank">Azure Hybrid Benefit for Windows Server</a>
+      <a href="https://learn.microsoft.com/en-us/windows-server/get-started/azure-hybrid-benefit?tabs=azure-local&wt.mc_id=MVP_579217#getting-azure-hybrid-benefit" target="_blank">Azure Hybrid Benefit for Windows Server</a>
       for specifics. Product Terms override general documentation.
     </p>
     <p>

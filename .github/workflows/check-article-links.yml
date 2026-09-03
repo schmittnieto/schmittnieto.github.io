@@ -1,0 +1,61 @@
+name: Check article links
+
+on:
+  schedule:
+    # Weekly, Mondays at 07:00 UTC, to catch links that rot over time
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: check-article-links
+  cancel-in-progress: true
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout blog
+        uses: actions/checkout@v5
+
+      - name: Check links in posts and pages
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        env:
+          # Raises the GitHub API rate limit for the many github.com links
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: >-
+            --no-progress
+            --max-concurrency 8
+            --max-retries 3
+            --retry-wait-time 5
+            --timeout 30
+            --base-url https://schmitt-nieto.com
+            --accept 200,206,429
+            --exclude-mail
+            --exclude "linkedin\.com"
+            --exclude-path "_posts/2025-08-09-awesome-azure-local.md"
+            --exclude-path "_posts/2026-05-23-awesome-azure-virtual-desktop.md"
+            "_posts/**/*.md"
+            "_pages/**/*.md"
+            "llms.txt"
+          # Never fail here, so the report step below always runs.
+          fail: false
+
+      - name: Open an issue when links are broken
+        if: steps.lychee.outputs.exit_code != 0
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: Broken links found in articles
+          content-filepath: ./lychee/out.md
+          labels: broken-links, automated
+
+      - name: Fail the run when links are broken
+        if: steps.lychee.outputs.exit_code != 0
+        run: |
+          echo "lychee reported broken links, see the issue it opened."
+          exit 1

@@ -73,7 +73,7 @@ With bigger clusters, more resources are available for workloads, and you get mo
 
 For raw vs. usable storage capacity calculations, I use the S2D calculator by **Cosmos Darwin** ([LinkedIn](https://www.linkedin.com/in/cosmosd/)):  [https://aka.ms/s2dcalc](https://aka.ms/s2dcalc)
 
-**Important**: Azure Local requires **a minimum of two capacity drives per node** ([hardware requirements](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/storage-spaces-direct-hardware-requirements#physical-deployments)). For two nodes, you’ll generally have a **two-way mirror**, and for three or more nodes, a **three-way mirror**. All nodes should have the same number of disks (same capacity and model).
+**Important**: Azure Local requires **a minimum of two capacity drives per node** ([hardware requirements](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/storage-spaces-direct-hardware-requirements?wt.mc_id=MVP_579217#physical-deployments)). For two nodes, you’ll generally have a **two-way mirror**, and for three or more nodes, a **three-way mirror**. All nodes should have the same number of disks (same capacity and model).
 
 #### Two-Node Cluster
 A two-node cluster with a two-way mirror ensures that if one node fails, the other still hosts the data. When the failed node is restored, the system automatically re-syncs the data. This re-sync can take minutes or hours depending on network bandwidth, RDMA configuration (RoCE/iWARP), and the amount of data that needs to be copied back.
@@ -89,7 +89,7 @@ With four nodes, you use a **three-way mirror**. This means data is replicated a
 
 Re-sync times also get longer with more copies to rebuild. In extreme scenarios involving enormous data volumes, re-syncs could take days, though in my experience it’s usually hours at most. It depends heavily on your network speed, RDMA adapters, and switch capacity.
 
-Microsoft’s fault tolerance documentation for S2D (like [this link](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/fault-tolerance)) provides some scenarios:
+Microsoft’s fault tolerance documentation for S2D (like [this link](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/fault-tolerance?wt.mc_id=MVP_579217)) provides some scenarios:
 - Situations where everything stays online (losing more than two drives but at most two servers):
 <a href="/assets/img/post/2025-03-01-azure-local-redundancy/S2DOnline1.png" target="_blank">
   <img src="/assets/img/post/2025-03-01-azure-local-redundancy/S2DOnline1.png" alt="S2D Online Tolerances" style="border: 2px solid grey;">
@@ -106,7 +106,7 @@ For example, four nodes each with 4 x 1 TB capacity disks gives you 16 TB raw, b
   <img src="/assets/img/post/2025-03-01-azure-local-redundancy/4nodesS2D.png" alt="Four-node S2D example" style="border: 2px solid grey;">
 </a>
 
-**Volume Counts**: It’s best practice (see [Microsoft’s volume planning guidelines](https://learn.microsoft.com/de-de/windows-server/storage/storage-spaces/plan-volumes#choosing-how-many-volumes-to-create)) to match the number of volumes to a multiple of the number of servers. For four servers, create four volumes if you want balanced performance. Each node can “own” one volume’s metadata orchestration.
+**Volume Counts**: It’s best practice (see [Microsoft’s volume planning guidelines](https://learn.microsoft.com/de-de/windows-server/storage/storage-spaces/plan-volumes?wt.mc_id=MVP_579217#choosing-how-many-volumes-to-create)) to match the number of volumes to a multiple of the number of servers. For four servers, create four volumes if you want balanced performance. Each node can “own” one volume’s metadata orchestration.
 
 ### Other Redundancies in the Infrastructure
 
@@ -120,23 +120,23 @@ You can handle Azure Local networking in multiple ways. Some designs feature a *
 Well, it depends on the number of nodes, your storage traffic design, and your budget. But you **always** need at least **two switches** for management and compute traffic. A single switch would act as a single point of failure, nullifying your otherwise redundant cluster design.
 
 For up to **four nodes**, you can technically go switchless (often called **Direct Attach**) for the storage network, meaning the nodes are cabled directly to each other. I recommend **RDMA** (especially **RoCEv2**). This setup ensures that if one node fails, the remaining ones maintain inter-node connectivity. Personally, though, I consider switchless challenging beyond two nodes, it requires precise configuration, can be tedious to implement (via ARM templates), and is not very flexible (you can’t easily add new nodes or modify them without major rework). Its one advantage is cost savings if your existing switches can’t handle RDMA traffic.
-For reference, here’s a link describing that setup in detail:  [Four-node switchless, two switches, two links](https://learn.microsoft.com/en-us/azure/azure-local/plan/four-node-switchless-two-switches-two-links?view=azloc-24113)
+For reference, here’s a link describing that setup in detail:  [Four-node switchless, two switches, two links](https://learn.microsoft.com/en-us/azure/azure-local/plan/four-node-switchless-two-switches-two-links?view=azloc-24113&wt.mc_id=MVP_579217)
 
 And here’s the official diagram for that cabling method (props to whoever created it!):
 <a href="/assets/img/post/2025-03-01-azure-local-redundancy/4nodesSwitchless.png" target="_blank">
   <img src="/assets/img/post/2025-03-01-azure-local-redundancy/4nodesSwitchless.png" alt="Four-node switchless design" style="border: 2px solid grey;">
 </a>
 
-In the image, each node has two connections to its neighbors, using six total network ports exclusively for storage. Because most network cards have two ports, you wouldn’t want to use both ports on a single NIC card to connect to the same node. If that NIC card fails, you’d lose the connection to the node entirely. Additionally, note that you can’t easily expand beyond two nodes in a “switchless” scenario, the only supported move is from a single node to a two-node cluster. Anything above two nodes requires a switch, as explained [here](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server?view=azloc-24112).
+In the image, each node has two connections to its neighbors, using six total network ports exclusively for storage. Because most network cards have two ports, you wouldn’t want to use both ports on a single NIC card to connect to the same node. If that NIC card fails, you’d lose the connection to the node entirely. Additionally, note that you can’t easily expand beyond two nodes in a “switchless” scenario, the only supported move is from a single node to a two-node cluster. Anything above two nodes requires a switch, as explained [here](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server?view=azloc-24112&wt.mc_id=MVP_579217).
 
 
 ##### Multi-Location or Rack Aware
 
 After deciding how many switches to use, you also need to determine how many physical “locations” your cluster needs, e.g., is it all in one data center room, or multiple? Those familiar with the product already know this, but newcomers might be surprised to learn that **Azure Local (starting 23H2) doesn’t support stretch clusters**, meaning nodes should theoretically be in the same rack. I’ll mention a new way to set up Azure Local for two locations (really just two rooms in the same building) called **Rack Aware Cluster**.
 
-In previous versions, you could configure a so-called **stretch cluster** for two sites, provided your round-trip latency didn’t exceed 5 ms (see [Microsoft docs](https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-local-dr#use-stretched-clusters-to-implement-automated-disaster-recovery-for-virtualized-workloads-and-file-shares-hosted-on-azure-local)). However, that’s now invalid because Azure Local 23H2 includes new cluster management elements (like **Azure ARC Resource Bridge**) that don’t support stretch clustering. In my opinion, there’s also no real need to expand clusters this way because Azure Local is more of an **Edge Datacenter** solution, not a typical “full” data center approach. If you want balanced infrastructure across two sites, **Windows Server 2025** might be a better option, or you could split Azure Local into two separate clusters.
+In previous versions, you could configure a so-called **stretch cluster** for two sites, provided your round-trip latency didn’t exceed 5 ms (see [Microsoft docs](https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-local-dr?wt.mc_id=MVP_579217#use-stretched-clusters-to-implement-automated-disaster-recovery-for-virtualized-workloads-and-file-shares-hosted-on-azure-local)). However, that’s now invalid because Azure Local 23H2 includes new cluster management elements (like **Azure ARC Resource Bridge**) that don’t support stretch clustering. In my opinion, there’s also no real need to expand clusters this way because Azure Local is more of an **Edge Datacenter** solution, not a typical “full” data center approach. If you want balanced infrastructure across two sites, **Windows Server 2025** might be a better option, or you could split Azure Local into two separate clusters.
 
-Nevertheless, there is a future possibility (currently in private preview) to meet this need, known as **Rack Aware Cluster** ([TechCommunity article](https://techcommunity.microsoft.com/blog/azurearcblog/evolving-stretch-clustering-for-azure-local/4352751)). This upcoming feature may include up to eight nodes (four per side). Its advantage is that it could support the ARC Resource Bridge because the nodes reside in the same Layer 2 network. If I ever get the chance, I’ll test it once a public preview is available. For now, we only have a network diagram:
+Nevertheless, there is a future possibility (currently in private preview) to meet this need, known as **Rack Aware Cluster** ([TechCommunity article](https://techcommunity.microsoft.com/blog/azurearcblog/evolving-stretch-clustering-for-azure-local/4352751?wt.mc_id=MVP_579217)). This upcoming feature may include up to eight nodes (four per side). Its advantage is that it could support the ARC Resource Bridge because the nodes reside in the same Layer 2 network. If I ever get the chance, I’ll test it once a public preview is available. For now, we only have a network diagram:
 
 <a href="/assets/img/post/2025-03-01-azure-local-redundancy/azurelocalrackaware.png" target="_blank">
   <img src="/assets/img/post/2025-03-01-azure-local-redundancy/azurelocalrackaware.png" alt="Rack Aware preview diagram" style="border: 2px solid grey;">
@@ -145,7 +145,7 @@ Nevertheless, there is a future possibility (currently in private preview) to me
 #### Active Directory Redundancy
 
 In my opinion, the most controversial part of designing a new Azure Local environment is **Active Directory**, mainly because there’s no official best-practice guidance covering it. 
-Starting with Azure Local 23H3, you can integrate Azure Local into your existing Active Directory with minimal effort by following the prep steps in [this Microsoft doc](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-prep-active-directory?view=azloc-24112). Those steps outline the prerequisites for registering Azure Local and creating the cluster. The question is: **Do I use my current corporate AD (with all existing data), or do I spin up a separate AD domain (often called the Fabric Domain) just for Azure Local?**
+Starting with Azure Local 23H3, you can integrate Azure Local into your existing Active Directory with minimal effort by following the prep steps in [this Microsoft doc](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-prep-active-directory?view=azloc-24112&wt.mc_id=MVP_579217). Those steps outline the prerequisites for registering Azure Local and creating the cluster. The question is: **Do I use my current corporate AD (with all existing data), or do I spin up a separate AD domain (often called the Fabric Domain) just for Azure Local?**
 
 Unsurprisingly, the answer is: **it depends**, it depends on the management model you want and how you plan to operate the cluster. However, in the majority of cases, I recommend creating a dedicated Active Directory domain for Azure Local, so you avoid unexpected permission issues or admins deciding it’s a great idea to apply random GPOs to the solution (I’ve seen some downright bizarre situations arise that were very tough to fix afterwards! 🤣)
 

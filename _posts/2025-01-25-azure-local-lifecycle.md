@@ -46,7 +46,7 @@ Spoiler alert: The information I’m sharing is a mix of official documentation 
 
 ### Azure Local Updates
 
-I recently updated my Azure Local cluster, and I want to share my experience based on the article [About updates for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/update/about-updates-23h2). Here’s everything you need to know to keep your system up to date.
+I recently updated my Azure Local cluster, and I want to share my experience based on the article [About updates for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/update/about-updates-23h2?wt.mc_id=MVP_579217). Here’s everything you need to know to keep your system up to date.
 
 #### Keeping the Cluster Updated
 
@@ -93,11 +93,11 @@ Personally, I used the **Azure portal** to manage the updates. The Azure Update 
 ![Update Step 04](/assets/img/post/2025-01-25-azure-local-lifecycle/04.png){: style="border: 2px solid grey;"}
 ![Update Step 05](/assets/img/post/2025-01-25-azure-local-lifecycle/05.png){: style="border: 2px solid grey;"}
 
-That said, it’s also possible to apply updates using [PowerShell](https://learn.microsoft.com/en-us/azure/azure-local/update/update-via-powershell-23h2), which works well for both single-node and multi-node systems. If you prefer a command-line approach, PowerShell is an excellent alternative. Just avoid unsupported tools like Windows Admin Center, SConfig, or third-party tools, as they will cause issues and might even impact billing (at least as far as support tickets are concerned 😅).
+That said, it’s also possible to apply updates using [PowerShell](https://learn.microsoft.com/en-us/azure/azure-local/update/update-via-powershell-23h2?wt.mc_id=MVP_579217), which works well for both single-node and multi-node systems. If you prefer a command-line approach, PowerShell is an excellent alternative. Just avoid unsupported tools like Windows Admin Center, SConfig, or third-party tools, as they will cause issues and might even impact billing (at least as far as support tickets are concerned 😅).
 
 ### Update Phases
 
-Updating Azure Local to version 23H2 introduces a phased process designed to ensure smooth updates with minimal disruption. Below, I’ll guide you through the phases of the update process based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/update/update-phases-23h2) and my own experience.
+Updating Azure Local to version 23H2 introduces a phased process designed to ensure smooth updates with minimal disruption. Below, I’ll guide you through the phases of the update process based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/update/update-phases-23h2?wt.mc_id=MVP_579217) and my own experience.
 
 #### About Update Phases
 
@@ -145,7 +145,7 @@ By following these phases, Azure Local ensures that updates are applied smoothly
 
 ### SBE Updates
 
-The **Solution Builder Extension (SBE)** is a critical part of managing and maintaining Azure Local, especially when it comes to ensuring your hardware is up to date. Based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/update/solution-builder-extension) and insights shared by Jaromir in his [Lifecycle Manager Deep Dive](https://github.com/DellGEOS/AzureLocalHOLs/tree/main/lab-guides/05-LifecycleManagerDeepDive), let’s explore what SBE updates bring to the table and how they improve the lifecycle management process.
+The **Solution Builder Extension (SBE)** is a critical part of managing and maintaining Azure Local, especially when it comes to ensuring your hardware is up to date. Based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/update/solution-builder-extension?wt.mc_id=MVP_579217) and insights shared by Jaromir in his [Lifecycle Manager Deep Dive](https://github.com/DellGEOS/AzureLocalHOLs/tree/main/lab-guides/05-LifecycleManagerDeepDive), let’s explore what SBE updates bring to the table and how they improve the lifecycle management process.
 
 #### What Are SBE Updates?
 
@@ -199,7 +199,7 @@ Each of these upgrade steps serves a unique purpose in optimizing and evolving y
 
 ### Extensions
 
-Managing extensions in Azure Local is a crucial part of keeping your cluster up to date and ensuring it runs optimally. Azure Local supports both **Azure-managed extensions** and **customer-managed extensions**, and upgrading them is a seamless process thanks to Azure Arc integration. Below, I’ll break down how the update process works based on [Azure’s documentation](https://learn.microsoft.com/en-us/azure/azure-local/manage/arc-extension-management?tabs=azureportal).
+Managing extensions in Azure Local is a crucial part of keeping your cluster up to date and ensuring it runs optimally. Azure Local supports both **Azure-managed extensions** and **customer-managed extensions**, and upgrading them is a seamless process thanks to Azure Arc integration. Below, I’ll break down how the update process works based on [Azure’s documentation](https://learn.microsoft.com/en-us/azure/azure-local/manage/arc-extension-management?tabs=azureportal&wt.mc_id=MVP_579217).
 
 #### How Extensions Are Upgraded
 
@@ -246,7 +246,7 @@ Extensions are an integral part of Azure Local’s functionality, and their upgr
 
 ### Add a Node
 
-Adding a node to your Azure Local cluster is one of the most straightforward ways to scale up resources like compute and storage. While I don’t currently have the infrastructure to reproduce this process step by step, I’ve successfully carried it out in the past, transitioning from a single-node to a two-node system without any issues. Based on my experience and [this article from Microsoft](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server), let me guide you through the process.
+Adding a node to your Azure Local cluster is one of the most straightforward ways to scale up resources like compute and storage. While I don’t currently have the infrastructure to reproduce this process step by step, I’ve successfully carried it out in the past, transitioning from a single-node to a two-node system without any issues. Based on my experience and [this article from Microsoft](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server?wt.mc_id=MVP_579217), let me guide you through the process.
 
 #### Overview
 
@@ -261,7 +261,7 @@ Here are some important highlights:
 #### Key Steps to Add a Node
 
 1. **Prepare the Node**:
-   - Install the operating system and required drivers on the new node. Follow the guidance for [Installing the Azure Local Operating System, version 23H2](https://learn.microsoft.com/en-us/azure/azure-local/install-os).
+   - Install the operating system and required drivers on the new node. Follow the guidance for [Installing the Azure Local Operating System, version 23H2](https://learn.microsoft.com/en-us/azure/azure-local/install-os?wt.mc_id=MVP_579217).
    - Register the new node with Azure Arc. Ensure the same parameters (e.g., Resource Group, Region, Subscription, Tenant) as the existing nodes are used.
    - Assign the following permissions:
      - **Azure Local Device Management Role**
@@ -323,7 +323,7 @@ Azure Local supports adding nodes across various scenarios:
 
 ### Add Storage
 
-Expanding your storage capacity in Azure Local is an essential step to accommodate growing workloads. This process, often called **scaling up**, involves adding drives to your nodes to increase storage capacity and, in some cases, improve performance. Azure Local relies on **Storage Spaces Direct (S2D)** for storage management, which simplifies the process by automatically detecting and integrating new drives. Based on [Microsoft's documentation](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/add-nodes#adding-drives), here’s how to add storage drives to your Azure Local cluster.
+Expanding your storage capacity in Azure Local is an essential step to accommodate growing workloads. This process, often called **scaling up**, involves adding drives to your nodes to increase storage capacity and, in some cases, improve performance. Azure Local relies on **Storage Spaces Direct (S2D)** for storage management, which simplifies the process by automatically detecting and integrating new drives. Based on [Microsoft's documentation](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/add-nodes?wt.mc_id=MVP_579217#adding-drives), here’s how to add storage drives to your Azure Local cluster.
 
 #### Overview of Adding Drives
 
@@ -381,7 +381,7 @@ After adding drives, data redistribution may become uneven across the pool. S2D 
 
 ### Repair a Node & Extensions
 
-In any Azure Local deployment, hardware failures or inconsistent extension states are inevitable over time. To avoid such scenarios, I will provide you with a detailed guide based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/manage/repair-server) and my personal experience.
+In any Azure Local deployment, hardware failures or inconsistent extension states are inevitable over time. To avoid such scenarios, I will provide you with a detailed guide based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/manage/repair-server?wt.mc_id=MVP_579217) and my personal experience.
 
 #### Repair a Node
 
@@ -448,7 +448,7 @@ You can find the script on my GitHub repository: [Troubleshooting Extensions Scr
 
 ### Secret Rotation
 
-Although **secret rotation** isn’t strictly part of an upgrade process, it is deeply tied to **Lifecycle Management**. Since we’ve already covered topics like node and extension repairs in this section, I’ve taken the liberty of including secret rotation as well. Ensuring that administrative credentials and service principal secrets are periodically updated is a critical security measure for any Azure Local deployment. Based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/manage/manage-secrets-rotation), here’s how to manage secret rotation.
+Although **secret rotation** isn’t strictly part of an upgrade process, it is deeply tied to **Lifecycle Management**. Since we’ve already covered topics like node and extension repairs in this section, I’ve taken the liberty of including secret rotation as well. Ensuring that administrative credentials and service principal secrets are periodically updated is a critical security measure for any Azure Local deployment. Based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/manage/manage-secrets-rotation?wt.mc_id=MVP_579217), here’s how to manage secret rotation.
 
 #### Rotating the Deployment User Password
 
@@ -521,7 +521,7 @@ Set-AzureStackRPSpCredential -SubscriptionID $SubscriptionId -TenantID $TenantId
 
 ### Upgrade from Azure Stack HCI 22H2
 
-The transition from **Azure Stack HCI 22H2** to **Azure Local 23H2** is a significant upgrade that ensures your system remains secure, supported, and up to date with the latest features. Although I haven’t personally performed this upgrade yet (for better or worse), I’ve followed multiple discussions about this topic in the [Azure Local Slack channel](https://aka.ms/azurelocal-slack). Based on these threads and [Microsoft’s documentation](https://learn.microsoft.com/en-us/azure/azure-local/upgrade/about-upgrades-23h2), here’s a guide to the process.
+The transition from **Azure Stack HCI 22H2** to **Azure Local 23H2** is a significant upgrade that ensures your system remains secure, supported, and up to date with the latest features. Although I haven’t personally performed this upgrade yet (for better or worse), I’ve followed multiple discussions about this topic in the [Azure Local Slack channel](https://aka.ms/azurelocal-slack). Based on these threads and [Microsoft’s documentation](https://learn.microsoft.com/en-us/azure/azure-local/upgrade/about-upgrades-23h2?wt.mc_id=MVP_579217), here’s a guide to the process.
 
 It’s important to note that **support for 22H2 ends in May 2025**, so I highly recommend upgrading your system sooner rather than later.
 
@@ -530,7 +530,7 @@ It’s important to note that **support for 22H2 ends in May 2025**, so I highly
 Before beginning the upgrade, keep the following points in mind:
 
 - Consult your hardware OEM before you upgrade Azure Local. Validate that your OEM supports the version and the upgrade.
-- Upgrading your Azure Local from version 22H2 is only supported for regions where Azure Local, version 23H2 is available. For more information, see [Azure Local region availability](https://learn.microsoft.com/en-us/azure/azure-local/concepts/system-requirements-23h2#azure-requirements).
+- Upgrading your Azure Local from version 22H2 is only supported for regions where Azure Local, version 23H2 is available. For more information, see [Azure Local region availability](https://learn.microsoft.com/en-us/azure/azure-local/concepts/system-requirements-23h2?wt.mc_id=MVP_579217#azure-requirements).
 - Use of 3rd party tools to install upgrades is not supported.
 
 Azure Local upgrade supports the following services and workloads:
@@ -755,9 +755,9 @@ Lifecycle Management in **Azure Local** is a multidimensional topic that involve
 
 Before carrying out **any** updates or upgrades, it’s crucial to stay informed about the latest release information and known issues for Azure Local 23H2. Microsoft regularly publishes:
 
-- [Azure Local 23H2 release information](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2) which highlights new features, improvements, and security updates in each release train.
+- [Azure Local 23H2 release information](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?wt.mc_id=MVP_579217) which highlights new features, improvements, and security updates in each release train.
    ![Release Train](/assets/img/post/2025-01-25-azure-local-lifecycle/release-trains.png){: style="border: 2px solid grey;"}
-- [Known issues for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/known-issues-2411-1) which provides a running list of critical issues, workarounds, and advisories to be aware of for each version.
+- [Known issues for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/known-issues-2411-1?wt.mc_id=MVP_579217) which provides a running list of critical issues, workarounds, and advisories to be aware of for each version.
 
 Spending a little time reviewing these resources prior to an update can save you a lot of hassle, minimize downtime, and ensure your system remains in a **fully supported state**. With solid preparation and the processes outlined here, you’ll be well-equipped to navigate the complexities of Azure Local Lifecycle Management. 
 
@@ -770,18 +770,18 @@ Below is a table of all the links referenced in this article, along with a brief
 | Link                                                                                                                | Description                                                                                                 |
 |---------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|
 | [Azure Stack HCI Day 2 Operations](/blog/azure-stack-hci-day2)                                                           | My earlier discussion on **Day 2 Operations** and how Lifecycle Management fits into that broader framework. |
-| [About updates for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/update/about-updates-23h2) | Official Microsoft documentation on updating Azure Local 23H2, including key features and update workflow.   |
-| [Update Azure Local via PowerShell](https://learn.microsoft.com/en-us/azure/azure-local/update/update-via-powershell-23h2) | Step-by-step guide to applying updates with **PowerShell**, suitable for both single-node and multi-node setups.  |
-| [Phases of Azure Local Updates](https://learn.microsoft.com/en-us/azure/azure-local/update/update-phases-23h2)      | Detailed breakdown of the **Discovery, Readiness, and Installation** phases for Azure Local updates.         |
-| [Solution Builder Extension (SBE)](https://learn.microsoft.com/en-us/azure/azure-local/update/solution-builder-extension) | Explanation of SBE updates, including drivers, firmware, and advanced capabilities for Azure Local hardware. |
+| [About updates for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/update/about-updates-23h2?wt.mc_id=MVP_579217) | Official Microsoft documentation on updating Azure Local 23H2, including key features and update workflow.   |
+| [Update Azure Local via PowerShell](https://learn.microsoft.com/en-us/azure/azure-local/update/update-via-powershell-23h2?wt.mc_id=MVP_579217) | Step-by-step guide to applying updates with **PowerShell**, suitable for both single-node and multi-node setups.  |
+| [Phases of Azure Local Updates](https://learn.microsoft.com/en-us/azure/azure-local/update/update-phases-23h2?wt.mc_id=MVP_579217)      | Detailed breakdown of the **Discovery, Readiness, and Installation** phases for Azure Local updates.         |
+| [Solution Builder Extension (SBE)](https://learn.microsoft.com/en-us/azure/azure-local/update/solution-builder-extension?wt.mc_id=MVP_579217) | Explanation of SBE updates, including drivers, firmware, and advanced capabilities for Azure Local hardware. |
 | [Lifecycle Manager Deep Dive by Jaromir](https://github.com/DellGEOS/AzureLocalHOLs/tree/main/lab-guides/05-LifecycleManagerDeepDive) | In-depth look at Lifecycle Manager internals, sideloading SBE packages, and troubleshooting tips.            |
-| [Azure Arc Extension Management](https://learn.microsoft.com/en-us/azure/azure-local/manage/arc-extension-management?tabs=azureportal) | How to install, upgrade, and manage Arc extensions on Azure Local, including automatic and manual upgrades.  |
-| [Add a Node to Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server)                  | Guidance on scaling your cluster by adding additional servers (nodes) to Azure Local.                        |
-| [Adding Drives (Windows Server Storage)](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/add-nodes#adding-drives) | Official documentation on expanding storage capacity in a cluster using **Storage Spaces Direct (S2D)**.     |
-| [Repair a Node in Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/manage/repair-server)            | Instructions on repairing a faulty node, from reimaging to re-registering with Azure Arc.                    |
+| [Azure Arc Extension Management](https://learn.microsoft.com/en-us/azure/azure-local/manage/arc-extension-management?tabs=azureportal&wt.mc_id=MVP_579217) | How to install, upgrade, and manage Arc extensions on Azure Local, including automatic and manual upgrades.  |
+| [Add a Node to Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server?wt.mc_id=MVP_579217)                  | Guidance on scaling your cluster by adding additional servers (nodes) to Azure Local.                        |
+| [Adding Drives (Windows Server Storage)](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/add-nodes?wt.mc_id=MVP_579217#adding-drives) | Official documentation on expanding storage capacity in a cluster using **Storage Spaces Direct (S2D)**.     |
+| [Repair a Node in Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/manage/repair-server?wt.mc_id=MVP_579217)            | Instructions on repairing a faulty node, from reimaging to re-registering with Azure Arc.                    |
 | [Troubleshooting Extensions Script](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/01Lab/03_TroubleshootingExtensions.ps1) | My custom PowerShell script for detecting and repairing inconsistent or broken Azure Local extensions.       |
-| [Manage Secrets Rotation](https://learn.microsoft.com/en-us/azure/azure-local/manage/manage-secrets-rotation)       | Steps to rotate credentials and service principal secrets for Azure Local, maintaining system security.      |
-| [Upgrade from Azure Stack HCI 22H2](https://learn.microsoft.com/en-us/azure/azure-local/upgrade/about-upgrades-23h2) | Overview of the **22H2 to 23H2** upgrade process, including prerequisites, supported scenarios, and workflows.|
-| [Azure Local region availability](https://learn.microsoft.com/en-us/azure/azure-local/concepts/system-requirements-23h2#azure-requirements) | Regions where Azure Local 23H2 is fully supported for deployments and upgrades.                              |
-| [Azure Local 23H2 Release Information](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2) | Microsoft’s official release notes and update trains for Azure Local 23H2, including features and baselines. |
-| [Known Issues for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/known-issues-2411-1)        | Continuously updated list of known issues, workarounds, and advisories for the current Azure Local release.  |
+| [Manage Secrets Rotation](https://learn.microsoft.com/en-us/azure/azure-local/manage/manage-secrets-rotation?wt.mc_id=MVP_579217)       | Steps to rotate credentials and service principal secrets for Azure Local, maintaining system security.      |
+| [Upgrade from Azure Stack HCI 22H2](https://learn.microsoft.com/en-us/azure/azure-local/upgrade/about-upgrades-23h2?wt.mc_id=MVP_579217) | Overview of the **22H2 to 23H2** upgrade process, including prerequisites, supported scenarios, and workflows.|
+| [Azure Local region availability](https://learn.microsoft.com/en-us/azure/azure-local/concepts/system-requirements-23h2?wt.mc_id=MVP_579217#azure-requirements) | Regions where Azure Local 23H2 is fully supported for deployments and upgrades.                              |
+| [Azure Local 23H2 Release Information](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?wt.mc_id=MVP_579217) | Microsoft’s official release notes and update trains for Azure Local 23H2, including features and baselines. |
+| [Known Issues for Azure Local 23H2](https://learn.microsoft.com/en-us/azure/azure-local/known-issues-2411-1?wt.mc_id=MVP_579217)        | Continuously updated list of known issues, workarounds, and advisories for the current Azure Local release.  |
