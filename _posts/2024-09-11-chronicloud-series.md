@@ -1,7 +1,7 @@
 ---
 title: "Chronicloud Series: A Journey through Azure Solutions"
 date: 2024-09-11
-last_modified_at: 2026-05-05
+last_modified_at: 2026-09-06
 excerpt: "Delve into Azure technologies with the Chronicloud Series. Access in-depth guides and hands-on labs to enhance your skills and understanding in cloud computing."
 categories:
   - Blog
@@ -63,6 +63,8 @@ Azure Local is a hyper-converged infrastructure solution from Microsoft that ena
    - *Deep Insights Workbook*: Extend Azure Local monitoring with guest VM visibility, richer performance counters and a workbook-based operational view. For more details, see [Azure Local Deep Insights Workbook](/blog/azure-local-deep-insights-workbook/).
    - *LLMs on AKS*: Deploy lightweight language models on AKS running inside an Azure Local environment. For more details, see [Azure Local: How to Deploy LLMs on AKS](/blog/azure-local-llm/).
    - *Terraform Deployment*: Automate Azure Local deployment with Terraform, staged validation and a service principal ready for future workload automation. For more details, see [Azure Local: Terraform Deployment](/blog/azure-local-terraform/).
+   - *Building the lab hardware*: The hardware companion to the Demolab, comparing laptops, mini PCs and second-hand servers, with the full build, running costs and host configuration of the dedicated server that now runs my nested lab. For more details, see [How to Build Your Own Azure Local Lab](/blog/how-to-build-your-azure-local-lab/).
+   - *Troubleshooting and support*: What to do when something breaks, covering the support ticket that has to come first, the Slack community, the public troubleshooting guide repository, self-service diagnostics and where the log files live on disk. For more details, see [Azure Local Troubleshooting: The Path From Error to Resolution](/blog/azure-local-troubleshooting/).
    - *Planning, sizing and migration*: Step-by-step guidance on planning Azure Local capacity and migrating from traditional systems to Azure Local will continue expanding in future posts.
 
 2. **Azure Virtual Desktop (AVD)**  

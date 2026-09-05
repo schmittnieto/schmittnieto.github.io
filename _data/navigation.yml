@@ -41,6 +41,8 @@ Azurelocal:
       url: /blog/azure-local-terraform/
     - title: "Build Your Own Lab Server"
       url: /blog/how-to-build-your-azure-local-lab/
+    - title: "Troubleshooting & Support"
+      url: /blog/azure-local-troubleshooting/
 
 Avd:
 - title: Azure Virtual Desktop

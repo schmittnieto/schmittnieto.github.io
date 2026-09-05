@@ -10,7 +10,7 @@ Important notes:
 - Public pages are HTML. Dedicated Markdown mirrors for individual posts are not currently published.
 - The author is Cristian Schmitt Nieto, a Senior Consultant at adesso SE based in Germany.
 - Contact address for the blog is blog@schmitt-nieto.com.
-- This file was last reviewed on 2026-08-08.
+- This file was last reviewed on 2026-09-06.
 
 ## Core Pages
 
@@ -35,6 +35,7 @@ Important notes:
 - [Azure Local: How to Deploy LLMs on AKS](https://schmitt-nieto.com/blog/azure-local-llm/): Walkthrough for deploying lightweight LLMs on AKS inside Azure Local.
 - [Azure Local: Terraform Deployment](https://schmitt-nieto.com/blog/azure-local-terraform/): Terraform-based Azure Local deployment using a fixed AVM fork, staged validation and pipeline-ready automation.
 - [How to Build Your Own Azure Local Lab](https://schmitt-nieto.com/blog/how-to-build-your-azure-local-lab/): Hardware guide for an Azure Local lab, comparing laptops, mini PCs and second-hand servers, with the full build, costs and host configuration of a dedicated lab server.
+- [Azure Local Troubleshooting: The Path From Error to Resolution](https://schmitt-nieto.com/blog/azure-local-troubleshooting/): Support-first troubleshooting reference covering why the Microsoft support ticket comes before log collection, the Azure Local Slack community, the public AzureLocal-Supportability guide repository, self-service diagnostics with the Microsoft.AzLocal.CSSTools module and a reference of on-disk log folders and Windows event channels.
 
 ## Azure Virtual Desktop Series
 
