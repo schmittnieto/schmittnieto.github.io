@@ -16,7 +16,55 @@
   {%- assign search_provider = site.search_provider | default: "lunr" -%}
   {%- case search_provider -%}
     {%- when "lunr" -%}
-      {% include_cached search/lunr-search-scripts.html %}
+      {%- comment -%}
+        SEO-019: lunr-store.js carries the full body text of every post
+        (search_full_content is on) and is ~675 KB. Load lunr only after the
+        reader opens the search panel, not on every page view. Full content
+        search is preserved.
+      {%- endcomment -%}
+      {%- assign lunr_lang = site.locale | default: "en" | slice: 0, 2 -%}
+      {%- unless lunr_lang == "en" or lunr_lang == "gr" -%}{%- assign lunr_lang = "en" -%}{%- endunless -%}
+      <script>
+      (function () {
+        var started = false;
+        function loadLunr() {
+          if (started) return;
+          started = true;
+          var files = [
+            "{{ '/assets/js/lunr/lunr.min.js' | relative_url }}",
+            "{{ '/assets/js/lunr/lunr-store.js' | relative_url }}",
+            "{{ '/assets/js/lunr/lunr-' | append: lunr_lang | append: '.js' | relative_url }}"
+          ];
+          (function next(i) {
+            if (i >= files.length) {
+              var input = document.getElementById('search');
+              if (input && input.value) {
+                input.dispatchEvent(new Event('keyup'));
+              }
+              return;
+            }
+            var s = document.createElement('script');
+            s.src = files[i];
+            s.onload = function () { next(i + 1); };
+            document.head.appendChild(s);
+          })(0);
+        }
+        function arm() {
+          var toggle = document.querySelector('.search__toggle');
+          if (toggle) toggle.addEventListener('click', loadLunr, { once: true });
+          var input = document.getElementById('search');
+          if (input) input.addEventListener('focus', loadLunr, { once: true });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', arm);
+        } else {
+          arm();
+        }
+        {%- if page.layout == "search" %}
+        loadLunr();
+        {%- endif %}
+      })();
+      </script>
     {%- when "google" -%}
       {% include_cached search/google-search-scripts.html %}
     {%- when "algolia" -%}
