@@ -13,13 +13,22 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Cristian Schmitt Nieto´s Blog
+locale: "en-US"
+title: "Cristian Schmitt Nieto's Blog"
 email: blog@schmitt-nieto.com
-description: Welcome to my blog, where you will find all kinds of information related to Azure, Azure Virtual Desktop and Azure Local.
+description: "Hands-on Azure, Azure Local and Azure Virtual Desktop guidance: architecture notes, deployment walkthroughs and troubleshooting for IT professionals."
+url: "https://schmitt-nieto.com"
+baseurl: ""
 github_username: schmittnieto
 minimal_mistakes_skin: "dark"
 logo: "/assets/img/logo3.png"
 masthead_title: "To Infinity and Azure"
+social:
+  type: Person
+  name: Cristian Schmitt Nieto
+  links:
+    - "https://github.com/schmittnieto"
+    - "https://www.linkedin.com/in/cristian-schmitt-nieto/"
 
 # Search
 search: true
