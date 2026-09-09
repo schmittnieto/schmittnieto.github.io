@@ -68,7 +68,7 @@ AKS is available in several deployment models, each catering to specific use cas
      - Ideal for scenarios requiring on-premises data processing due to latency or compliance needs.
    - **Cost Considerations**:
      - Requires licensing for Windows Server or Azure Stack HCI.
-     - Additional costs include Azure Arc-enabled Kubernetes charges, approximately $0.80 per virtual core per day, after a 60-day free evaluation period. [Learn more](https://azure.microsoft.com/en-us/pricing/details/azure-stack/aks-hci/)
+     - Additional costs include Azure Arc-enabled Kubernetes charges, approximately $0.80 per virtual core per day, after a 60-day free evaluation period. [Learn more](https://azure.microsoft.com/en-us/pricing/details/azure-stack/aks-hci/?wt.mc_id=MVP_579217)
 
 3. **AKS on Azure Local (Post-2402 Releases)**:
    - **Use Cases**:
@@ -1105,7 +1105,7 @@ In Azure Local, SQLmi leverages Azure Arc-enabled data services, seamlessly inte
 
 ### Pricing Overview
 
-The [pricing for SQLmi](https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/) in Azure Local is as follows:
+The [pricing for SQLmi](https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/?wt.mc_id=MVP_579217) in Azure Local is as follows:
 
 | Service | Price (1 vCore/Month) | Notes |
 |---------|-----------------------|-------|
@@ -1248,12 +1248,12 @@ https://techcommunity.microsoft.com/blog/azurestackblog/distributing-virtual-mac
 https://techcommunity.microsoft.com/blog/azurestackblog/disable-automatic-distribution-of-data-across-csvs-on-aks-on-azure-stack-hci-and/3597392?wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/aks/hybrid/concepts-support?wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/aks/hybrid/set-proxy-settings?wt.mc_id=MVP_579217#configure-an-aks-host-for-a-proxy-server-with-basic-authentication
-https://azure.microsoft.com/en-us/pricing/details/kubernetes-service/
+https://azure.microsoft.com/en-us/pricing/details/kubernetes-service/?wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/aks/hybrid/azure-hybrid-benefit-22h2?tabs=powershell&wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/aks/hybrid/pricing?wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview?view=azuresql&wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/azure-arc/data/plan-azure-arc-data-services?wt.mc_id=MVP_579217#deployment-requirements
-https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/
+https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/?wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-create-clusters-portal?wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network?wt.mc_id=MVP_579217
 https://learn.microsoft.com/en-us/azure/aks/aksarc/cluster-architecture?wt.mc_id=MVP_579217

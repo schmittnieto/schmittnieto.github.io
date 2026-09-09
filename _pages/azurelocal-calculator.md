@@ -1942,7 +1942,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     <p>
       <strong>Azure Local Deployment Model Disclaimer:</strong><br>
       L1 applies to cloud-connected hyperconverged deployments without external storage. L2 applies to disaggregated deployments or hyperconverged deployments with external storage. An Azure Local OEM license with external storage uses the listed 10/core/month special rate. L3 applies to disconnected operations with a locally hosted control plane. Microsoft does not publish an L3 host fee, so the calculator requires a user-provided planning rate or account-specific quote. Azure Local host fees and the Windows Server subscription have a free trial for the first 60 days after registration. See the
-      <a href="https://azure.microsoft.com/en-us/pricing/details/azure-local/#pricing" target="_blank">Azure Local pricing page</a>,
+      <a href="https://azure.microsoft.com/en-us/pricing/details/azure-local/?wt.mc_id=MVP_579217#pricing" target="_blank">Azure Local pricing page</a>,
       <a href="https://learn.microsoft.com/en-us/azure/azure-local/overview/disaggregated-overview?view=azloc-2606&wt.mc_id=MVP_579217" target="_blank">disaggregated deployment overview</a> and
       <a href="https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-overview?view=azloc-2606&wt.mc_id=MVP_579217" target="_blank">disconnected operations overview</a>.
       Fixed Azure rates are treated as values in the selected calculator currency. Currency selection does not perform foreign exchange conversion.
@@ -1966,7 +1966,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     <p>
       <strong>AVD and SQLmi Disclaimer:</strong><br>
       AVD costs are estimated at 0.01 per vCPU per hour. SQLmi pricing depends on tier, licensing model, and reservation term. These calculations are illustrative. For more info visit
-      <a href="https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/" target="_blank">Azure Arc Data Services Pricing</a>.
+      <a href="https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/?wt.mc_id=MVP_579217" target="_blank">Azure Arc Data Services Pricing</a>.
       Always refer to official Microsoft documentation for up-to-date pricing.
     </p>
     <p>

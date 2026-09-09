@@ -73,7 +73,7 @@ For Windows Server 2016/2019/2022/2025:
 - Remote Desktop Services (RDS) Client Access License (CAL) with Software Assurance (per-user or per-device)
 - RDS User Subscription Licenses
 
-Additionally, there's a cost of **$0.01 per virtual core per hour** for each AVD Session Host. This detail is somewhat hidden but can be found [here](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/) under the "Pricing overview > Azure Virtual Desktop for Azure Local" section.
+Additionally, there's a cost of **$0.01 per virtual core per hour** for each AVD Session Host. This detail is somewhat hidden but can be found [here](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/?wt.mc_id=MVP_579217) under the "Pricing overview > Azure Virtual Desktop for Azure Local" section.
 
 ### Host Pools
 
