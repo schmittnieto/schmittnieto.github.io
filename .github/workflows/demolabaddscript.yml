@@ -4,13 +4,21 @@ on:
   push:
     branches:
       - main  # La rama que deseas monitorear
+  workflow_dispatch:
 
 permissions:
   contents: write  # Otorga permisos de escritura a los contenidos
 
+concurrency:
+  group: demolab-add-script
+  # Queue runs instead of racing; cancelling mid-push corrupts the ref state
+  cancel-in-progress: false
+
 jobs:
   update-article:
     runs-on: ubuntu-latest
+    # Do not run on our own "[skip ci]" commits; still allow manual runs
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]')
 
     steps:
       - name: Checkout Repository
@@ -115,5 +123,18 @@ jobs:
       - name: Commit and Push Changes
         run: |
           git add .
-          git commit -m "Update article with latest PowerShell scripts" || echo "No changes to commit"
-          git push origin main
+          if git diff --cached --quiet; then
+            echo "No changes to commit; nothing to push."
+            exit 0
+          fi
+          git commit -m "Update article with latest PowerShell scripts [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin main && git push origin main; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            echo "Push attempt $attempt failed (remote moved); retrying in 5s..."
+            sleep 5
+          done
+          echo "Failed to push after 5 attempts." >&2
+          exit 1

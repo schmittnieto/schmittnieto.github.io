@@ -10,7 +10,8 @@ permissions:
 
 concurrency:
   group: update-awesome-azure-local
-  cancel-in-progress: true
+  # Queue runs instead of racing; cancelling mid-push corrupts the ref state
+  cancel-in-progress: false
 
 jobs:
   update-article:
@@ -21,6 +22,8 @@ jobs:
     steps:
       - name: Checkout blog
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # full history so pull --rebase works cleanly
 
       - name: Set up Git
         run: |
@@ -122,5 +125,18 @@ jobs:
       - name: Commit and push
         run: |
           git add .
-          git commit -m "Update Awesome Azure Local block from README [skip ci]" || echo "No changes to commit"
-          git push origin main
+          if git diff --cached --quiet; then
+            echo "No changes to commit; nothing to push."
+            exit 0
+          fi
+          git commit -m "Update Awesome Azure Local block from README [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase --autostash origin main && git push origin main; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            echo "Push attempt $attempt failed (remote moved); retrying in 5s..."
+            sleep 5
+          done
+          echo "Failed to push after 5 attempts." >&2
+          exit 1
