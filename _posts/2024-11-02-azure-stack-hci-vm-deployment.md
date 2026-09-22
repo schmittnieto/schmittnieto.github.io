@@ -2,7 +2,7 @@
 title: "Azure Local: VM Deployment"
 excerpt: "Deploy VMs on Azure Local easily and discover the process, management features, and benefits of integrated VM deployments."
 date: 2024-11-02
-last_modified_at: 2025-05-05
+last_modified_at: 2026-09-22
 categories:
   - Blog
 tags:
@@ -209,13 +209,27 @@ To streamline VM access without exposing firewall ports, I've configured a custo
 
 **Key Points:**
 
-- **Script Location**: The script is available in my [AzSHCI GitHub repository](https://github.com/schmittnieto/AzSHCI/tree/main/scripts/03VMDeployment/20_SSHRDPArcVM.ps1).
+- **Script Location**: The script is available in my [AzSHCI GitHub repository](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/03VMDeployment/20_SSHRDPArcVM.ps1).
 
 - **Functionality**: It configures the OpenSSH server on your VMs and allows secure RDP access without opening additional firewall ports.
 
 - **Based On**: The script is inspired by [Alexander Ortha's article](https://www.linkedin.com/pulse/azurearc-using-rdp-ssh-alexander-ortha-7sxae/), but I've modified it to rely more on PowerShell and less on the Azure CLI for a streamlined process.
 
 By using this script, you can securely manage your VMs without big changes on your network security, making remote administration more convenient.
+
+The current helper still uses interactive device code login through `Connect-AzAccount`. It does not consume the 01Lab `.env` file or automatically switch to that lab's SPN. Set `$Location` and `$LocalUser` in the helper to match the target VM; `$LocalUser` is a guest OS account, not the Azure application ID.
+
+The final connection uses `az ssh arc --rdp`, so Azure CLI authentication is separate from the Az PowerShell session. Sign the CLI into the intended tenant and subscription before running the helper from the repository root:
+
+```powershell
+az login --tenant '<tenant-id>'
+az account set --subscription '<subscription-id>'
+.\scripts\03VMDeployment\20_SSHRDPArcVM.ps1
+```
+
+The script discovers Arc machines and installs the `WindowsOpenSSH` extension if needed. The Azure identity needs access to the selected machine and permission for the requested extension and connectivity operations; the local account still needs the appropriate guest access. An SPN configured for cluster deployment does not automatically grant an administrator an interactive Windows session.
+
+For AVD session hosts, I now use the separate [Entra joined AVD workflow](/blog/azure-local-avd-entra-join/). It handles host pool registration and guest configuration through Arc Run Command. This SSH/RDP helper remains a VM administration tool.
 
 <a href="/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/99.png" target="_blank">
   <img src="/assets/img/post/2024-11-02-azure-stack-hci-demolab-vmdeployment/99.png" alt="RDP over SSH on Arc VM" style="border: 2px solid grey;">

@@ -2,7 +2,7 @@
 title: "Azure Local: Azure Virtual Desktop"
 excerpt: "Discover how to deploy Azure Virtual Desktop on Azure Local, including prerequisites, architecture, deployment steps, and connectivity options."
 date: 2024-11-17
-last_modified_at: 2025-05-05
+last_modified_at: 2026-09-22
 categories:
   - Blog
 tags:
@@ -49,13 +49,24 @@ So, let's get started!
 
 ## Prerequisites, Limitations, and Licenses
 
+**September 2026 update:** The portal walkthrough below uses AD DS joined session hosts. Native Entra join is also supported on Azure Local through PowerShell and other deployment methods. I now cover that path in [Entra Joined AVD Session Hosts with PowerShell](/blog/azure-local-avd-entra-join/), using `scripts/04AVD/30_AVDAzureLocal.ps1` from the AzSHCI repository. The existing screenshots and architecture here describe the AD DS path.
+{: .notice--info}
+
 Before we dive in, it's important to understand some prerequisites and limitations of the solution as outlined [here](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-stack-hci-overview?wt.mc_id=MVP_579217#limitations). I've combined them for clarity.
 
 ### Active Directory
 
-- **Active Directory Domain Services Required**: Currently, only Active Directory Domain Services (AD DS) can be used to join Session Hosts. This means **Entra ID Only** isn't supported for this solution.
+- **AD DS for the portal path**: The AVD portal adds Azure Local session hosts to an AD DS domain, including Microsoft Entra hybrid join. **Native Entra join is supported through PowerShell and other deployment methods**, as stated in the [Azure Local AVD limitations](https://learn.microsoft.com/en-us/azure/virtual-desktop/azure-local-overview?wt.mc_id=MVP_579217#limitations).
 - **Synchronization with Tenant**: It's recommended to use an Active Directory that's synchronized with the Entra ID tenant where your Azure Local Cluster is registered.
 - **Separate Domains Possible**: This doesn't necessarily mean the cluster and AVD have to be in the same AD DS. You can have an isolated AD for the cluster and use your company's usual AD for AVD, as long as they share the same Entra ID tenant.
+
+### PowerShell Alternative and Service Principal Setup
+
+The [04AVD scripts](https://github.com/schmittnieto/AzSHCI/tree/main/scripts/04AVD) deploy the host pool, application group and workspace, then provision the local VMs, join them to Entra ID and register the AVD agents. They also support guest configuration and management of an existing deployment.
+
+For the SPN-based lab path, create or reuse a service principal with `00_AzurePreRequisites.ps1` and configure the private `scripts/01Lab/.env` file. The prerequisite script's Azure Local roles are only the starting point. The AVD script checks the Azure permissions needed for the operation you select and offers repair through an authorized user. Directory searches and optional Entra device deletion use Microsoft Graph permissions with separate tenant consent. Azure resource group roles do not grant that consent.
+
+Both synchronized hybrid users and Entra only users can use the Entra joined session hosts. Profile storage has its own authentication requirements; the linked walkthrough explains the local FSLogix experiment and its lab boundaries.
 
 ### License Requirements for AVD
 

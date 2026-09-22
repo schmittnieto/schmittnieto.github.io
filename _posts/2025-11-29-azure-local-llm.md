@@ -2,6 +2,7 @@
 title: "Azure Local: How to Deploy LLMs on AKS"
 excerpt: "A detailed walkthrough of deploying lightweight LLMs on AKS inside an Azure Local environment."
 date: 2025-11-30
+last_modified_at: 2026-09-22
 categories:
   - Blog
 tags:
@@ -121,13 +122,19 @@ This script:
 
 * Uses Az CLI and aksarc (installing the extension automatically if missing)  
 * Retrieves local AKS credentials  
-* Creates an admin user to manage the cluster  
+* Creates a Kubernetes service account with a `cluster-admin` binding
 * Generates both a kubeconfig file and a txt file with the token  
 * Saves everything in the same directory  
 * Includes an extensive description  
 * Runs interactively if no parameters are provided
 
-When the script finishes, set your kubeconfig environment variable:
+This helper uses Azure CLI authentication and does not read the 01Lab `.env` file. Its Kubernetes service account is separate from the Entra service principal used for Azure Local deployment. If the CLI still holds the Terraform SPN session or an account from another tenant, use `-ForceAzReauth` to clear it and choose the intended interactive login:
+
+```powershell
+.\scripts\02Day2\12_AKSArcServiceToken.ps1 -ForceAzReauth
+```
+
+Run that command from the repository root. The default output folder is `%USERPROFILE%\.kube\AzSHCI`; the kubeconfig and token provide cluster access and should stay private. When the script finishes, set your kubeconfig environment variable:
 
 ```powershell
 $env:KUBECONFIG = "$HOME\.kube\AzSHCI\aks-arc-kube-config"

@@ -10,7 +10,7 @@ Important notes:
 - Public pages are HTML. Dedicated Markdown mirrors for individual posts are not currently published.
 - The author is Cristian Schmitt Nieto, a Senior Consultant at adesso SE based in Germany.
 - Contact address for the blog is blog@schmitt-nieto.com.
-- This file was last reviewed on 2026-09-06.
+- This file was last reviewed on 2026-09-22.
 
 ## Core Pages
 
@@ -21,6 +21,7 @@ Important notes:
 
 ## Azure Local Series
 
+- [Azure Local: Entra Joined AVD Session Hosts with PowerShell](https://schmitt-nieto.com/blog/azure-local-avd-entra-join/): PowerShell deployment of Entra joined session hosts on Azure Local, guest registration verification through Arc Run Command and an experimental local FSLogix profile setup for cloud only users.
 - [Azure Local: Evolution, Use Cases and Comparison with Other Solutions](https://schmitt-nieto.com/blog/azure-stack-hci-evolution-use-cases-comparison/): Overview of Azure Local evolution, use cases and comparison with VMware vSAN, Nutanix, Proxmox and Windows Server Hyper-V.
 - [Azure Local: Demolab](https://schmitt-nieto.com/blog/azure-stack-hci-demolab/): Step-by-step lab deployment approach for Azure Local on minimal hardware using AzSHCI scripts.
 - [Azure Local: Day2 operations](https://schmitt-nieto.com/blog/azure-stack-hci-day2/): Post-deployment operations such as networking, VM images, monitoring and security.
@@ -39,6 +40,7 @@ Important notes:
 
 ## Azure Virtual Desktop Series
 
+- [Azure Local: Entra Joined AVD Session Hosts with PowerShell](https://schmitt-nieto.com/blog/azure-local-avd-entra-join/): Entra joined AVD on Azure Local with PowerShell, also listed in the Azure Local series above.
 - [Awesome Azure Virtual Desktop](https://schmitt-nieto.com/blog/awesome-azure-virtual-desktop/): Curated catalog of Azure Virtual Desktop and Windows 365 resources from official, vendor and community sources.
 - [Azure Local: Azure Virtual Desktop](https://schmitt-nieto.com/blog/azure-stack-hci-azure-virtual-desktop/): Azure Virtual Desktop on Azure Local, also listed in the Azure Local series above.
 - [Azure Local meets Nerdio](https://schmitt-nieto.com/blog/azure-local-nerdio/): Using Nerdio to simplify Azure Virtual Desktop management on Azure Local.

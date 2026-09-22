@@ -2,6 +2,7 @@
 title: "Azure Local: Lifecycle Management"
 excerpt: "Learn about Lifecycle Management in Azure Local, including updates, upgrades, and repair processes to streamline hybrid infrastructure operations."
 date: 2025-01-25
+last_modified_at: 2026-09-22
 categories:
   - Blog
 tags:
@@ -446,9 +447,19 @@ To simplify the detection and repair of extensions, I created a PowerShell scrip
 
 You can find the script on my GitHub repository: [Troubleshooting Extensions Script](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/01Lab/03_TroubleshootingExtensions.ps1).
 
+The current version reads `scripts/01Lab/.env` through `Set-LabEnv.ps1`. With both SPN values set, it signs in using `AZSHCI_SPN_APP_ID`, `AZSHCI_SPN_SECRET` and `AZSHCI_TENANT_ID`. Otherwise it reuses an existing Az session or prompts for device code login. Check the selected tenant, subscription and resource group before allowing repairs.
+
+This is a lab repair helper with pinned extension versions. It can remove locks, reinstall extensions and run a `DownloadHelpers.psm1` patch against a specific `10.2601.0.1162` package path. Review those targets against the installed release. The current Terraform deployment installs the required extensions during validation, so do not run this helper as a routine prerequisite. Follow the [troubleshooting guide](/blog/azure-local-troubleshooting/) when deciding whether the repair applies.
+
 ### Secret Rotation
 
 Although **secret rotation** isn’t strictly part of an upgrade process, it is deeply tied to **Lifecycle Management**. Since we’ve already covered topics like node and extension repairs in this section, I’ve taken the liberty of including secret rotation as well. Ensuring that administrative credentials and service principal secrets are periodically updated is a critical security measure for any Azure Local deployment. Based on [Microsoft's documentation](https://learn.microsoft.com/en-us/azure/azure-local/manage/manage-secrets-rotation?wt.mc_id=MVP_579217), here’s how to manage secret rotation.
+
+#### Keep the AzSHCI Automation Credentials in Sync
+
+The AzSHCI automation SPN, the local/AD guest administrator accounts and the cluster's managed service credentials have separate lifecycles. Running `00_AzurePreRequisites.ps1` with its existing-SPN option assigns roles; it does not rotate that SPN's secret.
+
+After rotating the automation credential, update `AZSHCI_SPN_SECRET` in your private `scripts/01Lab/.env` and `service_principal_secret` in `terraform/terraform.tfvars`. Reload `Set-LabEnv.ps1` for PowerShell and rerun `terraform/Connect-Spn.ps1` for the CLI-based Terraform session. Update any other consumer of the same credential before retiring the old secret. Editing these files does not rotate an Arc Resource Bridge credential inside the deployed cluster; use the relevant Microsoft procedure below for that operation.
 
 #### Rotating the Deployment User Password
 

@@ -2,7 +2,7 @@
 title: "Azure Local: Day2 operations"
 excerpt: "Optimize your Azure Local deployment with Day 2 operations. Learn to configure networks, manage VM images, monitor, and secure your environment effectively."
 date: 2024-10-19
-last_modified_at: 2025-05-05
+last_modified_at: 2026-09-22
 categories:
   - Blog
 tags:
@@ -391,11 +391,11 @@ For more details, you can always refer to the [official guide](https://learn.mic
 
 #### Custom Images Script
 
-In my ongoing efforts to streamline the process of creating custom VM images for Azure Local, I've developed a PowerShell script named `11_ImageBuilderAzSHCI.ps1`. This script automates many steps, such as downloading images from Azure Marketplace, converting them to the VHDX format, and optimizing them on the VM Node.
+The repository includes [11_ImageBuilderAzSHCI.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/02Day2/11_ImageBuilderAzSHCI.ps1) and the optimized variant [11_ImageBuilderAL.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/02Day2/11_ImageBuilderAL.ps1). Both download selected Marketplace images, convert the disks to VHDX and optimize them on the node.
 
-However, I've intentionally omitted the part of the script that would automatically add the optimized VHDX image back into Azure Local via Azure CLI commands. The reason for this is that the Azure CLI currently does not support the inclusion of Hyper-V Generation 2 VM images directly into Azure Local. Attempting to automate this step would involve complex ARM or Bicep scripting, which can be quite tedious and time-consuming for this specific case.
+These older helpers still use interactive device code authentication and script-local settings for the node, storage path and guest credentials. They do not inherit the `.env` and SPN workflow used by the current 01Lab scripts. Review their configuration before running them, especially if your node uses the newer `AZLN01` name instead of the older `NODE` default.
 
-Therefore, I've opted to perform this final step manually. After the script completes the download and conversion process, I manually add the optimized VHDX image into Azure Local using the Azure Portal. This approach simplifies the script and reduces potential errors that could arise from unsupported or complex automation steps.
+The helpers stop after preparing the VHDX. The portal import below remains an option, but the old restriction described in this article is no longer a reason to avoid automation: Microsoft documents [image creation from a local share through Azure CLI](https://learn.microsoft.com/en-us/azure/azure-local/manage/virtual-machine-image-local-share?wt.mc_id=MVP_579217). Preparing a disk and registering an Azure Local image are separate steps.
 
 Here's are screenshots illustrating the manual addition of the VHDX image:
 
@@ -407,52 +407,40 @@ Here's are screenshots illustrating the manual addition of the VHDX image:
   <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/manual-add-VM-02.png" alt="Manually Adding VM Image 02" style="border: 2px solid grey;">
 </a>
 
-I plan to revisit this automation in the future when the tools and support for Hyper-V Generation 2 images become more mature, potentially allowing for full automation without the need for complex scripting.
-
-You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/scripts%2F02Day2%2F11_ImageBuilderAzSHCI.ps1).
+For the Windows AVD workflow, [30_AVDAzureLocal.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/04AVD/30_AVDAzureLocal.ps1) can select an existing image or import a Marketplace image during deployment. You still need the workload logical network prepared first. See the [Entra joined AVD walkthrough](/blog/azure-local-avd-entra-join/) for that path.
 
 ### Bonus: Automating Cluster Start and Stop Operations
 
-Managing the startup and shutdown sequences of your Azure Local cluster is essential, especially when you need to power down the host for maintenance or energy savings. To simplify this process, I've created a PowerShell script called `10_StartStopAzSHCI.ps1` that automates turning the cluster off and on.
+I use [10_StartStopAzSHCI.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/02Day2/10_StartStopAzSHCI.ps1) on the outer Hyper-V host to manage my single-node nested lab. The updated version handles the nested guests as well as the node and DC. That matters once the lab contains AVD desktops, Arc Resource Bridge or AKS VMs.
 
 #### Script: `10_StartStopAzSHCI.ps1`
 
-This script ensures that the Domain Controller (DC) and Cluster Node VMs are started and stopped in the correct order, preventing potential issues with services that depend on Active Directory or cluster resources.
+There are now three actions: `Configure`, `Stop` and `Start`. `Configure` changes the shutdown and startup policies without powering anything on or off. It sets guest shutdown instead of saved-state suspension and preserves cluster-managed startup for highly available VMs.
 
-**Features:**
+| Action | Order and behaviour |
+| --- | --- |
+| `Configure` | Discover nested VMs and apply the power policies without starting or stopping them |
+| `Stop` | Shut down nested guests and wait for their clustered roles to go offline, then stop the cluster, node VM and finally the DC |
+| `Start` | Start the DC and node, wait for services and storage, then bring the discovered guests online and request `Sync-AzureStackHCI` |
 
-- **Stop Operation:**
-  - Connects to the Cluster Node VM and stops the Cluster service.
-  - Shuts down the Cluster Node VM.
-  - Shuts down the Domain Controller VM.
+Run from an elevated PowerShell session on the outer host. Configure `scripts/01Lab/.env` first, then choose the action you need from the repository root:
 
-- **Start Operation:**
-  - Starts the Domain Controller VM and waits for its services to become available.
-  - Starts the Cluster Node VM.
-  - Starts the Cluster service on the Cluster Node VM.
+```powershell
+# Policy configuration only
+.\scripts\02Day2\10_StartStopAzSHCI.ps1 -Action Configure
 
-**Usage Instructions:**
+# Stop the lab when you are finished
+.\scripts\02Day2\10_StartStopAzSHCI.ps1 -Action Stop
 
-1. **Prerequisites:**
-   - Run the script with administrative privileges.
-   - Ensure the execution policy allows the script to run:
-     ```powershell
-     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-     ```
-   - Update the script variables to match your environment, such as VM names and credentials.
+# Start the lab for the next session
+.\scripts\02Day2\10_StartStopAzSHCI.ps1 -Action Start
+```
 
-2. **Running the Script:**
-   - Open PowerShell with administrative privileges.
-   - Navigate to the directory where the script is saved.
-   - Execute the script:
-     ```powershell
-     .\10_StartStopAzSHCI.ps1
-     ```
-   - When prompted, type `start` or `stop` to initiate the desired operation.
+This script uses guest administrator credentials through PowerShell Direct, not the Azure SPN. The node defaults to the domain LCM account from `.env`; the DC uses the configured default administrator. Use `-NodeCredential` and `-DCCredential` to supply different accounts. For a lab without a DC, `-SkipDC` requires a suitable local node administrator.
 
-By using this script, you can safely power down your Azure Local cluster when you need to shut down the host machine, and easily bring it back online when needed.
+Start brings **all discovered guests online**, including VMs that were already off. Stop waits for guest shutdown and blocks the outer node/DC shutdown if a dependent step fails. It does not force-power-off guests or delete saved states. Readiness waits use `-TimeoutMinutes` per transition, with a default of 15 minutes. Policy snapshots are stored under `%LOCALAPPDATA%\AzSHCI\PowerLifecycle`.
 
-You can download the script from my GitHub repository [here](https://github.com/schmittnieto/AzSHCI/blob/main/scripts%2F02Day2%2F10_StartStopAzSHCI.ps1).
+The Azure synchronization request after startup does not prove that every VM has already converged in the portal. Check workload health after the cycle. This implementation is for a single-node nested lab; it is not a multi-node production maintenance workflow. The latest complete power cycle remains part of the repository's live-validation follow-up.
 
 
 ## Conclusion
@@ -473,13 +461,7 @@ Finally, after setting up everything correctly, your environment should look lik
   <img src="/assets/img/post/2024-10-19-azure-stack-hci-demolab-day2/final02.png" alt="Final Setup 02" style="border: 2px solid grey;">
 </a>
 
-As I create the scripts (VM Images VHDX convertion) and workbooks (for VMs Monitoring) for the **AzSHCI** repository (which you can follow [here](https://github.com/schmittnieto/AzSHCI)), I’ll be updating this article with the new content. Keep an eye out for upcoming articles, where I’ll cover exciting topics such as:
-
-- Deploying and managing **VMs** on Azure Local directly from Azure
-- Setting up and managing **Azure Virtual Desktop (AVD)** on Azure Local
-- Deploying and managing **AKS (Azure Kubernetes Service)** on Azure Local
-
-Stay tuned for these updates, and don’t hesitate to check the repository for the latest tools and resources!
+Continue with [VM deployment](/blog/azure-stack-hci-vm-deployment/), [Entra joined AVD with PowerShell](/blog/azure-local-avd-entra-join/) or [AKS on Azure Local](/blog/azure-local-aks/). For VM observability, the [Deep Insights workbook](/blog/azure-local-deep-insights-workbook/) is also available. The [AzSHCI repository](https://github.com/schmittnieto/AzSHCI) remains the source for the scripts.
 
 Thanks for following along, and I look forward to hearing how your **Azure Local** journey is progressing!
 

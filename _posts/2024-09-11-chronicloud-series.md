@@ -1,7 +1,7 @@
 ---
 title: "Chronicloud Series: A Journey through Azure Solutions"
 date: 2024-09-11
-last_modified_at: 2026-09-06
+last_modified_at: 2026-09-22
 excerpt: "Delve into Azure technologies with the Chronicloud Series. Access in-depth guides and hands-on labs to enhance your skills and understanding in cloud computing."
 categories:
   - Blog
@@ -54,6 +54,7 @@ Azure Local is a hyper-converged infrastructure solution from Microsoft that ena
    - Day 2 Operations: After deploying your cluster, this guide will walk you through the essential steps to configure, activate and optimize your Azure Local environment, covering networking, security, monitoring and more. For more details, see [Azure Local: Day 2 Operations](/blog/azure-stack-hci-day2).
    - *VMs Deployment and management*: Learn how to create, manage and optimize virtual machines (VMs) in your Azure Local environment. You'll also discover how to integrate with Azure Arc for advanced VM management, allowing you to manage VMs on-premises through the Azure portal. For more details, see [Azure Local: VM Deployment](/blog/azure-stack-hci-vm-deployment).
    - *AVD OnPrem*: Learn how to deploy Azure Virtual Desktop on-premises within an HCI cluster for more control over virtual desktops. For more details, see [Azure Local: Azure Virtual Desktop](/blog/azure-stack-hci-azure-virtual-desktop).
+   - *Entra joined AVD*: Deploy Azure Local session hosts joined directly to Microsoft Entra ID with PowerShell, verify guest registration and explore a local FSLogix lab workaround for cloud only users. For more details, see [Azure Local: Entra Joined AVD Session Hosts with PowerShell](/blog/azure-local-avd-entra-join/).
    - *AKS Hybrid and SQL Managed Instances*: Deploy and manage Azure Kubernetes Service (AKS) and SQL Managed Instances on Azure Local in a hybrid cloud setup. For more details, see [Azure Local: AKS and SQL Managed Instances](/blog/azure-local-aks).
    - *Lifecycle Management*: Best practices for managing updates, upgrades and the entire lifecycle of your Azure Local infrastructure. For more details, see [Azure Local: Lifecycle Management](/blog/azure-local-lifecycle).
    - *Nerdio on Azure Local*: Explore how Nerdio can simplify Azure Virtual Desktop management on Azure Local, from image creation to automated scaling. For more details, see [Azure Local meets Nerdio](/blog/azure-local-nerdio/).

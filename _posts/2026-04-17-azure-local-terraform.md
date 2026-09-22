@@ -2,7 +2,7 @@
 title: "Azure Local: Terraform Deployment"
 excerpt: "Deploy Azure Local with Terraform using a fixed AVM fork, staged validation and a service principal ready for pipeline-driven AVD and AKS automation."
 date: 2026-04-17
-last_modified_at: 2026-07-01
+last_modified_at: 2026-09-22
 categories:
   - Blog
 tags:
@@ -50,7 +50,9 @@ It has two parallel paths that work together:
 - **`scripts/01Lab/`**: PowerShell scripts that handle everything from Azure prerequisites through Hyper-V infrastructure setup, domain controller configuration and Arc registration. These run before Terraform comes into the picture.
 - **`terraform/`**: A root Terraform configuration that calls a local fork of the AVM module. The fork carries the fixes and additions that were needed to make the deployment work against the current Azure API.
 
-The long-term vision for the repository is a single codebase that can deploy not just the Azure Local cluster but also the workloads on top of it: AVD host pools, AKS clusters and potentially other services. The Terraform path is designed from the start to be consumed from a CI/CD pipeline using a service principal, so every credential is handled through a Key Vault and no secrets live in the repository.
+The repository now covers cluster deployment and workload automation. The Terraform configuration builds the Azure Local foundation, while `scripts/04AVD/` handles [Entra joined AVD deployment and management](/blog/azure-local-avd-entra-join/) through PowerShell. That AVD workflow is separate from Terraform state.
+
+The lab uses a service principal for automation. Key Vault stores deployment secrets, but the local `.env` and `terraform.tfvars` files also contain credentials. Keep those files and Terraform state private. The repository contains templates; it is not a secret store or a completed CI/CD pipeline.
 
 ## Prerequisites: The First Script
 
@@ -59,17 +61,21 @@ Before any Terraform runs, Azure needs to be in the right state. The script `scr
 What it does:
 
 1. Checks for and installs the required Az PowerShell modules (`Az.Accounts`, `Az.Resources`).
-2. Verifies your Azure session and prompts a device code login if no active session is found.
+2. Checks your Azure session, signs out a cached SPN session and uses an interactive user for the prerequisite work.
 3. Lets you select a subscription interactively.
 4. Lets you choose an existing resource group or create a new one.
-5. Assigns the required RBAC roles to a user or to a newly created service principal.
+5. Assigns the requested RBAC roles to an existing user, a new service principal or an existing service principal.
 6. Registers all required resource providers.
 
 The roles it assigns fall into two scopes. At resource group scope: `Azure Connected Machine Onboarding`, `Azure Connected Machine Resource Administrator`, `Key Vault Data Access Administrator`, `Key Vault Secrets Officer`, `Key Vault Contributor` and `Storage Account Contributor`. At subscription scope: `Azure Stack HCI Administrator` and `Reader`.
 
 The resource providers it registers cover the full Azure Local stack: `Microsoft.HybridCompute`, `Microsoft.AzureStackHCI`, `Microsoft.Kubernetes`, `Microsoft.KubernetesConfiguration`, `Microsoft.ExtendedLocation`, `Microsoft.ResourceConnector`, `Microsoft.HybridContainerService` and several others.
 
-If you create a service principal through this script, it prints the connection details at the end. Those credentials go into your Terraform variables file and Key Vault reference and from that point the pipeline can run unattended. Here is a full run with sensitive values redacted:
+Run this step as a user authorized to create the requested Azure role assignments and register providers. Creating the application also needs the appropriate Entra rights. The script logs failed assignments as warnings, so check the output before moving on.
+
+To reuse an SPN, select option **3** and enter its application/client ID or a unique display name. The script resolves the object ID for RBAC. It does not create a new secret for an existing SPN. Supply a valid secret yourself and use the same client ID, tenant and subscription throughout the lab configuration.
+
+For a new SPN, the script creates a secret with a two-year lifetime and prints it at the end. Save it privately and plan its rotation. The following redacted transcript is from my earlier new-SPN run; the current menu also includes the existing-SPN option:
 
 ```plaintext
 Checking required Az modules...
@@ -211,7 +217,7 @@ The deployment happens in two stages, controlled by a single variable:
 
 **Stage 1 (`is_exported = false`)**: Terraform creates the Key Vault, storage account, RBAC assignments and edge device registration, then submits `deploymentSettings` to Azure with `deploymentMode = Validate`. Azure runs a validation sequence that checks connectivity, Active Directory and node configuration. This takes roughly 10 to 30 minutes.
 
-**Stage 2 (`is_exported = true`)**: After validation succeeds in the portal, you flip `is_exported` to `true` and run `terraform apply` again. This patches `deploymentMode` to `Deploy` and Azure starts the full cluster provisioning, which takes 30 to 60 minutes.
+**Stage 2 (`is_exported = true`)**: After validation succeeds in the portal, flip `is_exported` to `true` and run `terraform apply` again. This patches `deploymentMode` to `Deploy` and starts full cluster provisioning. Allow several hours for the lab deployment rather than treating validation completion as a finished cluster.
 
 A second variable, `deployment_completed`, controls whether Terraform attempts to read post-deployment data sources like the custom location. Set it to `false` during and after deployment and flip it to `true` only after the Azure portal confirms the deployment is complete.
 
@@ -266,7 +272,9 @@ With all of the above in place, here is the actual deployment flow.
 
 ### Step 1: Azure prerequisites
 
-Run `00_AzurePreRequisites.ps1`, select or create a resource group and either assign roles to your own account or let the script create a service principal. Note the SPN credentials if you created one. The full output of this script is shown in the [Prerequisites section above](#prerequisites-the-first-script).
+Run `00_AzurePreRequisites.ps1` as your authorized bootstrap user, select or create a resource group and create or reuse an SPN for the Terraform path. Use the client ID for sign-in, not the service principal object ID used in role assignments. The [Prerequisites section above](#prerequisites-the-first-script) explains the current choices.
+
+The lab scripts use `AZSHCI_SPN_APP_ID` and `AZSHCI_SPN_SECRET` from `scripts/01Lab/.env`. Terraform's login helper reads `service_principal_id` and `service_principal_secret` from `terraform.tfvars`, with `AZSHCI_TENANT_ID` from `.env`. Updating one file does not update the other. Keep them aligned when reusing or rotating the SPN.
 
 ### Step 2: Build the Hyper-V infrastructure
 
@@ -315,9 +323,10 @@ deployment_completed = false
 
 ### Step 6: Authenticate with Azure CLI
 
-Terraform uses the Azure CLI session to authenticate. Log in with the service principal created in Step 1 and set the target subscription:
+The current lab configuration uses an Azure CLI session for authentication. An Az PowerShell login from the prerequisite script does not sign the CLI in. Clear any cached CLI account, then log in with the SPN selected in Step 1:
 
 ```powershell
+az account clear
 az login --service-principal `
     --username "<app-id>" `
     --password "<client-secret>" `
@@ -326,6 +335,18 @@ az account set --subscription "<subscription-id>"
 ```
 
 There is also a small helper in the `terraform/` folder, `Connect-Spn.ps1`, that automates this login. Copy `Connect-Spn.ps1.example` to `Connect-Spn.ps1` and run it at the start of each session. It clears any cached Azure CLI session first, then logs in as the service principal using the values from `terraform.tfvars` and the tenant id from `scripts/01Lab/.env`, so a stale login from another tenant cannot leak into the run.
+
+From the repository root:
+
+```powershell
+Set-Location terraform
+# Copy once; retain your existing helper on later runs.
+Copy-Item Connect-Spn.ps1.example Connect-Spn.ps1
+.\Connect-Spn.ps1
+az account show --query '{subscription:id,tenant:tenantId,identity:user.name}'
+```
+
+The helper also accepts `-TenantId` when you need an explicit tenant. Review any existing `ARM_*` authentication environment variables before running Terraform, since a separately configured provider credential can override the CLI path. Provider auto-registration is disabled in `providers.tf`, so provider registration belongs in the bootstrap step.
 
 ### Step 7: Initialize and run Stage 1 (Validate)
 
@@ -401,7 +422,7 @@ It is also worth noting that the cluster deployment creates additional Azure res
 
 ## What Is Next
 
-The cluster deployment is the foundation. The repository's goal from the start has been to automate the full workload lifecycle on top of Azure Local, not just the cluster itself. The next steps are:
+The cluster deployment is the foundation. AVD automation is now available through [30_AVDAzureLocal.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/04AVD/30_AVDAzureLocal.ps1), including guest tasks and optional Entra device cleanup. Its Azure RBAC checks and Graph consent flow are separate from the Terraform bootstrap roles. The remaining Terraform work is:
 
 - **Azure Virtual Desktop**: A Terraform module for AVD host pools, session hosts and workspace configuration, deployable against the custom location created by the cluster deployment.
 - **AKS on Azure Local**: Terraform for AKS cluster creation using the Arc-enabled Kubernetes stack, scoped to the same resource group and custom location.

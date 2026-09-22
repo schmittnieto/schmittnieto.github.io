@@ -21,6 +21,8 @@ Azurelocal:
       url: /blog/azure-stack-hci-vm-deployment/
     - title: "Azure Virtual Desktop"
       url: /blog/azure-stack-hci-azure-virtual-desktop/
+    - title: "Entra Joined AVD with PowerShell"
+      url: /blog/azure-local-avd-entra-join/
     - title: "AKS & SQL Managed Instances"
       url: /blog/azure-local-aks/
     - title: "Lifecycle Management"
@@ -51,6 +53,8 @@ Avd:
       url: /blog/awesome-azure-virtual-desktop/
     - title: "AVD on Azure Local"
       url: /blog/azure-stack-hci-azure-virtual-desktop/
+    - title: "Entra Joined AVD on Azure Local"
+      url: /blog/azure-local-avd-entra-join/
     - title: "Azure Local meets Nerdio"
       url: /blog/azure-local-nerdio/
     - title: "Nerdio Scripted Actions: Windows Scripts"

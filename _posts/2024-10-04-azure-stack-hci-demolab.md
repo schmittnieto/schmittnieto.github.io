@@ -2,7 +2,7 @@
 title: "Azure Local: Demolab"
 excerpt: "Streamline Azure Local deployment on minimal hardware with AzSHCI scripts. Compare solutions and follow step-by-step instructions for efficient development."
 date: 2024-10-04
-last_modified_at: 2026-07-01
+last_modified_at: 2026-09-22
 categories:
   - Blog
 tags:
@@ -153,8 +153,12 @@ AzSHCI/
 │   │   ├── 11_ImageBuilderAL.ps1
 │   │   ├── 12_AKSArcServiceToken.ps1
 │   │   └── 13_VHDXOptimization.ps1
-│   └── 03VMDeployment/
-│       └── 20_SSHRDPArcVM.ps1
+│   ├── 03VMDeployment/
+│   │   └── 20_SSHRDPArcVM.ps1
+│   └── 04AVD/
+│       ├── 30_AVDAzureLocal.ps1
+│       ├── 31_FSLogixFileShare.ps1
+│       └── SessionHostScripts/
 │
 ├── terraform/
 ├── README.md
@@ -184,7 +188,25 @@ At the start of each session, load the variables once:
 .\scripts\01Lab\Set-LabEnv.ps1
 ```
 
-Every script you run afterwards picks them up automatically. If you forget to run it, each script loads the file on its first use. Secrets are loaded but never printed. `scripts/01Lab/.env` is listed in `.gitignore` and must never be committed. Share configuration only through `.env.example`.
+The configuration-based 01Lab scripts use these variables in the same PowerShell session and load the file automatically when needed. Run the loader again after editing `.env`; values already loaded into a session do not change when you save the file. The loader does not print secrets. The prerequisite script does print a newly created SPN secret once, so keep its output private. `scripts/01Lab/.env` is gitignored and must never be committed.
+
+Review sizing before starting: the current template allocates 96 GB of RAM and 32 virtual processors to the Azure Local node. Those are my larger lab settings. Reduce `AZSHCI_HCI_VM_MEMORY_GB` and `AZSHCI_HCI_VM_PROCESSORS` to fit your host while leaving capacity for the DC and the host OS. Replace every example password in the template.
+
+### Which identity does each step use?
+
+The Azure deployment identity and the accounts inside the lab have different jobs:
+
+| Step | Identity and configuration |
+| --- | --- |
+| Azure prerequisite setup | Interactive Azure user with permission to assign the requested roles and register providers; creating an application also needs the relevant Entra rights |
+| Node Arc registration | SPN from `AZSHCI_SPN_APP_ID` and `AZSHCI_SPN_SECRET`, or device code login when both are empty |
+| Local VM preparation | Guest administrator credentials from `.env`, used through PowerShell Direct |
+| Terraform | Azure CLI session established by `terraform/Connect-Spn.ps1`, using the SPN values in `terraform.tfvars` |
+| AVD deployment and management | `04AVD/30_AVDAzureLocal.ps1` checks permissions for the selected operation; Azure RBAC and Graph consent are separate |
+
+Run [00_AzurePreRequisites.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/01Lab/00_AzurePreRequisites.ps1) as the bootstrap user. It signs out a cached SPN session before prompting for user authentication. Its principal menu supports an existing user, a new SPN or an existing SPN. For the existing-SPN option, enter the **application/client ID** or a unique display name. The script resolves the service principal object ID for RBAC; it does not retrieve or rotate the existing secret.
+
+Azure role assignments do not grant Microsoft Graph application permissions. Review any failed role assignments in the prerequisite output before continuing. The AVD workflow adds its own operation-specific checks, including Graph consent for directory searches or optional Entra device deletion. The [Entra joined AVD article](/blog/azure-local-avd-entra-join/) explains that workflow.
 
 ### Script Breakdown
 
@@ -192,14 +214,14 @@ Every script you run afterwards picks them up automatically. If you forget to ru
 
 **Azure Pre-requisites Setup Script**
 
-- **Purpose:** Automates all Azure-side preparation needed before the lab deployment starts. Run this once per subscription before executing any other script.
+- **Purpose:** Prepares Azure providers and the requested role assignments for the selected subscription, resource group and principal. Run it again when those targets change.
 - **Features:**
   - Checks and installs required Az PowerShell modules (`Az.Accounts`, `Az.Resources`).
   - Authenticates to Azure via device code login and prompts you to select a subscription.
   - Lets you choose an existing resource group or create a new one (recommended name: `rg-azlocal-lab`).
   - Assigns all required RBAC roles at subscription scope (`Azure Stack HCI Administrator`, `Reader`) and resource group scope (`Key Vault Data Access Administrator`, `Key Vault Secrets Officer`, `Key Vault Contributor`, `Storage Account Contributor`, `Azure Connected Machine Onboarding`, `Azure Connected Machine Resource Administrator`).
   - Registers all necessary Azure resource providers (`Microsoft.AzureStackHCI`, `Microsoft.HybridCompute`, `Microsoft.KeyVault`, and others).
-  - Optionally creates a Service Principal (SPN). If created, the `AppId` and `Secret` are printed at the end -- save them to use with `02_Cluster.ps1` for non-interactive Arc registration.
+  - Assigns roles to an existing user, an existing SPN or a newly created SPN. Only the new-SPN path creates and prints a secret. Store the client ID and secret in the private `.env` file for non-interactive Arc registration.
 
 #### 00_Infra_AzHCI.ps1
 
@@ -254,13 +276,13 @@ Every script you run afterwards picks them up automatically. If you forget to ru
   - Validates that required Azure Connected Machine extensions are installed and at the correct version.
   - Fixes any failed or version-mismatched extensions by removing locks, deleting, and reinstalling them.
   - Adds any missing extensions based on a predefined list.
-  - Once all four required extensions reach `Succeeded`, applies a targeted LcmController hotfix on the node through Azure Arc Run Command to patch a known `DownloadHelpers.psm1` bug that can break deployment validation. The step is idempotent and safe to rerun.
+  - After the extension checks, attempts a lab-specific `DownloadHelpers.psm1` patch through Arc Run Command. The current script pins extension versions and a `10.2601.0.1162` package path. Review those targets against the installed release before using it; this is not a general repair for every Azure Local version.
 
 #### 99_Offboarding.ps1
 
 **Offboarding Script to Clean Up Configurations**
 
-- **Purpose:** Cleans up the entire lab deployment by removing VMs, VHD files, virtual switches, NAT settings, and the lab folder structure.
+- **Purpose:** Removes the local Hyper-V lab, including VMs, VHD files, virtual switches, NAT settings and the lab folder structure. It does not delete Azure resources or Entra objects.
 - **Features:**
   - Stops and removes `AZLN01` and `DC` VMs and their associated VHD files.
   - Removes the HgsGuardian entries for both VMs.
@@ -333,7 +355,9 @@ This interactive script will:
 - Create or select the resource group (`rg-azlocal-lab` is the recommended default).
 - Assign all required RBAC roles at subscription and resource group scope.
 - Register all required Azure resource providers.
-- Optionally create a Service Principal (SPN). If you choose to create one, **save the `AppId` and `Secret`** that are printed at the end -- you will need them in Step 9 to enable non-interactive Arc registration.
+- Assign roles to an existing user, an existing SPN or a new SPN. If you create one, save the printed client ID and secret privately. If you reuse one, supply its existing valid secret yourself. Step 9 uses these values for non-interactive Arc registration.
+
+Copy the chosen subscription, tenant and resource group into `.env`, then reload it with `Set-LabEnv.ps1`. The prerequisite script does not write those selections back to your configuration file.
 
 ### 5. Initial infrastructure script
 
@@ -407,11 +431,11 @@ AZSHCI_RESOURCE_GROUP="rg-azlocal-lab"
 AZSHCI_LOCATION="westeurope"
 ```
 
-If you created a Service Principal in Step 4, you can enable non-interactive Arc registration by also setting:
+If you created or selected a service principal in Step 4, enable non-interactive Arc registration by setting its client ID and valid secret:
 
 ```dotenv
-AZSHCI_SPN_APP_ID="appid-from-00_AzurePreRequisites"
-AZSHCI_SPN_SECRET="secret-from-00_AzurePreRequisites"
+AZSHCI_SPN_APP_ID="your-application-client-id"
+AZSHCI_SPN_SECRET="your-client-secret"
 ```
 
 If both values are left empty, the script falls back to an interactive device code login on the node. Once the values are in place, execute the script:
@@ -433,10 +457,9 @@ This process takes approximately **10 minutes**. The script will:
 - Install required Windows features.
 - Register the node with Azure Arc (with automatic retry for transient connection errors).
 
-### 10. Verify Node Extension Installation
-> ⚠️ **Warning:** This step is no longer required (Since April 2025) as the extension installation is now handled automatically during the cluster deployment starting from version **2503**. I will show how to perform this step in the next section.
+### 10. Understand Extension Installation
 
-After running Script 02, the Azure Connected Machine extensions should begin installing automatically. This can take up to **20 minutes**. To verify:
+Arc registration prepares the node for deployment. The current Terraform path installs the four required Azure Local extensions during its validation stage; `03_TroubleshootingExtensions.ps1` is not a prerequisite to run before `terraform apply`. Continue to cluster deployment after registration, then inspect extension status if validation fails:
 
 - Go to the Azure Portal.
 - Navigate to the Azure Arc machines.
@@ -445,22 +468,22 @@ After running Script 02, the Azure Connected Machine extensions should begin ins
    <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/extensions.png" alt="Extension" style="border: 2px solid grey;">
 </a>
 
-If you encounter any issues or failures with the extensions, run Script 03:
+If the failure calls for extension repair, inspect the version-specific settings in Script 03 before running it in the lab:
 
 ```
 .\03_TroubleshootingExtensions.ps1
 ```
 
-This script will troubleshoot and fix common extension issues.
+The script can remove locks, replace extensions and apply the lab-specific LcmController patch described above. Use the [troubleshooting guide](/blog/azure-local-troubleshooting/) for diagnosis before applying it to a different release.
 
 
 ### 11. Registering the Cluster
 
-Once the cluster node script completes and extensions are correctly installed, follow these steps to register your cluster in Azure:
+Once the node is Arc-registered, follow the portal path below or use the Terraform alternative at the end of this section:
 
 1. **Assign Required Rights:**
 
-   If you ran `00_AzurePreRequisites.ps1` in Step 4, all RBAC roles have already been assigned automatically and you can skip this step. If you skipped Step 4, assign the following roles manually:
+   Check the role-assignment results from Step 4. The script assigns Azure RBAC to the selected principal, which may be an SPN rather than the user opening the portal. The portal operator needs the relevant deployment rights too. Azure RBAC assignment does not grant Entra directory roles. For the portal path, review:
 
    - **Subscription Level:** `Azure Stack HCI Administrator`, `Reader`.
    - **Resource Group Level:** `Key Vault Data Access Administrator`, `Key Vault Secrets Officer`, `Key Vault Contributor`, `Storage Account Contributor`.
@@ -488,7 +511,7 @@ Once the cluster node script completes and extensions are correctly installed, f
 </a>
 
    - **Custom Location and User Configuration:**
-     - Configure users and custom locations as defined in the scripts (credentials are exposed in the scripts):
+     - Use the domain, OU and LCM user prepared by `01_DC.ps1`, with the credentials from your private `.env` file:
 <a href="/assets/img/post/2024-10-04-azure-stack-hci-demolab/adconfiguration.png" target="_blank">
   <img src="/assets/img/post/2024-10-04-azure-stack-hci-demolab/adconfiguration.png" alt="AD Configuration" style="border: 2px solid grey;">
 </a>
@@ -525,7 +548,7 @@ One of the advantages of using the **AzSHCI** scripts and Nested Virtualization 
 - **Azure Local Costs**: 0€
   - Azure Local is free for the first 60 days. Since we won't exceed this period for our testing, no costs will be incurred.
 
-Additionally, every **2 to 3 weeks**, I delete all resources in the Resource Group and use Script `99_Offboarding.ps1` to remove all the infrastructure, allowing me to perform a fresh deployment. This practice helps avoid any unintended costs and keeps the environment clean for new tests.
+When rebuilding the lab, remove the Azure deployment before removing the local VMs. For a Terraform-managed deployment, review and run `terraform destroy` from `terraform/` while the node and Terraform state are still available. Then run `scripts/01Lab/99_Offboarding.ps1` on the outer host to remove the local lab. Resources created outside Terraform, such as workloads or the bootstrap SPN, need their own cleanup. Deleting the local VMs alone leaves Azure resources and role assignments behind.
 
 
 ## Conclusion
@@ -542,17 +565,9 @@ By following these steps, you should have a functional Azure Local environment r
 - **Azure Local Documentation:** [Microsoft Docs](https://docs.microsoft.com/en-us/azure-stack/hci/)
 
 
-## Future Enhancements
+## Workloads and Ongoing Operations
 
-Planned updates include:
-
-- **Azure Kubernetes Service (AKS) Integration** 
-- **Azure Virtual Desktop (AVD) Deployment** 
-- **Azure Arc Managed VMs Setup** 
-
-In the coming weeks, I will add more tests and case studies, providing detailed articles to cover these topics comprehensively.
-
-Stay tuned for these updates!
+The repository now includes [Entra joined AVD deployment and management](/blog/azure-local-avd-entra-join/) under `scripts/04AVD/`. For cluster deployment through code, follow the [Terraform article](/blog/azure-local-terraform/). The [Day 2 guide](/blog/azure-stack-hci-day2/) covers logical networks, images and the updated graceful start/stop workflow. You can also continue with [Arc VM deployment](/blog/azure-stack-hci-vm-deployment/) or [AKS on Azure Local](/blog/azure-local-aks/).
 
 ## Contributing
 
