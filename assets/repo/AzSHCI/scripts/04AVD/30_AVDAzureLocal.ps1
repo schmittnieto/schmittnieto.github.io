@@ -32,7 +32,7 @@
     .\scripts\04AVD\30_AVDAzureLocal.ps1 -Monitor "$env:LOCALAPPDATA\AVDEntraJoin\runs\<run>\run.json"
 .NOTES
     Designed for the Azure Local lab maintained by Cristian Schmitt Nieto.
-    https://schmitt-nieto.com/blog/azure-local-demolab/
+    https://schmitt-nieto.com/blog/azure-local-avd-entra-join/
 #>
 [CmdletBinding()]
 param(
@@ -3495,11 +3495,11 @@ try {
     )
             $welcomeShown=$true
         }
-        $action = Select-Item $actionItems 'Choose deployment action'
-        if ($action.Kind -eq 'Exit') { return }
-        if ($action.Kind -eq 'Refresh') { continue }
-        if ($action.Kind -eq 'Permissions') { try { Invoke-AvdPermissionMenu } catch { Write-Warning "Permission configuration stopped: $($_.Exception.Message). Completed grants are retained." }; continue }
-        if ($action.Kind -eq 'New') { $startNewDeployment=$true; break }
+        $avdDeploymentChoice = Select-Item $actionItems 'Choose deployment action'
+        if ($avdDeploymentChoice.Kind -eq 'Exit') { return }
+        if ($avdDeploymentChoice.Kind -eq 'Refresh') { continue }
+        if ($avdDeploymentChoice.Kind -eq 'Permissions') { try { Invoke-AvdPermissionMenu } catch { Write-Warning "Permission configuration stopped: $($_.Exception.Message). Completed grants are retained." }; continue }
+        if ($avdDeploymentChoice.Kind -eq 'New') { $startNewDeployment=$true; break }
 
         $returnToDeploymentMenu=$false
         while (-not $returnToDeploymentMenu) {
