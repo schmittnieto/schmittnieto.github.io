@@ -1,7 +1,7 @@
 ---
 permalink: /azurelocal-calculator/
 title: "Azure Local Calculator"
-excerpt: "Interactive calculators for Azure Local covering storage sizing, pricing estimation and CPU planning, with configuration import from ODIN. Ideal for architecture design and cost evaluation."
+excerpt: "Interactive calculators for Azure Local covering CPU planning with catalog node types, storage sizing with external SAN and pricing for L1, L2 and L3 including disconnected operations, with configuration import from ODIN. Ideal for architecture design and cost evaluation."
 redirect_from:
   - /azl-storage-calculator/
   - /azure-local-calculator/
@@ -27,9 +27,9 @@ This page presents a set of web-based calculators built to estimate key metrics 
 
 While the calculators have been thoroughly tested, they are provided as-is and without any warranties. If you notice any inconsistencies or potential issues, I would greatly appreciate your feedback 🤗 feel free to get in touch!
 
-These tools are intended to **supplement** the official [Microsoft Azure Local Sizer](https://azurelocalsolutions.azure.microsoft.com/#/sizer), which is currently still in **Preview**. The Sizer offers a helpful approximation of how the final solution might look once deployed, and this calculator set aims to provide deeper visibility into specific resource planning areas.
+These tools are intended to **supplement** the official [Microsoft Azure Local Sizer](https://azurelocalsolutions.azure.microsoft.com/#/sizer), which is currently still in **Preview**. The Sizer offers a helpful approximation of how the final solution might look once deployed. This calculator set aims to provide deeper visibility into specific resource planning areas.
 
-More insights on planning, sizing, and migration strategies will be shared in my upcoming blog post: **“Planning, Sizing and Migration for Azure Local”**.
+More insights on planning, sizing and migration strategies will be shared in my upcoming blog post: **“Planning, Sizing and Migration for Azure Local”**.
 
 ## Azure Local Calculator
 
@@ -39,7 +39,11 @@ The source code for the calculators is available on GitHub, but the calculators 
 
 The storage configuration used in the calculator is based on the *Express* mode. While I acknowledge that this is not the most efficient setup in terms of capacity optimization, it serves well as a first approximation to get a general understanding of the storage architecture.
 
-If you aim to implement more advanced storage configurations, you will likely need to customize the deployment by manually configuring storage to suit your needs, and in those cases, you probably already have an Excel sheet from your vendor or internal team that provides more accurate figures than what this calculator is designed to offer.
+If you aim to implement more advanced storage configurations, you will likely need to customize the deployment by manually configuring storage to suit your needs. In those cases you probably already have an Excel sheet from your vendor or internal team that provides more accurate figures than what this calculator is designed to offer.
+
+### Interactive 3D Charts
+
+The charts of all three calculators are 3D and built into each calculator, without external libraries. Hover or tap a slice or bar to see its value and share, click a legend entry to hide or show that part, drag to rotate the view and double-click to reset it. With the keyboard, focus a chart with Tab and read each value with the arrow keys. Every value is also listed in the legend or in the Full Overview table.
 
 ### Import from ODIN
 
@@ -72,6 +76,13 @@ Microsoft does not publish the L3 price, so enter your quote in the Pricing Calc
 {: .notice--info}
 
 ### CPU
+
+The CPU Calculator sizes the physical cores for a virtual workload in two directions: from a node count to a recommended CPU, or from a CPU model to the number of nodes you need.
+
+- **Node Type**: the systems listed as "Current (2026 or later)" in the [Azure Local solutions catalog](https://azurelocalsolutions.azure.microsoft.com/#/catalog). Once you select one, the calculator only offers the CPU models that system can use (same generation, a cores per socket option the catalog lists and support for the selected sockets) and sizes the cluster with a real CPU instead of a theoretical core count.
+- **CPU Recommendations**: the recommended CPU is highlighted. Click any other card, including a smaller one, to size the cluster with it. When the CPU is too small, the charts show the missing cores of each node.
+- **Cluster Type**: hyperconverged, disaggregated with external SAN storage or the management cluster of disconnected operations.
+- Results and charts recalculate when you change the node type, the CPU or any input.
 
 <html lang="en">
 <head>
@@ -2537,8 +2548,14 @@ Microsoft does not publish the L3 price, so enter your quote in the Pricing Calc
 
 ### Storage Calculator
 
-The storage calculator I designed is now outdated, as [Armin](https://www.linkedin.com/in/aoberneder/) has created a much better one. For this reason, I will not continue developing mine, and I recommend using Armin’s calculator for this purpose: [s2d-calculator.com](https://s2d-calculator.com/).
+For detailed Storage Spaces Direct sizing I recommend the dedicated tool [Armin](https://www.linkedin.com/in/aoberneder/) created: [s2d-calculator.com](https://s2d-calculator.com/). My original Storage Calculator is outdated. The version on this page is its redesign and adds the deployment types that a pure Storage Spaces Direct calculator does not cover.
 {: .notice--warning}
+
+The Storage Calculator estimates raw, effective and usable capacity, either from your drive layout or from a capacity target.
+
+- **Deployment Type**: hyperconverged (Storage Spaces Direct), hyperconverged with external SAN, disaggregated (SAN only, up to 64 nodes) or the management cluster of disconnected operations.
+- **External SAN**: the supported arrays from Dell, Everpure, Hitachi, HPE, Lenovo and NetApp with their MPIO registration, the Fibre Channel or iSCSI host requirements, the LUN layout (one LUN per CSV) and the physical capacity to buy after free space headroom and data reduction.
+- **Disconnected operations**: checks the drive count and drive size of the management cluster and reserves its 2 TB infrastructure volume.
 
 <html lang="en">
 <head>
@@ -2547,7 +2564,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   <style>
     #storageV2_calcRoot,
     #storageV2_calcRoot *{box-sizing:border-box}
-    #storageV2_calcRoot{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:20px auto;padding:0 16px;text-align:center}
+    #storageV2_calcRoot{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:20px 0;text-align:center}
     #storageV2_calcRoot h3{font-size:1.5em;margin-bottom:20px}
 
     #storageV2_calcRoot .card{margin:20px 0;padding:0;text-align:left}
@@ -4779,6 +4796,12 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
 
 ### Pricing Calculator
 
+The Pricing Calculator estimates the one-time and monthly cost of an Azure Local deployment, including hardware, licensing, related costs and Azure Local services.
+
+- **Deployment models**: L1 hyperconverged without external storage, L2 disaggregated with SAN storage, L2 hyperconverged with external storage, L2 with an OEM license and L3 disconnected operations. Azure Hybrid Benefit for the host fee is only available for L1.
+- **L3**: Microsoft does not publish the host fee, so enter your quote. The calculator adds the nodes and cores of the management cluster because disconnected operations bill them too. AVD is not available with disconnected operations.
+- **Licensing and services**: the free 60-day trial, the Windows Server subscription or custom Windows licensing, AVD and SQL Managed Instance.
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -4786,7 +4809,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   <style>
     #pricingV2_calcRoot,
     #pricingV2_calcRoot *{box-sizing:border-box}
-    #pricingV2_calcRoot{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:20px auto;padding:0 16px;text-align:center}
+    #pricingV2_calcRoot{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:20px 0;text-align:center}
     #pricingV2_calcRoot h3{font-size:1.5em;margin-bottom:20px}
 
     #pricingV2_calcRoot .card{margin:20px 0;padding:0;text-align:left}
@@ -4904,7 +4927,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
         <label for="pricingV2_deploymentModel">Azure Local Deployment Model</label>
         <select id="pricingV2_deploymentModel">
           <option value="l1">L1: Hyperconverged without external storage (10/core/month)</option>
-          <option value="l2-disagg">L2: Disaggregated with SAN storage (20.10/core/month, no Hybrid Benefit)</option>
+          <option value="l2-disagg">L2: Disaggregated with SAN storage (20.10/core/month)</option>
           <option value="l2">L2: Hyperconverged with external storage (20.10/core/month)</option>
           <option value="l2-oem">L2: OEM license with external storage (10/core/month)</option>
           <option value="l3">L3: Disconnected operations (user-provided rate)</option>
@@ -6668,7 +6691,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   [LinkedIn](https://www.linkedin.com/in/karl-wester-ebbinghaus-a41507153/)
 
 > The **Storage Calculator** is inspired by Cosmos Darwin’s work on the S2D Calculator.  
-> [LinkedIn – Cosmos Darwin](https://www.linkedin.com/in/cosmosd/)
+> [LinkedIn: Cosmos Darwin](https://www.linkedin.com/in/cosmosd/)
 
 - **Cristian Schmitt Nieto**  
   Author of the calculators and blog.  
