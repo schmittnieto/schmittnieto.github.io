@@ -70,7 +70,9 @@ The calculators also cover the two deployment types that change the sizing the m
 |------------|--------------------------------|--------------|
 | CPU | Cluster type for the management cluster: the fixed control plane appliance (24 vCPUs), at least 24 physical cores per node, a host reservation of at least 20% of the cores and 3 nodes for production. Only catalog systems with the Disconnected operations capability are offered | Disaggregated cluster type with up to 64 nodes and only the catalog systems that support this architecture |
 | Storage | Checks the standard (6 drives) or datacenter (8 drives) configuration with drives of at least 2 TB and reserves the 2 TB infrastructure volume of disconnected operations | Hyperconverged with external SAN or disaggregated: supported arrays, Fibre Channel or iSCSI host requirements, one LUN per CSV and the physical array capacity after free space headroom and data reduction |
-| Pricing | L3 adds the nodes and cores of the management cluster because they are billed too. AVD is not available with disconnected operations | Both SAN variants use the L2 host fee |
+| Pricing | L3 adds the nodes and cores of the management cluster because they are billed too. AVD is not available with disconnected operations | Both SAN variants use the L2 host fee. The SAN System section adds the array price and its monthly support |
+
+The Storage and Pricing Calculators stay in sync. When you change the deployment type in the Storage Calculator, the Pricing Calculator switches to the matching model (hyperconverged with external SAN to L2, disaggregated to L2 disaggregated, the ALDO management cluster to L3) and the other way around. Every SAN plan of the Storage Calculator also fills in the vendor and the physical capacity of the SAN System section.
 
 Microsoft does not publish the L3 price, so enter your quote in the Pricing Calculator. External SAN storage requires Azure Local 2604 or later. See [Supported SAN solutions on Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/concepts/san-requirements?wt.mc_id=MVP_579217) and [Dedicated management cluster for disconnected operations](https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-control-plane-appliance?wt.mc_id=MVP_579217).
 {: .notice--info}
@@ -2761,7 +2763,7 @@ The Storage Calculator estimates raw, effective and usable capacity, either from
   <!-- Card 4: External SAN (hybrid and disaggregated deployments) -->
   <div class="card" id="storageV2_sanCard" style="display:none">
     <h3>External SAN Storage</h3>
-    <p style="font-size:.85em;color:inherit;margin:0 0 12px">Block storage presented to all nodes over Fibre Channel or iSCSI and used as NTFS Cluster Shared Volumes. Requires Azure Local 2604 or later and a supported array.</p>
+    <p style="font-size:.85em;color:inherit;margin:0 0 12px">Block storage presented to all nodes over Fibre Channel or iSCSI and used as NTFS Cluster Shared Volumes. Requires Azure Local 2604 or later and a supported array. The vendor and the physical capacity are passed to the SAN System section of the Pricing Calculator.</p>
     <div class="form-grid">
       <div class="form-group">
         <label for="storageV2_sanVendor">SAN Vendor</label>
@@ -3171,16 +3173,64 @@ The Storage Calculator estimates raw, effective and usable capacity, either from
     rows.push("</tbody>");
     $("storageV2_overviewTable").innerHTML = rows.join("");
     $("storageV2_exportPdfBtn").style.display = "inline-block";
+    syncSanPlan(p);
   }
 
-  $("storageV2_deployType").addEventListener("change", function() {
+  function setDeployType(type) {
+    $("storageV2_deployType").value = type;
     if (isAldo()) {
       $("storageV2_singleNode").checked = false;
       $("storageV2_nodeCountGroup").style.display = "";
       $("storageV2_nodeCount").value = ALDO_NODES;
     }
     applyDeployType();
+  }
+  $("storageV2_deployType").addEventListener("change", function(e) {
+    setDeployType(this.value);
+    if (e.isTrusted) syncPost({ type: "deployment", storage: deployType() });
   });
+
+  /* ================================================================
+     DEPLOYMENT SYNC (Storage <-> Pricing)
+     A user change of the deployment type is passed to the Pricing
+     Calculator (same page or other tabs), its deployment model comes back
+     here, and every SAN plan is sent to its SAN System section. Received
+     changes are never posted again, so the calculators can't loop.
+     ================================================================ */
+  var SYNC_EVENT = "azurelocal-calculator-sync";
+  var syncChannel = null;
+  try { if (typeof BroadcastChannel === "function") syncChannel = new BroadcastChannel(SYNC_EVENT); } catch (e) {}
+  function syncPost(msg) {
+    msg.source = "storage";
+    try {
+      if (syncChannel) syncChannel.postMessage(msg);
+      else window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: msg }));
+    } catch (e) {}
+  }
+  /* the plan is also kept for the browser session, for a Pricing Calculator that loads later */
+  function syncSanPlan(p) {
+    var msg = { type: "san", vendor: p.vendor.name, physicalTB: Math.ceil(p.physical * 100) / 100 };
+    try { sessionStorage.setItem("azureLocalCalculator.sanPlan", JSON.stringify(msg)); } catch (e) {}
+    syncPost(msg);
+  }
+  /* Pricing deployment model -> deployment type, keeping a compatible current type */
+  function typeForModel(model, current) {
+    if (model === "l3") return "aldo-mgmt";
+    if (model === "l2-disagg") return "disaggregated";
+    if (model === "l2") return "hybrid";
+    if (model === "l2-oem") return current === "hybrid" || current === "disaggregated" ? current : "hybrid";
+    return "s2d";
+  }
+  function onSync(msg) {
+    if (!msg || msg.source === "storage" || msg.type !== "deployment" || !msg.pricing) return;
+    var type = typeForModel(msg.pricing, deployType());
+    if (type === deployType()) return;
+    var shown = $("storageV2_resultBox").style.display === "block";
+    setDeployType(type);
+    if (shown) $("storageV2_calcBtn").click();
+  }
+  if (syncChannel) syncChannel.addEventListener("message", function(ev) { onSync(ev.data); });
+  else window.addEventListener(SYNC_EVENT, function(ev) { onSync(ev.detail); });
   sanVendors.forEach(function(v, i) {
     var opt = document.createElement("option");
     opt.value = i; opt.textContent = v.name;
@@ -3356,6 +3406,7 @@ The Storage Calculator estimates raw, effective and usable capacity, either from
     var d          = calcCapacity(nodes, driveCount, driveCap, selectedResiliency, aldoExtraTB());
     var san        = deployTypes[deployType()].san ? sanPlan() : null;
     d.san = san;
+    if (san) syncSanPlan(san);
 
     var rb = $("storageV2_resultBox");
     rb.style.display = "block";
@@ -3411,6 +3462,7 @@ The Storage Calculator estimates raw, effective and usable capacity, either from
     }
 
     var aldo = isAldo(), san = deployTypes[deployType()].san ? sanPlan() : null;
+    if (san) syncSanPlan(san);
     var rb = $("storageV2_resultBox");
     rb.style.display = "block";
     rb.innerHTML =
@@ -4800,6 +4852,7 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
 
 - **Deployment models**: L1 hyperconverged without external storage, L2 disaggregated with SAN storage, L2 hyperconverged with external storage, L2 with an OEM license and L3 disconnected operations. Azure Hybrid Benefit for the host fee is only available for L1.
 - **L3**: Microsoft does not publish the host fee, so enter your quote. The calculator adds the nodes and cores of the management cluster because disconnected operations bill them too. AVD is not available with disconnected operations.
+- **SAN System**: for the L2 models, the one-time price of the SAN array and its monthly support. The vendor and the physical capacity come from the SAN plan of the Storage Calculator. The overview also shows the price per TB.
 - **Licensing and services**: the free 60-day trial, the Windows Server subscription or custom Windows licensing, AVD and SQL Managed Instance.
 
 <html lang="en">
@@ -4984,6 +5037,37 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
           <label for="pricingV2_customWinOneTime">One-Time Datacenter License (per node)</label>
           <input type="number" id="pricingV2_customWinOneTime" placeholder="e.g., 3000" step="100" min="0">
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2b: SAN System (L2 deployments with external storage) -->
+  <div class="card" id="pricingV2_sanCard" style="display:none">
+    <h3>SAN System Price</h3>
+    <p style="font-size:.82em;color:inherit;margin:0 0 12px">External SAN storage of the L2 deployment models. The SAN plan of the Storage Calculator fills in the vendor and the capacity.</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="pricingV2_sanVendor">SAN Vendor</label>
+        <select id="pricingV2_sanVendor">
+          <option value="Dell">Dell</option>
+          <option value="Everpure">Everpure</option>
+          <option value="Hitachi Vantara">Hitachi Vantara</option>
+          <option value="HPE">HPE</option>
+          <option value="Lenovo">Lenovo</option>
+          <option value="NetApp">NetApp</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="pricingV2_sanCapacity">Physical Usable Capacity (TB)</label>
+        <input type="number" id="pricingV2_sanCapacity" placeholder="e.g., 50" step="0.01" min="0">
+      </div>
+      <div class="form-group">
+        <label for="pricingV2_sanPrice">SAN Array Price (one-time)</label>
+        <input type="number" id="pricingV2_sanPrice" placeholder="e.g., 150000" step="100" min="0">
+      </div>
+      <div class="form-group">
+        <label for="pricingV2_sanSupport">SAN Support and Maintenance (monthly)</label>
+        <input type="number" id="pricingV2_sanSupport" placeholder="e.g., 1000" step="10" min="0">
       </div>
     </div>
   </div>
@@ -5227,6 +5311,7 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
     for (const id of ["pricingV2_l3MgmtNodesGroup", "pricingV2_l3MgmtCoresGroup", "pricingV2_l3MgmtPriceGroup"]) {
       $(id).style.display = model === "l3" ? "flex" : "none";
     }
+    $("pricingV2_sanCard").style.display = isL2 ? "block" : "none";
     /* AVD isn't a supported service of disconnected operations */
     $("pricingV2_avdVCPUs").disabled = $("pricingV2_avdHours").disabled = model === "l3";
     $("pricingV2_avdNote").style.display = model === "l3" ? "block" : "none";
@@ -5251,7 +5336,54 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
       $("pricingV2_customLicenseContainer").style.display = "none";
     }
   });
-  $("pricingV2_deploymentModel").addEventListener("change", updateDeploymentFields);
+  $("pricingV2_deploymentModel").addEventListener("change", function (e) {
+    updateDeploymentFields();
+    if (e.isTrusted) syncPost({ type: "deployment", pricing: this.value });
+  });
+
+  /* ================================================================
+     DEPLOYMENT SYNC (Storage <-> Pricing)
+     A user change of the deployment model is passed to the Storage
+     Calculator (same page or other tabs) and its deployment type comes
+     back here, together with the SAN plan. Received changes are never
+     posted again, so the calculators can't loop.
+     ================================================================ */
+  const SYNC_EVENT = "azurelocal-calculator-sync";
+  let syncChannel = null;
+  try { if (typeof BroadcastChannel === "function") syncChannel = new BroadcastChannel(SYNC_EVENT); } catch (e) {}
+  function syncPost(msg) {
+    msg.source = "pricing";
+    try {
+      if (syncChannel) syncChannel.postMessage(msg);
+      else window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: msg }));
+    } catch (e) {}
+  }
+  /* Storage deployment type -> deployment model, keeping a compatible current model */
+  function modelForStorage(type, current) {
+    if (type === "aldo-mgmt") return "l3";
+    if (type === "disaggregated") return current === "l2-oem" ? current : "l2-disagg";
+    if (type === "hybrid") return current === "l2" || current === "l2-oem" ? current : "l2";
+    /* Storage Spaces Direct only: L1, or a workload cluster of disconnected operations */
+    return current === "l3" ? current : "l1";
+  }
+  function recalcIfShown() {
+    const needsRate = $("pricingV2_deploymentModel").value === "l3" && !(+$("pricingV2_l3HostRate").value > 0);
+    if ($("pricingV2_resultBox").style.display === "block" && !needsRate) calculate();
+  }
+  function onSync(msg) {
+    if (!msg || msg.source === "pricing") return;
+    const sel = $("pricingV2_deploymentModel");
+    if (msg.type === "deployment" && msg.storage) {
+      const model = modelForStorage(msg.storage, sel.value);
+      if (model !== sel.value) { sel.value = model; updateDeploymentFields(); recalcIfShown(); }
+    } else if (msg.type === "san") {
+      if ([...$("pricingV2_sanVendor").options].some(o => o.value === msg.vendor)) $("pricingV2_sanVendor").value = msg.vendor;
+      if (msg.physicalTB > 0) $("pricingV2_sanCapacity").value = msg.physicalTB;
+      recalcIfShown();
+    }
+  }
+  if (syncChannel) syncChannel.addEventListener("message", ev => onSync(ev.data));
+  else window.addEventListener(SYNC_EVENT, ev => onSync(ev.detail));
 
   /* ---- SQL price lookup (per vCore / month) ---- */
   const sqlPrices = {
@@ -5289,9 +5421,16 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
     const mgmtCores     = mgmtNodes * mgmtCoresNode;
     const mgmtNodesCost = mgmtNodes * mgmtNodeUnit;
 
+    /* L2: the external SAN system */
+    const isL2 = deploymentModel === "l2" || deploymentModel === "l2-disagg" || deploymentModel === "l2-oem";
+    const sanVendor   = $("pricingV2_sanVendor").value;
+    const sanCapacity = isL2 ? num($("pricingV2_sanCapacity")) : 0;
+    const sanCost     = isL2 ? num($("pricingV2_sanPrice")) : 0;
+    const sanMonthly  = isL2 ? num($("pricingV2_sanSupport")) : 0;
+
     const nodesCost  = nodes * nodeUnit + mgmtNodesCost;
     const switchCost = switches * switchUnit;
-    const hwCost     = nodesCost + switchCost;
+    const hwCost     = nodesCost + switchCost + sanCost;
 
     const coresPerNode = num($("pricingV2_coresPerNode"));
     const totalCores   = nodes * coresPerNode;
@@ -5347,7 +5486,7 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
     const sqlCost        = sqlVcores * sqlHourlyRate * sqlHours;
 
     const oneTimeTotal = hwCost + winOneTime + thirdOneTime;
-    const monthlyTotal = hostFee + winMonthly + thirdMonthly + avdCost + sqlCost;
+    const monthlyTotal = hostFee + winMonthly + thirdMonthly + avdCost + sqlCost + sanMonthly;
     const trialApplied = $("pricingV2_applyTrial").checked;
     /* disconnected operations are billed on an annual capacity term, so the trial covers no L3 host fee */
     const trialEligibleMonthly = (isL3 ? 0 : hostFee) + (winLicenseMode === "default" ? winMonthly : 0);
@@ -5367,13 +5506,14 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
     /* ---- charts ---- */
     $("pricingV2_chartsSection").style.display = "block";
     drawTotalChart(oneTimeTotal, monthlyTotal, yearlyTotal);
-    drawOneTimeChart(nodesCost, switchCost, winOneTime, thirdOneTime);
-    drawMonthlyChart(hostFee, winMonthly, avdCost, sqlCost, thirdMonthly);
+    drawOneTimeChart(nodesCost, switchCost, winOneTime, thirdOneTime, sanCost);
+    drawMonthlyChart(hostFee, winMonthly, avdCost, sqlCost, thirdMonthly, sanMonthly);
 
     /* ---- overview ---- */
     buildOverview({
       nodes, nodeUnit, nodesCost,
       switches, switchUnit, switchCost, hwCost,
+      isL2, sanVendor, sanCapacity, sanCost, sanMonthly,
       coresPerNode, totalCores, billedCores,
       mgmtNodes, mgmtCoresNode, mgmtCores, mgmtNodeUnit, mgmtNodesCost,
       deploymentModel, deploymentLabel: deployment.label, hostRate,
@@ -5414,6 +5554,9 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
     row("Nodes Cost", d.nodes + " nodes x " + fmt(d.nodeUnit) + "/node", fmt(d.nodesCost - d.mgmtNodesCost));
     if (d.mgmtNodes > 0) row("ALDO Management Cluster Nodes", d.mgmtNodes + " nodes x " + fmt(d.mgmtNodeUnit) + "/node", fmt(d.mgmtNodesCost));
     row("Switches Cost", d.switches + " switches x " + fmt(d.switchUnit) + "/switch", fmt(d.switchCost));
+    if (d.isL2) {
+      row("SAN System (" + d.sanVendor + ")", d.sanCapacity > 0 ? d.sanCapacity + " TB physical usable" + (d.sanCost > 0 ? ", " + fmt(d.sanCost / d.sanCapacity) + "/TB" : "") : "External SAN array", fmt(d.sanCost));
+    }
     total("Total Hardware", fmt(d.hwCost));
 
     sec("Licensing");
@@ -5438,6 +5581,7 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
     row("Free 60-Day Trial", !d.trialApplied ? "Not applied" : d.deploymentModel === "l3" ? "Windows subscription only (L3 is billed on an annual capacity term)" : "Applied to eligible host and Windows subscription fees", d.trialSavings > 0 ? "-" + fmt(d.trialSavings) : fmt(0));
 
     sec("Related / Third-Party");
+    if (d.isL2) row("SAN Support and Maintenance (monthly)", d.sanVendor + ", user-defined", fmt(d.sanMonthly));
     if (d.backupOTC || d.backupMonth)   { row("Backup (OTC)", "User-defined", fmt(d.backupOTC));   row("Backup (monthly)", "User-defined", fmt(d.backupMonth)); }
     if (d.logsOTC || d.logsMonth)       { row("Logs / Monitoring (OTC)", "User-defined", fmt(d.logsOTC));     row("Logs / Monitoring (monthly)", "User-defined", fmt(d.logsMonth)); }
     if (d.installOTC || d.installMonth) { row("Installation (OTC)", "User-defined", fmt(d.installOTC)); row("Installation (monthly)", "User-defined", fmt(d.installMonth)); }
@@ -6197,24 +6341,30 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
     });
   }
 
-  function drawOneTimeChart(nodesCost, switchCost, winOneTime, thirdOneTime) {
+  /* the SAN system uses a neutral gray in both charts: every palette slot already
+     belongs to another entity of the one-time or the monthly chart */
+  const SAN_COLOR = C3D.ink2;
+
+  function drawOneTimeChart(nodesCost, switchCost, winOneTime, thirdOneTime, sanCost) {
     if (oneTimeBreakdownChart) oneTimeBreakdownChart.destroy();
     oneTimeBreakdownChart = stackedChart($("pricingV2_oneTimeBreakdownChart"), "One-Time Breakdown", ["Hardware", "Windows License", "Third-Party"], [
       { label: "Nodes",        color: C3D_COLORS.blue,   data: [nodesCost,  0,          0] },
       { label: "Switches",     color: C3D_COLORS.orange, data: [switchCost, 0,          0] },
+      { label: "SAN System",   color: SAN_COLOR,         data: [sanCost,    0,          0] },
       { label: "Third-Party",  color: C3D_COLORS.violet, data: [0,          0,          thirdOneTime] },
       { label: "Windows Lic.", color: C3D_COLORS.yellow, data: [0,          winOneTime, 0] }
     ]);
   }
 
-  function drawMonthlyChart(host, win, avd, sql, third) {
+  function drawMonthlyChart(host, win, avd, sql, third, san) {
     if (costBreakdownChart) costBreakdownChart.destroy();
-    costBreakdownChart = stackedChart($("pricingV2_costBreakdownChart"), "Monthly Breakdown", ["Licensing", "AVD", "SQLmi", "Third-Party"], [
-      { label: "Host Fee",     color: C3D_COLORS.aqua,    data: [host, 0,   0,   0] },
-      { label: "Windows Lic.", color: C3D_COLORS.yellow,  data: [win,  0,   0,   0] },
-      { label: "AVD",          color: C3D_COLORS.magenta, data: [0,    avd, 0,   0] },
-      { label: "SQLmi",        color: C3D_COLORS.green,   data: [0,    0,   sql, 0] },
-      { label: "Third-Party",  color: C3D_COLORS.violet,  data: [0,    0,   0,   third] }
+    costBreakdownChart = stackedChart($("pricingV2_costBreakdownChart"), "Monthly Breakdown", ["Licensing", "AVD", "SQLmi", "SAN", "Third-Party"], [
+      { label: "Host Fee",     color: C3D_COLORS.aqua,    data: [host, 0,   0,   0,   0] },
+      { label: "Windows Lic.", color: C3D_COLORS.yellow,  data: [win,  0,   0,   0,   0] },
+      { label: "AVD",          color: C3D_COLORS.magenta, data: [0,    avd, 0,   0,   0] },
+      { label: "SQLmi",        color: C3D_COLORS.green,   data: [0,    0,   sql, 0,   0] },
+      { label: "SAN Support",  color: SAN_COLOR,          data: [0,    0,   0,   san, 0] },
+      { label: "Third-Party",  color: C3D_COLORS.violet,  data: [0,    0,   0,   0,   third] }
     ]);
   }
 
@@ -6673,6 +6823,11 @@ The Pricing Calculator estimates the one-time and monthly cost of an Azure Local
   /* ---- events ---- */
   $("pricingV2_calcBtn").addEventListener("click", calculate);
   $("pricingV2_exportPdfBtn").addEventListener("click", exportPdf);
+  /* SAN plan of a Storage Calculator that calculated before this page section loaded */
+  try {
+    const plan = JSON.parse(sessionStorage.getItem("azureLocalCalculator.sanPlan") || "null");
+    if (plan && plan.type === "san") onSync(Object.assign(plan, { source: "storage" }));
+  } catch (e) {}
   listenOdinImport("pricing", applyOdinConfig);
 })();
 </script>

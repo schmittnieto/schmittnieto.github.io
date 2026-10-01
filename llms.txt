@@ -16,7 +16,7 @@ Important notes:
 
 - [Home](https://schmitt-nieto.com/): Latest posts and main entry point.
 - [About](https://schmitt-nieto.com/about/): Author background, professional focus, employer journey and certifications.
-- [Azure Local Calculator](https://schmitt-nieto.com/azurelocal-calculator/): Interactive calculators for Azure Local covering CPU planning with the Azure Local catalog node types and their compatible CPU models, disconnected operations (ALDO) management clusters, storage sizing with external SAN planning and pricing estimation, including the L1, L2 and L3 deployment models, Azure Hybrid Benefit eligibility and a shared configuration import from ODIN for Azure Local.
+- [Azure Local Calculator](https://schmitt-nieto.com/azurelocal-calculator/): Interactive calculators for Azure Local covering CPU planning with the Azure Local catalog node types and their compatible CPU models, disconnected operations (ALDO) management clusters, storage sizing with external SAN planning and pricing estimation with the SAN system, including the L1, L2 and L3 deployment models, Azure Hybrid Benefit eligibility and a shared configuration import from ODIN for Azure Local.
 - [Privacy Policy](https://schmitt-nieto.com/privacy-policy/): Privacy, analytics and cookie information for the site.
 
 ## Azure Local Series
