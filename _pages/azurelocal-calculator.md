@@ -125,10 +125,18 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     .overview-table .formula{font-size:.86em;opacity:.8}
 
     .cpu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:12px}
-    .cpu-card{border:1px solid #555;border-radius:8px;padding:12px;font-size:.88em}
+    .cpu-card{border:1px solid #555;border-radius:8px;padding:12px;font-size:.88em;cursor:pointer;transition:box-shadow .2s,border-color .2s,opacity .2s}
+    .cpu-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.25)}
+    .cpu-card:focus{outline:none}
+    .cpu-card:focus-visible{outline:2px solid #007aff;outline-offset:2px}
     .cpu-card.match{border-color:#2e7d32}
     .cpu-card.tight{border-color:#cc7a00}
     .cpu-card.no-fit{border-color:#888;opacity:.65}
+    .cpu-card.recommended{border:2px solid #007aff;padding:11px;opacity:1;box-shadow:0 6px 22px rgba(0,122,255,.4)}
+    .cpu-card.selected{border:2px solid #8e44ad;padding:11px;box-shadow:0 6px 22px rgba(142,68,173,.45)}
+    .cpu-card.no-fit.selected{opacity:.85}
+    .cpu-tag.rec-tag{background:#007aff;color:#fff}
+    .cpu-tag.sel-tag{background:#8e44ad;color:#fff}
     .cpu-card .cpu-name{font-weight:700;font-size:.95em;margin-bottom:6px}
     .cpu-card .cpu-detail{line-height:1.5}
     .cpu-tag{display:inline-block;font-size:.72em;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
@@ -184,6 +192,11 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
   <div class="card">
     <h3>Cluster Settings</h3>
     <div class="form-grid">
+      <div class="form-group">
+        <label for="nodeType">Node Type (Azure Local catalog)</label>
+        <select id="nodeType"></select>
+        <div id="nodeTypeInfo" style="font-size:.82em;margin-top:6px"></div>
+      </div>
       <div class="form-group">
         <label for="socketsPerNode">CPU Sockets per Node</label>
         <select id="socketsPerNode">
@@ -255,7 +268,7 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
   <!-- CPU Recommendations -->
   <div id="cpuRecommendSection" class="card" style="display:none">
     <h3>CPU Recommendations</h3>
-    <p style="font-size:.85em;margin:0 0 4px">Based on the minimum cores required per socket, these are common server CPUs that could fit your workload.</p>
+    <p id="cpuRecommendIntro" style="font-size:.85em;margin:0 0 4px">Based on the minimum cores required per socket, this is the smallest common server CPU of each generation that fits your workload. Select a node type to see every CPU model that system can use. The recommended CPU is highlighted; click another card to size the cluster with it.</p>
     <p style="font-size:.82em;margin:0 0 10px;font-weight:600">Important: CPU availability depends on your OEM/server platform. Always confirm with your hardware vendor before purchasing. Newer generations offer better IPC and efficiency, enabling higher vCPU:core ratios.</p>
     <div id="cpuGrid" class="cpu-grid"></div>
   </div>
@@ -351,23 +364,109 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     { name: "Intel Xeon Platinum 8490H",vendor:"Intel", gen: "4th Gen (Sapphire Rapids)",cores: 60, tdp: 350 },
 
     /* --- Intel Xeon 5th Gen (Emerald Rapids) --- */
-    { name: "Intel Xeon Gold 6530",    vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, tdp: 270 },
-    { name: "Intel Xeon Gold 6538Y+",  vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, tdp: 225 },
-    { name: "Intel Xeon Gold 6548Y+",  vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, tdp: 250 },
-    { name: "Intel Xeon Platinum 8558",vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 48, tdp: 330 },
-    { name: "Intel Xeon Platinum 8568Y+",vendor:"Intel",gen: "5th Gen (Emerald Rapids)", cores: 48, tdp: 350 },
-    { name: "Intel Xeon Platinum 8580",vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 60, tdp: 350 },
-    { name: "Intel Xeon Platinum 8592+",vendor:"Intel", gen: "5th Gen (Emerald Rapids)", cores: 64, tdp: 350 },
+    { name: "Intel Xeon Bronze 3508U", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 8, sockets: 1, base: 2.1, tdp: 125 },
+    { name: "Intel Xeon Gold 5515+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 8, sockets: 2, base: 3.2, tdp: 165 },
+    { name: "Intel Xeon Gold 6534", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 8, sockets: 2, base: 3.9, tdp: 195 },
+    { name: "Intel Xeon Silver 4509Y", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 8, sockets: 2, base: 2.6, tdp: 125 },
+    { name: "Intel Xeon Silver 4510", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 12, sockets: 2, base: 2.4, tdp: 150 },
+    { name: "Intel Xeon Silver 4510T", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 12, sockets: 2, base: 2, tdp: 115 },
+    { name: "Intel Xeon Gold 6526Y", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 16, sockets: 2, base: 2.8, tdp: 195 },
+    { name: "Intel Xeon Gold 6544Y", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 16, sockets: 2, base: 3.6, tdp: 270 },
+    { name: "Intel Xeon Silver 4514Y", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 16, sockets: 2, base: 2, tdp: 150 },
+    { name: "Intel Xeon Gold 6542Y", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 24, sockets: 2, base: 2.9, tdp: 250 },
+    { name: "Intel Xeon Silver 4516Y+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 24, sockets: 2, base: 2.2, tdp: 185 },
+    { name: "Intel Xeon Gold 5512U", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 28, sockets: 1, base: 2.1, tdp: 185 },
+    { name: "Intel Xeon Gold 5520+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 28, sockets: 2, base: 2.2, tdp: 205 },
+    { name: "Intel Xeon Gold 6530", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, sockets: 2, base: 2.1, tdp: 270 },
+    { name: "Intel Xeon Gold 6538N", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, sockets: 2, base: 2.1, tdp: 205 },
+    { name: "Intel Xeon Gold 6538Y+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, sockets: 2, base: 2.2, tdp: 225 },
+    { name: "Intel Xeon Gold 6548N", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, sockets: 2, base: 2.8, tdp: 250 },
+    { name: "Intel Xeon Gold 6548Y+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, sockets: 2, base: 2.5, tdp: 250 },
+    { name: "Intel Xeon Gold 6558Q", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, sockets: 2, base: 3.2, tdp: 350 },
+    { name: "Intel Xeon Platinum 8562Y+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 32, sockets: 2, base: 2.8, tdp: 300 },
+    { name: "Intel Xeon Gold 6554S", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 36, sockets: 2, base: 2.2, tdp: 270 },
+    { name: "Intel Xeon Platinum 8558", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 48, sockets: 2, base: 2.1, tdp: 330 },
+    { name: "Intel Xeon Platinum 8558P", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 48, sockets: 2, base: 2.7, tdp: 350 },
+    { name: "Intel Xeon Platinum 8558U", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 48, sockets: 1, base: 2, tdp: 300 },
+    { name: "Intel Xeon Platinum 8568Y+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 48, sockets: 2, base: 2.3, tdp: 350 },
+    { name: "Intel Xeon Platinum 8571N", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 52, sockets: 1, base: 2.4, tdp: 350 },
+    { name: "Intel Xeon Platinum 8570", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 56, sockets: 2, base: 2.1, tdp: 350 },
+    { name: "Intel Xeon Platinum 8580", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 60, sockets: 2, base: 2, tdp: 350 },
+    { name: "Intel Xeon Platinum 8581V", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 60, sockets: 1, base: 2, tdp: 270 },
+    { name: "Intel Xeon Platinum 8592+", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 64, sockets: 2, base: 1.9, tdp: 350 },
+    { name: "Intel Xeon Platinum 8592V", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 64, sockets: 2, base: 2, tdp: 330 },
+    { name: "Intel Xeon Platinum 8593Q", vendor: "Intel", gen: "5th Gen (Emerald Rapids)", cores: 64, sockets: 2, base: 2.2, tdp: 385 },
 
-    /* --- Intel Xeon 6 P-cores (Granite Rapids) --- */
-    { name: "Intel Xeon 6952P",        vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids)", cores: 96,  tdp: 400 },
-    { name: "Intel Xeon 6960P",        vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids)", cores: 72,  tdp: 500 },
-    { name: "Intel Xeon 6980P",        vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids)", cores: 128, tdp: 500 },
+    /* --- Intel Xeon 6 P-cores 6500P/6700P (Granite Rapids-SP) --- */
+    { name: "Intel Xeon 6 6507P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 8, sockets: 2, base: 3.5, tdp: 150 },
+    { name: "Intel Xeon 6 6714P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 8, sockets: 8, base: 4, tdp: 165 },
+    { name: "Intel Xeon 6 6505P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 12, sockets: 2, base: 2.2, tdp: 150 },
+    { name: "Intel Xeon 6 6511P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 16, sockets: 1, base: 2.3, tdp: 150 },
+    { name: "Intel Xeon 6 6515P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 16, sockets: 2, base: 2.3, tdp: 150 },
+    { name: "Intel Xeon 6 6517P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 16, sockets: 2, base: 3.2, tdp: 190 },
+    { name: "Intel Xeon 6 6724P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 16, sockets: 8, base: 3.6, tdp: 210 },
+    { name: "Intel Xeon 6 6520P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 24, sockets: 2, base: 2.4, tdp: 210 },
+    { name: "Intel Xeon 6 6521P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 24, sockets: 1, base: 2.6, tdp: 225 },
+    { name: "Intel Xeon 6 6527P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 24, sockets: 2, base: 3, tdp: 250 },
+    { name: "Intel Xeon 6 6728P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 24, sockets: 8, base: 2.7, tdp: 210 },
+    { name: "Intel Xeon 6 6530P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 32, sockets: 2, base: 2.3, tdp: 225 },
+    { name: "Intel Xeon 6 6730P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 32, sockets: 2, base: 2.5, tdp: 250 },
+    { name: "Intel Xeon 6 6731P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 32, sockets: 1, base: 2.5, tdp: 245 },
+    { name: "Intel Xeon 6 6732P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 32, sockets: 2, base: 3.8, tdp: 350 },
+    { name: "Intel Xeon 6 6737P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 32, sockets: 2, base: 2.9, tdp: 270 },
+    { name: "Intel Xeon 6 6738P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 32, sockets: 8, base: 2.9, tdp: 270 },
+    { name: "Intel Xeon 6 6745P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 32, sockets: 2, base: 3.1, tdp: 300 },
+    { name: "Intel Xeon 6 6736P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 36, sockets: 2, base: 2, tdp: 205 },
+    { name: "Intel Xeon 6 6740P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 48, sockets: 2, base: 2.1, tdp: 270 },
+    { name: "Intel Xeon 6 6741P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 48, sockets: 1, base: 2.5, tdp: 300 },
+    { name: "Intel Xeon 6 6747P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 48, sockets: 2, base: 2.7, tdp: 350 },
+    { name: "Intel Xeon 6 6748P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 48, sockets: 2, base: 2.5, tdp: 300 },
+    { name: "Intel Xeon 6 6760P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 64, sockets: 2, base: 2.2, tdp: 330 },
+    { name: "Intel Xeon 6 6761P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 64, sockets: 1, base: 2.5, tdp: 350 },
+    { name: "Intel Xeon 6 6762P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 64, sockets: 2, base: 2.9, tdp: 350 },
+    { name: "Intel Xeon 6 6767P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 64, sockets: 2, base: 2.4, tdp: 350 },
+    { name: "Intel Xeon 6 6768P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 64, sockets: 8, base: 2.4, tdp: 330 },
+    { name: "Intel Xeon 6 6774P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 64, sockets: 1, base: 2.5, tdp: 350 },
+    { name: "Intel Xeon 6 6776P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 64, sockets: 2, base: 2.3, tdp: 350 },
+    { name: "Intel Xeon 6 6781P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 80, sockets: 1, base: 2, tdp: 350 },
+    { name: "Intel Xeon 6 6787P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 86, sockets: 2, base: 2, tdp: 350 },
+    { name: "Intel Xeon 6 6788P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-SP)", cores: 86, sockets: 8, base: 2, tdp: 350 },
+
+    /* --- Intel Xeon 6 P-cores 6900P (Granite Rapids-AP) --- */
+    { name: "Intel Xeon 6 6944P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-AP)", cores: 72, sockets: 2, base: 1.8, tdp: 350 },
+    { name: "Intel Xeon 6 6960P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-AP)", cores: 72, sockets: 2, base: 2.7, tdp: 500 },
+    { name: "Intel Xeon 6 6962P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-AP)", cores: 72, sockets: 2, base: 2.7, tdp: 500 },
+    { name: "Intel Xeon 6 6952P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-AP)", cores: 96, sockets: 2, base: 2.1, tdp: 400 },
+    { name: "Intel Xeon 6 6972P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-AP)", cores: 96, sockets: 2, base: 2.4, tdp: 500 },
+    { name: "Intel Xeon 6 6979P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-AP)", cores: 120, sockets: 2, base: 2.1, tdp: 500 },
+    { name: "Intel Xeon 6 6980P", vendor: "Intel", gen: "Xeon 6 P-core (Granite Rapids-AP)", cores: 128, sockets: 2, base: 2, tdp: 500 },
 
     /* --- Intel Xeon 6 E-cores (Sierra Forest) --- */
-    { name: "Intel Xeon 6756E",        vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)",  cores: 128, tdp: 250 },
-    { name: "Intel Xeon 6766E",        vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)",  cores: 144, tdp: 250 },
-    { name: "Intel Xeon 6780E",        vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)",  cores: 144, tdp: 330 },
+    { name: "Intel Xeon 6 6710E", vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)", cores: 64, sockets: 2, base: 2.4, tdp: 205 },
+    { name: "Intel Xeon 6 6731E", vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)", cores: 96, sockets: 1, base: 2.2, tdp: 250 },
+    { name: "Intel Xeon 6 6740E", vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)", cores: 96, sockets: 2, base: 2.4, tdp: 250 },
+    { name: "Intel Xeon 6 6746E", vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)", cores: 112, sockets: 2, base: 2, tdp: 250 },
+    { name: "Intel Xeon 6 6756E", vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)", cores: 128, sockets: 2, base: 1.8, tdp: 225 },
+    { name: "Intel Xeon 6 6766E", vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)", cores: 144, sockets: 2, base: 1.9, tdp: 250 },
+    { name: "Intel Xeon 6 6780E", vendor: "Intel", gen: "Xeon 6 E-core (Sierra Forest)", cores: 144, sockets: 2, base: 2.2, tdp: 330 },
+
+    /* --- Intel Xeon D-2700 (Ice Lake-D) --- */
+    { name: "Intel Xeon D-2712T", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 4, sockets: 1, base: 1.9, tdp: 65 },
+    { name: "Intel Xeon D-2733NT", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 8, sockets: 1, base: 2.1, tdp: 80 },
+    { name: "Intel Xeon D-2738", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 8, sockets: 1, base: 2.5, tdp: 88 },
+    { name: "Intel Xeon D-2752NTE", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 12, sockets: 1, base: 1.9, tdp: 84 },
+    { name: "Intel Xeon D-2752TER", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 12, sockets: 1, base: 1.8, tdp: 77 },
+    { name: "Intel Xeon D-2753NT", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 12, sockets: 1, base: 2, tdp: 87 },
+    { name: "Intel Xeon D-2766NT", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 14, sockets: 1, base: 2, tdp: 97 },
+    { name: "Intel Xeon D-2775TE", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 16, sockets: 1, base: 2, tdp: 100 },
+    { name: "Intel Xeon D-2776NT", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 16, sockets: 1, base: 2.1, tdp: 117 },
+    { name: "Intel Xeon D-2779", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 16, sockets: 1, base: 2.5, tdp: 126 },
+    { name: "Intel Xeon D-2786NTE", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 18, sockets: 1, base: 2.1, tdp: 118 },
+    { name: "Intel Xeon D-2795NT", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 20, sockets: 1, base: 2, tdp: 110 },
+    { name: "Intel Xeon D-2796NT", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 20, sockets: 1, base: 2, tdp: 120 },
+    { name: "Intel Xeon D-2796TE", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 20, sockets: 1, base: 2, tdp: 118 },
+    { name: "Intel Xeon D-2798NT", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 20, sockets: 1, base: 2.1, tdp: 125 },
+    { name: "Intel Xeon D-2799", vendor: "Intel", gen: "Xeon D-2700 (Ice Lake-D)", cores: 20, sockets: 1, base: 2.4, tdp: 129 },
 
     /* --- AMD EPYC 3rd Gen (Milan) --- */
     { name: "AMD EPYC 7313",  vendor: "AMD", gen: "3rd Gen (Milan)", cores: 16, tdp: 155 },
@@ -381,25 +480,182 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     { name: "AMD EPYC 7763",  vendor: "AMD", gen: "3rd Gen (Milan)", cores: 64, tdp: 280 },
 
     /* --- AMD EPYC 4th Gen (Genoa) --- */
-    { name: "AMD EPYC 9124",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 16, tdp: 200 },
-    { name: "AMD EPYC 9174F", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 16, tdp: 320 },
-    { name: "AMD EPYC 9224",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 24, tdp: 200 },
-    { name: "AMD EPYC 9334",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 32, tdp: 210 },
-    { name: "AMD EPYC 9354",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 32, tdp: 280 },
-    { name: "AMD EPYC 9454",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 48, tdp: 290 },
-    { name: "AMD EPYC 9534",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 64, tdp: 280 },
-    { name: "AMD EPYC 9554",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 64, tdp: 360 },
-    { name: "AMD EPYC 9654",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 96, tdp: 360 },
-    { name: "AMD EPYC 9754",  vendor: "AMD", gen: "4th Gen (Genoa)", cores: 128,tdp: 360 },
+    { name: "AMD EPYC 9124", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 16, sockets: 2, base: 3, tdp: 200 },
+    { name: "AMD EPYC 9174F", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 16, sockets: 2, base: 4.1, tdp: 320 },
+    { name: "AMD EPYC 9184X", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 16, sockets: 2, base: 3.55, tdp: 320 },
+    { name: "AMD EPYC 9224", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 24, sockets: 2, base: 2.5, tdp: 200 },
+    { name: "AMD EPYC 9254", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 24, sockets: 2, base: 2.9, tdp: 220 },
+    { name: "AMD EPYC 9274F", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 24, sockets: 2, base: 4.05, tdp: 320 },
+    { name: "AMD EPYC 9334", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 32, sockets: 2, base: 2.7, tdp: 210 },
+    { name: "AMD EPYC 9354", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 32, sockets: 2, base: 3.25, tdp: 280 },
+    { name: "AMD EPYC 9354P", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 32, sockets: 1, base: 3.25, tdp: 280 },
+    { name: "AMD EPYC 9374F", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 32, sockets: 2, base: 3.85, tdp: 320 },
+    { name: "AMD EPYC 9384X", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 32, sockets: 2, base: 3.1, tdp: 320 },
+    { name: "AMD EPYC 9454", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 48, sockets: 2, base: 2.75, tdp: 290 },
+    { name: "AMD EPYC 9454P", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 48, sockets: 1, base: 2.75, tdp: 290 },
+    { name: "AMD EPYC 9474F", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 48, sockets: 2, base: 3.6, tdp: 360 },
+    { name: "AMD EPYC 9534", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 64, sockets: 2, base: 2.45, tdp: 280 },
+    { name: "AMD EPYC 9554", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 64, sockets: 2, base: 3.1, tdp: 360 },
+    { name: "AMD EPYC 9554P", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 64, sockets: 1, base: 3.1, tdp: 360 },
+    { name: "AMD EPYC 9634", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 84, sockets: 2, base: 2.25, tdp: 290 },
+    { name: "AMD EPYC 9654", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 96, sockets: 2, base: 2.4, tdp: 360 },
+    { name: "AMD EPYC 9654P", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 96, sockets: 1, base: 2.4, tdp: 360 },
+    { name: "AMD EPYC 9684X", vendor: "AMD", gen: "4th Gen (Genoa)", cores: 96, sockets: 2, base: 2.55, tdp: 400 },
+
+    /* --- AMD EPYC 4th Gen (Bergamo) --- */
+    { name: "AMD EPYC 9734", vendor: "AMD", gen: "4th Gen (Bergamo)", cores: 112, sockets: 2, base: 2.2, tdp: 340 },
+    { name: "AMD EPYC 9754", vendor: "AMD", gen: "4th Gen (Bergamo)", cores: 128, sockets: 2, base: 2.25, tdp: 360 },
+    { name: "AMD EPYC 9754S", vendor: "AMD", gen: "4th Gen (Bergamo)", cores: 128, sockets: 2, base: 2.25, tdp: 360 },
+
+    /* --- AMD EPYC 4th Gen (Siena) --- */
+    { name: "AMD EPYC 8024P", vendor: "AMD", gen: "4th Gen (Siena)", cores: 8, sockets: 1, base: 2.4, tdp: 90 },
+    { name: "AMD EPYC 8024PN", vendor: "AMD", gen: "4th Gen (Siena)", cores: 8, sockets: 1, base: 2.05, tdp: 80 },
+    { name: "AMD EPYC 8124P", vendor: "AMD", gen: "4th Gen (Siena)", cores: 16, sockets: 1, base: 2.45, tdp: 125 },
+    { name: "AMD EPYC 8124PN", vendor: "AMD", gen: "4th Gen (Siena)", cores: 16, sockets: 1, base: 2, tdp: 100 },
+    { name: "AMD EPYC 8224P", vendor: "AMD", gen: "4th Gen (Siena)", cores: 24, sockets: 1, base: 2.55, tdp: 160 },
+    { name: "AMD EPYC 8224PN", vendor: "AMD", gen: "4th Gen (Siena)", cores: 24, sockets: 1, base: 2, tdp: 120 },
+    { name: "AMD EPYC 8324P", vendor: "AMD", gen: "4th Gen (Siena)", cores: 32, sockets: 1, base: 2.65, tdp: 180 },
+    { name: "AMD EPYC 8324PN", vendor: "AMD", gen: "4th Gen (Siena)", cores: 32, sockets: 1, base: 2.05, tdp: 130 },
+    { name: "AMD EPYC 8434P", vendor: "AMD", gen: "4th Gen (Siena)", cores: 48, sockets: 1, base: 2.5, tdp: 200 },
+    { name: "AMD EPYC 8434PN", vendor: "AMD", gen: "4th Gen (Siena)", cores: 48, sockets: 1, base: 2, tdp: 155 },
+    { name: "AMD EPYC 8534P", vendor: "AMD", gen: "4th Gen (Siena)", cores: 64, sockets: 1, base: 2.3, tdp: 200 },
+    { name: "AMD EPYC 8534PN", vendor: "AMD", gen: "4th Gen (Siena)", cores: 64, sockets: 1, base: 2, tdp: 175 },
 
     /* --- AMD EPYC 5th Gen (Turin) --- */
-    { name: "AMD EPYC 9175F", vendor: "AMD", gen: "5th Gen (Turin)", cores: 16,  tdp: 320 },
-    { name: "AMD EPYC 9275F", vendor: "AMD", gen: "5th Gen (Turin)", cores: 24,  tdp: 320 },
-    { name: "AMD EPYC 9555",  vendor: "AMD", gen: "5th Gen (Turin)", cores: 64,  tdp: 400 },
-    { name: "AMD EPYC 9655",  vendor: "AMD", gen: "5th Gen (Turin)", cores: 96,  tdp: 400 },
-    { name: "AMD EPYC 9755",  vendor: "AMD", gen: "5th Gen (Turin)", cores: 128, tdp: 500 },
-    { name: "AMD EPYC 9965",  vendor: "AMD", gen: "5th Gen (Turin Dense)", cores: 192, tdp: 500 }
+    { name: "AMD EPYC 9015", vendor: "AMD", gen: "5th Gen (Turin)", cores: 8, sockets: 2, base: 3.6, tdp: 125 },
+    { name: "AMD EPYC 9115", vendor: "AMD", gen: "5th Gen (Turin)", cores: 16, sockets: 2, base: 2.6, tdp: 125 },
+    { name: "AMD EPYC 9135", vendor: "AMD", gen: "5th Gen (Turin)", cores: 16, sockets: 2, base: 3.65, tdp: 200 },
+    { name: "AMD EPYC 9175F", vendor: "AMD", gen: "5th Gen (Turin)", cores: 16, sockets: 2, base: 4.2, tdp: 320 },
+    { name: "AMD EPYC 9255", vendor: "AMD", gen: "5th Gen (Turin)", cores: 24, sockets: 2, base: 3.25, tdp: 200 },
+    { name: "AMD EPYC 9275F", vendor: "AMD", gen: "5th Gen (Turin)", cores: 24, sockets: 2, base: 4.1, tdp: 320 },
+    { name: "AMD EPYC 9335", vendor: "AMD", gen: "5th Gen (Turin)", cores: 32, sockets: 2, base: 3, tdp: 210 },
+    { name: "AMD EPYC 9355", vendor: "AMD", gen: "5th Gen (Turin)", cores: 32, sockets: 2, base: 3.55, tdp: 280 },
+    { name: "AMD EPYC 9355P", vendor: "AMD", gen: "5th Gen (Turin)", cores: 32, sockets: 1, base: 3.55, tdp: 280 },
+    { name: "AMD EPYC 9375F", vendor: "AMD", gen: "5th Gen (Turin)", cores: 32, sockets: 2, base: 3.8, tdp: 320 },
+    { name: "AMD EPYC 9365", vendor: "AMD", gen: "5th Gen (Turin)", cores: 36, sockets: 2, base: 3.4, tdp: 300 },
+    { name: "AMD EPYC 9455", vendor: "AMD", gen: "5th Gen (Turin)", cores: 48, sockets: 2, base: 3.15, tdp: 300 },
+    { name: "AMD EPYC 9455P", vendor: "AMD", gen: "5th Gen (Turin)", cores: 48, sockets: 1, base: 3.15, tdp: 300 },
+    { name: "AMD EPYC 9475F", vendor: "AMD", gen: "5th Gen (Turin)", cores: 48, sockets: 2, base: 3.65, tdp: 400 },
+    { name: "AMD EPYC 9535", vendor: "AMD", gen: "5th Gen (Turin)", cores: 64, sockets: 2, base: 2.4, tdp: 300 },
+    { name: "AMD EPYC 9555", vendor: "AMD", gen: "5th Gen (Turin)", cores: 64, sockets: 2, base: 3.2, tdp: 360 },
+    { name: "AMD EPYC 9555P", vendor: "AMD", gen: "5th Gen (Turin)", cores: 64, sockets: 1, base: 3.2, tdp: 360 },
+    { name: "AMD EPYC 9575F", vendor: "AMD", gen: "5th Gen (Turin)", cores: 64, sockets: 2, base: 3.3, tdp: 400 },
+    { name: "AMD EPYC 9565", vendor: "AMD", gen: "5th Gen (Turin)", cores: 72, sockets: 2, base: 3.15, tdp: 400 },
+    { name: "AMD EPYC 9655", vendor: "AMD", gen: "5th Gen (Turin)", cores: 96, sockets: 2, base: 2.5, tdp: 400 },
+    { name: "AMD EPYC 9655P", vendor: "AMD", gen: "5th Gen (Turin)", cores: 96, sockets: 1, base: 2.5, tdp: 400 },
+    { name: "AMD EPYC 9755", vendor: "AMD", gen: "5th Gen (Turin)", cores: 128, sockets: 2, base: 2.7, tdp: 500 },
+
+    /* --- AMD EPYC 5th Gen (Turin Dense) --- */
+    { name: "AMD EPYC 9645", vendor: "AMD", gen: "5th Gen (Turin Dense)", cores: 96, sockets: 2, base: 2.3, tdp: 320 },
+    { name: "AMD EPYC 9745", vendor: "AMD", gen: "5th Gen (Turin Dense)", cores: 128, sockets: 2, base: 2.4, tdp: 400 },
+    { name: "AMD EPYC 9825", vendor: "AMD", gen: "5th Gen (Turin Dense)", cores: 144, sockets: 2, base: 2.2, tdp: 390 },
+    { name: "AMD EPYC 9845", vendor: "AMD", gen: "5th Gen (Turin Dense)", cores: 160, sockets: 2, base: 2.1, tdp: 390 },
+    { name: "AMD EPYC 9965", vendor: "AMD", gen: "5th Gen (Turin Dense)", cores: 192, sockets: 2, base: 2.25, tdp: 500 },
+
+    /* --- AMD EPYC 5th Gen (Sorano) --- */
+    { name: "AMD EPYC 8025P", vendor: "AMD", gen: "5th Gen (Sorano)", cores: 8, sockets: 1, base: 2.9, tdp: 95 },
+    { name: "AMD EPYC 8125P", vendor: "AMD", gen: "5th Gen (Sorano)", cores: 16, sockets: 1, base: 2.65, tdp: 125 },
+    { name: "AMD EPYC 8225P", vendor: "AMD", gen: "5th Gen (Sorano)", cores: 24, sockets: 1, base: 2.95, tdp: 160 },
+    { name: "AMD EPYC 8325P", vendor: "AMD", gen: "5th Gen (Sorano)", cores: 32, sockets: 1, base: 2.7, tdp: 175 },
+    { name: "AMD EPYC 8435P", vendor: "AMD", gen: "5th Gen (Sorano)", cores: 48, sockets: 1, base: 2.45, tdp: 200 },
+    { name: "AMD EPYC 8535P", vendor: "AMD", gen: "5th Gen (Sorano)", cores: 64, sockets: 1, base: 2, tdp: 210 },
+    { name: "AMD EPYC 8635P", vendor: "AMD", gen: "5th Gen (Sorano)", cores: 84, sockets: 1, base: 1.6, tdp: 225 }
   ];
+
+  /* ================================================================
+     AZURE LOCAL CATALOG NODE TYPES
+     Systems listed as "Current (2026 or later)" in the Azure Local
+     solutions catalog (https://azurelocalsolutions.azure.microsoft.com/#/catalog).
+     The catalog publishes the CPU generation and the supported cores per
+     socket of each system, not individual CPU models. "note" explains
+     values that had to be inferred because the catalog entry was incomplete.
+     ================================================================ */
+  const CATALOG_DATE = "2026-10-01";
+  const nodeTypes = [
+    { vendor: "Armada", name: "Galleon - Cruiser", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Armada", name: "Galleon - Triton", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "DataON", name: "DataON AZL-8208i Intel Xeon 6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 16, 24, 32], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "DataON", name: "DataON AZL-8224i Intel Xeon 6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 16, 24, 32], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "DataON", name: "DataON AZS-8112a 5th Gen AMD EPYC", family: "AMD", model: "5th Gen EPYC", sockets: 1, cores: [8, 16, 24, 32, 36, 48], maxCores: 48, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "core options above the system maximum (48 cores) removed" },
+    { vendor: "Dell Technologies", name: "AX-4000r/z with AX-4510c", family: "Intel", model: "Xeon D 27xx", sockets: 1, cores: [8, 16, 20], maxCores: 20, nodes: [1, 16], form: "Rugged", arch: "Hyperconverged", note: "" },
+    { vendor: "Dell Technologies", name: "AX-4000r/z with AX-4520c", family: "Intel", model: "Xeon D 27xx", sockets: 1, cores: [8, 16, 20], maxCores: 20, nodes: [1, 16], form: "Rugged", arch: "Hyperconverged", note: "" },
+    { vendor: "Dell Technologies", name: "AX-660", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 20, 24, 28, 32, 40, 48, 52, 56, 60], maxCores: 120, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "core options above the system maximum (120 cores) removed" },
+    { vendor: "Dell Technologies", name: "AX-670", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Dell Technologies", name: "AX-760", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 20, 24, 28, 32, 40, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Dell Technologies", name: "AX-770", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Dell Technologies", name: "PowerEdge R660, enabled with Dell Private Cloud", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Dell Technologies", name: "PowerEdge R670, enabled with Dell Private Cloud", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Dell Technologies", name: "PowerEdge R760, enabled with Dell Private Cloud", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Dell Technologies", name: "PowerEdge R770, enabled with Dell Private Cloud", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant Compute DL360 Gen12 Server Premier Solution", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant Compute DL380 Gen12 Server Premier Solution", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant DL145 Gen11 Server Premier Solution", family: "AMD", model: "5th Gen EPYC", sockets: 1, cores: [16, 24, 32, 48, 64, 84], maxCores: 84, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant DL380 Gen11 Server Premier Solution for Azure Local", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Hitachi", name: "Hitachi Advanced Server HA810 G6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Hitachi", name: "Hitachi Advanced Server HA820 G6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Lenovo", name: "ThinkAgile FX630 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile FX650 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX455 V3 Edge PR", family: "AMD", model: "4th Gen EPYC", sockets: 1, cores: [8, 16, 24, 32, 48, 64], maxCores: 64, nodes: [1, 4], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX630 V3 CN Node", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX630 V3 Integrated System", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX630 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX650 V3 CN Node", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX650 V3 Integrated System", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX650 V3 PR Node", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX650 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX650a V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" }
+  ];
+
+  /* cpuDatabase generations that belong to each catalog CPU generation. The Xeon 6
+     catalog systems use the LGA 4710 platform (6500P/6700P and 6700E), not the 6900P. */
+  const catalogGenerations = {
+    "Intel 6th Gen Xeon Scalable": ["Xeon 6 P-core (Granite Rapids-SP)", "Xeon 6 E-core (Sierra Forest)"],
+    "Intel 5th Gen Xeon Scalable": ["5th Gen (Emerald Rapids)"],
+    "Intel Xeon D 27xx": ["Xeon D-2700 (Ice Lake-D)"],
+    "AMD 5th Gen EPYC": ["5th Gen (Turin)", "5th Gen (Turin Dense)"],
+    "AMD 4th Gen EPYC": ["4th Gen (Genoa)", "4th Gen (Bergamo)"]
+  };
+  /* Systems whose CPU socket is known from their core options: SP6 platforms use EPYC 8004 / 8005 */
+  const nodeTypeGenerations = {
+    "HPE ProLiant DL145 Gen11 Server Premier Solution": ["5th Gen (Sorano)"],
+    "ThinkAgile MX455 V3 Edge PR": ["4th Gen (Siena)"]
+  };
+  const nodeCpuLabel = p => p.family + " " + p.model;
+  const selectedNodeType = () => { const v = $("nodeType").value; return v === "" ? null : nodeTypes[+v]; };
+  const cpuSockets = cpu => cpu.sockets || 2;
+  const nodeGenerations = p => nodeTypeGenerations[p.name] || catalogGenerations[nodeCpuLabel(p)] || [];
+  /* Real CPU models a node type can use: its CPU generation, one of its published
+     cores-per-socket options and support for the selected number of sockets */
+  const compatibleCpus = (p, sockets) => cpuDatabase
+    .filter(c => nodeGenerations(p).includes(c.gen) && p.cores.includes(c.cores) && cpuSockets(c) >= sockets)
+    .sort((a, b) => a.cores - b.cores || a.tdp - b.tdp || a.name.localeCompare(b.name));
+  /* Catalog core options without any known model of the node type's generation */
+  const unmatchedOptions = p => p.cores.filter(n => !cpuDatabase.some(c => nodeGenerations(p).includes(c.gen) && c.cores === n));
+  /* Generations sold in the "Current (2026 or later)" catalog systems */
+  const currentGenerations = new Set([].concat(...Object.values(catalogGenerations), ...Object.values(nodeTypeGenerations)));
+  /* Recommended CPU of a card list: the smallest model with enough cores (current catalog
+     generations first, lowest TDP on a tie), else the largest one */
+  function recommendCpu(list, minCoresPerSocket) {
+    const isCurrent = c => currentGenerations.has(c.gen) ? 0 : 1;
+    const fit = list.filter(c => c.cores >= minCoresPerSocket)
+      .sort((a, b) => isCurrent(a) - isCurrent(b) || a.cores - b.cores || a.tdp - b.tdp);
+    if (fit.length) return fit[0];
+    return list.slice().sort((a, b) => b.cores - a.cores || isCurrent(a) - isCurrent(b) || a.tdp - b.tdp)[0] || null;
+  }
+  /* CPU recommendation cards: with a node type its compatible models, without one the
+     smallest fitting model of each generation (or the largest one) */
+  function recommendationCandidates(p, sockets, minCoresPerSocket) {
+    if (p) return compatibleCpus(p, sockets);
+    return [...new Set(cpuDatabase.map(c => c.gen))].map(gen => {
+      const list = cpuDatabase.filter(c => c.gen === gen && cpuSockets(c) >= sockets).sort((a, b) => a.cores - b.cores || a.tdp - b.tdp);
+      return list.find(c => c.cores >= minCoresPerSocket) || list[list.length - 1];
+    }).filter(Boolean);
+  }
+  /* CPU card the user clicked to size with instead of the recommended one */
+  let chosenCpuName = null;
+  const cpuSpecs = cpu => cpu.cores + " cores/socket | " + cpu.gen +
+    (cpu.base ? " | " + cpu.base.toFixed(1) + " GHz" : "") + (cpu.tdp ? " | TDP " + cpu.tdp + "W" : "") +
+    (cpuSockets(cpu) === 1 ? " | single socket only" : "");
 
   /* CPU imported from ODIN (not part of the recommendation list) */
   let importedCpu = null;
@@ -426,35 +682,117 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
 
   /* ================================================================
      POPULATE CPU DROPDOWN
+     Without a node type: every CPU of the database. With a node type:
+     the catalog core options of that system plus matching example models.
      ================================================================ */
-  (function populateDropdown() {
-    const sel = $("cpuSelect");
-    const grouped = {};
-    for (const cpu of cpuDatabase) {
-      const key = cpu.vendor + " - " + cpu.gen;
-      if (!grouped[key]) grouped[key] = [];
-      grouped[key].push(cpu);
-    }
-    for (const [group, cpus] of Object.entries(grouped)) {
+  function fillCpuSelect() {
+    const sel = $("cpuSelect"), prev = sel.value, p = selectedNodeType();
+    const odin = sel.querySelector("optgroup[data-odin]");
+    sel.innerHTML = "";
+    if (odin) sel.appendChild(odin);
+    const add = (label, items) => {
+      if (!items.length) return;
       const og = document.createElement("optgroup");
-      og.label = group;
-      for (const cpu of cpus) {
+      og.label = label;
+      for (const [value, text] of items) {
         const opt = document.createElement("option");
-        opt.value = cpu.name;
-        opt.textContent = cpu.name + " (" + cpu.cores + " cores)";
+        opt.value = value;
+        opt.textContent = text;
+        og.appendChild(opt);
+      }
+      sel.appendChild(og);
+    };
+    if (p) {
+      const list = compatibleCpus(p, Math.max(num($("socketsPerNode")), 1));
+      for (const n of [...new Set(list.map(c => c.cores))]) {
+        add(n + " cores per socket", list.filter(c => c.cores === n).map(c =>
+          [c.name, c.name + " (" + c.cores + " cores" + (c.base ? ", " + c.base.toFixed(1) + " GHz" : "") + ", " + c.tdp + " W)"]));
+      }
+    } else {
+      const grouped = {};
+      for (const cpu of cpuDatabase) {
+        const key = cpu.vendor + " - " + cpu.gen;
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push([cpu.name, cpu.name + " (" + cpu.cores + " cores)"]);
+      }
+      for (const [group, items] of Object.entries(grouped)) add(group, items);
+    }
+    if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+    sel.dispatchEvent(new Event("change"));
+  }
+
+  /* show info on change */
+  $("cpuSelect").addEventListener("change", function () {
+    const cpu = findCpu(this.value);
+    $("cpuSelectInfo").textContent = cpu ? cpuSpecs(cpu) : "";
+  });
+
+  /* ================================================================
+     NODE TYPE (Azure Local catalog)
+     ================================================================ */
+  (function initNodeTypes() {
+    const sel = $("nodeType");
+    const any = document.createElement("option");
+    any.value = "";
+    any.textContent = "Any server (no catalog filter)";
+    sel.appendChild(any);
+    const vendors = {};
+    nodeTypes.forEach((p, i) => { (vendors[p.vendor] = vendors[p.vendor] || []).push(i); });
+    for (const vendor of Object.keys(vendors)) {
+      const og = document.createElement("optgroup");
+      og.label = vendor;
+      for (const i of vendors[vendor]) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = nodeTypes[i].name + " (" + nodeCpuLabel(nodeTypes[i]) + ")";
         og.appendChild(opt);
       }
       sel.appendChild(og);
     }
-    /* show info on change */
-    sel.addEventListener("change", function () {
-      const cpu = findCpu(this.value);
-      if (cpu) {
-        $("cpuSelectInfo").textContent = cpu.cores + " cores/socket | " + cpu.gen + (cpu.tdp ? " | TDP " + cpu.tdp + "W" : "");
-      }
-    });
-    sel.dispatchEvent(new Event("change"));
+    sel.addEventListener("change", applyNodeType);
   })();
+
+  /* Limits sockets and node count to the selected system and refreshes the CPU list */
+  function applyNodeType() {
+    const p = selectedNodeType(), sockets = $("socketsPerNode"), nodeCount = $("nodeCount");
+    const dual = sockets.querySelector('option[value="2"]');
+    dual.disabled = !!p && p.sockets < 2;
+    /* a single-socket system forces 1 socket; restore 2 when the next system allows it again */
+    if (dual.disabled) {
+      if (sockets.value === "2") sockets.dataset.forced = "1";
+      sockets.value = "1";
+    } else if (sockets.dataset.forced) {
+      sockets.value = "2";
+      delete sockets.dataset.forced;
+    }
+    nodeCount.min = p ? p.nodes[0] : 1;
+    nodeCount.max = p ? p.nodes[1] : 16;
+    chosenCpuName = null;
+    fillCpuSelect();
+    updateNodeTypeInfo();
+  }
+
+  function updateNodeTypeInfo() {
+    const p = selectedNodeType();
+    if (!p) { $("nodeTypeInfo").textContent = ""; return; }
+    const sockets = Math.max(num($("socketsPerNode")), 1);
+    const list = compatibleCpus(p, sockets), missing = unmatchedOptions(p);
+    $("nodeTypeInfo").textContent = [p.form + ", " + p.arch,
+        p.nodes[0] + " to " + p.nodes[1] + " nodes",
+        "up to " + p.sockets + " socket" + (p.sockets > 1 ? "s" : ""),
+        nodeCpuLabel(p) + ": " + p.cores.join(", ") + " cores per socket",
+        list.length + " compatible CPU model" + (list.length === 1 ? "" : "s") + " for " + sockets + " socket" + (sockets > 1 ? "s" : "") +
+          " (" + [...new Set(list.map(c => c.gen))].join(", ") + ")"].join(" | ") +
+      (missing.length ? ". No known " + nodeCpuLabel(p) + " model has " + missing.join(", ") + " cores, so these options are not used" : "") +
+      (p.note ? ". Note: " + p.note : "") + ". Source: Azure Local catalog, " + CATALOG_DATE + ".";
+  }
+
+  /* the socket count changes which CPU models fit (single socket only models) */
+  $("socketsPerNode").addEventListener("change", function () {
+    if (selectedNodeType()) { fillCpuSelect(); updateNodeTypeInfo(); }
+  });
+
+  fillCpuSelect();
 
   /* ================================================================
      SHARED: read common inputs
@@ -474,7 +812,11 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
   /* ================================================================
      MODE A: "I know my Nodes - recommend CPU"
      ================================================================ */
+  /* the mode of the last calculation, recalculated automatically on input changes */
+  let lastRun = null;
+
   function calculate() {
+    lastRun = "nodes";
     const c = readCommon();
     const nodes          = Math.max(num($("nodeCount")), 1);
     const haEnabled      = c.haCheckbox && nodes > 1;
@@ -483,7 +825,22 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     const coresNeededPerNode   = workloadNodes > 0 ? Math.ceil(c.workloadCores / workloadNodes) : c.workloadCores;
     const minCoresPerSocket    = Math.ceil((coresNeededPerNode + c.mgmtPerNode) / c.socketsPerNode);
 
-    const physicalCoresPerNode   = minCoresPerSocket * c.socketsPerNode;
+    /* size with a real CPU: the card the user selected, else the recommended one */
+    const nodeType = selectedNodeType();
+    const candidates = recommendationCandidates(nodeType, c.socketsPerNode, minCoresPerSocket);
+    const recommendedCpu = recommendCpu(candidates, minCoresPerSocket);
+    let chosenCpu = chosenCpuName ? candidates.find(x => x.name === chosenCpuName) : null;
+    if (chosenCpuName && !chosenCpu) {
+      /* keep a selection that is still valid even when it is no longer one of the generation cards */
+      const cpu = cpuDatabase.find(x => x.name === chosenCpuName);
+      const valid = cpu && (nodeType ? compatibleCpus(nodeType, c.socketsPerNode).includes(cpu) : cpuSockets(cpu) >= c.socketsPerNode);
+      if (valid) { chosenCpu = cpu; candidates.push(cpu); } else chosenCpuName = null;
+    }
+    if (chosenCpu === recommendedCpu) { chosenCpu = null; chosenCpuName = null; }
+    const pickedCpu = chosenCpu || recommendedCpu;
+    const coresPerSocket = pickedCpu ? pickedCpu.cores : minCoresPerSocket;
+
+    const physicalCoresPerNode   = coresPerSocket * c.socketsPerNode;
     const availableCoresPerNode  = Math.max(physicalCoresPerNode - c.mgmtPerNode, 0);
     const totalAvailableCores    = availableCoresPerNode * workloadNodes;
     const totalMgmtCores         = c.mgmtPerNode * nodes;
@@ -507,14 +864,16 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     html += "<strong>Minimum Cores per Socket:</strong> " + minCoresPerSocket + " cores<br>";
     html += "<strong>Nodes for Workloads:</strong> " + workloadNodes + " of " + nodes + (haEnabled ? " (1 reserved for HA)" : "") + "<br>";
     html += "<strong>Max vCPUs Supported:</strong> " + maxVCPUs + " vCPUs<br>";
+    html += nodeTypeChecks(nodes);
+    html += sizingCpuLines(minCoresPerSocket, recommendedCpu, chosenCpu);
     if (fits) {
-      html += '<span class="ok">The cluster has sufficient CPU capacity with ' + minCoresPerSocket + '+ core sockets.</span>';
+      html += '<span class="ok">The cluster has sufficient CPU capacity with ' + (pickedCpu ? pickedCpu.name + " (" + coresPerSocket + " cores per socket)" : minCoresPerSocket + "+ core sockets") + '.</span>';
     } else {
       html += '<span class="warning">Insufficient with ' + nodes + ' nodes. Need at least ' + minNodesTotal + ' nodes.</span>';
     }
     rb.innerHTML = html;
 
-    buildCpuRecommendations(minCoresPerSocket);
+    buildCpuRecommendations(minCoresPerSocket, candidates, recommendedCpu, chosenCpu);
 
     $("chartsSection").style.display = "block";
     drawCoreChart(c.workloadCores, totalMgmtCores, haCores, totalAvailableCores);
@@ -524,10 +883,10 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
       mode: "nodes",
       vms: c.vms, vcpusPerVm: c.vcpusPerVm, totalVCPUs: c.totalVCPUs, overcommit: c.overcommit, workloadCores: c.workloadCores,
       nodes, socketsPerNode: c.socketsPerNode, mgmtPerNode: c.mgmtPerNode, haEnabled, workloadNodes,
-      minCoresPerSocket, physicalCoresPerNode, availableCoresPerNode,
+      minCoresPerSocket, coresPerSocket, physicalCoresPerNode, availableCoresPerNode,
       totalAvailableCores, totalMgmtCores, totalPhysicalCores, haCores,
       maxVCPUs, utilization, fits, minNodesTotal,
-      cpuName: null
+      cpuName: null, pickedCpu, recommendedCpu, chosenCpu
     });
 
     $("exportPdfBtn").style.display = "inline-block";
@@ -537,6 +896,7 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
      MODE B: "I know my CPU - recommend Nodes"
      ================================================================ */
   function calculateByCpu() {
+    lastRun = "cpu";
     const c = readCommon();
     const selectedName   = $("cpuSelect").value;
     const cpu            = findCpu(selectedName);
@@ -572,7 +932,8 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     html += "<strong>Available Cores per Node (for VMs):</strong> " + availableCoresPerNode + " cores<br>";
     html += '<strong>Minimum Nodes Required:</strong> <span class="ok">' + minNodes + " nodes</span>" + (haEnabled ? " (includes +1 for HA)" : "") + "<br>";
     html += "<strong>Max vCPUs Supported (" + minNodes + " nodes):</strong> " + maxVCPUs + " vCPUs<br>";
-    html += "<strong>Core Utilization:</strong> " + utilization.toFixed(1) + "%";
+    html += "<strong>Core Utilization:</strong> " + utilization.toFixed(1) + "%<br>";
+    html += nodeTypeChecks(minNodes);
     rb.innerHTML = html;
 
     /* hide CPU recommendation grid (not relevant in this mode) */
@@ -587,7 +948,7 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
       mode: "cpu",
       vms: c.vms, vcpusPerVm: c.vcpusPerVm, totalVCPUs: c.totalVCPUs, overcommit: c.overcommit, workloadCores: c.workloadCores,
       nodes: minNodes, socketsPerNode: c.socketsPerNode, mgmtPerNode: c.mgmtPerNode, haEnabled, workloadNodes,
-      minCoresPerSocket: coresPerSocket, physicalCoresPerNode, availableCoresPerNode,
+      minCoresPerSocket: coresPerSocket, coresPerSocket, physicalCoresPerNode, availableCoresPerNode,
       totalAvailableCores, totalMgmtCores, totalPhysicalCores, haCores,
       maxVCPUs, utilization, fits: true, minNodesTotal: minNodes,
       cpuName: cpu.name
@@ -597,18 +958,62 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
   }
 
   /* ================================================================
+     NODE TYPE CHECKS (result box lines)
+     ================================================================ */
+  function nodeTypeChecks(nodes) {
+    const p = selectedNodeType();
+    if (!p) return "";
+    let html = "<strong>Node Type:</strong> " + p.vendor + " " + p.name + " (" + nodeCpuLabel(p) + ")<br>";
+    if (nodes < p.nodes[0] || nodes > p.nodes[1]) {
+      html += '<span class="warning">' + nodes + " nodes is outside the supported scale of this node type (" + p.nodes[0] + " to " + p.nodes[1] + " nodes).</span><br>";
+    }
+    return html;
+  }
+
+  /* Mode A: the recommended CPU and the CPU the cluster is sized with */
+  function sizingCpuLines(minCoresPerSocket, recommended, chosen) {
+    if (!recommended) return '<span class="warning">No known CPU model is compatible with this node type and socket count.</span><br>';
+    const scope = selectedNodeType() ? "compatible model" : "current-generation model";
+    let html = "<strong>Recommended CPU:</strong> " + recommended.name + " (" + cpuSpecs(recommended) + ")<br>";
+    if (chosen) {
+      html += "<strong>Selected CPU:</strong> " + chosen.name + " (" + cpuSpecs(chosen) + ")<br>";
+      html += "<strong>Sized With:</strong> " + chosen.cores + " cores per socket, the CPU selected in CPU Recommendations<br>";
+      if (chosen.cores < minCoresPerSocket) {
+        html += '<span class="warning">The selected CPU has fewer than the ' + minCoresPerSocket + " cores per socket the workload needs. The charts show the missing cores.</span><br>";
+      }
+    } else if (recommended.cores >= minCoresPerSocket) {
+      html += "<strong>Sized With:</strong> " + recommended.cores + " cores per socket, the smallest " + scope + " with " + minCoresPerSocket + "+ cores<br>";
+    } else {
+      html += '<span class="warning">No ' + (selectedNodeType() ? "compatible " : "") + "CPU has " + minCoresPerSocket + "+ cores per socket. Sized with the largest one, " + recommended.name + " (" + recommended.cores + " cores). Add nodes" + (selectedNodeType() ? " or choose another node type" : "") + ".</span><br>";
+    }
+    return html;
+  }
+
+  /* ================================================================
      CPU RECOMMENDATIONS
      ================================================================ */
-  function buildCpuRecommendations(minCores) {
-    $("cpuRecommendSection").style.display = "block";
-    const grid = $("cpuGrid");
+  const defaultRecommendIntro = $("cpuRecommendIntro").textContent;
 
-    /* sort: best fit first, then by cores ascending */
-    const sorted = [...cpuDatabase].sort((a, b) => {
+  function buildCpuRecommendations(minCores, candidates, recommended, chosen) {
+    $("cpuRecommendSection").style.display = "block";
+    const grid = $("cpuGrid"), p = selectedNodeType();
+
+    /* with a node type the cards are the real CPU models that system can use */
+    const sockets = Math.max(num($("socketsPerNode")), 1);
+    $("cpuRecommendIntro").textContent = p
+      ? "Based on the minimum cores required per socket, these are the CPU models " + p.name + " can use: " + nodeCpuLabel(p) +
+        " models with a cores-per-socket option the Azure Local catalog lists for this system that support " + sockets + " socket" + (sockets > 1 ? "s" : "") +
+        ". The recommended CPU is highlighted; click another card, including a smaller one, to size the cluster with it."
+      : defaultRecommendIntro;
+
+    /* sort: recommended first, then fitting models by cores and TDP ascending */
+    const sorted = candidates.slice().sort((a, b) => {
+      const aRec = a === recommended ? 0 : 1, bRec = b === recommended ? 0 : 1;
+      if (aRec !== bRec) return aRec - bRec;
       const aFit = a.cores >= minCores ? 0 : 1;
       const bFit = b.cores >= minCores ? 0 : 1;
       if (aFit !== bFit) return aFit - bFit;
-      return a.cores - b.cores;
+      return a.cores - b.cores || a.tdp - b.tdp;
     });
 
     let html = "";
@@ -618,15 +1023,35 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
       if (ratio >= 1.2)      { cls = "match"; tag = '<span class="cpu-tag fit">Good Fit</span>'; }
       else if (ratio >= 1.0) { cls = "tight"; tag = '<span class="cpu-tag tight-tag">Tight Fit</span>'; }
       else                   { cls = "no-fit"; tag = '<span class="cpu-tag small">Too Small</span>'; }
+      const isRec = cpu === recommended, isSel = cpu === chosen;
+      if (isRec) { cls += " recommended"; tag += '<span class="cpu-tag rec-tag">Recommended</span>'; }
+      if (isSel) { cls += " selected"; tag += '<span class="cpu-tag sel-tag">Selected</span>'; }
 
-      html += '<div class="cpu-card ' + cls + '">';
+      html += '<div class="cpu-card ' + cls + '" data-cpu="' + cpu.name + '" role="button" tabindex="0" aria-pressed="' + (isSel || (isRec && !chosen)) + '"' +
+        ' title="' + (isRec ? "Recommended CPU" : "Size the cluster with this CPU") + '">';
       html += '<div class="cpu-name">' + cpu.name + tag + '</div>';
-      html += '<div class="cpu-detail">';
-      html += cpu.cores + ' cores/socket | ' + cpu.gen + ' | TDP ' + cpu.tdp + 'W';
-      html += '</div></div>';
+      html += '<div class="cpu-detail">' + cpuSpecs(cpu) + '</div></div>';
     }
     grid.innerHTML = html;
   }
+
+  /* clicking a card sizes the cluster with that CPU; clicking the recommended one goes back to it */
+  function chooseCard(card) {
+    if (!card) return;
+    const name = card.dataset.cpu, hadFocus = card === document.activeElement;
+    chosenCpuName = name;
+    calculate();
+    const again = $("cpuGrid").querySelector('[data-cpu="' + name + '"]');
+    if (again && hadFocus) again.focus({ preventScroll: true });
+  }
+  $("cpuGrid").addEventListener("click", e => chooseCard(e.target.closest(".cpu-card")));
+  $("cpuGrid").addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const card = e.target.closest(".cpu-card");
+    if (!card) return;
+    e.preventDefault();
+    chooseCard(card);
+  });
 
   /* ================================================================
      OVERVIEW TABLE
@@ -646,6 +1071,10 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     row("Physical Cores Required", d.totalVCPUs + " vCPUs / " + d.overcommit + ":1 ratio", d.workloadCores + " cores");
 
     sec("Cluster Configuration");
+    const nodeType = selectedNodeType();
+    if (nodeType) {
+      row("Node Type", "Azure Local catalog (" + CATALOG_DATE + ")", nodeType.vendor + " " + nodeType.name);
+    }
     if (d.cpuName) {
       row("Selected CPU", "User-selected", d.cpuName);
     }
@@ -657,8 +1086,14 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     sec(d.mode === "cpu" ? "Node Sizing (for " + d.cpuName + ")" : "CPU Sizing");
     if (d.mode === "nodes") {
       row("Cores Needed per Node (workload + mgmt)", "ceil(" + d.workloadCores + " / " + d.workloadNodes + ") + " + d.mgmtPerNode, (d.availableCoresPerNode + d.mgmtPerNode) + " cores");
-      row("Minimum Cores per Socket", (d.availableCoresPerNode + d.mgmtPerNode) + " / " + d.socketsPerNode + " socket(s)", d.minCoresPerSocket + " cores");
-      total("Recommended Socket", d.minCoresPerSocket + "+ cores per socket");
+      row("Minimum Cores per Socket", "(ceil(" + d.workloadCores + " / " + d.workloadNodes + ") + " + d.mgmtPerNode + ") / " + d.socketsPerNode + " socket(s)", d.minCoresPerSocket + " cores");
+      if (d.pickedCpu) {
+        row("Recommended CPU", (nodeType ? "Smallest compatible model" : "Smallest current-generation model") + " with enough cores", d.recommendedCpu.name);
+        if (d.chosenCpu) row("Selected CPU", "User-selected in CPU Recommendations", d.chosenCpu.name);
+        total("Sized With", d.coresPerSocket + " cores per socket (" + d.pickedCpu.name + ")");
+      } else {
+        total("Recommended Socket", d.minCoresPerSocket + "+ cores per socket");
+      }
     } else {
       row("Cores per Socket", d.cpuName, d.minCoresPerSocket + " cores");
       row("Available Cores per Node (for VMs)", d.physicalCoresPerNode + " - " + d.mgmtPerNode + " mgmt", d.availableCoresPerNode + " cores");
@@ -666,8 +1101,8 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
       total("Minimum Nodes Required", d.nodes + " nodes" + (d.haEnabled ? " (incl. +1 HA)" : ""));
     }
 
-    sec("Cluster Capacity (" + d.nodes + " nodes, " + d.minCoresPerSocket + "-core sockets)");
-    row("Physical Cores per Node", d.socketsPerNode + " x " + d.minCoresPerSocket + " cores", d.physicalCoresPerNode + " cores");
+    sec("Cluster Capacity (" + d.nodes + " nodes, " + d.coresPerSocket + "-core sockets)");
+    row("Physical Cores per Node", d.socketsPerNode + " x " + d.coresPerSocket + " cores", d.physicalCoresPerNode + " cores");
     row("Available Cores per Node (for VMs)", d.physicalCoresPerNode + " - " + d.mgmtPerNode + " mgmt", d.availableCoresPerNode + " cores");
     row("Total Available Cores (cluster)", d.availableCoresPerNode + " x " + d.workloadNodes + " nodes", d.totalAvailableCores + " cores");
     row("Max vCPUs Supported", d.totalAvailableCores + " cores x " + d.overcommit + ":1", d.maxVCPUs + " vCPUs");
@@ -1424,7 +1859,7 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
   }
 
   function drawNodeChart(nodes, coresPerNode, mgmtPerNode, availPerNode, totalWorkloadCores, workloadNodes, haEnabled) {
-    const labels = [], mgmtData = [], workloadData = [], freeData = [];
+    const labels = [], mgmtData = [], workloadData = [], freeData = [], missingData = [];
     const workloadPerNode = workloadNodes > 0 ? Math.ceil(totalWorkloadCores / workloadNodes) : 0;
 
     for (let i = 1; i <= nodes; i++) {
@@ -1434,22 +1869,27 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
       if (isHA) {
         workloadData.push(0);
         freeData.push(availPerNode);
+        missingData.push(0);
       } else {
         const assigned = Math.min(workloadPerNode, availPerNode);
         workloadData.push(assigned);
         freeData.push(Math.max(availPerNode - assigned, 0));
+        missingData.push(Math.max(workloadPerNode - availPerNode, 0));
       }
     }
+    const series = [
+      { label: "Management",  color: C3D_COLORS.orange, data: mgmtData },
+      { label: "VM Workload", color: C3D_COLORS.blue,   data: workloadData },
+      { label: "Free",        color: C3D_COLORS.aqua,   data: freeData }
+    ];
+    /* a CPU that is too small: the workload cores each node lacks, stacked above its capacity */
+    if (missingData.some(v => v > 0)) series.push({ label: "Missing (short)", color: C3D.critical, data: missingData });
 
     if (nodeChart) nodeChart.destroy();
     nodeChart = new Chart3D($("nodeChart"), {
       type: "bar", title: "Per-Node Core Distribution", categories: labels,
       format: cores, axisFormat: v => String(+v.toFixed(1)),
-      series: [
-        { label: "Management",  color: C3D_COLORS.orange, data: mgmtData },
-        { label: "VM Workload", color: C3D_COLORS.blue,   data: workloadData },
-        { label: "Free",        color: C3D_COLORS.aqua,   data: freeData }
-      ]
+      series
     });
   }
 
@@ -1855,6 +2295,13 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
 
   function applyOdinConfig(cfg, fileName) {
     const applied = [], notes = [];
+    chosenCpuName = null;
+
+    if (selectedNodeType()) {
+      $("nodeType").value = "";
+      applyNodeType();
+      notes.push("The node type filter was cleared, because the ODIN design defines its own CPU.");
+    }
 
     if (cfg.totals && cfg.totals.vcpus > 0) {
       const total = Math.ceil(cfg.totals.vcpus * cfg.growthFactor);
@@ -1927,6 +2374,23 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
   $("calcBtn").addEventListener("click", calculate);
   $("calcByCpuBtn").addEventListener("click", calculateByCpu);
   $("exportPdfBtn").addEventListener("click", exportPdf);
+
+  /* ---- automatic recalculation ----
+     Choosing a CPU recalculates the required nodes and the charts. After a first
+     calculation, any other input change recalculates the active mode, so results,
+     recommendations and charts never show a stale node type or CPU. Only user
+     events count (fillCpuSelect dispatches its own change events). */
+  let recalcTimer = null;
+  function onInputChange(e) {
+    const t = e.target;
+    if (!e.isTrusted || !t.id || t.id === "odinFile" || t.id === "nodeTypeInfo") return;
+    const mode = t.id === "cpuSelect" ? "cpu" : lastRun;
+    if (!mode) return;
+    clearTimeout(recalcTimer);
+    recalcTimer = setTimeout(() => { if (mode === "cpu") calculateByCpu(); else calculate(); }, 120);
+  }
+  $("calcRoot").addEventListener("change", onInputChange);
+  $("calcRoot").addEventListener("input", onInputChange);
   listenOdinImport("cpu", applyOdinConfig);
 })();
 </script>
