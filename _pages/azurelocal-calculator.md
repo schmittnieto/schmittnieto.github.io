@@ -49,13 +49,26 @@ You only need to import once. The configuration is applied to all three calculat
 
 | Calculator | Fields imported from ODIN |
 |------------|---------------------------|
-| CPU | Total workload vCPUs including future growth, vCPU to core ratio, node count, sockets, management overhead per node (the ODIN host core reservation) and the ODIN CPU as a selectable model |
-| Storage | Node count, capacity drives per node and drive size, resiliency (Simple, two-way, three-way or four-way mirror) and target effective storage from the workload total including future growth |
-| Pricing | Deployment model (L1, L2 or L3), node count, physical cores per node, switch count and AVD vCPUs |
+| CPU | Cluster type, total workload vCPUs including future growth (the fixed control plane appliance for an ALDO management cluster), vCPU to core ratio, node count, sockets, management overhead per node (the ODIN host core reservation) and the ODIN CPU as a selectable model |
+| Storage | Deployment type, node count, capacity drives per node and drive size, resiliency (Simple, two-way, three-way or four-way mirror) and target effective storage from the workload total including future growth. Disaggregated designs get the SAN capacity plan with Fibre Channel or iSCSI |
+| Pricing | Deployment model (L1, L2 or L3), node count, physical cores per node (the management cluster fields for an ALDO management cluster design), switch count and AVD vCPUs (not for L3) |
 
 The switch count follows the ODIN Sizer network model: 2 ToR switches and 1 BMC switch per rack, 2 racks for Rack Aware, a single BMC switch for Single Node. Disaggregated Storage adds FC and spine switches on top. The Simple and Four-Way Mirror options only appear in the Storage Calculator when the imported design uses them.
 
-Prices for nodes, switches and related costs are not part of ODIN exports and must be entered manually. Tiered ODIN layouts are imported as their capacity drives only. The Storage Calculator caps imports at 16 nodes and 24 drives per node.
+Prices for nodes, switches and related costs are not part of ODIN exports and must be entered manually. Tiered ODIN layouts are imported as their capacity drives only. The Storage Calculator caps imports at 16 nodes (64 for disaggregated) and 24 drives per node. ODIN exports have no SAN vendor, so choose it after the import.
+{: .notice--info}
+
+### Disconnected Operations and External SAN
+
+The calculators also cover the two deployment types that change the sizing the most: the dedicated management cluster of disconnected operations (ALDO) and external SAN storage.
+
+| Calculator | Disconnected operations (ALDO) | External SAN |
+|------------|--------------------------------|--------------|
+| CPU | Cluster type for the management cluster: the fixed control plane appliance (24 vCPUs), at least 24 physical cores per node, a host reservation of at least 20% of the cores and 3 nodes for production. Only catalog systems with the Disconnected operations capability are offered | Disaggregated cluster type with up to 64 nodes and only the catalog systems that support this architecture |
+| Storage | Checks the standard (6 drives) or datacenter (8 drives) configuration with drives of at least 2 TB and reserves the 2 TB infrastructure volume of disconnected operations | Hyperconverged with external SAN or disaggregated: supported arrays, Fibre Channel or iSCSI host requirements, one LUN per CSV and the physical array capacity after free space headroom and data reduction |
+| Pricing | L3 adds the nodes and cores of the management cluster because they are billed too. AVD is not available with disconnected operations | Both SAN variants use the L2 host fee |
+
+Microsoft does not publish the L3 price, so enter your quote in the Pricing Calculator. External SAN storage requires Azure Local 2604 or later. See [Supported SAN solutions on Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/concepts/san-requirements?wt.mc_id=MVP_579217) and [Dedicated management cluster for disconnected operations](https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-control-plane-appliance?wt.mc_id=MVP_579217).
 {: .notice--info}
 
 ### CPU
@@ -192,6 +205,15 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
   <div class="card">
     <h3>Cluster Settings</h3>
     <div class="form-grid">
+      <div class="form-group full">
+        <label for="clusterType">Cluster Type</label>
+        <select id="clusterType">
+          <option value="standard" selected>Hyperconverged (Storage Spaces Direct)</option>
+          <option value="disaggregated">Disaggregated (external SAN storage, up to 64 nodes)</option>
+          <option value="aldo-mgmt">Disconnected operations (ALDO): management cluster</option>
+        </select>
+        <div id="clusterTypeInfo" style="font-size:.82em;margin-top:6px"></div>
+      </div>
       <div class="form-group">
         <label for="nodeType">Node Type (Azure Local catalog)</label>
         <select id="nodeType"></select>
@@ -310,6 +332,11 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     <p>
       <strong>Newer CPU Generations Disclaimer:</strong><br>
       Newer processor generations (e.g., Intel Xeon 6 Granite Rapids/Sierra Forest, AMD EPYC 5th Gen Turin) typically offer improved IPC (Instructions Per Clock), higher core counts, better power efficiency, and enhanced virtualization features compared to older generations. This means that with a newer CPU, you may safely use a higher vCPU-to-physical-core ratio (overcommit) while maintaining the same or better performance per VM. When planning new deployments, consider selecting the latest available generation to maximize density and efficiency. Always validate performance expectations with your workload profile and OEM recommendations.
+    </p>
+    <p>
+      <strong>Cluster Type Disclaimer:</strong><br>
+      Disaggregated clusters use external SAN storage instead of Storage Spaces Direct and support up to 64 nodes. A disconnected operations (ALDO) management cluster is a dedicated cluster that only hosts the local control plane appliance: production needs 3 nodes with at least 24 physical cores, 128 GB (standard) or 512 GB (datacenter) memory, 6 or 8 data drives of at least 2 TB and a 960 GB boot drive per node. The appliance size (24 vCPUs, 78 GB) and the 20% host core reservation follow the ODIN Sizer. Only catalog systems with the Disconnected operations capability are offered for it. See
+      <a href="https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-control-plane-appliance?wt.mc_id=MVP_579217" target="_blank">dedicated management cluster for disconnected operations</a>.
     </p>
     <p>
       <strong>No Warranty:</strong><br>
@@ -572,38 +599,38 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
      ================================================================ */
   const CATALOG_DATE = "2026-10-01";
   const nodeTypes = [
-    { vendor: "Armada", name: "Galleon - Cruiser", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
-    { vendor: "Armada", name: "Galleon - Triton", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
-    { vendor: "DataON", name: "DataON AZL-8208i Intel Xeon 6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 16, 24, 32], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
-    { vendor: "DataON", name: "DataON AZL-8224i Intel Xeon 6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 16, 24, 32], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Armada", name: "Galleon - Cruiser", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Armada", name: "Galleon - Triton", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "DataON", name: "DataON AZL-8208i Intel Xeon 6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 16, 24, 32], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" },
+    { vendor: "DataON", name: "DataON AZL-8224i Intel Xeon 6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 16, 24, 32], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" },
     { vendor: "DataON", name: "DataON AZS-8112a 5th Gen AMD EPYC", family: "AMD", model: "5th Gen EPYC", sockets: 1, cores: [8, 16, 24, 32, 36, 48], maxCores: 48, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "core options above the system maximum (48 cores) removed" },
-    { vendor: "Dell Technologies", name: "AX-4000r/z with AX-4510c", family: "Intel", model: "Xeon D 27xx", sockets: 1, cores: [8, 16, 20], maxCores: 20, nodes: [1, 16], form: "Rugged", arch: "Hyperconverged", note: "" },
-    { vendor: "Dell Technologies", name: "AX-4000r/z with AX-4520c", family: "Intel", model: "Xeon D 27xx", sockets: 1, cores: [8, 16, 20], maxCores: 20, nodes: [1, 16], form: "Rugged", arch: "Hyperconverged", note: "" },
-    { vendor: "Dell Technologies", name: "AX-660", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 20, 24, 28, 32, 40, 48, 52, 56, 60], maxCores: 120, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "core options above the system maximum (120 cores) removed" },
-    { vendor: "Dell Technologies", name: "AX-670", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Dell Technologies", name: "AX-760", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 20, 24, 28, 32, 40, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Dell Technologies", name: "AX-770", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Dell Technologies", name: "PowerEdge R660, enabled with Dell Private Cloud", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
-    { vendor: "Dell Technologies", name: "PowerEdge R670, enabled with Dell Private Cloud", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
-    { vendor: "Dell Technologies", name: "PowerEdge R760, enabled with Dell Private Cloud", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
-    { vendor: "Dell Technologies", name: "PowerEdge R770, enabled with Dell Private Cloud", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
-    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant Compute DL360 Gen12 Server Premier Solution", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
-    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant Compute DL380 Gen12 Server Premier Solution", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
-    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant DL145 Gen11 Server Premier Solution", family: "AMD", model: "5th Gen EPYC", sockets: 1, cores: [16, 24, 32, 48, 64, 84], maxCores: 84, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant DL380 Gen11 Server Premier Solution for Azure Local", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Dell Technologies", name: "AX-4000r/z with AX-4510c", family: "Intel", model: "Xeon D 27xx", sockets: 1, cores: [8, 16, 20], maxCores: 20, nodes: [1, 16], form: "Rugged", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Dell Technologies", name: "AX-4000r/z with AX-4520c", family: "Intel", model: "Xeon D 27xx", sockets: 1, cores: [8, 16, 20], maxCores: 20, nodes: [1, 16], form: "Rugged", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Dell Technologies", name: "AX-660", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 20, 24, 28, 32, 40, 48, 52, 56, 60], maxCores: 120, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "core options above the system maximum (120 cores) removed" },
+    { vendor: "Dell Technologies", name: "AX-670", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Dell Technologies", name: "AX-760", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 20, 24, 28, 32, 40, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Dell Technologies", name: "AX-770", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Dell Technologies", name: "PowerEdge R660, enabled with Dell Private Cloud", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated", aldo: true, note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Dell Technologies", name: "PowerEdge R670, enabled with Dell Private Cloud", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", aldo: true, note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Dell Technologies", name: "PowerEdge R760, enabled with Dell Private Cloud", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated", aldo: true, note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Dell Technologies", name: "PowerEdge R770, enabled with Dell Private Cloud", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", aldo: true, note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant Compute DL360 Gen12 Server Premier Solution", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant Compute DL380 Gen12 Server Premier Solution", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant DL145 Gen11 Server Premier Solution", family: "AMD", model: "5th Gen EPYC", sockets: 1, cores: [16, 24, 32, 48, 64, 84], maxCores: 84, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Hewlett Packard Enterprise", name: "HPE ProLiant DL380 Gen11 Server Premier Solution for Azure Local", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" },
     { vendor: "Hitachi", name: "Hitachi Advanced Server HA810 G6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
     { vendor: "Hitachi", name: "Hitachi Advanced Server HA820 G6", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated", note: "sockets inferred from maximum cores; core options taken from other systems with the same CPU generation" },
-    { vendor: "Lenovo", name: "ThinkAgile FX630 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Lenovo", name: "ThinkAgile FX650 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Lenovo", name: "ThinkAgile MX455 V3 Edge PR", family: "AMD", model: "4th Gen EPYC", sockets: 1, cores: [8, 16, 24, 32, 48, 64], maxCores: 64, nodes: [1, 4], form: "Rack", arch: "Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile FX630 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile FX650 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX455 V3 Edge PR", family: "AMD", model: "4th Gen EPYC", sockets: 1, cores: [8, 16, 24, 32, 48, 64], maxCores: 64, nodes: [1, 4], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
     { vendor: "Lenovo", name: "ThinkAgile MX630 V3 CN Node", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
     { vendor: "Lenovo", name: "ThinkAgile MX630 V3 Integrated System", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Lenovo", name: "ThinkAgile MX630 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX630 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" },
     { vendor: "Lenovo", name: "ThinkAgile MX650 V3 CN Node", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
     { vendor: "Lenovo", name: "ThinkAgile MX650 V3 Integrated System", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Lenovo", name: "ThinkAgile MX650 V3 PR Node", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", note: "" },
-    { vendor: "Lenovo", name: "ThinkAgile MX650 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" },
-    { vendor: "Lenovo", name: "ThinkAgile MX650a V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", note: "" }
+    { vendor: "Lenovo", name: "ThinkAgile MX650 V3 PR Node", family: "Intel", model: "5th Gen Xeon Scalable", sockets: 2, cores: [8, 10, 12, 16, 18, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64], maxCores: 128, nodes: [1, 16], form: "Rack", arch: "Hyperconverged", aldo: true, note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX650 V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" },
+    { vendor: "Lenovo", name: "ThinkAgile MX650a V4", family: "Intel", model: "6th Gen Xeon Scalable", sockets: 2, cores: [8, 12, 16, 24, 32, 36, 48, 64, 80, 86], maxCores: 172, nodes: [1, 64], form: "Rack", arch: "Disaggregated/Hyperconverged", aldo: true, note: "" }
   ];
 
   /* cpuDatabase generations that belong to each catalog CPU generation. The Xeon 6
@@ -766,7 +793,7 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
       delete sockets.dataset.forced;
     }
     nodeCount.min = p ? p.nodes[0] : 1;
-    nodeCount.max = p ? p.nodes[1] : 16;
+    nodeCount.max = Math.min(p ? p.nodes[1] : 64, clusterTypes[clusterType()].maxNodes);
     chosenCpuName = null;
     fillCpuSelect();
     updateNodeTypeInfo();
@@ -792,6 +819,90 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     if (selectedNodeType()) { fillCpuSelect(); updateNodeTypeInfo(); }
   });
 
+  /* ================================================================
+     CLUSTER TYPE
+     Disconnected operations (ALDO) management cluster values: Microsoft Learn
+     "Dedicated management cluster for disconnected operations" (3 nodes,
+     24 physical cores per node, up to 16 machines) and the ODIN Sizer
+     (control plane appliance IRVM1 with 24 vCPUs and 78 GB memory, host
+     reservation of 20% of the physical cores with a minimum of 2).
+     ================================================================ */
+  const ALDO = { minCores: 24, nodes: 3, applianceVcpus: 24, applianceMemGB: 78, reservePct: 0.20, reserveMin: 2 };
+  const clusterTypes = {
+    standard:        { label: "Hyperconverged (Storage Spaces Direct)", arch: "Hyperconverged", maxNodes: 16 },
+    disaggregated:   { label: "Disaggregated (external SAN storage)", arch: "Disaggregated", maxNodes: 64 },
+    "aldo-mgmt":     { label: "Disconnected operations (ALDO) management cluster", arch: "Hyperconverged", maxNodes: 16 }
+  };
+  const clusterType = () => clusterTypes[$("clusterType").value] ? $("clusterType").value : "standard";
+  const isAldo = () => clusterType() === "aldo-mgmt";
+  /* catalog systems a cluster type can use: matching architecture, plus the catalog
+     "Disconnected operations" solution capability for the ALDO management cluster */
+  const nodeTypeAllowed = p => p.arch.split("/").includes(clusterTypes[clusterType()].arch) && (!isAldo() || !!p.aldo);
+  /* host cores reserved per node: the user value, for ALDO at least 20% of the physical cores (min 2) */
+  const hostReserve = (physical, mgmt) => isAldo() ? Math.max(mgmt, Math.ceil(ALDO.reservePct * physical), ALDO.reserveMin) : mgmt;
+  /* smallest physical cores per node that leave the needed cores after the host reservation */
+  function minPhysicalPerNode(needed, mgmt) {
+    let p = needed + mgmt;
+    while (p - hostReserve(p, mgmt) < needed) p++;
+    return isAldo() ? Math.max(p, ALDO.minCores) : p;
+  }
+
+  function applyClusterType() {
+    const aldo = isAldo(), nt = $("nodeType");
+    /* the management cluster only runs the control plane appliance */
+    for (const id of ["vmCount", "vcpusPerVm"]) {
+      const el = $(id);
+      if (aldo && !el.disabled) { el.dataset.userValue = el.value; el.disabled = true; }
+      else if (!aldo && el.disabled) { el.value = el.dataset.userValue || el.value; el.disabled = false; delete el.dataset.userValue; }
+    }
+    if (aldo) { $("vmCount").value = 1; $("vcpusPerVm").value = ALDO.applianceVcpus; }
+
+    for (const opt of nt.querySelectorAll("option")) {
+      if (opt.value === "") continue;
+      const ok = nodeTypeAllowed(nodeTypes[+opt.value]);
+      opt.disabled = !ok;
+      opt.title = ok ? "" : (isAldo() ? "No Disconnected operations capability in the Azure Local catalog" : "Not available as " + clusterTypes[clusterType()].arch + " in the Azure Local catalog");
+    }
+    if (selectedNodeType() && !nodeTypeAllowed(selectedNodeType())) nt.value = "";
+    applyNodeType();
+    if (+$("nodeCount").value > +$("nodeCount").max) $("nodeCount").value = $("nodeCount").max;
+
+    const allowed = nodeTypes.filter(nodeTypeAllowed).length;
+    $("clusterTypeInfo").textContent = {
+      standard: "Storage Spaces Direct on the cluster nodes, 1 to 16 nodes.",
+      disaggregated: "Compute nodes use external SAN storage (Fibre Channel or iSCSI) instead of Storage Spaces Direct, up to 64 nodes. " + allowed + " catalog systems support this architecture.",
+      "aldo-mgmt": "Dedicated cluster that only hosts the disconnected operations control plane appliance (" + ALDO.applianceVcpus + " vCPUs, " + ALDO.applianceMemGB +
+        " GB). Production needs " + ALDO.nodes + " nodes with " + ALDO.minCores + "+ physical cores each, and the host reserves at least 20% of the cores. Workloads run on separate clusters. " +
+        allowed + " hyperconverged catalog systems have the Disconnected operations capability."
+    }[clusterType()];
+  }
+  $("clusterType").addEventListener("change", () => {
+    if (isAldo()) $("nodeCount").value = ALDO.nodes;
+    applyClusterType();
+  });
+
+  /* result lines for the cluster type */
+  function clusterTypeChecks(nodes, physicalPerNode, mgmtPerNode, userMgmt) {
+    const t = clusterType();
+    if (t === "standard") return "";
+    let html = "<strong>Cluster Type:</strong> " + clusterTypes[t].label + "<br>";
+    if (t === "disaggregated") {
+      html += "<strong>Storage:</strong> external SAN (Fibre Channel or iSCSI), internal drives are boot drives only. Plan the SAN in the Storage Calculator.<br>";
+      return html;
+    }
+    html += "<strong>Workload:</strong> disconnected operations control plane appliance (IRVM1, " + ALDO.applianceVcpus + " vCPUs, " + ALDO.applianceMemGB + " GB memory). Don't deploy other workloads on this cluster.<br>";
+    html += "<strong>Host Reservation:</strong> " + mgmtPerNode + " cores per node (the larger of " + userMgmt + " cores and 20% of " + physicalPerNode + " physical cores, min " + ALDO.reserveMin + ")<br>";
+    if (physicalPerNode < ALDO.minCores) {
+      html += '<span class="warning">' + physicalPerNode + " physical cores per node is below the " + ALDO.minCores + " physical cores the management cluster requires.</span><br>";
+    }
+    if (nodes < ALDO.nodes) {
+      html += '<span class="warning">Production management clusters need ' + ALDO.nodes + " nodes. Smaller management clusters are only for evaluation and proof of concept.</span><br>";
+    }
+    html += "<strong>Other Minimums per Node:</strong> 128 GB memory (standard, 100+ nodes managed) or 512 GB (datacenter, 1000+ nodes), 6 or 8 data drives of at least 2 TB (SSD/NVMe) and a 960 GB boot drive<br>";
+    return html;
+  }
+
+  applyClusterType();
   fillCpuSelect();
 
   /* ================================================================
@@ -823,7 +934,8 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     const workloadNodes  = haEnabled ? nodes - 1 : nodes;
 
     const coresNeededPerNode   = workloadNodes > 0 ? Math.ceil(c.workloadCores / workloadNodes) : c.workloadCores;
-    const minCoresPerSocket    = Math.ceil((coresNeededPerNode + c.mgmtPerNode) / c.socketsPerNode);
+    const minPhysical          = minPhysicalPerNode(coresNeededPerNode, c.mgmtPerNode);
+    const minCoresPerSocket    = Math.ceil(minPhysical / c.socketsPerNode);
 
     /* size with a real CPU: the card the user selected, else the recommended one */
     const nodeType = selectedNodeType();
@@ -841,9 +953,10 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     const coresPerSocket = pickedCpu ? pickedCpu.cores : minCoresPerSocket;
 
     const physicalCoresPerNode   = coresPerSocket * c.socketsPerNode;
-    const availableCoresPerNode  = Math.max(physicalCoresPerNode - c.mgmtPerNode, 0);
+    const mgmtPerNode            = hostReserve(physicalCoresPerNode, c.mgmtPerNode);
+    const availableCoresPerNode  = Math.max(physicalCoresPerNode - mgmtPerNode, 0);
     const totalAvailableCores    = availableCoresPerNode * workloadNodes;
-    const totalMgmtCores         = c.mgmtPerNode * nodes;
+    const totalMgmtCores         = mgmtPerNode * nodes;
     const totalPhysicalCores     = physicalCoresPerNode * nodes;
     const haCores                = haEnabled ? physicalCoresPerNode : 0;
     const maxVCPUs               = totalAvailableCores * c.overcommit;
@@ -864,6 +977,7 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     html += "<strong>Minimum Cores per Socket:</strong> " + minCoresPerSocket + " cores<br>";
     html += "<strong>Nodes for Workloads:</strong> " + workloadNodes + " of " + nodes + (haEnabled ? " (1 reserved for HA)" : "") + "<br>";
     html += "<strong>Max vCPUs Supported:</strong> " + maxVCPUs + " vCPUs<br>";
+    html += clusterTypeChecks(nodes, physicalCoresPerNode, mgmtPerNode, c.mgmtPerNode);
     html += nodeTypeChecks(nodes);
     html += sizingCpuLines(minCoresPerSocket, recommendedCpu, chosenCpu);
     if (fits) {
@@ -877,13 +991,13 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
 
     $("chartsSection").style.display = "block";
     drawCoreChart(c.workloadCores, totalMgmtCores, haCores, totalAvailableCores);
-    drawNodeChart(nodes, physicalCoresPerNode, c.mgmtPerNode, availableCoresPerNode, c.workloadCores, workloadNodes, haEnabled);
+    drawNodeChart(nodes, physicalCoresPerNode, mgmtPerNode, availableCoresPerNode, c.workloadCores, workloadNodes, haEnabled);
 
     buildOverview({
       mode: "nodes",
       vms: c.vms, vcpusPerVm: c.vcpusPerVm, totalVCPUs: c.totalVCPUs, overcommit: c.overcommit, workloadCores: c.workloadCores,
-      nodes, socketsPerNode: c.socketsPerNode, mgmtPerNode: c.mgmtPerNode, haEnabled, workloadNodes,
-      minCoresPerSocket, coresPerSocket, physicalCoresPerNode, availableCoresPerNode,
+      nodes, socketsPerNode: c.socketsPerNode, mgmtPerNode, userMgmt: c.mgmtPerNode, haEnabled, workloadNodes,
+      coresNeededPerNode, minPhysical, minCoresPerSocket, coresPerSocket, physicalCoresPerNode, availableCoresPerNode,
       totalAvailableCores, totalMgmtCores, totalPhysicalCores, haCores,
       maxVCPUs, utilization, fits, minNodesTotal,
       cpuName: null, pickedCpu, recommendedCpu, chosenCpu
@@ -904,16 +1018,18 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
 
     const coresPerSocket        = cpu.cores;
     const physicalCoresPerNode  = coresPerSocket * c.socketsPerNode;
-    const availableCoresPerNode = Math.max(physicalCoresPerNode - c.mgmtPerNode, 0);
+    const mgmtPerNode           = hostReserve(physicalCoresPerNode, c.mgmtPerNode);
+    const availableCoresPerNode = Math.max(physicalCoresPerNode - mgmtPerNode, 0);
 
-    /* minimum workload nodes */
+    /* minimum workload nodes (the ALDO management cluster has at least 3 nodes) */
     const minWorkloadNodes = availableCoresPerNode > 0 ? Math.ceil(c.workloadCores / availableCoresPerNode) : 999;
     const haEnabled        = c.haCheckbox;
-    const minNodes         = haEnabled ? minWorkloadNodes + 1 : minWorkloadNodes;
+    const sizedNodes       = haEnabled ? minWorkloadNodes + 1 : minWorkloadNodes;
+    const minNodes         = isAldo() ? Math.max(sizedNodes, ALDO.nodes) : sizedNodes;
     const workloadNodes    = haEnabled ? minNodes - 1 : minNodes;
 
     const totalAvailableCores = availableCoresPerNode * workloadNodes;
-    const totalMgmtCores      = c.mgmtPerNode * minNodes;
+    const totalMgmtCores      = mgmtPerNode * minNodes;
     const totalPhysicalCores  = physicalCoresPerNode * minNodes;
     const haCores             = haEnabled ? physicalCoresPerNode : 0;
     const maxVCPUs            = totalAvailableCores * c.overcommit;
@@ -930,9 +1046,11 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     html += "<strong>Physical Cores Required:</strong> " + c.workloadCores + " cores (at " + c.overcommit + ":1 ratio)<br>";
     html += "<strong>Physical Cores per Node:</strong> " + physicalCoresPerNode + " (" + c.socketsPerNode + " x " + coresPerSocket + " cores)<br>";
     html += "<strong>Available Cores per Node (for VMs):</strong> " + availableCoresPerNode + " cores<br>";
-    html += '<strong>Minimum Nodes Required:</strong> <span class="ok">' + minNodes + " nodes</span>" + (haEnabled ? " (includes +1 for HA)" : "") + "<br>";
+    html += '<strong>Minimum Nodes Required:</strong> <span class="ok">' + minNodes + " nodes</span>" +
+      (minNodes > sizedNodes ? " (management cluster minimum, the appliance needs " + sizedNodes + ")" : haEnabled ? " (includes +1 for HA)" : "") + "<br>";
     html += "<strong>Max vCPUs Supported (" + minNodes + " nodes):</strong> " + maxVCPUs + " vCPUs<br>";
     html += "<strong>Core Utilization:</strong> " + utilization.toFixed(1) + "%<br>";
+    html += clusterTypeChecks(minNodes, physicalCoresPerNode, mgmtPerNode, c.mgmtPerNode);
     html += nodeTypeChecks(minNodes);
     rb.innerHTML = html;
 
@@ -942,12 +1060,12 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     /* charts */
     $("chartsSection").style.display = "block";
     drawCoreChart(c.workloadCores, totalMgmtCores, haCores, totalAvailableCores);
-    drawNodeChart(minNodes, physicalCoresPerNode, c.mgmtPerNode, availableCoresPerNode, c.workloadCores, workloadNodes, haEnabled);
+    drawNodeChart(minNodes, physicalCoresPerNode, mgmtPerNode, availableCoresPerNode, c.workloadCores, workloadNodes, haEnabled);
 
     buildOverview({
       mode: "cpu",
       vms: c.vms, vcpusPerVm: c.vcpusPerVm, totalVCPUs: c.totalVCPUs, overcommit: c.overcommit, workloadCores: c.workloadCores,
-      nodes: minNodes, socketsPerNode: c.socketsPerNode, mgmtPerNode: c.mgmtPerNode, haEnabled, workloadNodes,
+      nodes: minNodes, sizedNodes, socketsPerNode: c.socketsPerNode, mgmtPerNode, userMgmt: c.mgmtPerNode, haEnabled, workloadNodes,
       minCoresPerSocket: coresPerSocket, coresPerSocket, physicalCoresPerNode, availableCoresPerNode,
       totalAvailableCores, totalMgmtCores, totalPhysicalCores, haCores,
       maxVCPUs, utilization, fits: true, minNodesTotal: minNodes,
@@ -1081,12 +1199,23 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     row("Nodes", d.mode === "cpu" ? "Calculated" : "User-defined", d.nodes + " total" + (d.haEnabled ? " (1 HA reserved)" : ""));
     row("Workload Nodes", d.haEnabled ? d.nodes + " - 1 HA" : d.nodes + " (no HA)", d.workloadNodes + " nodes");
     row("Sockets per Node", "User-defined", d.socketsPerNode + " socket(s)");
-    row("Management Overhead per Node", "User-defined", d.mgmtPerNode + " cores");
+    if (isAldo()) {
+      row("Cluster Type", "Dedicated, runs only the control plane appliance", clusterTypes[clusterType()].label);
+      row("Management Overhead per Node", "max(" + d.userMgmt + " user-defined, 20% of " + d.physicalCoresPerNode + " cores, " + ALDO.reserveMin + ")", d.mgmtPerNode + " cores");
+    } else {
+      if (clusterType() !== "standard") row("Cluster Type", "User-defined", clusterTypes[clusterType()].label);
+      row("Management Overhead per Node", "User-defined", d.mgmtPerNode + " cores");
+    }
 
     sec(d.mode === "cpu" ? "Node Sizing (for " + d.cpuName + ")" : "CPU Sizing");
     if (d.mode === "nodes") {
-      row("Cores Needed per Node (workload + mgmt)", "ceil(" + d.workloadCores + " / " + d.workloadNodes + ") + " + d.mgmtPerNode, (d.availableCoresPerNode + d.mgmtPerNode) + " cores");
-      row("Minimum Cores per Socket", "(ceil(" + d.workloadCores + " / " + d.workloadNodes + ") + " + d.mgmtPerNode + ") / " + d.socketsPerNode + " socket(s)", d.minCoresPerSocket + " cores");
+      const perNode = "ceil(" + d.workloadCores + " / " + d.workloadNodes + ")";
+      if (isAldo()) {
+        row("Physical Cores Needed per Node", "max(" + perNode + " + 20% host reservation, " + ALDO.minCores + " management cluster minimum)", d.minPhysical + " cores");
+      } else {
+        row("Physical Cores Needed per Node (workload + mgmt)", perNode + " + " + d.userMgmt, d.minPhysical + " cores");
+      }
+      row("Minimum Cores per Socket", d.minPhysical + " / " + d.socketsPerNode + " socket(s)", d.minCoresPerSocket + " cores");
       if (d.pickedCpu) {
         row("Recommended CPU", (nodeType ? "Smallest compatible model" : "Smallest current-generation model") + " with enough cores", d.recommendedCpu.name);
         if (d.chosenCpu) row("Selected CPU", "User-selected in CPU Recommendations", d.chosenCpu.name);
@@ -1097,7 +1226,8 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
     } else {
       row("Cores per Socket", d.cpuName, d.minCoresPerSocket + " cores");
       row("Available Cores per Node (for VMs)", d.physicalCoresPerNode + " - " + d.mgmtPerNode + " mgmt", d.availableCoresPerNode + " cores");
-      row("Min Workload Nodes", "ceil(" + d.workloadCores + " / " + d.availableCoresPerNode + ")", d.workloadNodes + " nodes");
+      row("Min Workload Nodes", "ceil(" + d.workloadCores + " / " + d.availableCoresPerNode + ")", (d.availableCoresPerNode > 0 ? Math.ceil(d.workloadCores / d.availableCoresPerNode) : 999) + " nodes");
+      if (d.nodes > d.sizedNodes) row("Management Cluster Minimum", "Production management cluster", ALDO.nodes + " nodes");
       total("Minimum Nodes Required", d.nodes + " nodes" + (d.haEnabled ? " (incl. +1 HA)" : ""));
     }
 
@@ -2303,7 +2433,14 @@ Prices for nodes, switches and related costs are not part of ODIN exports and mu
       notes.push("The node type filter was cleared, because the ODIN design defines its own CPU.");
     }
 
-    if (cfg.totals && cfg.totals.vcpus > 0) {
+    const odinType = clusterTypes[cfg.clusterType] ? cfg.clusterType : "standard";
+    $("clusterType").value = odinType;
+    applyClusterType();
+    if (odinType !== "standard") applied.push(["Cluster Type", clusterTypes[odinType].label]);
+
+    if (isAldo()) {
+      notes.push("The management cluster workload is the fixed control plane appliance (" + ALDO.applianceVcpus + " vCPUs), so the ODIN workload totals were not applied.");
+    } else if (cfg.totals && cfg.totals.vcpus > 0) {
       const total = Math.ceil(cfg.totals.vcpus * cfg.growthFactor);
       let vms = Math.max(cfg.vmEquivalents, 1);
       let perVm = Math.ceil(total / vms);
@@ -2514,6 +2651,23 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     <h3>Cluster Configuration</h3>
     <div class="form-grid">
       <div class="form-group full">
+        <label for="storageV2_deployType">Deployment Type</label>
+        <select id="storageV2_deployType">
+          <option value="s2d" selected>Hyperconverged (Storage Spaces Direct)</option>
+          <option value="hybrid">Hyperconverged with external SAN (Storage Spaces Direct + SAN)</option>
+          <option value="disaggregated">Disaggregated (external SAN only, up to 64 nodes)</option>
+          <option value="aldo-mgmt">Disconnected operations (ALDO): management cluster</option>
+        </select>
+        <div id="storageV2_deployInfo" style="font-size:.82em;margin-top:6px"></div>
+      </div>
+      <div class="form-group full" id="storageV2_aldoProfileGroup" style="display:none">
+        <label for="storageV2_aldoProfile">Management Cluster Configuration</label>
+        <select id="storageV2_aldoProfile">
+          <option value="standard" selected>Standard: 128 GB memory, 6 data drives of at least 2 TB per node (100+ nodes managed)</option>
+          <option value="datacenter">Datacenter: 512 GB memory, 8 data drives of at least 2 TB per node (1000+ nodes managed)</option>
+        </select>
+      </div>
+      <div class="form-group full">
         <div class="chk-row">
           <input type="checkbox" id="storageV2_singleNode">
           <label for="storageV2_singleNode">Single Node Cluster</label>
@@ -2527,7 +2681,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   </div>
 
   <!-- Card 2: Calculation Mode -->
-  <div class="card">
+  <div class="card" id="storageV2_modeCard">
     <h3>Calculation Mode</h3>
     <p style="font-size:.85em;color:inherit;margin:0 0 12px">Choose your starting point: specify your drives to calculate effective storage, or set a storage target to find the required drives.</p>
 
@@ -2581,10 +2735,46 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   </div>
 
   <!-- Card 3: Storage Resiliency -->
-  <div class="card">
+  <div class="card" id="storageV2_resCard">
     <h3>Storage Resiliency</h3>
     <p style="font-size:.85em;color:inherit;margin:0 0 10px">Available options depend on your cluster size.</p>
     <div id="storageV2_resiliencyOptions" class="res-options"></div>
+  </div>
+
+  <!-- Card 4: External SAN (hybrid and disaggregated deployments) -->
+  <div class="card" id="storageV2_sanCard" style="display:none">
+    <h3>External SAN Storage</h3>
+    <p style="font-size:.85em;color:inherit;margin:0 0 12px">Block storage presented to all nodes over Fibre Channel or iSCSI and used as NTFS Cluster Shared Volumes. Requires Azure Local 2604 or later and a supported array.</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="storageV2_sanVendor">SAN Vendor</label>
+        <select id="storageV2_sanVendor"></select>
+      </div>
+      <div class="form-group">
+        <label for="storageV2_sanProtocol">Connectivity</label>
+        <select id="storageV2_sanProtocol">
+          <option value="fc" selected>Fibre Channel (FC)</option>
+          <option value="iscsi">iSCSI (over TCP/IP)</option>
+        </select>
+      </div>
+      <div class="form-group full" id="storageV2_sanVendorInfo" style="font-size:.82em;line-height:1.5"></div>
+      <div class="form-group">
+        <label for="storageV2_sanCapacity">Workload Capacity on the SAN (TB)</label>
+        <input type="number" id="storageV2_sanCapacity" value="20" min="0.1" step="0.1">
+      </div>
+      <div class="form-group">
+        <label for="storageV2_sanVolumes">SAN Volumes (one LUN per CSV)</label>
+        <input type="number" id="storageV2_sanVolumes" value="4" min="1" max="64" step="1">
+      </div>
+      <div class="form-group">
+        <label for="storageV2_sanDrr">Expected Array Data Reduction (N:1)</label>
+        <input type="number" id="storageV2_sanDrr" value="1" min="1" max="10" step="0.1">
+      </div>
+      <div class="form-group">
+        <label for="storageV2_sanHeadroom">Free Space Headroom on the Array (%)</label>
+        <input type="number" id="storageV2_sanHeadroom" value="20" min="0" max="50" step="1">
+      </div>
+    </div>
   </div>
 
   <!-- Actions -->
@@ -2654,6 +2844,17 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     <p>
       <strong>Dual Parity Efficiency:</strong><br>
       Dual parity efficiency depends on the number of fault domains (nodes). With N nodes, the efficiency is calculated as (N-2)/N, up to a maximum of 6 data columns + 2 parity columns (75% efficiency at 8+ nodes). Dual parity provides better storage efficiency than mirrors but with lower write performance.
+    </p>
+    <p>
+      <strong>External SAN Disclaimer:</strong><br>
+      Azure Local 2604 or later can use Fibre Channel or iSCSI block storage from supported arrays (Dell PowerStore, Everpure FlashArray, Hitachi VSP, HPE Alletra MP 10000, Lenovo ThinkSystem DS/DM/DG and NetApp ONTAP) next to Storage Spaces Direct (hyperconverged with external storage) or instead of it (disaggregated). SAN-backed CSVs must be NTFS, ReFS isn't supported for them in this preview, and each LUN backs a single CSV. The data reduction and free space headroom are planning assumptions, so size the array with your storage vendor. Infrastructure volume sizes on the SAN follow the ODIN Sizer. See
+      <a href="https://learn.microsoft.com/en-us/azure/azure-local/concepts/san-requirements?wt.mc_id=MVP_579217" target="_blank">supported SAN solutions</a> and
+      <a href="https://learn.microsoft.com/en-us/azure/azure-local/deploy/enable-external-storage?wt.mc_id=MVP_579217" target="_blank">enable external storage on Azure Local</a>.
+    </p>
+    <p>
+      <strong>Disconnected Operations Disclaimer:</strong><br>
+      The disconnected operations (ALDO) management cluster is a dedicated cluster for the local control plane. Production needs 3 nodes, each with 6 (standard) or 8 (datacenter) SSD/NVMe data drives of at least 2 TB and a 960 GB boot drive. The deployment creates a thinly provisioned 2 TB infrastructure volume, which this calculator reserves in full. See
+      <a href="https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-control-plane-appliance?wt.mc_id=MVP_579217" target="_blank">dedicated management cluster for disconnected operations</a>.
     </p>
     <p>
       <strong>No Warranty:</strong><br>
@@ -2776,9 +2977,207 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   }
 
   /* ================================================================
+     DEPLOYMENT TYPES
+     External SAN: Microsoft Learn "Supported SAN solutions on Azure Local"
+     and "Enable external storage on Azure Local" (Azure Local 2604 or later).
+     ALDO management cluster: "Dedicated management cluster for disconnected
+     operations" (3 nodes, 6 or 8 data drives of at least 2 TB per node) and
+     "Deploy disconnected operations" (thin 2 TB infrastructure volume).
+     SAN infrastructure volumes of a disaggregated instance: ODIN Sizer.
+     ================================================================ */
+  var deployTypes = {
+    "s2d":           { label: "Hyperconverged (Storage Spaces Direct)", s2d: true,  san: false, maxNodes: 16 },
+    "hybrid":        { label: "Hyperconverged with external SAN (Storage Spaces Direct + SAN)", s2d: true, san: true, maxNodes: 16 },
+    "disaggregated": { label: "Disaggregated (external SAN only)", s2d: false, san: true,  maxNodes: 64 },
+    "aldo-mgmt":     { label: "Disconnected operations (ALDO) management cluster", s2d: true, san: false, maxNodes: 16 }
+  };
+  var SAN_INFRA = [{ name: "Infrastructure_1", tb: 0.256 }, { name: "ClusterPerfHistory", tb: 0.020 }];
+  var ALDO_INFRA_TB = 2, ALDO_MIN_DRIVE_TB = 2, ALDO_NODES = 3;
+  var ALDO_PROFILES = { standard: { label: "Standard", drives: 6, memoryGB: 128 }, datacenter: { label: "Datacenter", drives: 8, memoryGB: 512 } };
+  var sanVendors = [
+    { name: "Dell", models: "PowerStore T and Q appliances running PowerStoreOS 3.0 or later",
+      mpio: 'New-MSDSMSupportedHW -VendorId "DellEMC" -ProductId "PowerStore"', tuning: "Dell recommends MPIO overrides: retry count 3, custom path recovery every 10 s and a 30 s disk timeout." },
+    { name: "Everpure", models: "FlashArray X, C, XL, E and RC20",
+      mpio: 'New-MSDSMSupportedHW -VendorId "PURE" -ProductId "FlashArray"', tuning: "Everpure recommends MPIO overrides (custom path recovery every 20 s, PDO remove period 20 s, 60 s disk timeout) and removing the generic MSDSM wildcard entry." },
+    { name: "Hitachi Vantara", models: "VSP One Block High End, 24, 26 and 28; VSP 5100, 5200, 5500 and 5600; VSP E590, E790, E990 and E1090; VSP F350, F370, F700 and F900; VSP G130, G350, G370, G700 and G900 (host and fabric details in the Hitachi Product Compatibility Guide)",
+      mpio: 'mpclaim -r -i -d "HITACHI OPEN-V"', tuning: "The default MSDSM settings with the Round Robin policy work well." },
+    { name: "HPE", models: "Alletra MP 10000",
+      mpio: 'New-MSDSMSupportedHW -VendorId "3PARdata" -ProductId "VV"', tuning: "No MPIO tuning is needed when the host persona on the array is WINDOWS." },
+    { name: "Lenovo", models: "ThinkSystem DS, DM and DG Series", mpio: "", tuning: "The Microsoft documentation lists no MSDSM registration for Lenovo, so follow the Lenovo guidance." },
+    { name: "NetApp", models: "AFF, ASA and other ONTAP platforms configured for SAN, as validated end to end in the NetApp Interoperability Matrix Tool",
+      mpio: 'New-MSDSMSupportedHW -VendorId "NETAPP" -ProductId "LUN C-Mode"', tuning: "No MPIO tuning is needed beyond the defaults." }
+  ];
+
+  function deployType() { var v = $("storageV2_deployType").value; return deployTypes[v] ? v : "s2d"; }
+  function isAldo() { return deployType() === "aldo-mgmt"; }
+  function aldoProfile() { return ALDO_PROFILES[$("storageV2_aldoProfile").value] || ALDO_PROFILES.standard; }
+  function aldoExtraTB() { return isAldo() ? ALDO_INFRA_TB : 0; }
+
+  function fillNodeCount(max) {
+    var sel = $("storageV2_nodeCount"), prev = parseInt(sel.value, 10) || 2;
+    sel.innerHTML = "";
+    for (var i = 2; i <= max; i++) {
+      var opt = document.createElement("option");
+      opt.value = i; opt.textContent = i;
+      sel.appendChild(opt);
+    }
+    sel.value = Math.min(prev, max);
+  }
+
+  function hideResults() {
+    $("storageV2_resultBox").style.display       = "none";
+    $("storageV2_chartsSection").style.display   = "none";
+    $("storageV2_compareSection").style.display  = "none";
+    $("storageV2_overviewSection").style.display = "none";
+    $("storageV2_exportPdfBtn").style.display    = "none";
+  }
+
+  function applyDeployType() {
+    var t = deployTypes[deployType()];
+    $("storageV2_aldoProfileGroup").style.display = isAldo() ? "" : "none";
+    $("storageV2_sanCard").style.display  = t.san ? "" : "none";
+    $("storageV2_modeCard").style.display = t.s2d ? "" : "none";
+    $("storageV2_resCard").style.display  = t.s2d ? "" : "none";
+    fillNodeCount(t.maxNodes);
+    $("storageV2_deployInfo").textContent = {
+      "s2d": "Storage Spaces Direct pools the NVMe drives of all nodes (1 to 16 nodes).",
+      "hybrid": "Storage Spaces Direct for the infrastructure and part of the workloads, plus SAN volumes for the rest. Both use the L2 host fee.",
+      "disaggregated": "Compute nodes use only SAN storage. Storage Spaces Direct isn't used, the internal drives are boot drives and the array provides the resiliency. Up to 64 nodes, L2 host fee.",
+      "aldo-mgmt": "Dedicated cluster that only hosts the disconnected operations control plane. Production needs " + ALDO_NODES + " nodes; deployment adds a thin " + ALDO_INFRA_TB + " TB infrastructure volume."
+    }[deployType()];
+    hideResults();
+    updateResiliencyOptions();
+    updateSanVendorInfo();
+  }
+
+  function updateSanVendorInfo() {
+    var v = sanVendors[+$("storageV2_sanVendor").value] || sanVendors[0];
+    var proto = $("storageV2_sanProtocol").value === "iscsi" ? "iSCSI" : "Fibre Channel";
+    $("storageV2_sanVendorInfo").textContent = "Supported models: " + v.models + ". Both Fibre Channel and iSCSI are supported. " +
+      (v.mpio ? "MPIO registration: " + v.mpio + ". " : "") + v.tuning + " Connectivity: " + proto + ".";
+  }
+
+  /* SAN capacity plan: LUN sizes, logical capacity with headroom and the physical capacity after data reduction */
+  function sanPlan() {
+    var disagg   = deployType() === "disaggregated";
+    var workload = Math.max(num($("storageV2_sanCapacity")), 0);
+    var volumes  = Math.min(Math.max(Math.round(num($("storageV2_sanVolumes"))), 1), 64);
+    var drr      = Math.max(num($("storageV2_sanDrr")), 1);
+    var headroom = Math.min(Math.max(num($("storageV2_sanHeadroom")), 0), 50) / 100;
+    /* hybrid instances keep their infrastructure volumes on Storage Spaces Direct */
+    var infra    = disagg ? SAN_INFRA : [];
+    var infraTB  = infra.reduce(function(s, v) { return s + v.tb; }, 0);
+    var provisioned = workload + infraTB;
+    var logical  = provisioned / (1 - headroom);
+    var vendor   = sanVendors[+$("storageV2_sanVendor").value] || sanVendors[0];
+    return {
+      disagg: disagg, workload: workload, volumes: volumes, perVolume: workload / volumes, drr: drr, headroom: headroom,
+      infra: infra, infraTB: infraTB, provisioned: provisioned, logical: logical, free: logical - provisioned,
+      physical: logical / drr, vendor: vendor, iscsi: $("storageV2_sanProtocol").value === "iscsi"
+    };
+  }
+
+  function sanRequirementLines(p) {
+    var h = [];
+    if (p.iscsi) {
+      h.push("<strong>Hosts (iSCSI):</strong> identical NICs on every node with catalog firmware and drivers, iSCSI Initiator service enabled, iSCSI NICs outside Network ATC with static IPs and no default gateway, consistent MTU on the whole path" +
+        (p.disagg ? "" : ", and dedicated physical ports for iSCSI (vNICs aren't supported next to Storage Spaces Direct)"));
+    } else {
+      h.push("<strong>Hosts (Fibre Channel):</strong> Windows Server 2025 certified HBAs and drivers on every node, identical HBA configuration and zoning, dual fabrics for multipathing; zone the HBA WWNs only after the Azure Local deployment");
+    }
+    h.push("<strong>Volumes:</strong> present every LUN to all nodes with consistent LUN IDs, one LUN per CSV (not shared across clusters), GPT and NTFS with a 64 KB allocation unit (ReFS isn't supported for SAN-backed volumes in this preview), then add each CSV path as a storage path in the Azure portal");
+    h.push("<strong>Multipath:</strong> MPIO is enabled by default from Azure Local 2604 (Round Robin); register the array with MSDSM and use an array with SCSI-3 Persistent Reservations");
+    h.push("<strong>Licensing:</strong> external SAN storage uses the L2 host fee (20.10/core/month, or 10/core/month with an OEM license), without Azure Hybrid Benefit for the host fee");
+    return h;
+  }
+
+  function sanResultHtml(p) {
+    var h = "<strong>SAN Array:</strong> " + odinEsc(p.vendor.name) + " (" + (p.iscsi ? "iSCSI" : "Fibre Channel") + ")<br>";
+    h += "<strong>Workload Volumes:</strong> " + p.volumes + " x " + fmtTB(p.perVolume) + " (" + fmtTB(p.workload) + ")<br>";
+    if (p.infraTB > 0) h += "<strong>Infrastructure Volumes on the SAN:</strong> " + p.infra.map(function(v) { return v.name + " " + (v.tb * 1000).toFixed(0) + " GB"; }).join(", ") + "<br>";
+    h += "<strong>Provisioned on the SAN:</strong> " + fmtTB(p.provisioned) + "<br>";
+    h += "<strong>Capacity with " + (p.headroom * 100).toFixed(0) + "% Free Space:</strong> " + fmtTB(p.logical) + "<br>";
+    h += '<strong>Physical Usable Capacity on the Array:</strong> <span class="ok">' + fmtTB(p.physical) + "</span>" + (p.drr > 1 ? " (at " + p.drr + ":1 data reduction)" : " (no data reduction assumed)") + "<br>";
+    return h;
+  }
+
+  function sanOverviewRows(p, sec, row, total) {
+    sec("External SAN (" + odinEsc(p.vendor.name) + ", " + (p.iscsi ? "iSCSI" : "Fibre Channel") + ")");
+    row("Workload Volumes", p.volumes + " LUNs x " + fmtTB(p.perVolume), fmtTB(p.workload));
+    p.infra.forEach(function(v) { row(v.name, "Infrastructure volume on the SAN", (v.tb * 1000).toFixed(0) + " GB"); });
+    row("Provisioned on the SAN", "workload + infrastructure", fmtTB(p.provisioned));
+    row("Free Space Headroom", fmtTB(p.provisioned) + " / (1 - " + (p.headroom * 100).toFixed(0) + "%)", fmtTB(p.logical));
+    total("Physical Usable Capacity on the Array", fmtTB(p.physical) + (p.drr > 1 ? " (" + fmtTB(p.logical) + " / " + p.drr + ":1)" : ""));
+  }
+
+  /* ALDO management cluster checks for a drive layout */
+  function aldoChecks(nodes, drives, driveCap) {
+    var pr = aldoProfile(), h = "";
+    h += "<strong>Cluster Type:</strong> " + deployTypes["aldo-mgmt"].label + " (" + pr.label + ": " + pr.drives + " data drives of at least " + ALDO_MIN_DRIVE_TB + " TB, " + pr.memoryGB + " GB memory per node)<br>";
+    h += "<strong>Disconnected Operations Volume:</strong> " + ALDO_INFRA_TB + " TB thin infrastructure volume created during deployment, reserved from the user storage<br>";
+    if (drives < pr.drives) h += '<span class="warning">' + drives + " data drives per node is below the " + pr.drives + " drives of the " + pr.label.toLowerCase() + " configuration.</span><br>";
+    if (driveCap < ALDO_MIN_DRIVE_TB) h += '<span class="warning">' + fmtTB(driveCap) + " drives are below the " + ALDO_MIN_DRIVE_TB + " TB minimum drive size of the management cluster.</span><br>";
+    if (nodes < ALDO_NODES) h += '<span class="warning">Production management clusters need ' + ALDO_NODES + " nodes. Smaller management clusters are only for evaluation and proof of concept.</span><br>";
+    h += "<strong>Boot Drive:</strong> 960 GB SSD/NVMe per node (smaller boot drives need extra data drives for the appliance)<br>";
+    return h;
+  }
+
+  /* SAN only: no Storage Spaces Direct */
+  function calculateSan() {
+    var nodes = getNodes(), p = sanPlan();
+    var rb = $("storageV2_resultBox");
+    rb.style.display = "block";
+    var h = "<strong>Cluster:</strong> " + nodes + " node" + (nodes > 1 ? "s" : "") + ", " + deployTypes.disaggregated.label + "<br>";
+    h += "<strong>Node Storage:</strong> boot drives only. Storage Spaces Direct isn't used and the array provides the resiliency.<br>";
+    h += "<hr style='border:none;border-top:1px solid #555;margin:8px 0'>";
+    h += sanResultHtml(p);
+    h += "<hr style='border:none;border-top:1px solid #555;margin:8px 0'>";
+    h += sanRequirementLines(p).join("<br>");
+    rb.innerHTML = h;
+
+    $("storageV2_chartsSection").style.display  = "block";
+    $("storageV2_compareSection").style.display = "none";
+    drawSanCapacityChart(p);
+    drawSanVolumesChart(p);
+
+    $("storageV2_overviewSection").style.display = "block";
+    var rows = [];
+    function sec(t)     { rows.push('<tr class="section-header"><td colspan="3">' + t + '</td></tr>'); }
+    function row(l,f,v) { rows.push('<tr><td>' + l + '</td><td class="formula">' + f + '</td><td>' + v + '</td></tr>'); }
+    function total(l,v) { rows.push('<tr class="total-row"><td colspan="2">' + l + '</td><td>' + v + '</td></tr>'); }
+    rows.push('<thead><tr><th>Item</th><th>Calculation</th><th>Value</th></tr></thead><tbody>');
+    sec("Cluster Configuration");
+    row("Deployment Type", "User-defined", deployTypes.disaggregated.label);
+    row("Number of Nodes", "User-defined", nodes);
+    row("Node Storage", "No Storage Spaces Direct", "Boot drives only");
+    sanOverviewRows(p, sec, row, total);
+    rows.push("</tbody>");
+    $("storageV2_overviewTable").innerHTML = rows.join("");
+    $("storageV2_exportPdfBtn").style.display = "inline-block";
+  }
+
+  $("storageV2_deployType").addEventListener("change", function() {
+    if (isAldo()) {
+      $("storageV2_singleNode").checked = false;
+      $("storageV2_nodeCountGroup").style.display = "";
+      $("storageV2_nodeCount").value = ALDO_NODES;
+    }
+    applyDeployType();
+  });
+  sanVendors.forEach(function(v, i) {
+    var opt = document.createElement("option");
+    opt.value = i; opt.textContent = v.name;
+    $("storageV2_sanVendor").appendChild(opt);
+  });
+  $("storageV2_aldoProfile").addEventListener("change", hideResults);
+  $("storageV2_sanVendor").addEventListener("change", updateSanVendorInfo);
+  $("storageV2_sanProtocol").addEventListener("change", updateSanVendorInfo);
+
+  /* ================================================================
      CAPACITY CALCULATION (shared)
      ================================================================ */
-  function calcCapacity(nodes, drivesPerNode, driveCap, resId) {
+  function calcCapacity(nodes, drivesPerNode, driveCap, resId, extraTB) {
+    extraTB = extraTB || 0;
     var efficiency        = getEfficiency(resId, nodes);
     var rawPerNode        = drivesPerNode * driveCap;
     var totalRaw          = rawPerNode * nodes;
@@ -2792,7 +3191,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     var infra1            = 0.250;
     var clusterPerf       = 0.020;
     var extraReserve      = 0.007;
-    var volumeOH          = infra1 + clusterPerf + extraReserve;
+    /* extraTB: the disconnected operations infrastructure volume of an ALDO management cluster */
+    var volumeOH          = infra1 + clusterPerf + extraReserve + extraTB;
     var remainingForUser  = Math.max(netUsable - volumeOH, 0);
     var userPerNode       = nodes > 0 ? remainingForUser / nodes : 0;
 
@@ -2802,13 +3202,15 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       reserveCapacity: reserveCapacity, effective: effective,
       usableAfterRes: usableAfterRes, resiliencyOverhead: resiliencyOverhead,
       netUsable: netUsable, netUsableTiB: netUsableTiB, storageEff: storageEff,
-      infra1: infra1, clusterPerf: clusterPerf, extraReserve: extraReserve,
+      infra1: infra1, clusterPerf: clusterPerf, extraReserve: extraReserve, aldoInfra: extraTB,
       volumeOH: volumeOH, remainingForUser: remainingForUser, userPerNode: userPerNode
     };
   }
 
   /* Reverse: find minimum drivesPerNode to reach targetNetUsable */
-  function calcReverse(nodes, driveCap, targetNetUsable, resId) {
+  function calcReverse(nodes, driveCap, targetNetUsable, resId, extraTB, minDrives) {
+    extraTB = extraTB || 0;
+    targetNetUsable += extraTB;
     var efficiency = getEfficiency(resId, nodes);
     var drivesPerNode;
     if (nodes === 1) {
@@ -2819,8 +3221,11 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       drivesPerNode = Math.ceil(needed) + 1;
       drivesPerNode = Math.max(drivesPerNode, 2);
     }
-    var d = calcCapacity(nodes, drivesPerNode, driveCap, resId);
+    drivesPerNode = Math.max(drivesPerNode, minDrives || 0);
+    var d = calcCapacity(nodes, drivesPerNode, driveCap, resId, extraTB);
     d.feasible = drivesPerNode <= MAX_DRIVES;
+    /* user capacity after the extra volume, compared with the target */
+    d.targetUsable = d.netUsable - extraTB;
     return d;
   }
 
@@ -2856,7 +3261,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   $("storageV2_modeABtn").addEventListener("click", function() { switchMode("A"); });
   $("storageV2_modeBBtn").addEventListener("click", function() { switchMode("B"); });
   $("storageV2_calcBtn").addEventListener("click", function() {
-    if (activeMode === "A") calculateForward();
+    if (!deployTypes[deployType()].s2d) calculateSan();
+    else if (activeMode === "A") calculateForward();
     else calculateReverse();
   });
   $("storageV2_exportPdfBtn").addEventListener("click", exportPdf);
@@ -2930,12 +3336,16 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     var nodes      = getNodes();
     var driveCap   = getDriveCapA();
     var driveCount = Math.max(num($("storageV2_ffCount")), 1);
-    var d          = calcCapacity(nodes, driveCount, driveCap, selectedResiliency);
+    var d          = calcCapacity(nodes, driveCount, driveCap, selectedResiliency, aldoExtraTB());
+    var san        = deployTypes[deployType()].san ? sanPlan() : null;
+    d.san = san;
 
     var rb = $("storageV2_resultBox");
     rb.style.display = "block";
     var h = "";
     h += "<strong>Cluster:</strong> " + nodes + " node" + (nodes > 1 ? "s" : "") + (nodes === 1 ? " (Single Node)" : "") + "<br>";
+    if (isAldo()) h += aldoChecks(nodes, driveCount, driveCap);
+    if (san) h += "<strong>Deployment Type:</strong> " + deployTypes.hybrid.label + "<br>";
     h += "<strong>Storage:</strong> Full-Flash NVMe - " + driveCount + " x " + fmtTB(driveCap) + " per node<br>";
     h += "<strong>Resiliency:</strong> " + resiliencyLabel(selectedResiliency) + " (" + (d.efficiency * 100).toFixed(1) + "% efficiency)<br>";
     h += "<hr style='border:none;border-top:1px solid #555;margin:8px 0'>";
@@ -2946,12 +3356,18 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     h += "<strong>Infrastructure Overhead:</strong> " + fmtTB(INFRA_OVERHEAD) + "<br>";
     h += "<strong>Storage Efficiency:</strong> " + d.storageEff.toFixed(1) + "%<br>";
     h += '<strong>Net Usable Capacity:</strong> <span class="ok">' + fmtTB(d.netUsable) + " (" + d.netUsableTiB.toFixed(2) + " TiB)</span>";
+    if (d.aldoInfra > 0) h += "<br><strong>User Storage after the Disconnected Operations Volume:</strong> " + fmtTB(d.remainingForUser);
+    if (san) {
+      h += "<hr style='border:none;border-top:1px solid #555;margin:8px 0'>" + sanResultHtml(san);
+      h += "<strong>Workload Capacity (S2D user volumes + SAN):</strong> " + fmtTB(d.remainingForUser + san.workload) + "<br>";
+      h += sanRequirementLines(san).join("<br>");
+    }
     rb.innerHTML = h;
 
     $("storageV2_chartsSection").style.display  = "block";
     $("storageV2_compareSection").style.display = "none";
     drawCapacityChart(d.netUsable, d.resiliencyOverhead, d.reserveCapacity, INFRA_OVERHEAD);
-    drawVolumesChart(d.infra1, d.clusterPerf, d.userPerNode, nodes);
+    drawVolumesChart(d.infra1, d.clusterPerf, d.userPerNode, nodes, d.aldoInfra, san);
 
     buildOverview(d);
     $("storageV2_exportPdfBtn").style.display = "inline-block";
@@ -2977,26 +3393,33 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       return;
     }
 
+    var aldo = isAldo(), san = deployTypes[deployType()].san ? sanPlan() : null;
     var rb = $("storageV2_resultBox");
     rb.style.display = "block";
     rb.innerHTML =
       "<strong>Target Effective Storage:</strong> " + fmtTB(targetStorage) + "<br>" +
       "<strong>Cluster:</strong> " + nodes + " node" + (nodes > 1 ? "s" : "") + "<br>" +
-      "<strong>Resiliency:</strong> " + resiliencyLabel(selectedResiliency) + " (" + (getEfficiency(selectedResiliency, nodes) * 100).toFixed(1) + "% efficiency)";
+      (aldo ? aldoChecks(nodes, aldoProfile().drives, ALDO_MIN_DRIVE_TB) +
+        "<strong>Drive Sizes:</strong> at least " + aldoProfile().drives + " drives per node; sizes below " + ALDO_MIN_DRIVE_TB + " TB are marked as not feasible<br>" : "") +
+      "<strong>Resiliency:</strong> " + resiliencyLabel(selectedResiliency) + " (" + (getEfficiency(selectedResiliency, nodes) * 100).toFixed(1) + "% efficiency)" +
+      (san ? "<hr style='border:none;border-top:1px solid #555;margin:8px 0'><strong>Deployment Type:</strong> " + deployTypes.hybrid.label + "<br>" +
+        sanResultHtml(san) + sanRequirementLines(san).join("<br>") : "");
 
     $("storageV2_chartsSection").style.display  = "none";
     $("storageV2_overviewSection").style.display = "none";
     $("storageV2_compareSection").style.display = "block";
 
     var results = sizes.map(function(sz) {
-      return calcReverse(nodes, sz, targetStorage, selectedResiliency);
+      var r = calcReverse(nodes, sz, targetStorage, selectedResiliency, aldoExtraTB(), aldo ? aldoProfile().drives : 0);
+      if (aldo && sz < ALDO_MIN_DRIVE_TB) r.feasible = false;
+      return r;
     });
 
     // Find minimum headroom among feasible results that meet the target (most efficient)
     var minHeadroom = Infinity;
     results.forEach(function(r) {
-      if (r.feasible && r.netUsable >= targetStorage) {
-        var h = r.netUsable - targetStorage;
+      if (r.feasible && r.targetUsable >= targetStorage) {
+        var h = r.targetUsable - targetStorage;
         if (h < minHeadroom) minHeadroom = h;
       }
     });
@@ -3010,17 +3433,17 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     );
 
     results.forEach(function(r) {
-      var headroom = r.netUsable - targetStorage;
-      var isBest   = r.feasible && r.netUsable >= targetStorage && Math.abs(headroom - minHeadroom) < 0.001;
+      var headroom = r.targetUsable - targetStorage;
+      var isBest   = r.feasible && r.targetUsable >= targetStorage && Math.abs(headroom - minHeadroom) < 0.001;
       var trClass  = !r.feasible ? ' class="infeasible"' : (isBest ? ' class="best"' : "");
       var drivesCell = r.feasible
         ? r.drivesPerNode
         : r.drivesPerNode + " *";
       var totalDrives = r.feasible ? (r.drivesPerNode * nodes) : "-";
-      var usableCell  = r.netUsable >= targetStorage
-        ? '<span style="color:#2e7d32;font-weight:600">' + fmtTB(r.netUsable) + "</span>"
-        : '<span style="color:#cc3300">' + fmtTB(r.netUsable) + "</span>";
-      var headroomCell = (r.feasible && r.netUsable >= targetStorage)
+      var usableCell  = r.targetUsable >= targetStorage
+        ? '<span style="color:#2e7d32;font-weight:600">' + fmtTB(r.targetUsable) + "</span>"
+        : '<span style="color:#cc3300">' + fmtTB(r.targetUsable) + "</span>";
+      var headroomCell = (r.feasible && r.targetUsable >= targetStorage)
         ? "+" + fmtTB(headroom)
         : "n/a";
 
@@ -3770,15 +4193,48 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     });
   }
 
-  function drawVolumesChart(infra1, clusterPerf, userPerNode, nodes) {
-    var labels = ["Infrastructure_1", "ClusterPerfHistory"], user = [0, 0], infra = [infra1, clusterPerf];
-    for (var i = 1; i <= nodes; i++) { labels.push("UserStorage_" + i); user.push(userPerNode); infra.push(0); }
+  function drawVolumesChart(infra1, clusterPerf, userPerNode, nodes, aldoInfra, san) {
+    var labels = ["Infrastructure_1", "ClusterPerfHistory"], user = [0, 0], infra = [infra1, clusterPerf], sanData = [0, 0];
+    if (aldoInfra > 0) { labels.push("DisconnectedOps (thin)"); user.push(0); infra.push(aldoInfra); sanData.push(0); }
+    for (var i = 1; i <= nodes; i++) { labels.push("UserStorage_" + i); user.push(userPerNode); infra.push(0); sanData.push(0); }
+    if (san) for (var j = 1; j <= san.volumes; j++) { labels.push("SAN_CSV_" + j); user.push(0); infra.push(0); sanData.push(san.perVolume); }
+    var series = [
+      { label: "User volumes",           color: C3D_COLORS.blue,   data: user },
+      { label: "Infrastructure volumes", color: C3D_COLORS.orange, data: infra }
+    ];
+    if (san) series.push({ label: "SAN volumes", color: C3D_COLORS.violet, data: sanData });
     if (volChart) volChart.destroy();
     volChart = new Chart3D($("storageV2_volumesChart"), {
       type: "bar", horizontal: true, title: "Volume Distribution", categories: labels, format: fmtTB,
       axisFormat: function(v) { return c3dCompact(v) + " TB"; },
+      series: series
+    });
+  }
+
+  /* SAN only: capacity on the array and the LUNs of the instance */
+  function drawSanCapacityChart(p) {
+    if (capChart) capChart.destroy();
+    capChart = new Chart3D($("storageV2_capacityChart"), {
+      type: "donut", title: "SAN Capacity Plan", format: fmtTB,
+      slices: [
+        { label: "Workload Volumes",       value: p.workload, color: C3D_COLORS.blue },
+        { label: "Free Space Headroom",    value: p.free,     color: C3D_COLORS.aqua },
+        { label: "Infrastructure Volumes", value: p.infraTB,  color: C3D_COLORS.yellow }
+      ],
+      center: function() { return { value: fmtTB(p.physical), label: p.drr > 1 ? "Physical (" + p.drr + ":1)" : "Usable on the array" }; }
+    });
+  }
+
+  function drawSanVolumesChart(p) {
+    var labels = [], user = [], infra = [];
+    p.infra.forEach(function(v) { labels.push(v.name); user.push(0); infra.push(v.tb); });
+    for (var i = 1; i <= p.volumes; i++) { labels.push("SAN_CSV_" + i); user.push(p.perVolume); infra.push(0); }
+    if (volChart) volChart.destroy();
+    volChart = new Chart3D($("storageV2_volumesChart"), {
+      type: "bar", horizontal: true, title: "SAN Volumes (one LUN per CSV)", categories: labels, format: fmtTB,
+      axisFormat: function(v) { return c3dCompact(v) + " TB"; },
       series: [
-        { label: "User volumes",           color: C3D_COLORS.blue,   data: user },
+        { label: "Workload volumes",       color: C3D_COLORS.blue,   data: user },
         { label: "Infrastructure volumes", color: C3D_COLORS.orange, data: infra }
       ]
     });
@@ -3798,6 +4254,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
 
     sec("Cluster Configuration");
     row("Cluster Type", "", d.nodes === 1 ? "Single Node" : "Multi-Node");
+    if (deployType() !== "s2d") row("Deployment Type", "User-defined", deployTypes[deployType()].label);
     row("Number of Nodes", "User-defined", d.nodes);
     row("Storage", "Full-Flash NVMe", d.drivesPerNode + " drives x " + fmtTB(d.driveCap) + " per node");
     row("Resiliency", resiliencyLabel(d.resId), (d.efficiency * 100).toFixed(1) + "% efficiency");
@@ -3821,10 +4278,15 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     row("Infrastructure_1", "ARC Resource Bridge + AKS images", (d.infra1 * 1000).toFixed(0) + " GB");
     row("ClusterPerformanceHistory", "Cluster statistics", (d.clusterPerf * 1000).toFixed(0) + " GB");
     row("Extra Reserved", "System overhead", (d.extraReserve * 1000).toFixed(0) + " GB");
+    if (d.aldoInfra > 0) row("Disconnected Operations Infrastructure", "Thin volume created during deployment", fmtTB(d.aldoInfra));
     for (var n = 1; n <= d.nodes; n++) {
       row("UserStorage_" + n, fmtTB(d.remainingForUser) + " / " + d.nodes + " nodes", fmtTB(d.userPerNode));
     }
     total("Total Volume Allocation", fmtTB(d.volumeOH + d.remainingForUser));
+    if (d.san) {
+      sanOverviewRows(d.san, sec, row, total);
+      total("Workload Capacity (S2D user volumes + SAN)", fmtTB(d.remainingForUser + d.san.workload));
+    }
 
     rows.push("</tbody>");
     $("storageV2_overviewTable").innerHTML = rows.join("");
@@ -4223,21 +4685,32 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     var applied = [], notes = [];
     odinResiliencyShown = {};
 
+    var odinDeploy = cfg.clusterType === "disaggregated" ? "disaggregated" : cfg.clusterType === "aldo-mgmt" ? "aldo-mgmt" : "s2d";
+    $("storageV2_deployType").value = odinDeploy;
+    applyDeployType();
+    if (odinDeploy !== "s2d") applied.push(["Deployment Type", deployTypes[odinDeploy].label]);
+    var maxNodes = deployTypes[odinDeploy].maxNodes;
+
     if (cfg.nodes) {
       var single = cfg.nodes === 1;
       $("storageV2_singleNode").checked = single;
       $("storageV2_nodeCountGroup").style.display = single ? "none" : "";
       if (!single) {
-        $("storageV2_nodeCount").value = Math.min(Math.max(cfg.nodes, 2), 16);
-        if (cfg.nodes > 16) notes.push("ODIN uses " + cfg.nodes + " nodes. This calculator supports up to 16 nodes, so 16 was applied.");
+        $("storageV2_nodeCount").value = Math.min(Math.max(cfg.nodes, 2), maxNodes);
+        if (cfg.nodes > maxNodes) notes.push("ODIN uses " + cfg.nodes + " nodes. This deployment type supports up to " + maxNodes + " nodes, so " + maxNodes + " was applied.");
       }
-      applied.push(["Nodes", single ? "Single Node" : String(Math.min(cfg.nodes, 16))]);
+      applied.push(["Nodes", single ? "Single Node" : String(Math.min(cfg.nodes, maxNodes))]);
     }
-    if (cfg.clusterType === "disaggregated") {
-      notes.push("Disaggregated Storage uses an external SAN. Internal drives are boot-only, so S2D capacity results do not apply to this design.");
+    if (odinDeploy === "disaggregated") {
+      /* the ODIN network model only adds FC switches for Fibre Channel SANs */
+      var fc = !(cfg.network && cfg.network.detail) || /FC/.test(cfg.network.detail);
+      $("storageV2_sanProtocol").value = fc ? "fc" : "iscsi";
+      updateSanVendorInfo();
+      applied.push(["SAN Connectivity", fc ? "Fibre Channel" : "iSCSI"]);
+      notes.push("Disaggregated Storage uses an external SAN. The internal drives are boot drives, so the SAN capacity plan is shown instead of Storage Spaces Direct results. Choose the SAN vendor in the External SAN Storage section.");
     }
 
-    if (cfg.disks && cfg.disks.capacityCount > 0 && cfg.disks.capacityTB > 0) {
+    if (odinDeploy !== "disaggregated" && cfg.disks && cfg.disks.capacityCount > 0 && cfg.disks.capacityTB > 0) {
       var count = Math.min(cfg.disks.capacityCount, MAX_DRIVES);
       var size = Math.round(cfg.disks.capacityTB * 100) / 100;
       $("storageV2_ffCount").value = count;
@@ -4267,12 +4740,18 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
 
     var targetTB = cfg.totals ? Math.round(cfg.totals.storage * cfg.growthFactor / 1000 * 100) / 100 : 0;
     if (targetTB > 0) {
-      $("storageV2_targetStorage").value = targetTB;
-      applied.push(["Target Effective Storage", targetTB + " TB (" + cfg.workloadCount + " workload(s)" +
+      $(odinDeploy === "disaggregated" ? "storageV2_sanCapacity" : "storageV2_targetStorage").value = targetTB;
+      applied.push([odinDeploy === "disaggregated" ? "Workload Capacity on the SAN" : "Target Effective Storage", targetTB + " TB (" + cfg.workloadCount + " workload(s)" +
         (cfg.growthPct ? ", incl. " + cfg.growthPct + "% growth" + (cfg.growthYears > 1 ? " over " + cfg.growthYears + " years" : "") : "") + ")"]);
     }
 
     var hasDrives = applied.some(function(a) { return a[0] === "Drives per Node"; });
+    if (odinDeploy === "disaggregated") {
+      switchMode("A");
+      showOdinSummary($("storageV2_importBox"), cfg, fileName, applied, notes);
+      $("storageV2_calcBtn").click();
+      return;
+    }
     if (!hasDrives && targetTB <= 0) notes.push("The file has no drive or workload storage data. Only the cluster settings were applied.");
     switchMode(hasDrives || targetTB <= 0 ? "A" : "B");
     showOdinSummary($("storageV2_importBox"), cfg, fileName, applied, notes);
@@ -4289,7 +4768,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
   /* ================================================================
      INITIAL RENDER
      ================================================================ */
-  updateResiliencyOptions();
+  applyDeployType();
   listenOdinImport("storage", applyOdinConfig);
 
 })();
@@ -4435,6 +4914,19 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
         <label for="pricingV2_l3HostRate">L3 Host Fee per Physical Core / Month</label>
         <input type="number" id="pricingV2_l3HostRate" placeholder="Enter a planning rate or account-specific quote" min="0.01" step="0.01">
       </div>
+      <div class="form-group" id="pricingV2_l3MgmtNodesGroup" style="display:none">
+        <label for="pricingV2_l3MgmtNodes">ALDO Management Cluster Nodes</label>
+        <input type="number" id="pricingV2_l3MgmtNodes" value="3" min="0" max="16" step="1">
+      </div>
+      <div class="form-group" id="pricingV2_l3MgmtCoresGroup" style="display:none">
+        <label for="pricingV2_l3MgmtCores">Physical Cores per Management Node</label>
+        <input type="number" id="pricingV2_l3MgmtCores" value="24" min="1" max="384" step="1">
+      </div>
+      <div class="form-group full" id="pricingV2_l3MgmtPriceGroup" style="display:none">
+        <label for="pricingV2_l3MgmtNodePrice">Price per Management Node</label>
+        <input type="number" id="pricingV2_l3MgmtNodePrice" value="50000" min="0" step="100">
+        <div style="font-size:.82em;margin-top:6px">Disconnected operations bill the physical cores of the workload clusters and of the dedicated management cluster that runs the local control plane. Production management clusters have 3 nodes with at least 24 physical cores each. Set 0 nodes if the management cluster is already billed.</div>
+      </div>
       <div class="form-group full">
         <label for="pricingV2_coresPerNode">Physical Cores per Node</label>
         <input type="number" id="pricingV2_coresPerNode" value="16" min="1" max="128" step="1">
@@ -4566,6 +5058,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
         <label for="pricingV2_avdHours">AVD Usage Hours / Month</label>
         <input type="number" id="pricingV2_avdHours" value="280" min="1" max="730" step="1">
       </div>
+      <p id="pricingV2_avdNote" class="warning form-group full" style="display:none;font-size:.82em;margin:0">Azure Virtual Desktop isn't available with disconnected operations (L3), so no AVD cost is included.</p>
       <div class="form-group">
         <label for="pricingV2_sqlVcores">SQL Managed Instance vCores</label>
         <input type="number" id="pricingV2_sqlVcores" placeholder="e.g., 4" step="1" min="0">
@@ -4645,7 +5138,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     <p>Actual costs may vary depending on vendor quotes, hardware configurations, and licensing agreements.</p>
     <p>
       <strong>Azure Local Deployment Model Disclaimer:</strong><br>
-      L1 applies to cloud-connected hyperconverged deployments without external storage. L2 applies to disaggregated deployments with SAN storage (up to 64 machines) and to hyperconverged deployments with external storage. Both use the 20.10/core/month host fee. An Azure Local OEM license with external storage uses the listed 10/core/month special rate. L3 applies to disconnected operations with a locally hosted control plane. Microsoft does not publish an L3 host fee, so the calculator requires a user-provided planning rate or account-specific quote. Azure Local host fees and the Windows Server subscription have a free trial for the first 60 days after registration. See the
+      L1 applies to cloud-connected hyperconverged deployments without external storage. L2 applies to disaggregated deployments with SAN storage (up to 64 machines) and to hyperconverged deployments with external storage. Both use the 20.10/core/month host fee. An Azure Local OEM license with external storage uses the listed 10/core/month special rate. L3 applies to disconnected operations with a locally hosted control plane. Microsoft does not publish an L3 host fee, so the calculator requires a user-provided planning rate or account-specific quote. L3 is licensed per physical core on an annual capacity term, billed monthly, and includes the cores of the dedicated management cluster that runs the control plane, so the calculator adds the management cluster nodes and cores (3 nodes with 24 cores by default) and applies no trial to the L3 host fee. Azure Hybrid Benefit can't waive the L3 host fee, but it can still cover Windows Server VMs. Azure Local host fees and the Windows Server subscription have a free trial for the first 60 days after registration. See the
       <a href="https://azure.microsoft.com/en-us/pricing/details/azure-local/?wt.mc_id=MVP_579217#pricing" target="_blank">Azure Local pricing page</a>,
       <a href="https://learn.microsoft.com/en-us/azure/azure-local/overview/disaggregated-overview?view=azloc-2606&wt.mc_id=MVP_579217" target="_blank">disaggregated deployment overview</a> and
       <a href="https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-overview?view=azloc-2606&wt.mc_id=MVP_579217" target="_blank">disconnected operations overview</a>.
@@ -4669,7 +5162,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     </p>
     <p>
       <strong>AVD and SQLmi Disclaimer:</strong><br>
-      AVD costs are estimated at 0.01 per vCPU per hour. SQLmi pricing depends on tier, licensing model, and reservation term. These calculations are illustrative. For more info visit
+      AVD costs are estimated at 0.01 per vCPU per hour. AVD isn't among the services of disconnected operations, so it is excluded for L3. SQLmi pricing depends on tier, licensing model, and reservation term. These calculations are illustrative. For more info visit
       <a href="https://azure.microsoft.com/en-us/pricing/details/azure-arc/data-services/?wt.mc_id=MVP_579217" target="_blank">Azure Arc Data Services Pricing</a>.
       Always refer to official Microsoft documentation for up-to-date pricing.
     </p>
@@ -4708,6 +5201,12 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     const nodes = $("pricingV2_nodes");
 
     $("pricingV2_l3RateContainer").style.display = model === "l3" ? "flex" : "none";
+    for (const id of ["pricingV2_l3MgmtNodesGroup", "pricingV2_l3MgmtCoresGroup", "pricingV2_l3MgmtPriceGroup"]) {
+      $(id).style.display = model === "l3" ? "flex" : "none";
+    }
+    /* AVD isn't a supported service of disconnected operations */
+    $("pricingV2_avdVCPUs").disabled = $("pricingV2_avdHours").disabled = model === "l3";
+    $("pricingV2_avdNote").style.display = model === "l3" ? "block" : "none";
     hostWaiver.disabled = !isL1;
     if (!isL1) hostWaiver.checked = false;
     const ahbNote = $("pricingV2_ahbNote");
@@ -4757,14 +5256,23 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     const nodeUnit   = num($("pricingV2_pricePerNode"));
     const switches   = num($("pricingV2_switches"));
     const switchUnit = num($("pricingV2_pricePerSwitch"));
-    const nodesCost  = nodes * nodeUnit;
+    const deploymentModel = $("pricingV2_deploymentModel").value;
+    const deployment = deploymentModels[deploymentModel];
+    /* L3: the dedicated ALDO management cluster is bought and billed as well */
+    const isL3 = deploymentModel === "l3";
+    const mgmtNodes     = isL3 ? Math.max(Math.round(num($("pricingV2_l3MgmtNodes"))), 0) : 0;
+    const mgmtCoresNode = isL3 ? num($("pricingV2_l3MgmtCores")) : 0;
+    const mgmtNodeUnit  = num($("pricingV2_l3MgmtNodePrice"));
+    const mgmtCores     = mgmtNodes * mgmtCoresNode;
+    const mgmtNodesCost = mgmtNodes * mgmtNodeUnit;
+
+    const nodesCost  = nodes * nodeUnit + mgmtNodesCost;
     const switchCost = switches * switchUnit;
     const hwCost     = nodesCost + switchCost;
 
     const coresPerNode = num($("pricingV2_coresPerNode"));
     const totalCores   = nodes * coresPerNode;
-    const deploymentModel = $("pricingV2_deploymentModel").value;
-    const deployment = deploymentModels[deploymentModel];
+    const billedCores  = totalCores + mgmtCores;
     const l3RateInput = $("pricingV2_l3HostRate");
     const hostRate = deploymentModel === "l3" ? num(l3RateInput) : deployment.rate;
     if (deploymentModel === "l3" && hostRate <= 0) {
@@ -4773,7 +5281,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       return;
     }
     const hostFeeWaived = deploymentModel === "l1" && $("pricingV2_waiveHostFee").checked;
-    const hostFee = hostFeeWaived ? 0 : totalCores * hostRate;
+    const hostFee = hostFeeWaived ? 0 : billedCores * hostRate;
 
     let winMonthly = 0, winOneTime = 0;
     let winLicenseMode = "default";
@@ -4802,8 +5310,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     const thirdOneTime = backupOTC + logsOTC + installOTC + partnerOTC + otherOTC;
     const thirdMonthly = backupMonth + logsMonth + installMonth + partnerMonth + otherMonth;
 
-    const avdVCPUs = num($("pricingV2_avdVCPUs"));
-    const avdHours = num($("pricingV2_avdHours"));
+    const avdVCPUs = isL3 ? 0 : num($("pricingV2_avdVCPUs"));
+    const avdHours = isL3 ? 0 : num($("pricingV2_avdHours"));
     const avdCost  = avdVCPUs * 0.01 * avdHours;
 
     const sqlVcores = num($("pricingV2_sqlVcores"));
@@ -4818,7 +5326,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     const oneTimeTotal = hwCost + winOneTime + thirdOneTime;
     const monthlyTotal = hostFee + winMonthly + thirdMonthly + avdCost + sqlCost;
     const trialApplied = $("pricingV2_applyTrial").checked;
-    const trialEligibleMonthly = hostFee + (winLicenseMode === "default" ? winMonthly : 0);
+    /* disconnected operations are billed on an annual capacity term, so the trial covers no L3 host fee */
+    const trialEligibleMonthly = (isL3 ? 0 : hostFee) + (winLicenseMode === "default" ? winMonthly : 0);
     const trialSavings = trialApplied ? trialEligibleMonthly * 2 : 0;
     const yearlyTotal  = oneTimeTotal + monthlyTotal * 12 - trialSavings;
     const threeYearTotal = oneTimeTotal + monthlyTotal * 36 - trialSavings;
@@ -4842,7 +5351,8 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     buildOverview({
       nodes, nodeUnit, nodesCost,
       switches, switchUnit, switchCost, hwCost,
-      coresPerNode, totalCores,
+      coresPerNode, totalCores, billedCores,
+      mgmtNodes, mgmtCoresNode, mgmtCores, mgmtNodeUnit, mgmtNodesCost,
       deploymentModel, deploymentLabel: deployment.label, hostRate,
       hostFeeWaived, hostFee,
       winLicenseMode,
@@ -4878,15 +5388,20 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     rows.push("<thead><tr><th>Item</th><th>Calculation</th><th>Amount</th></tr></thead><tbody>");
 
     sec("Infrastructure (One-Time)");
-    row("Nodes Cost", d.nodes + " nodes x " + fmt(d.nodeUnit) + "/node", fmt(d.nodesCost));
+    row("Nodes Cost", d.nodes + " nodes x " + fmt(d.nodeUnit) + "/node", fmt(d.nodesCost - d.mgmtNodesCost));
+    if (d.mgmtNodes > 0) row("ALDO Management Cluster Nodes", d.mgmtNodes + " nodes x " + fmt(d.mgmtNodeUnit) + "/node", fmt(d.mgmtNodesCost));
     row("Switches Cost", d.switches + " switches x " + fmt(d.switchUnit) + "/switch", fmt(d.switchCost));
     total("Total Hardware", fmt(d.hwCost));
 
     sec("Licensing");
     row("Azure Local Deployment Model", d.deploymentLabel, d.deploymentModel.toUpperCase());
     row("Total Physical Cores", d.nodes + " nodes x " + d.coresPerNode + " cores/node", d.totalCores + " cores");
+    if (d.mgmtCores > 0) {
+      row("ALDO Management Cluster Cores", d.mgmtNodes + " nodes x " + d.mgmtCoresNode + " cores/node (control plane)", d.mgmtCores + " cores");
+      row("Billed Physical Cores", d.totalCores + " workload + " + d.mgmtCores + " management", d.billedCores + " cores");
+    }
     row("Azure Local Host Rate", d.deploymentModel === "l3" ? "User-provided rate" : "Published rate", fmt(d.hostRate) + "/core/month");
-    row("Azure Local Host Fee (monthly)", d.hostFeeWaived ? "Waived through Azure Hybrid Benefit" : d.totalCores + " cores x " + fmt(d.hostRate) + "/core" + (d.deploymentModel === "l1" ? "" : " (no Azure Hybrid Benefit)"), fmt(d.hostFee));
+    row("Azure Local Host Fee (monthly)", d.hostFeeWaived ? "Waived through Azure Hybrid Benefit" : d.billedCores + " cores x " + fmt(d.hostRate) + "/core" + (d.deploymentModel === "l1" ? "" : " (no Azure Hybrid Benefit)"), fmt(d.hostFee));
 
     if (d.winLicenseMode === "custom") {
       row("Windows License (monthly)", "Custom: " + fmt(d.winMonthly / d.nodes) + "/node x " + d.nodes + " nodes", fmt(d.winMonthly));
@@ -4897,7 +5412,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       row("Windows License (monthly)", d.totalCores + " cores x " + c + "23.30/core", fmt(d.winMonthly));
     }
 
-    row("Free 60-Day Trial", d.trialApplied ? "Applied to eligible host and Windows subscription fees" : "Not applied", d.trialSavings > 0 ? "-" + fmt(d.trialSavings) : fmt(0));
+    row("Free 60-Day Trial", !d.trialApplied ? "Not applied" : d.deploymentModel === "l3" ? "Windows subscription only (L3 is billed on an annual capacity term)" : "Applied to eligible host and Windows subscription fees", d.trialSavings > 0 ? "-" + fmt(d.trialSavings) : fmt(0));
 
     sec("Related / Third-Party");
     if (d.backupOTC || d.backupMonth)   { row("Backup (OTC)", "User-defined", fmt(d.backupOTC));   row("Backup (monthly)", "User-defined", fmt(d.backupMonth)); }
@@ -4909,7 +5424,7 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     total("Related Total (monthly)", fmt(d.thirdMonthly));
 
     sec("Azure Services (Monthly)");
-    row("AVD Cost", d.avdVCPUs + " vCPUs x " + c + "0.01/vCPU/hr x " + d.avdHours + " hrs", fmt(d.avdCost));
+    row("AVD Cost", d.deploymentModel === "l3" ? "Not available with disconnected operations" : d.avdVCPUs + " vCPUs x " + c + "0.01/vCPU/hr x " + d.avdHours + " hrs", fmt(d.avdCost));
     row("SQLmi Rate", d.sqlTier + " / " + d.sqlLic + " / " + d.sqlTerm, fmt(d.sqlMonthlyRate) + "/vCore/month");
     row("SQLmi Cost", d.sqlVcores + " vCores x " + c + d.sqlHourlyRate.toFixed(4) + "/hr x " + d.sqlHours + " hrs", fmt(d.sqlCost));
 
@@ -6090,16 +6605,19 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
     updateDeploymentFields();
     applied.push(["Deployment Model", deploymentModels[model].label]);
 
+    /* an ALDO management cluster design describes the management cluster, not the workload clusters */
+    const aldoMgmt = cfg.clusterType === "aldo-mgmt";
     if (cfg.nodes) {
-      const nodes = $("pricingV2_nodes");
+      const nodes = $(aldoMgmt ? "pricingV2_l3MgmtNodes" : "pricingV2_nodes");
       nodes.value = Math.min(cfg.nodes, +nodes.max);
       if (cfg.nodes > +nodes.max) notes.push("ODIN uses " + cfg.nodes + " nodes. This deployment model supports up to " + nodes.max + " nodes, so " + nodes.max + " was applied.");
-      applied.push(["Nodes", nodes.value]);
+      applied.push([aldoMgmt ? "ALDO Management Cluster Nodes" : "Nodes", nodes.value]);
     }
+    if (aldoMgmt) notes.push("The ODIN design is the disconnected operations management cluster. Enter the workload cluster nodes and cores that it manages, since both are billed.");
     if (cfg.cpu) {
       const cores = cfg.cpu.coresPerSocket * cfg.cpu.sockets;
-      $("pricingV2_coresPerNode").value = cores;
-      applied.push(["Physical Cores per Node", cores + " (" + cfg.cpu.sockets + " x " + cfg.cpu.coresPerSocket + " cores)"]);
+      $(aldoMgmt ? "pricingV2_l3MgmtCores" : "pricingV2_coresPerNode").value = cores;
+      applied.push([aldoMgmt ? "Physical Cores per Management Node" : "Physical Cores per Node", cores + " (" + cfg.cpu.sockets + " x " + cfg.cpu.coresPerSocket + " cores)"]);
     } else {
       notes.push("The file has no CPU data. Physical cores per node were not changed.");
     }
@@ -6107,7 +6625,9 @@ The storage calculator I designed is now outdated, as [Armin](https://www.linked
       $("pricingV2_switches").value = cfg.network.total;
       applied.push(["Switches", cfg.network.total + " (" + cfg.network.detail + ", ODIN network model)"]);
     }
-    if (cfg.avdVcpus > 0) {
+    if (cfg.avdVcpus > 0 && model === "l3") {
+      notes.push("The ODIN design has " + Math.ceil(cfg.avdVcpus) + " AVD vCPUs, but Azure Virtual Desktop isn't available with disconnected operations, so no AVD cost was applied.");
+    } else if (cfg.avdVcpus > 0) {
       $("pricingV2_avdVCPUs").value = Math.ceil(cfg.avdVcpus);
       applied.push(["AVD vCPUs", String(Math.ceil(cfg.avdVcpus))]);
     }
