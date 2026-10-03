@@ -391,11 +391,11 @@ For more details, you can always refer to the [official guide](https://learn.mic
 
 #### Custom Images Script
 
-The repository includes [11_ImageBuilderAzSHCI.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/02Day2/11_ImageBuilderAzSHCI.ps1) and the optimized variant [11_ImageBuilderAL.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/02Day2/11_ImageBuilderAL.ps1). Both download selected Marketplace images, convert the disks to VHDX and optimize them on the node.
+I no longer build images with a script. Azure Local now imports Marketplace images directly, as shown in the previous section, and that is the path I use in the lab. The earlier helpers, [11_ImageBuilderAzSHCI.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/02Day2/OldImageBuilder/11_ImageBuilderAzSHCI.ps1) and the variant [11_ImageBuilderAL.ps1](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/02Day2/OldImageBuilder/11_ImageBuilderAL.ps1), are archived in `scripts/02Day2/OldImageBuilder/` for reference. They downloaded selected Marketplace images through a temporary managed disk, converted the disks to VHDX and optimized them on the node.
 
-These older helpers still use interactive device code authentication and script-local settings for the node, storage path and guest credentials. They do not inherit the `.env` and SPN workflow used by the current 01Lab scripts. Review their configuration before running them, especially if your node uses the newer `AZLN01` name instead of the older `NODE` default.
+If you still want to look at them, keep in mind that they use interactive device code authentication and script-local settings for the node, storage path and guest credentials, with the older `NODE` default instead of `AZLN01`. They do not use the `.env` and SPN workflow of the current 01Lab scripts. The `11_ImageBuilderAL.ps1` variant also writes the download outside the configured storage folder, so it does not complete the conversion.
 
-The helpers stop after preparing the VHDX. The portal import below remains an option, but the old restriction described in this article is no longer a reason to avoid automation: Microsoft documents [image creation from a local share through Azure CLI](https://learn.microsoft.com/en-us/azure/azure-local/manage/virtual-machine-image-local-share?wt.mc_id=MVP_579217). Preparing a disk and registering an Azure Local image are separate steps.
+The helpers stopped after preparing the VHDX. The portal import below remains an option, but the old restriction described in this article is no longer a reason to avoid automation: Microsoft documents [image creation from a local share through Azure CLI](https://learn.microsoft.com/en-us/azure/azure-local/manage/virtual-machine-image-local-share?wt.mc_id=MVP_579217). Preparing a disk and registering an Azure Local image are separate steps.
 
 Here's are screenshots illustrating the manual addition of the VHDX image:
 

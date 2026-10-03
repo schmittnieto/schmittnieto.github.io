@@ -100,7 +100,6 @@ jobs:
               ('<!-- 00INFRA:START -->', '<!-- 00INFRA:END -->', 'assets/repo/AzSHCI/scripts/01Lab/00_Infra_AzHCI.ps1'),
               ('<!-- 01DC:START -->', '<!-- 01DC:END -->', 'assets/repo/AzSHCI/scripts/01Lab/01_DC.ps1'),
               ('<!-- 02CLUSTER:START -->', '<!-- 02CLUSTER:END -->', 'assets/repo/AzSHCI/scripts/01Lab/02_Cluster.ps1'),
-              ('<!-- 03TROUBLESHOOTING:START -->', '<!-- 03TROUBLESHOOTING:END -->', 'assets/repo/AzSHCI/scripts/01Lab/03_TroubleshootingExtensions.ps1'),
               ('<!-- 99OFFBOARDING:START -->', '<!-- 99OFFBOARDING:END -->', 'assets/repo/AzSHCI/scripts/01Lab/99_Offboarding.ps1'),
           ]
           

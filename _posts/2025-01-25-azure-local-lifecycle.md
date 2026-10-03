@@ -445,7 +445,7 @@ To simplify the detection and repair of extensions, I created a PowerShell scrip
 - Detects whether the necessary extensions for Azure Local are installed and functional.
 - Repairs or reinstalls extensions that are in an inconsistent state.
 
-You can find the script on my GitHub repository: [Troubleshooting Extensions Script](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/01Lab/03_TroubleshootingExtensions.ps1).
+You can find the script on my GitHub repository: [Troubleshooting Extensions Script](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/01Lab/Old%20version/03_TroubleshootingExtensions.ps1). It is now archived in `scripts/01Lab/Old version/`, because neither the portal wizard nor the Terraform deployment needs it any more. Its extension versions are pinned to build `10.2601`, so treat it as a reference rather than a tool for current releases.
 
 The current version reads `scripts/01Lab/.env` through `Set-LabEnv.ps1`. With both SPN values set, it signs in using `AZSHCI_SPN_APP_ID`, `AZSHCI_SPN_SECRET` and `AZSHCI_TENANT_ID`. Otherwise it reuses an existing Az session or prompts for device code login. Check the selected tenant, subscription and resource group before allowing repairs.
 
@@ -790,7 +790,7 @@ Below is a table of all the links referenced in this article, along with a brief
 | [Add a Node to Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/manage/add-server?wt.mc_id=MVP_579217)                  | Guidance on scaling your cluster by adding additional servers (nodes) to Azure Local.                        |
 | [Adding Drives (Windows Server Storage)](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/add-nodes?wt.mc_id=MVP_579217#adding-drives) | Official documentation on expanding storage capacity in a cluster using **Storage Spaces Direct (S2D)**.     |
 | [Repair a Node in Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/manage/repair-server?wt.mc_id=MVP_579217)            | Instructions on repairing a faulty node, from reimaging to re-registering with Azure Arc.                    |
-| [Troubleshooting Extensions Script](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/01Lab/03_TroubleshootingExtensions.ps1) | My custom PowerShell script for detecting and repairing inconsistent or broken Azure Local extensions.       |
+| [Troubleshooting Extensions Script](https://github.com/schmittnieto/AzSHCI/blob/main/scripts/01Lab/Old%20version/03_TroubleshootingExtensions.ps1) | My archived PowerShell script for detecting and repairing inconsistent or broken Azure Local extensions (reference only). |
 | [Manage Secrets Rotation](https://learn.microsoft.com/en-us/azure/azure-local/manage/manage-secrets-rotation?wt.mc_id=MVP_579217)       | Steps to rotate credentials and service principal secrets for Azure Local, maintaining system security.      |
 | [Upgrade from Azure Stack HCI 22H2](https://learn.microsoft.com/en-us/azure/azure-local/upgrade/about-upgrades-23h2?wt.mc_id=MVP_579217) | Overview of the **22H2 to 23H2** upgrade process, including prerequisites, supported scenarios, and workflows.|
 | [Azure Local region availability](https://learn.microsoft.com/en-us/azure/azure-local/concepts/system-requirements-23h2?wt.mc_id=MVP_579217#azure-requirements) | Regions where Azure Local 23H2 is fully supported for deployments and upgrades.                              |
