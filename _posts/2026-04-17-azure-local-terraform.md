@@ -2,7 +2,7 @@
 title: "Azure Local: Terraform Deployment"
 excerpt: "Deploy Azure Local with Terraform using a fixed AVM fork, staged validation and a service principal ready for pipeline-driven AVD and AKS automation."
 date: 2026-04-17
-last_modified_at: 2026-09-22
+last_modified_at: 2026-10-05
 categories:
   - Blog
 tags:
@@ -35,7 +35,7 @@ If you have been following this series, you already know how I built my Azure Lo
 
 A few months ago I decided to change that. The goal was straightforward: replace the portal deployment path with a fully automated Terraform run that I could trigger from a pipeline with a service account and that I could later reuse for AVD, AKS and other workloads on top of Azure Local. Less clicking, more repeatable infrastructure.
 
-Getting there turned out to be more work than I expected. The [Azure Verified Module (AVM) for Azure Local](https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-cluster) is a good starting point, but it was written against a specific point in time and the Azure Local deployment API has moved since then. From the end of 2025 onward, several things changed: resource provider behavior, required role assignments and the API version that the Azure control plane actually accepts. When I first tried to apply the module against my lab, I got a series of failures that took real investigation to understand.
+Getting there turned out to be more work than I expected. The [Azure Verified Module (AVM) for Azure Local](https://github.com/Azure/terraform-azurerm-avm-res-azurestackhci-cluster) is a good starting point, but it was written against a specific point in time and the Azure Local deployment API has moved since then. From the end of 2025 onward, several things changed: resource provider behavior, required role assignments and the API version that the Azure control plane accepts. When I first tried to apply the module against my lab, I got a series of failures that took real investigation to understand.
 
 This article covers what I built, what broke, how I fixed it and how the deployment now flows end to end. I will also explain where I plan to take the repository from here.
 
@@ -44,6 +44,8 @@ This article covers what I built, what broke, how I fixed it and how the deploym
 All of the automation lives in my [AzSHCI repository](https://github.com/schmittnieto/AzSHCI). 
 
 <a href="https://github.com/schmittnieto/AzSHCI"><img src="https://badgen.net/https/raw.githubusercontent.com/schmittnieto/AzSHCI/refs/heads/main/terraform/lastdeployment.json?cache=300"></a>
+
+The badge shows the last full Terraform deployment in my lab. So far the staged flow has completed end to end on Azure Local releases 2604, 2605, 2606 and 2608, most recently on 4 October 2026 with build `12.2608.1003.9`.
 
 It has two parallel paths that work together:
 
@@ -206,7 +208,7 @@ The Terraform configuration is a thin root module that creates a few shared prer
 
 - **Key Vault** with RBAC authorization enabled, used to store the deployment credentials.
 - **Witness storage account** for the cluster quorum.
-- Required **role assignments** at resource group scope for the Arc machine identity and the Azure Stack HCI resource provider service principal.
+- Required **role assignments** at resource group scope for the Arc machine identity and the Azure Stack HCI resource provider service principal. If the resource provider assignment survived a previous lab, Terraform adopts it instead of creating it again.
 - **Edge device registration** (`Microsoft.AzureStackHCI/edgeDevices`) for the Arc node.
 
 The cluster module is a local fork of the AVM module. The fork is not a divergence for its own sake. It carries specific fixes that the upstream module did not have at the time of writing and I will describe those in the next section.
@@ -215,15 +217,15 @@ The cluster module is a local fork of the AVM module. The fork is not a divergen
 
 The deployment happens in two stages, controlled by a single variable:
 
-**Stage 1 (`is_exported = false`)**: Terraform creates the Key Vault, storage account, RBAC assignments and edge device registration, then submits `deploymentSettings` to Azure with `deploymentMode = Validate`. Azure runs a validation sequence that checks connectivity, Active Directory and node configuration. This takes roughly 10 to 30 minutes.
+**Stage 1 (`is_exported = false`)**: Terraform creates the Key Vault, storage account, RBAC assignments and edge device registration, then submits `deploymentSettings` to Azure with `deploymentMode = Validate`. Azure runs a validation sequence that checks connectivity, Active Directory and node configuration. In my lab this stage takes around 90 minutes, most of it spent installing the Arc extensions and running the environment checks.
 
-**Stage 2 (`is_exported = true`)**: After validation succeeds in the portal, flip `is_exported` to `true` and run `terraform apply` again. This patches `deploymentMode` to `Deploy` and starts full cluster provisioning. Allow several hours for the lab deployment rather than treating validation completion as a finished cluster.
+**Stage 2 (`is_exported = true`)**: After validation succeeds, flip `is_exported` to `true` and run `terraform apply` again. This patches `deploymentMode` to `Deploy` and starts full cluster provisioning. Allow two to three hours for the lab deployment rather than treating validation completion as a finished cluster.
 
-A second variable, `deployment_completed`, controls whether Terraform attempts to read post-deployment data sources like the custom location. Set it to `false` during and after deployment and flip it to `true` only after the Azure portal confirms the deployment is complete.
+The same Stage 2 apply also reads the resources that only exist once Azure has finished the deployment: the Arc resource bridge, the custom location and the Arc settings. Terraform holds those reads until the deployment update returns, so `custom_location_id` is already in the outputs when the apply ends. Earlier versions needed a third variable called `deployment_completed` plus an extra apply for this. That variable is now deprecated and has no effect.
 
 ## What Broke and How I Fixed It
 
-This section documents the real debugging journey. I am including it because if you try to use any version of the AVM module against a current Azure subscription, you will likely hit some of these same issues.
+This section documents the real debugging history. I am including it because if you try to use any version of the AVM module against a current Azure subscription, you will likely hit some of these same issues.
 
 ### Missing edgeDevices resource
 
@@ -252,7 +254,7 @@ The API version itself also matters. The ARM QuickStart template uses `2025-09-1
 
 ### The LcmController 0.settings bug
 
-This one took the most iterations to nail down and I want to be honest: I went down several wrong paths before finding the real cause. The full investigation trail, including the false leads and the intermediate workarounds I tried, is documented in the [CHANGELOG](https://github.com/schmittnieto/AzSHCI/blob/main/terraform/CHANGELOG.md) if you want the unfiltered version. I will keep this section to what actually matters.
+This one took the most iterations to nail down and I want to be honest: I went down several wrong paths before finding the real cause. The full investigation trail, including the false leads and the intermediate workarounds I tried, is documented in the [CHANGELOG](https://github.com/schmittnieto/AzSHCI/blob/main/terraform/CHANGELOG.md) if you want the unfiltered version. I will keep this section to what matters.
 
 The symptom was a BITS failure during validation:
 
@@ -264,7 +266,32 @@ The root cause is a type-checking bug in `DownloadHelpers.psm1` inside the `Azur
 
 One important lesson from this: the four required Arc extensions (`AzureEdgeTelemetryAndDiagnostics`, `AzureEdgeDeviceManagement`, `AzureEdgeLifecycleManager`, `AzureEdgeRemoteSupport`) must be installed through the cluster creation process itself. Trying to pre-stage them manually before `terraform apply` is not only unnecessary, it can leave the node in a state where validation rejects it. Let Terraform handle the extension installation as part of Stage 1. The `03_TroubleshootingExtensions.ps1` script is now archived in `scripts/01Lab/Old version/` for reference. It is not a step in the normal flow.
 
-Alongside the extension repair logic, that script also applied a targeted LcmController hotfix on the node through Azure Arc Run Command, so it does not need direct network access to the node. The hotfix patches the exact `DownloadHelpers.psm1` line responsible for the null-check bug described above and restarts the LcmController service. It is idempotent, so it is safe to rerun after any extension recovery.
+Alongside the extension repair logic, that script also applied a targeted LcmController hotfix on the node through Azure Arc Run Command, so it did not need direct network access to the node. The hotfix patched the exact `DownloadHelpers.psm1` line responsible for the null-check bug described above and restarted the LcmController service. The bug only affected build `10.2601` of the deployment service and the script pins its extension versions to that build. Do not run it against a cluster on a newer release, because it would reinstall older extensions. Before `terraform apply` the node only needs the Arc registration from `02_Cluster.ps1` and the SPN and RBAC from `00_AzurePreRequisites.ps1`.
+
+### Leftover role assignments after a host-only teardown
+
+When I rebuild the lab I often tear it down with `99_Offboarding.ps1` alone. That script removes the Hyper-V VMs and host networking, but it never touches Azure. The `Azure Connected Machine Resource Manager` (ACMRM) assignment for the Microsoft.AzureStackHCI resource provider service principal stays in the resource group. That principal is the same in every deployment, so the next apply failed on `service_principal_role_assign["ACMRM"]` with:
+
+```
+409 RoleAssignmentExists: The role assignment already exists.
+```
+
+For a while the fix was manual: copy the GUID from the error into a recovery variable, apply, then reset the variable. Now `main.tf` lists the role assignments of the resource group with `azapi_resource_list` on every plan and filters for the resource provider principal, the ACMRM role definition and an exact resource group scope (the list also returns assignments inherited from the subscription). If a match exists, it feeds an `import` block and Terraform adopts the assignment. If not, the module creates it as before. Once the assignment is in state the import is a no-op, so the block can stay in place permanently.
+
+The machine assignments (`Azure Stack HCI Device Management Role`, `Azure Stack HCI Connected InfraVMs` and `Key Vault Secrets User`) do not need this treatment. They belong to the Arc machine identity, which is new after every node registration. The Key Vault they point to also gets a new random suffix on every deployment.
+
+### Post-deployment reads without a third apply
+
+The Arc resource bridge, custom location and Arc settings only exist after Azure finishes the deployment. Reading them earlier made every `terraform plan` fail with `Resource not found`, so I gated those data sources behind a `deployment_completed` flag. That meant one more manual step after every successful deployment: flip the flag and run another apply just to get `custom_location_id`.
+
+Those data sources already depended on the deployment update resource, which only completes when Azure finishes the deployment (with a 24 hour timeout). Terraform defers a data source with a pending dependency until apply time, so the flag was redundant. The reads are now gated by `is_exported` instead:
+
+- **Stage 1**: nothing is read, because nothing exists yet.
+- **Stage 2**: the reads wait for the deployment and run in the same apply.
+- **Later plans**: the deployment update is in state with no changes, so the reads run at plan time against resources that now exist.
+- **Failed deployment**: the update resource errors, the apply stops before the reads and the next apply retries with the reads deferred again.
+
+The root `deployment_completed` variable stays declared as deprecated, so an older `terraform.tfvars` still loads without a warning.
 
 ## Step-by-Step Deployment
 
@@ -278,7 +305,7 @@ The lab scripts use `AZSHCI_SPN_APP_ID` and `AZSHCI_SPN_SECRET` from `scripts/01
 
 ### Step 2: Build the Hyper-V infrastructure
 
-Run `00_Infra_AzHCI.ps1` to create the Hyper-V host infrastructure for the lab node. This step is identical to the one described in the [demolab article](/blog/azure-stack-hci-demolab/), so refer to it for a detailed walkthrough.
+Run `00_Infra_AzHCI.ps1` to create the Hyper-V host infrastructure for the lab node. This step is identical to the one described in the [demolab article](/blog/azure-stack-hci-demolab/), so refer to it for a detailed walkthrough. On Windows Server Insider builds the script now detects Hyper-V through the VMMS service instead of the DISM feature cmdlets, which could hang there even with the role installed.
 
 <a href="/assets/img/post/2026-04-17-azure-local-terraform/00_Infra_Overview.webp" target="_blank">
   <img src="/assets/img/post/2026-04-17-azure-local-terraform/00_Infra_Overview.webp" alt="Hyper-V infrastructure overview" style="border: 2px solid grey;">
@@ -286,7 +313,7 @@ Run `00_Infra_AzHCI.ps1` to create the Hyper-V host infrastructure for the lab n
 
 ### Step 3: Configure the domain controller
 
-Run `01_DC.ps1` to set up Active Directory on the domain controller VM. Again, this step is identical to the one covered in the [demolab article](/blog/azure-stack-hci-demolab/).
+Run `01_DC.ps1` to set up Active Directory on the domain controller VM. Again, this step is identical to the one covered in the [demolab article](/blog/azure-stack-hci-demolab/). After installing Windows Updates the script now restarts the DC itself and continues only once Active Directory answers and the VM stays up for `AZSHCI_DC_SLEEP_UPDATES` seconds on the same boot. A cumulative update can restart the DC twice and the old fixed sleep let the script continue in between.
 
 <a href="/assets/img/post/2026-04-17-azure-local-terraform/01_DC_Setup.webp" target="_blank">
   <img src="/assets/img/post/2026-04-17-azure-local-terraform/01_DC_Setup.webp" alt="Domain controller setup" style="border: 2px solid grey;">
@@ -318,8 +345,9 @@ networking_type     = ""
 networking_pattern  = ""
 witness_type        = ""
 is_exported         = false
-deployment_completed = false
 ```
+
+If your `terraform.tfvars` comes from an older copy and still contains `deployment_completed`, you can delete the line. The variable has no effect any more.
 
 ### Step 6: Authenticate with Azure CLI
 
@@ -370,7 +398,7 @@ Review the plan output before confirming the apply. Terraform creates the Key Va
   <img src="/assets/img/post/2026-04-17-azure-local-terraform/TF_Apply_Stage1_Validate.webp" alt="Stage 1 apply complete" style="border: 2px solid grey;">
 </a>
 
-Validation runs as part of the apply itself. Once Terraform reports the apply as complete, Stage 1 is done (takes arround 90 minutes) and you can move straight to Stage 2.
+Validation runs as part of the apply itself. Once Terraform reports the apply as complete, Stage 1 is done (it takes around 90 minutes) and you can move straight to Stage 2.
 
 ### Step 8: Switch to Stage 2 (Deploy)
 
@@ -386,7 +414,7 @@ While Terraform is waiting, you can follow the deployment progress in real time 
   <img src="/assets/img/post/2026-04-17-azure-local-terraform/TF_Portal_Deploying.webp" alt="Azure portal showing deployment steps in progress" style="border: 2px solid grey;">
 </a>
 
-Once the apply finishes and all steps complete successfully, this is what it looks like from both sides. First, the Terraform output confirming all resources were created:
+Once the apply finishes and all steps complete successfully, this is what it looks like from both sides. First, the Terraform output confirming all resources were created. My October run took 145 minutes, the one in this screenshot 164. The screenshot predates the change described in [Post-deployment reads without a third apply](#post-deployment-reads-without-a-third-apply), so `custom_location_id` is still missing from its outputs. With the current code the same apply also reads the custom location and lists it.
 
 <a href="/assets/img/post/2026-04-17-azure-local-terraform/TF_Apply_Stage2_completed.webp" target="_blank">
   <img src="/assets/img/post/2026-04-17-azure-local-terraform/TF_Apply_Stage2_completed.webp" alt="Terraform apply Stage 2 complete" style="border: 2px solid grey;">
@@ -398,27 +426,35 @@ And the Azure portal showing the cluster as successfully deployed:
   <img src="/assets/img/post/2026-04-17-azure-local-terraform/TF_Portal_Deployed.webp" alt="Azure portal showing deployment complete" style="border: 2px solid grey;">
 </a>
 
-### Step 9: Enable post-deployment outputs
+### Step 9: Check the outputs
 
-Once the portal confirms the deployment is complete and Terraform finishes the apply, set `deployment_completed = true` in `terraform.tfvars` and run `terraform apply` once more. This allows Terraform to read the custom location output that is only available after the Azure deployment engine finishes.
+There is nothing left to switch after Stage 2. Leave `is_exported = true` in `terraform.tfvars` and read the custom location ID that the AVD and AKS workloads will need:
+
+```powershell
+terraform output custom_location_id
+```
+
+If the cluster was deployed with an older checkout of the repository, pull the current code and run `terraform apply` once. Terraform reads the Arc resource bridge, custom location and Arc settings at plan time, changes nothing in Azure and only saves the new output to state:
 
 <a href="/assets/img/post/2026-04-17-azure-local-terraform/TF_Apply_Stage2_Complete.webp" target="_blank">
-  <img src="/assets/img/post/2026-04-17-azure-local-terraform/TF_Apply_Stage2_Complete.webp" alt="Terraform apply complete with post-deployment outputs" style="border: 2px solid grey;">
+  <img src="/assets/img/post/2026-04-17-azure-local-terraform/TF_Apply_Stage2_Complete.webp" alt="Terraform apply on an existing deployment adding the custom_location_id output" style="border: 2px solid grey;">
 </a>
 
 ## Recovery Helpers
 
-If a `terraform apply` times out or you lose Terraform state after a successful apply, the configuration includes two recovery variables to help you get back on track without destroying and rebuilding:
+The clean way to remove the lab is `terraform destroy` from the `terraform/` folder first and `99_Offboarding.ps1` on the host afterwards, since the offboarding script never touches Azure. If you skip the destroy, the leftover role assignments no longer block the next deployment, as described in [Leftover role assignments after a host-only teardown](#leftover-role-assignments-after-a-host-only-teardown).
+
+If a `terraform apply` times out or you lose Terraform state after a successful apply, the configuration includes three recovery variables to help you get back on track without destroying and rebuilding:
 
 - **`import_deployment_settings`** (`bool`, default `false`): When `true`, imports the pre-existing `deploymentSettings/default` into state before the plan phase. Use this when a previous apply timed out but the resource already exists in Azure.
 
 - **`import_machine_rg_role_assignment_ids`** (`map(string)`, default `{}`): When the `machine_rg_role_assign` role assignments already exist in Azure and a new apply would fail with `409 Conflict`, populate this map with the existing assignment GUIDs (visible in the 409 error message) and run `terraform apply` to import them. Reset to `{}` afterward.
 
-- **`import_service_principal_role_assignment_ids`** (`map(string)`, default `{}`): When you tear the lab down with `99_Offboarding.ps1` alone (or lose state), the `Azure Connected Machine Resource Manager` assignment on the Microsoft.AzureStackHCI resource provider service principal survives and the next apply fails with `409 RoleAssignmentExists` on `service_principal_role_assign["ACMRM"]`. Take the GUID from the error and import it as `{ "ACMRM" = "<guid>" }`, then reset to `{}` after a successful apply.
+- **`import_service_principal_role_assignment_ids`** (`map(string)`, default `{}`): Manual override for the ACMRM assignment on the Microsoft.AzureStackHCI resource provider service principal. You normally do not need it, since Terraform now detects and imports that assignment on its own. Use it only if the automatic lookup cannot read the role assignments of the resource group and the apply still fails with `409 RoleAssignmentExists` on `service_principal_role_assign["ACMRM"]`. Take the GUID from the error and import it as `{ "ACMRM" = "<guid>" }`, then reset to `{}` after a successful apply. Values set here take precedence over the lookup.
 
 If the Arc machine was manually deleted from Azure and you need to run `terraform destroy`, set `enable_cluster_module = false` to skip the cluster module and avoid failing Arc data-source lookups.
 
-It is also worth noting that the cluster deployment creates additional Azure resources such as Arc extensions and logical networks that are lifecycle-managed by the cluster resource itself: they are created and destroyed together with it, so they do not need to be imported separately. The custom location is the exception, it is the only post-deployment resource that Terraform captures in state and exposes as an output, since workload modules (AVD, AKS) need to reference it. Everything else is handled by Azure as part of the cluster's own lifecycle.
+The cluster deployment also creates additional Azure resources such as Arc extensions and logical networks that are lifecycle-managed by the cluster resource itself: they are created and destroyed together with it, so they do not need to be imported separately. The custom location is the exception, it is the only post-deployment resource that Terraform captures in state and exposes as an output, since workload modules (AVD, AKS) need to reference it. Everything else is handled by Azure as part of the cluster's own lifecycle.
 
 ## What Is Next
 
@@ -429,4 +465,4 @@ The cluster deployment is the foundation. AVD automation is now available throug
 - **Pipelines**: GitHub Actions or Azure DevOps pipeline definitions that call these Terraform configurations using the service principal created by `00_AzurePreRequisites.ps1`. The goal is a single pipeline trigger that goes from a fresh Arc-registered node to a fully deployed cluster with workloads.
 - **Dedicated Terraform repository**: what lives today in `AzSHCI/terraform` is still a proof of concept sitting next to the PowerShell scripts. Once it stabilises, the Terraform path will move to its own repository with a remote state backend on Azure Blob Storage, a modular pipeline structure and full Day-2 lifecycle operations (upgrades, node management, monitoring).
 
-If you have questions, hit issues, or have already gone through a similar Terraform journey with Azure Local, I would love to hear from you in the comments below. The repository is public and pull requests are welcome.
+If you have questions, hit issues or have already built something similar with Terraform on Azure Local, I would love to hear from you in the comments below. The repository is public and pull requests are welcome.
