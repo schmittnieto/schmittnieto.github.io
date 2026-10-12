@@ -8,6 +8,19 @@ classes:
 ---
 
 <style>
+  /* The nav already says "About", so the H1 stays for screen readers and SEO only */
+  .about-page .page__inner-wrap > header {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .about-hero {
     text-align: center;
     margin-bottom: 2.5rem;
