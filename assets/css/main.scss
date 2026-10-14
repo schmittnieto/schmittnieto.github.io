@@ -750,6 +750,33 @@ $caption-font-family        : $serif;
   white-space: nowrap;
 }
 
+/* Author sidebar (home, tags): without the old light panel the 110px avatar
+   looked small and stuck to the left. Larger avatar, and the whole card is
+   centered so the avatar lines up with the name and bio however the bio
+   wraps. Desktop only, mobile keeps the theme's compact row. */
+@media (min-width: 64em) {
+  .sidebar .h-card {
+    text-align: center;
+  }
+
+  .sidebar .h-card .author__urls li a {
+    justify-content: center;
+  }
+
+  .sidebar .h-card .author__avatar {
+    display: block;
+    width: auto;
+    height: auto;
+    text-align: center;
+  }
+
+  .sidebar .h-card .author__avatar img {
+    width: 150px;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
 /* /posts/ sort switch (_layouts/posts.html) */
 .posts-sort {
   display: flex;
