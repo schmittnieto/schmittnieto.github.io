@@ -159,3 +159,41 @@
   }
 })();
 </script>
+
+<script>
+/* TOC collapse: closed by default below 1280px, where it stacks above the
+   article. From 1280px up it sits beside the article and stays open. */
+(function () {
+  function initTocCollapse() {
+    var details = document.querySelector('.toc__details');
+    if (!details || !window.matchMedia) return;
+
+    var summary = details.querySelector('.toc__summary');
+    var narrow = window.matchMedia('(max-width: 1279px)');
+
+    function sync() {
+      details.open = !narrow.matches;
+    }
+
+    if (summary) {
+      summary.addEventListener('click', function (event) {
+        if (!narrow.matches) event.preventDefault();
+      });
+    }
+
+    if (narrow.addEventListener) {
+      narrow.addEventListener('change', sync);
+    } else if (narrow.addListener) {
+      narrow.addListener(sync);
+    }
+
+    sync();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTocCollapse);
+  } else {
+    initTocCollapse();
+  }
+})();
+</script>

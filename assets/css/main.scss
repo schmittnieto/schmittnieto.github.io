@@ -274,6 +274,15 @@ $caption-font-family        : $serif;
     top: auto;
   }
 
+  .layout--single #main.has-page-sidebar > .page__sidebar .nav__list {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Below 1280px the TOC stacks above the article and starts collapsed */
+@media (max-width: 1279px) {
   .layout--single .page__content--with-toc {
     display: block;
   }
@@ -296,14 +305,12 @@ $caption-font-family        : $serif;
     top: auto;
   }
 
-  .layout--single #main.has-page-sidebar > .page__sidebar .nav__list,
   .layout--single .page__content--with-toc .sidebar__right .toc {
     width: 100%;
     margin-left: 0;
     margin-right: 0;
   }
 
-  .layout--single .page__content--with-toc .sidebar__right .toc > header,
   .layout--single .page__content--with-toc .sidebar__right .nav__title {
     margin-top: 0;
     margin-left: 0;
@@ -316,17 +323,100 @@ $caption-font-family        : $serif;
   }
 }
 
-@media (min-width: 64em) and (max-width: 1585px) {
+@media (min-width: 64em) and (max-width: 1279px) {
   .layout--single .page__content--with-toc .sidebar__right {
     max-width: var(--sn-content-width);
     margin: 0 auto 2rem;
     padding-left: 0;
   }
 
-  .layout--single #main.has-page-sidebar > .page__sidebar .nav__list,
   .layout--single .page__content--with-toc .sidebar__right,
   .layout--single .page__content--with-toc .sidebar__right .toc,
   .layout--single .page__content--with-toc .sidebar__right .toc__menu {
+    width: 100%;
+    max-width: var(--sn-content-width);
+    padding-left: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Laptop range: the TOC moves into a sticky column beside the article, the
+   series nav stays stacked above it. Narrower TOC than the 1586px layout so
+   the article keeps most of the width. */
+@media (min-width: 1280px) and (max-width: 1585px) {
+  .layout--single {
+    --sn-right-sidebar-width: 280px;
+  }
+
+  .layout--single .page__content--with-toc {
+    display: grid;
+    grid-template-columns: minmax(0, var(--sn-content-width)) var(--sn-right-sidebar-width);
+    justify-content: center;
+    align-items: flex-start;
+    column-gap: var(--sn-layout-gap);
+  }
+
+  .layout--single .page__content--with-toc .page__content-body {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    max-width: var(--sn-content-width);
+  }
+
+  .layout--single .page__content--with-toc .sidebar__right {
+    grid-column: 2;
+    grid-row: 1;
+    width: var(--sn-right-sidebar-width);
+    margin: 0;
+  }
+}
+
+/* TOC title doubles as the collapse toggle below 1280px. From 1280px up the
+   TOC is always open and the title looks like a plain header. */
+.toc__summary {
+  display: block;
+  list-style: none;
+}
+
+.toc__summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (max-width: 1279px) {
+  .toc__summary {
+    cursor: pointer;
+  }
+
+  .toc__summary .nav__title {
+    position: relative;
+    padding-right: 2.25rem;
+  }
+
+  .toc__summary .nav__title::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0.9rem;
+    width: 0.45em;
+    height: 0.45em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-70%) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .toc__details[open] .toc__summary .nav__title::after {
+    transform: translateY(-30%) rotate(-135deg);
+  }
+
+  .toc__details:not([open]) .toc__summary .nav__title {
+    border-radius: 4px;
+  }
+}
+
+@media (min-width: 64em) and (max-width: 1585px) {
+  .layout--single #main.has-page-sidebar > .page__sidebar .nav__list {
     width: 100%;
     max-width: var(--sn-content-width);
     padding-left: 0;
