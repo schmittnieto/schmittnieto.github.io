@@ -23,6 +23,8 @@ classes:
 
   .about-hero {
     text-align: center;
+    /* The H1 above is hidden, so the hero needs its own space below the masthead */
+    margin-top: 2.5rem;
     margin-bottom: 2.5rem;
   }
 

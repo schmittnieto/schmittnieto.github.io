@@ -19,7 +19,7 @@ layout: archive
 <div class="posts-sort" role="group" aria-label="Sort posts" data-default-sort="{{ default_sort }}" hidden>
   <span class="posts-sort__label">Sort by</span>
   <button type="button" class="posts-sort__option" data-sort="published" aria-pressed="{% if default_sort == 'published' %}true{% else %}false{% endif %}">Published</button>
-  <button type="button" class="posts-sort__option" data-sort="updated" aria-pressed="{% if default_sort == 'updated' %}true{% else %}false{% endif %}">Last updated</button>
+  <button type="button" class="posts-sort__option" data-sort="updated" aria-pressed="{% if default_sort == 'updated' %}true{% else %}false{% endif %}">Latest activity</button>
 </div>
 
 <!-- First, sort and group all posts by year -->
@@ -104,39 +104,56 @@ layout: archive
 </div>
 
 {%- comment -%}
-  Sort key per post: last update (or publish date) as a sortable string plus
-  the URL, so the posts can be looked up again after sorting.
+  Latest activity: every post once, at its most recent event. That is the
+  last update when last_modified_at falls on a later day than the publish
+  date, otherwise the publication itself. Sort key: event date as a sortable
+  string, event type and URL, so each post can be looked up after sorting.
 {%- endcomment -%}
-{% assign updated_keys = "" | split: "" %}
+{% assign activity_keys = "" | split: "" %}
 {% for post in site.posts %}
-  {% assign updated_at = post.last_modified_at | default: post.date %}
-  {% capture updated_key %}{{ updated_at | date: "%Y%m%d%H%M%S" }}|{{ post.url }}{% endcapture %}
-  {% assign updated_keys = updated_keys | push: updated_key %}
+  {% assign activity_type = "Published" %}
+  {% assign activity_at = post.date %}
+  {% if post.last_modified_at %}
+    {% assign updated_day = post.last_modified_at | date: "%Y%m%d" %}
+    {% assign published_day = post.date | date: "%Y%m%d" %}
+    {% if updated_day > published_day %}
+      {% assign activity_type = "Updated" %}
+      {% assign activity_at = post.last_modified_at %}
+    {% endif %}
+  {% endif %}
+  {% capture activity_key %}{{ activity_at | date: "%Y%m%d%H%M%S" }}|{{ activity_type }}|{{ post.url }}{% endcapture %}
+  {% assign activity_keys = activity_keys | push: activity_key %}
 {% endfor %}
-{% assign updated_keys = updated_keys | sort | reverse %}
+{% assign activity_keys = activity_keys | sort | reverse %}
 
 <div class="posts-view" data-view="updated"{% if default_sort != "updated" %} hidden{% endif %}>
   {% assign lazy_teasers = false %}
   {% if default_sort != "updated" %}{% assign lazy_teasers = true %}{% endif %}
-  {% assign current_year = "" %}
+  {% assign current_month = "" %}
 
-  {% for updated_key in updated_keys %}
-    {% assign key_parts = updated_key | split: "|" %}
+  {% for activity_key in activity_keys %}
+    {% assign key_parts = activity_key | split: "|" %}
+    {% assign key_month = key_parts[0] | slice: 0, 6 %}
     {% assign key_year = key_parts[0] | slice: 0, 4 %}
-    {% assign post = site.posts | where: "url", key_parts[1] | first %}
+    {% assign month_index = key_parts[0] | slice: 4, 2 | plus: 0 | minus: 1 %}
+    {% assign key_month_number = key_parts[0] | slice: 4, 2 %}
+    {% assign key_day = key_parts[0] | slice: 6, 2 %}
+    {% assign activity_date = key_year | append: "-" | append: key_month_number | append: "-" | append: key_day %}
+    {% assign activity_type = key_parts[1] %}
+    {% assign post = site.posts | where: "url", key_parts[2] | first %}
 
-    {% if key_year != current_year %}
+    {% if key_month != current_month %}
       {% unless forloop.first %}
           </div>
         </section>
       {% endunless %}
-      {% assign current_year = key_year %}
-        <section id="updated-{{ key_year }}" class="taxonomy__section">
-          <h2 class="archive__subtitle">Updated in {{ key_year }}</h2>
+      {% assign current_month = key_month %}
+        <section id="activity-{{ key_month }}" class="taxonomy__section">
+          <h2 class="archive__subtitle">{{ month_names[month_index] }} {{ key_year }}</h2>
           <div class="entries-{{ entries_layout }}">
     {% endif %}
 
-    {% include archive-single.html type=entries_layout lazy=lazy_teasers %}
+    {% include archive-single.html type=entries_layout lazy=lazy_teasers activity=activity_type activity_date=activity_date %}
 
     {% if forloop.last %}
           </div>

@@ -68,8 +68,6 @@ html.light-theme .page__hero--overlay .page__meta {
 
 html.light-theme .toc,
 html.light-theme .author__urls,
-html.light-theme .page__share,
-html.light-theme .page__meta,
 html.light-theme .pagination--pager,
 html.light-theme .notice,
 html.light-theme .search-content,
@@ -79,14 +77,18 @@ html.light-theme .greedy-nav .hidden-links {
   border-color: #d7dee6;
 }
 
-/* Sidebars and post list items sit on the page background, like in the dark
-   theme. White panels on the #f7f9fc page barely stood out. */
+/* Sidebars, post list items, post meta and share buttons sit on the page
+   background, like in the dark theme. White panels on the #f7f9fc page
+   barely stood out. */
 html.light-theme .sidebar,
 html.light-theme .nav__list,
+html.light-theme .page__share,
+html.light-theme .page__meta,
 html.light-theme .archive__item,
 html.light-theme .archive__item .page__meta {
   background-color: transparent;
   color: #1f2937;
+  border-color: #d7dee6;
 }
 
 html.light-theme .page__footer {
@@ -103,7 +105,7 @@ html.light-theme .page__inner-wrap > footer.page__meta .page__meta-title {
 }
 
 html.light-theme .page__inner-wrap > footer.page__meta {
-  background: #ffffff;
+  background: transparent;
 }
 
 html.light-theme .greedy-nav .hidden-links {
@@ -211,6 +213,14 @@ html.light-theme button:not(.theme-toggle) {
   background-color: #ffffff;
   color: #1f2937;
   border-color: #cbd5e1;
+}
+
+/* Share buttons keep their brand background, so the generic light link color
+   (#0b63c9) made their labels unreadable */
+html.light-theme .page__share .btn,
+html.light-theme .page__share .btn:hover,
+html.light-theme .page__share .btn:visited {
+  color: #ffffff;
 }
 
 html.light-theme .btn,

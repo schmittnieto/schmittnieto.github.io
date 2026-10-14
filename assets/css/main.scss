@@ -210,6 +210,18 @@ $caption-font-family        : $serif;
   max-width: 100%;
 }
 
+/* Related posts: the theme floats this block right with room for a sidebar
+   (width: calc(100% - 300px)), so it started 300px right of the article.
+   Align it with the page shell instead. The 1586px sidebar grid below still
+   places it in the article column. */
+.layout--single .page__related {
+  float: none;
+  width: auto;
+  max-width: var(--sn-page-shell-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* The shared max-width: 100% above also hit .page__content-body, so pages
    without a TOC (About, 404) ran wider than the 1180px column their title
    uses. This puts the cap back. */
@@ -787,6 +799,39 @@ html.light-theme .posts-sort .posts-sort__option {
 html.light-theme .posts-sort .posts-sort__option[aria-pressed="true"] {
   border-color: #0b63c9;
   background: rgba(11, 99, 201, 0.1);
+}
+
+/* Event label above each post in the "Latest activity" view of /posts/ */
+.archive__item-activity {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.archive__item-activity--updated {
+  background: rgba(96, 165, 250, 0.16);
+  color: #93c5fd;
+}
+
+.archive__item-activity--published {
+  background: rgba(52, 211, 153, 0.14);
+  color: #6ee7b7;
+}
+
+html.light-theme .archive__item-activity--updated {
+  background: rgba(11, 99, 201, 0.1);
+  color: #0b63c9;
+}
+
+html.light-theme .archive__item-activity--published {
+  background: rgba(5, 150, 105, 0.1);
+  color: #047857;
 }
 
 /* The wide home column would make 2:1 teasers about 600px tall. Cap them so

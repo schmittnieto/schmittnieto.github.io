@@ -2,8 +2,9 @@
   Override of the minimal-mistakes page__meta.html. Adds the last update
   date after the read time when last_modified_at is set and falls on a
   different day than the publish date. Used by the post hero, the page
-  header and the post lists (archive-single.html). Keep the rest in sync
-  with the theme.
+  header and the post lists (archive-single.html). hide_updated skips it
+  where the caller already shows the update (Latest activity view). Keep
+  the rest in sync with the theme.
 {%- endcomment -%}
 {% assign locale = include.locale | default: site.locale %}
 {% assign document = post | default: page %}
@@ -36,7 +37,7 @@
       </span>
     {% endif %}
 
-    {% if document.last_modified_at and document.show_date %}
+    {% if document.last_modified_at and document.show_date and include.hide_updated == nil %}
       {% assign updated_day = document.last_modified_at | date: "%Y-%m-%d" %}
       {% assign published_day = document.date | date: "%Y-%m-%d" %}
       {% if updated_day != published_day %}

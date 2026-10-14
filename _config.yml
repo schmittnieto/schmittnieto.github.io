@@ -108,6 +108,7 @@ plugins:
 author:
   name   : "Cristian Schmitt Nieto"
   avatar : "/assets/img/avatar-csn.jpeg"
+  home   : "/about/"   # avatar and name in the author sidebar link here
   bio    : "Azure Consultant with over 10 years of IT experience, sharing insights and solutions here 😊"
   links:
     - label: "GitHub"

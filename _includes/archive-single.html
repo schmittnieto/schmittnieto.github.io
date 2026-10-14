@@ -12,10 +12,17 @@
 
 <div class="{{ include.type | default: 'list' }}__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    {% if include.type == "list" and teaser %}
+    {% if teaser and include.type == "list" or teaser and include.type == "grid" %}
       <div class="archive__item-teaser">
-        <img src="{{ teaser | relative_url }}" alt="" style="border-radius: 8px;"{% if include.lazy %} loading="lazy"{% endif %}>
+        <img src="{{ teaser | relative_url }}" alt="" style="border-radius: 8px;"{% if include.lazy or include.type == "grid" %} loading="lazy"{% endif %}>
       </div>
+    {% endif %}
+    {% if include.activity %}
+      {% assign activity_format = site.date_format | default: "%B %-d, %Y" %}
+      <p class="archive__item-activity archive__item-activity--{{ include.activity | downcase }}">
+        <i class="fas {% if include.activity == 'Updated' %}fa-rotate{% else %}fa-file-circle-plus{% endif %}" aria-hidden="true"></i>
+        {{ include.activity }} <time datetime="{{ include.activity_date }}">{{ include.activity_date | date: activity_format }}</time>
+      </p>
     {% endif %}
     <h4 class="archive__item-title" itemprop="headline">
       {% if post.link %}
@@ -26,7 +33,7 @@
         <a href="{{ post.url | relative_url }}" rel="permalink">{{ title }}</a>
       {% endif %}
     </h4>
-    {% include page__meta.html type=include.type %}
+    {% include page__meta.html type=include.type hide_updated=include.activity %}
     {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 160 }}</p>{% endif %}
   </article>
 </div>
