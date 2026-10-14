@@ -147,8 +147,9 @@ $caption-font-family        : $serif;
 .layout--single {
   --sn-shell-max-width: 1586px;
   --sn-content-width: 1180px;
-  --sn-left-sidebar-width: 18rem;
-  --sn-right-sidebar-width: 16rem;
+  /* Sidebars in px: rem would grow with the 22px root font from 1280px up */
+  --sn-left-sidebar-width: 300px;
+  --sn-right-sidebar-width: 280px;
   --sn-layout-gap: 2rem;
   --sn-page-shell-width: calc(var(--sn-content-width) + var(--sn-right-sidebar-width) + var(--sn-layout-gap));
   --sn-sidebar-shell-width: calc(var(--sn-left-sidebar-width) + var(--sn-page-shell-width) + var(--sn-layout-gap));
@@ -345,8 +346,8 @@ $caption-font-family        : $serif;
    series nav stays stacked above it. Narrower TOC than the 1586px layout so
    the article keeps most of the width. */
 @media (min-width: 1280px) and (max-width: 1585px) {
-  .layout--single {
-    --sn-right-sidebar-width: 280px;
+  .layout--single #main.has-page-sidebar > .page__sidebar {
+    max-width: var(--sn-page-shell-width);
   }
 
   .layout--single .page__content--with-toc {
@@ -539,7 +540,7 @@ $caption-font-family        : $serif;
 @media (min-width: 1586px) {
   .layout--single #main:not(.has-page-sidebar) .page__content--with-toc {
     display: grid;
-    grid-template-columns: minmax(750px, var(--sn-content-width)) var(--sn-right-sidebar-width);
+    grid-template-columns: minmax(0, var(--sn-content-width)) var(--sn-right-sidebar-width);
     justify-content: center;
     align-items: flex-start;
     column-gap: var(--sn-layout-gap);
@@ -562,7 +563,8 @@ $caption-font-family        : $serif;
 
 @media (min-width: 1586px) {
   .layout--single #main.has-page-sidebar {
-    max-width: var(--sn-sidebar-shell-width);
+    /* + 4rem for the 2rem side padding, #main is border-box */
+    max-width: calc(var(--sn-sidebar-shell-width) + 4rem);
     display: grid;
     grid-template-columns: var(--sn-left-sidebar-width) minmax(0, var(--sn-page-shell-width));
     column-gap: var(--sn-layout-gap);
@@ -607,7 +609,7 @@ $caption-font-family        : $serif;
 @media (min-width: 1586px) {
   .layout--single #main.has-page-sidebar .page__content--with-toc {
     display: grid;
-    grid-template-columns: minmax(750px, var(--sn-content-width)) var(--sn-right-sidebar-width);
+    grid-template-columns: minmax(0, var(--sn-content-width)) var(--sn-right-sidebar-width);
     justify-content: center;
     align-items: flex-start;
     column-gap: var(--sn-layout-gap);
