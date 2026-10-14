@@ -31,8 +31,6 @@ There are areas and tools I'll cover more thoroughly in future posts, but the ma
 
 I've decided to separate the categories into **IAM (Identity Access Management)**, **UEM (Unified Endpoint Management) & Modern Work (M365 and related services)**, and **Azure & Microsoft**. The reason is purely organizational, so those looking for IAM or UEM tools don't have to sift through Azure tools and vice versa.
 
-I haven't included blogs because the list would be infinite 😅, but if you want a list of some blogs I follow, most can be found on this page: [https://azurecrazy.com/azure-blogs/](https://azurecrazy.com/azure-blogs/).
-
 I'm not responsible for any errors in the tools or their functionalities. My goal with this post is to show you the tools I've used at some point (or even use daily) and have them centralized.
 
 The contact persons (along with their LinkedIn links) are not necessarily responsible for these repositories; they are mainly the people who created or introduced me to these repositories, that is, the people that I personally consider contributors. I'm sure I've forgotten to mention many of you; in that case, you can let me know, and I'll add the LinkedIn links, it's not a problem 😊.
