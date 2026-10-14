@@ -66,11 +66,8 @@ html.light-theme .page__hero--overlay .page__meta {
   background: transparent;
 }
 
-html.light-theme .sidebar,
 html.light-theme .toc,
-html.light-theme .nav__list,
 html.light-theme .author__urls,
-html.light-theme .archive__item,
 html.light-theme .page__share,
 html.light-theme .page__meta,
 html.light-theme .pagination--pager,
@@ -82,9 +79,14 @@ html.light-theme .greedy-nav .hidden-links {
   border-color: #d7dee6;
 }
 
-html.light-theme .archive__item {
-  border-radius: 0.9rem;
-  box-shadow: 0 10px 24px rgba(148, 163, 184, 0.08);
+/* Sidebars and post list items sit on the page background, like in the dark
+   theme. White panels on the #f7f9fc page barely stood out. */
+html.light-theme .sidebar,
+html.light-theme .nav__list,
+html.light-theme .archive__item,
+html.light-theme .archive__item .page__meta {
+  background-color: transparent;
+  color: #1f2937;
 }
 
 html.light-theme .page__footer {
@@ -130,13 +132,13 @@ html.light-theme .sidebar.sticky .h-card {
   box-shadow: none;
 }
 
-html.light-theme .sidebar.sticky .author__urls {
-  margin-top: 0.75rem;
-  padding: 0.85rem 1rem;
-  background: #f8fafc;
-  border: 1px solid #d7dee6;
-  border-radius: 0.9rem;
-  box-shadow: 0 10px 24px rgba(148, 163, 184, 0.12);
+/* Desktop only: below 64em the links are a "Follow" dropdown and need a background */
+@media (min-width: 64em) {
+  html.light-theme .sidebar.sticky .author__urls {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
 }
 
 html.light-theme .archive__subtitle,

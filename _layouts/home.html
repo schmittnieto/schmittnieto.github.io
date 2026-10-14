@@ -3,6 +3,7 @@ layout: archive
 ---
 
 {% if paginator == nil or paginator.page == 1 %}
+  {% include home-intro.html %}
   {{ content }}
 {% endif %}
 

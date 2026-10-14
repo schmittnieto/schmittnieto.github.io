@@ -685,10 +685,11 @@ $caption-font-family        : $serif;
   gap: 1rem;
 }
 
-/* Three cards in one row, never a lone card on a second row */
+/* All cards in one row (up to 4, set inline from the card count), so no card
+   ends up alone on a second row */
 @media (min-width: 48em) {
   .home-intro__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--home-intro-columns, 3), minmax(0, 1fr));
   }
 }
 
@@ -728,6 +729,64 @@ $caption-font-family        : $serif;
   font-size: 0.75em;
   font-weight: 600;
   color: #60a5fa;
+}
+
+/* Keep each meta item (date, read time, update) on one line when the row wraps */
+.page__meta-date,
+.page__meta-readtime,
+.page__meta-updated {
+  white-space: nowrap;
+}
+
+/* /posts/ sort switch (_layouts/posts.html) */
+.posts-sort {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.5rem;
+  font-size: 0.8em;
+}
+
+.posts-sort[hidden],
+.posts-view[hidden] {
+  display: none;
+}
+
+.posts-sort__label {
+  margin-right: 0.25rem;
+  font-weight: 600;
+}
+
+.posts-sort__option {
+  padding: 0.35rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.posts-sort__option:hover {
+  border-color: rgba(96, 165, 250, 0.55);
+}
+
+.posts-sort__option[aria-pressed="true"] {
+  border-color: #60a5fa;
+  background: rgba(96, 165, 250, 0.16);
+  font-weight: 700;
+}
+
+html.light-theme .posts-sort .posts-sort__option {
+  border-color: #cbd5e1;
+  background: transparent;
+  color: #1f2937;
+}
+
+html.light-theme .posts-sort .posts-sort__option[aria-pressed="true"] {
+  border-color: #0b63c9;
+  background: rgba(11, 99, 201, 0.1);
 }
 
 /* The wide home column would make 2:1 teasers about 600px tall. Cap them so

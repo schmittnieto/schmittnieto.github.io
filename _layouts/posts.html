@@ -4,6 +4,24 @@ layout: archive
 
 {{ content }}
 
+{%- comment -%}
+  Two views of the same posts: by publish date (year and month) and by last
+  update (year of last_modified_at, falling back to the publish date). The
+  default comes from posts_archive.default_sort in _config.yml, readers switch
+  with the buttons below (?sort=updated or ?sort=published in the URL).
+  Teasers in the view that starts hidden load lazily.
+{%- endcomment -%}
+{% assign default_sort = site.posts_archive.default_sort | default: "published" %}
+{% if default_sort != "updated" %}{% assign default_sort = "published" %}{% endif %}
+{% assign entries_layout = page.entries_layout | default: 'list' %}
+{% assign month_names = "January|February|March|April|May|June|July|August|September|October|November|December" | split: "|" %}
+
+<div class="posts-sort" role="group" aria-label="Sort posts" data-default-sort="{{ default_sort }}" hidden>
+  <span class="posts-sort__label">Sort by</span>
+  <button type="button" class="posts-sort__option" data-sort="published" aria-pressed="{% if default_sort == 'published' %}true{% else %}false{% endif %}">Published</button>
+  <button type="button" class="posts-sort__option" data-sort="updated" aria-pressed="{% if default_sort == 'updated' %}true{% else %}false{% endif %}">Last updated</button>
+</div>
+
 <!-- First, sort and group all posts by year -->
 {% assign posts_by_year = site.posts
   | sort: "date"
@@ -11,75 +29,159 @@ layout: archive
   | group_by_exp: "post", "post.date | date: '%Y'"
 %}
 
-<ul class="taxonomy__index">
-  {% for year in posts_by_year %}
-    <!-- Group the year's posts by month so we can link to them too -->
-    {% assign posts_by_month = year.items
-      | group_by_exp: "post", "post.date | date: '%m'"
-      | sort: "name"
-      | reverse
-    %}
+<div class="posts-view" data-view="published"{% if default_sort != "published" %} hidden{% endif %}>
+  {% assign lazy_teasers = false %}
+  {% if default_sort != "published" %}{% assign lazy_teasers = true %}{% endif %}
 
-    <li>
-      <!-- Year link with total posts in parentheses -->
-      <a href="#{{ year.name }}">
-        <strong>{{ year.name }}</strong> 
-        <span class="taxonomy__count">({{ year.items | size }})</span>
-      </a>
-      <ul>
-        {% for month in posts_by_month %}
-          {% assign month_number = month.name | plus: 0 %}
-          {% assign month_index  = month_number | minus: 1 %}
-          {% assign month_names  = "January|February|March|April|May|June|July|August|September|October|November|December" | split: "|" %}
-          {% assign month_name   = month_names[month_index] %}
+  <ul class="taxonomy__index">
+    {% for year in posts_by_year %}
+      <!-- Group the year's posts by month so we can link to them too -->
+      {% assign posts_by_month = year.items
+        | group_by_exp: "post", "post.date | date: '%m'"
+        | sort: "name"
+        | reverse
+      %}
 
-          <li>
-            <!-- Month link with its post count -->
-            <a href="#{{ year.name }}-{{ month_number }}">
-              {{ month_name }}
-              <span class="taxonomy__count">({{ month.items | size }})</span>
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    </li>
-  {% endfor %}
-</ul>
+      <li>
+        <!-- Year link with total posts in parentheses -->
+        <a href="#{{ year.name }}">
+          <strong>{{ year.name }}</strong>
+          <span class="taxonomy__count">({{ year.items | size }})</span>
+        </a>
+        <ul>
+          {% for month in posts_by_month %}
+            {% assign month_number = month.name | plus: 0 %}
+            {% assign month_index  = month_number | minus: 1 %}
+            {% assign month_name   = month_names[month_index] %}
 
-{% assign entries_layout = page.entries_layout | default: 'list' %}
-
-<!-- Now print the actual archive of posts, grouped by year and month -->
-{% for year in posts_by_year %}
-  <section id="{{ year.name }}" class="taxonomy__section">
-    <h2 class="archive__subtitle">{{ year.name }}</h2>
-
-    <!-- Group by month to display -->
-    {% assign posts_by_month = year.items
-      | group_by_exp: "post", "post.date | date: '%m'"
-      | sort: "name"
-      | reverse
-    %}
-
-    {% for month in posts_by_month %}
-      {% assign month_number = month.name | plus: 0 %}
-      {% assign month_index  = month_number | minus: 1 %}
-      {% assign month_names  = "January|February|March|April|May|June|July|August|September|October|November|December" | split: "|" %}
-      {% assign month_name   = month_names[month_index] %}
-
-      <!-- Match the anchor ID for quick navigation -->
-      <h3 id="{{ year.name }}-{{ month_number }}">
-        {{ month_name }} ({{ month.items | size }} posts)
-      </h3>
-
-      <div class="entries-{{ entries_layout }}">
-        {% for post in month.items %}
-          {% include archive-single.html type=entries_layout %}
-        {% endfor %}
-      </div>
+            <li>
+              <!-- Month link with its post count -->
+              <a href="#{{ year.name }}-{{ month_number }}">
+                {{ month_name }}
+                <span class="taxonomy__count">({{ month.items | size }})</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
     {% endfor %}
+  </ul>
 
-    <a href="#page-title" class="back-to-top">
-      {{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;
-    </a>
-  </section>
+  <!-- Now print the actual archive of posts, grouped by year and month -->
+  {% for year in posts_by_year %}
+    <section id="{{ year.name }}" class="taxonomy__section">
+      <h2 class="archive__subtitle">{{ year.name }}</h2>
+
+      <!-- Group by month to display -->
+      {% assign posts_by_month = year.items
+        | group_by_exp: "post", "post.date | date: '%m'"
+        | sort: "name"
+        | reverse
+      %}
+
+      {% for month in posts_by_month %}
+        {% assign month_number = month.name | plus: 0 %}
+        {% assign month_index  = month_number | minus: 1 %}
+        {% assign month_name   = month_names[month_index] %}
+
+        <!-- Match the anchor ID for quick navigation -->
+        <h3 id="{{ year.name }}-{{ month_number }}">
+          {{ month_name }} ({{ month.items | size }} posts)
+        </h3>
+
+        <div class="entries-{{ entries_layout }}">
+          {% for post in month.items %}
+            {% include archive-single.html type=entries_layout lazy=lazy_teasers %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <a href="#page-title" class="back-to-top">
+        {{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;
+      </a>
+    </section>
+  {% endfor %}
+</div>
+
+{%- comment -%}
+  Sort key per post: last update (or publish date) as a sortable string plus
+  the URL, so the posts can be looked up again after sorting.
+{%- endcomment -%}
+{% assign updated_keys = "" | split: "" %}
+{% for post in site.posts %}
+  {% assign updated_at = post.last_modified_at | default: post.date %}
+  {% capture updated_key %}{{ updated_at | date: "%Y%m%d%H%M%S" }}|{{ post.url }}{% endcapture %}
+  {% assign updated_keys = updated_keys | push: updated_key %}
 {% endfor %}
+{% assign updated_keys = updated_keys | sort | reverse %}
+
+<div class="posts-view" data-view="updated"{% if default_sort != "updated" %} hidden{% endif %}>
+  {% assign lazy_teasers = false %}
+  {% if default_sort != "updated" %}{% assign lazy_teasers = true %}{% endif %}
+  {% assign current_year = "" %}
+
+  {% for updated_key in updated_keys %}
+    {% assign key_parts = updated_key | split: "|" %}
+    {% assign key_year = key_parts[0] | slice: 0, 4 %}
+    {% assign post = site.posts | where: "url", key_parts[1] | first %}
+
+    {% if key_year != current_year %}
+      {% unless forloop.first %}
+          </div>
+        </section>
+      {% endunless %}
+      {% assign current_year = key_year %}
+        <section id="updated-{{ key_year }}" class="taxonomy__section">
+          <h2 class="archive__subtitle">Updated in {{ key_year }}</h2>
+          <div class="entries-{{ entries_layout }}">
+    {% endif %}
+
+    {% include archive-single.html type=entries_layout lazy=lazy_teasers %}
+
+    {% if forloop.last %}
+          </div>
+        </section>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<script>
+/* Switches between the two views. The choice goes into ?sort= so a link can
+   point at either order. */
+(function () {
+  var control = document.querySelector('.posts-sort');
+  if (!control) return;
+
+  var views = document.querySelectorAll('.posts-view');
+  var options = control.querySelectorAll('.posts-sort__option');
+  var defaultSort = control.getAttribute('data-default-sort');
+
+  function show(sort) {
+    for (var i = 0; i < views.length; i++) {
+      views[i].hidden = views[i].getAttribute('data-view') !== sort;
+    }
+    for (var j = 0; j < options.length; j++) {
+      options[j].setAttribute('aria-pressed', options[j].getAttribute('data-sort') === sort ? 'true' : 'false');
+    }
+  }
+
+  function requestedSort() {
+    var match = /[?&]sort=(published|updated)\b/.exec(window.location.search);
+    return match ? match[1] : defaultSort;
+  }
+
+  for (var k = 0; k < options.length; k++) {
+    options[k].addEventListener('click', function () {
+      var sort = this.getAttribute('data-sort');
+      show(sort);
+      if (window.history && window.history.replaceState) {
+        var url = sort === defaultSort ? window.location.pathname : window.location.pathname + '?sort=' + sort;
+        window.history.replaceState(null, '', url);
+      }
+    });
+  }
+
+  control.hidden = false;
+  show(requestedSort());
+})();
+</script>

@@ -1,0 +1,39 @@
+{%- comment -%}
+  Home page intro. Content and cards come from home_intro in _config.yml.
+  Included by _layouts/home.html on the first page only.
+{%- endcomment -%}
+{% assign intro = site.home_intro %}
+{% if intro and intro.enabled %}
+<section class="home-intro" aria-label="Start here">
+  {% if intro.lead %}<p class="home-intro__lead">{{ intro.lead }}</p>{% endif %}
+
+  {% if intro.cards and intro.cards.size > 0 %}
+    {% assign columns = intro.cards.size %}
+    {% if columns > 4 %}{% assign columns = 3 %}{% endif %}
+    <div class="home-intro__grid" style="--home-intro-columns: {{ columns }};">
+      {% for card in intro.cards %}
+        {% assign card_url = card.url %}
+        {% assign card_text = card.text %}
+        {% assign card_label = card.link_label | default: "Open" %}
+        {% if card.nav %}
+          {% assign series = site.data.navigation[card.nav][0].children %}
+          {% if series and series.size > 0 %}
+            {% assign card_url = series[0].url %}
+            {% assign series_count = series.size | append: "" %}
+            {% assign card_text = card.text | replace: "{count}", series_count %}
+            {% assign default_label = "Start with " | append: series[0].title %}
+            {% assign card_label = card.link_label | default: default_label %}
+          {% endif %}
+        {% endif %}
+        {% if card_url %}
+          <a class="home-intro__card" href="{{ card_url | relative_url }}">
+            <span class="home-intro__title">{{ card.title }}</span>
+            {% if card_text %}<span class="home-intro__text">{{ card_text }}</span>{% endif %}
+            <span class="home-intro__more">{{ card_label }} &rarr;</span>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+{% endif %}

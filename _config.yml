@@ -38,7 +38,34 @@ lunr:
   search_within_pages: true
   
 
-# Miscellaneous 
+# Home page intro, shown above the post list on the first page only.
+# enabled: false hides it. Cards render in the order listed; remove an entry to hide that card.
+# Card types:
+#   nav:  a key in _data/navigation.yml. Links to its first entry, "{count}" in text becomes the number of entries.
+#   url:  a plain link.
+# link_label is optional. Defaults: "Start with <first entry>" for nav cards, "Open" for url cards.
+home_intro:
+  enabled: true
+  lead: "Hands-on notes on Azure Local, Azure Virtual Desktop and hybrid Azure, written from my lab and customer projects."
+  cards:
+    - title: "Azure Local series"
+      nav: Azurelocal
+      text: "{count} guides, from use cases and a demo lab to day 2 operations, Terraform and troubleshooting."
+    - title: "Azure Virtual Desktop series"
+      nav: Avd
+      text: "{count} guides on AVD, including session hosts on Azure Local and Nerdio Manager."
+    - title: "Azure Local Calculator"
+      url: /azurelocal-calculator/
+      text: "CPU planning, storage sizing and pricing for Azure Local, with import from ODIN."
+      link_label: "Open the calculator"
+
+# /posts/ archive. Readers can switch between both orders on the page,
+# this sets which one shows first: "published" (year and month of the publish date)
+# or "updated" (last_modified_at, falling back to the publish date).
+posts_archive:
+  default_sort: published
+
+# Miscellaneous
 enable_copy_code_button: true
 teaser: /assets/img/avatar-logo2.png
 
