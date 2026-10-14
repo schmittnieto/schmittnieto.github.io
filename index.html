@@ -1,7 +1,36 @@
 ---
-# You don't need to edit this file, it's empty on purpose.
-# Edit theme's home layout instead if you wanna make some changes
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
+# The post list comes from _layouts/home.html. This file holds the intro shown
+# above it on the first page. The title matches site.title on purpose: it fills
+# the H1 without changing the <title> tag (seo.html keeps titles that already
+# contain site.title as they are).
 layout: home
 author_profile: true
+# "wide" drops the 300px right padding the theme keeps for a sidebar the home page does not have
+classes: wide
+title: "Cristian Schmitt Nieto's Blog"
 ---
+
+{% assign azurelocal_series = site.data.navigation.Azurelocal[0].children %}
+{% assign avd_series = site.data.navigation.Avd[0].children %}
+
+<section class="home-intro" aria-label="Start here">
+  <p class="home-intro__lead">Hands-on notes on Azure Local, Azure Virtual Desktop and hybrid Azure, written from my lab and customer projects.</p>
+
+  <div class="home-intro__grid">
+    <a class="home-intro__card" href="{{ azurelocal_series[0].url | relative_url }}">
+      <span class="home-intro__title">Azure Local series</span>
+      <span class="home-intro__text">{{ azurelocal_series.size }} guides, from use cases and a demo lab to day 2 operations, Terraform and troubleshooting.</span>
+      <span class="home-intro__more">Start with {{ azurelocal_series[0].title }} &rarr;</span>
+    </a>
+    <a class="home-intro__card" href="{{ avd_series[0].url | relative_url }}">
+      <span class="home-intro__title">Azure Virtual Desktop series</span>
+      <span class="home-intro__text">{{ avd_series.size }} guides on AVD, including session hosts on Azure Local and Nerdio Manager.</span>
+      <span class="home-intro__more">Start with {{ avd_series[0].title }} &rarr;</span>
+    </a>
+    <a class="home-intro__card" href="{{ '/azurelocal-calculator/' | relative_url }}">
+      <span class="home-intro__title">Azure Local Calculator</span>
+      <span class="home-intro__text">CPU planning, storage sizing and pricing for Azure Local, with import from ODIN.</span>
+      <span class="home-intro__more">Open the calculator &rarr;</span>
+    </a>
+  </div>
+</section>

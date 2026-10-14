@@ -2,7 +2,9 @@
 layout: archive
 ---
 
-{{ content }}
+{% if paginator == nil or paginator.page == 1 %}
+  {{ content }}
+{% endif %}
 
 {% assign all_posts = site.posts | sort: 'date' | reverse %}
 {% assign sticky_posts = all_posts | where: 'sticky', true %}
