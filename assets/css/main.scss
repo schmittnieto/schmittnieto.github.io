@@ -238,6 +238,18 @@ $caption-font-family        : $serif;
   padding-right: 2rem;
 }
 
+/* The content column keeps its full width, so lines run past 100 characters
+   on desktop. Extra leading makes long lines easier to track. Direct children
+   only, so page widgets (calculator, About cards) keep their own spacing. */
+@media (min-width: 64em) {
+  .layout--single .page__content-body > p,
+  .layout--single .page__content-body > ul li,
+  .layout--single .page__content-body > ol li,
+  .layout--single .page__content-body > blockquote {
+    line-height: 1.7;
+  }
+}
+
 @media (max-width: 1585px) {
   .layout--single #main.has-page-sidebar {
     display: block;
