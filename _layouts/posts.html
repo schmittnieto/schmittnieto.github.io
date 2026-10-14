@@ -104,25 +104,24 @@ layout: archive
 </div>
 
 {%- comment -%}
-  Latest activity: every post once, at its most recent event. That is the
-  last update when last_modified_at falls on a later day than the publish
-  date, otherwise the publication itself. Sort key: event date as a sortable
-  string, event type and URL, so each post can be looked up after sorting.
+  Latest activity: a timeline of every event. Each post adds a "Published"
+  entry at its publish date, and an "Updated" entry at last_modified_at when
+  that falls on a later day. An updated post therefore shows up twice. Sort
+  key: event date as a sortable string, event type and URL, so each post can
+  be looked up after sorting.
 {%- endcomment -%}
 {% assign activity_keys = "" | split: "" %}
 {% for post in site.posts %}
-  {% assign activity_type = "Published" %}
-  {% assign activity_at = post.date %}
+  {% capture published_key %}{{ post.date | date: "%Y%m%d%H%M%S" }}|Published|{{ post.url }}{% endcapture %}
+  {% assign activity_keys = activity_keys | push: published_key %}
   {% if post.last_modified_at %}
     {% assign updated_day = post.last_modified_at | date: "%Y%m%d" %}
     {% assign published_day = post.date | date: "%Y%m%d" %}
     {% if updated_day > published_day %}
-      {% assign activity_type = "Updated" %}
-      {% assign activity_at = post.last_modified_at %}
+      {% capture updated_key %}{{ post.last_modified_at | date: "%Y%m%d%H%M%S" }}|Updated|{{ post.url }}{% endcapture %}
+      {% assign activity_keys = activity_keys | push: updated_key %}
     {% endif %}
   {% endif %}
-  {% capture activity_key %}{{ activity_at | date: "%Y%m%d%H%M%S" }}|{{ activity_type }}|{{ post.url }}{% endcapture %}
-  {% assign activity_keys = activity_keys | push: activity_key %}
 {% endfor %}
 {% assign activity_keys = activity_keys | sort | reverse %}
 
