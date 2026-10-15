@@ -212,7 +212,7 @@ $caption-font-family        : $serif;
 
 /* Related posts: the theme floats this block right with room for a sidebar
    (width: calc(100% - 300px)), so it started 300px right of the article.
-   Align it with the page shell instead. The 1586px sidebar grid below still
+   Align it with the page shell instead. The 1800px sidebar grid below still
    places it in the article column. */
 .layout--single .page__related {
   float: none;
@@ -244,7 +244,10 @@ $caption-font-family        : $serif;
   margin-right: auto;
 }
 
-.layout--single .page__lead {
+/* The hero title shares the lead and meta column. Without this it started
+   at the wider hero wrapper edge (x=211 at 1920px, lead and meta at x=370). */
+.layout--single .page__lead,
+.layout--single .page__hero--overlay .page__title {
   max-width: var(--sn-content-width);
   margin-left: auto;
   margin-right: auto;
@@ -270,7 +273,7 @@ $caption-font-family        : $serif;
   }
 }
 
-@media (max-width: 1585px) {
+@media (max-width: 1799px) {
   .layout--single #main.has-page-sidebar {
     display: block;
     max-width: var(--sn-shell-max-width);
@@ -361,10 +364,11 @@ $caption-font-family        : $serif;
   }
 }
 
-/* Laptop range: the TOC moves into a sticky column beside the article, the
-   series nav stays stacked above it. Narrower TOC than the 1586px layout so
-   the article keeps most of the width. */
-@media (min-width: 1280px) and (max-width: 1585px) {
+/* 1280 to 1799px: the TOC sits in a sticky column beside the article, the
+   series nav stays stacked above it as a toggle. The nav only moves into its
+   own column from 1800px, where the article still gets more than 1000px
+   (at 1586px it dropped to 830px). */
+@media (min-width: 1280px) and (max-width: 1799px) {
   .layout--single #main.has-page-sidebar > .page__sidebar {
     max-width: var(--sn-page-shell-width);
   }
@@ -435,13 +439,15 @@ $caption-font-family        : $serif;
   }
 }
 
-@media (min-width: 64em) and (max-width: 1585px) {
+@media (min-width: 64em) and (max-width: 1799px) {
+  /* Fill the stacked sidebar column so the toggle lines up with the article's
+     left edge (capped and centered, it drifted right of it) */
   .layout--single #main.has-page-sidebar > .page__sidebar .nav__list {
     width: 100%;
-    max-width: var(--sn-content-width);
+    max-width: 100%;
     padding-left: 0;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .layout--single #main.has-page-sidebar > .page__sidebar .nav__list label,
@@ -580,7 +586,7 @@ $caption-font-family        : $serif;
   }
 }
 
-@media (min-width: 1586px) {
+@media (min-width: 1800px) {
   .layout--single #main.has-page-sidebar {
     /* + 4rem for the 2rem side padding, #main is border-box */
     max-width: calc(var(--sn-sidebar-shell-width) + 4rem);
@@ -646,12 +652,6 @@ $caption-font-family        : $serif;
     grid-row: 1;
     width: var(--sn-right-sidebar-width);
     margin: 0;
-  }
-}
-
-@media (min-width: 1586px) {
-  .layout--single #main.has-page-sidebar {
-    grid-template-columns: var(--sn-left-sidebar-width) minmax(0, var(--sn-page-shell-width));
   }
 }
 
@@ -861,9 +861,10 @@ html.light-theme .archive__item-activity--published {
   color: #047857;
 }
 
-/* The wide home column would make 2:1 teasers about 600px tall. Cap them so
-   more than one post fits on screen. */
-.layout--home .archive__item-teaser img {
+/* The wide archive columns (home, /posts/, /tags/, /categories/) would make
+   2:1 teasers about 600px tall. Cap them so more than one post fits on
+   screen. List cards only, related posts (grid) keep the theme sizing. */
+.list__item .archive__item-teaser img {
   width: 100%;
   max-height: 360px;
   object-fit: cover;
