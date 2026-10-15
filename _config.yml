@@ -56,7 +56,7 @@ home_intro:
       text: "{count} guides on AVD, including session hosts on Azure Local and Nerdio Manager."
     - title: "Azure Local Calculator"
       url: /azurelocal-calculator/
-      text: "CPU planning, storage sizing and pricing for Azure Local, with import from ODIN."
+      text: "Planning, CPU and storage sizing and pricing for every Azure Local deployment type, with import from ODIN."
       link_label: "Open the calculator"
 
 # /posts/ archive. Readers can switch between both orders on the page,
