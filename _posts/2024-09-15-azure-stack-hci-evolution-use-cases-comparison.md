@@ -1,8 +1,8 @@
 ---
-title: "Azure Local: Evolution, Use Cases, and Comparison with Other Solutions"
-excerpt: "Discover Azure Local evolution, use cases and how it stacks up against VMware vSAN, Nutanix, Proxmox, Windows Server Hyper-V with System Center and other hyper-converged infrastructure solutions."
+title: "Azure Local: Evolution, Use Cases and Comparison with Other Solutions"
+excerpt: "Where Azure Local fits in 2026: datacenter virtualization and VMware exits, branch and industrial edge, sovereign disconnected clouds, multi-rack scale, virtual desktops and AI at the edge, compared with VMware, Nutanix, Proxmox, Hyper-V with System Center and OpenShift."
 date: 2024-09-15
-last_modified_at: 2026-05-04
+last_modified_at: 2026-10-17
 categories:
   - Blog
 tags:
@@ -32,203 +32,242 @@ sidebar:
   
 ---
 
-This article was created before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112&wt.mc_id=MVP_579217)) in November 2024, which is why some references or hardcoded URLs may still point to Azure Stack HCI. However, the content has been updated accordingly, and if you find any errors, I would greatly appreciate it if you could report them either through the comment function or by emailing blog@schmitt-nieto.com
+I wrote the first version of this article before Azure Stack HCI was renamed to Azure Local ([link](https://learn.microsoft.com/en-us/azure/azure-local/rename-to-azure-local?view=azloc-24112&wt.mc_id=MVP_579217)) in November 2024, which is why the URL still carries the old name. If you find an error, I would appreciate a note in the comments or at blog@schmitt-nieto.com.
 {: .notice--info}
 
-## Azure Local: Evolution, Use Cases, and Comparison with Other Solutions
+## Azure Local: Evolution, Use Cases and Comparison with Other Solutions
 
-**Last updated: May 2026.** This article has been substantially revised to reflect the current state of Azure Local (now running on a monthly release cadence covering versions 2408 through 2512 and beyond) and to expand the competitive landscape. In addition to the original comparisons with VMware vSAN, Nutanix and Dell EMC VxRail, this update adds dedicated coverage of **Proxmox VE** as a growing open-source alternative, **Windows Server Hyper-V with System Center** (VMM, SCCM/ConfigMgr, SCOM) as a proven datacenter management stack and **Azure Arc** as a unifying management plane that can bridge Azure governance across heterogeneous on-premises infrastructure regardless of the underlying hypervisor.
+**Last updated: October 2026 (Azure Local 2609).** I rebuilt the use cases around the scenarios I see in projects today. Azure Local started as a hyperconverged platform for virtual machines. In 2026 it also covers disconnected sovereign clouds, multi-rack datacenters, deployments on external SAN arrays, small edge devices that only run containers and AI workloads on GPUs. The comparison section now reflects VMware licensing under Broadcom, the general availability of AVD Hybrid on other hypervisors and OpenShift Virtualization.
 {: .notice--warning}
 
-This article is intended for IT professionals, system administrators and decision-makers looking to explore the potential of Azure Local for modernizing their on-premises infrastructure. Whether you're considering hybrid cloud solutions or comparing various hyper-converged infrastructure options, this post will provide valuable insights into the evolution, use cases and comparisons of Azure Local against other major solutions such as VMware vSAN, Nutanix, Dell EMC VxRail, Proxmox, Windows Server Hyper-V with System Center, OpenShift and other hyper-converged infrastructure solutions.
+This article is for IT professionals and decision makers who want to know where Azure Local fits and how it compares with the alternatives. It is **not a general introduction to Azure Local**. For what Azure Local is and how to deploy it, the [official Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-local/overview?wt.mc_id=MVP_579217) is the right starting point. Once you know Azure Local fits, my [Azure Local Calculator](/azurelocal-calculator/) helps with the sizing and the cost.
 
-Note that **this article is not a general introduction to Azure Local**. If you are looking for a description of what Azure Local is, how it works or how to deploy it, the [official Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-local/overview?wt.mc_id=MVP_579217) is the right starting point. The focus here is on **use cases and competitive comparisons**: where Azure Local fits, where it excels and how it stacks up against the alternatives available on the market today.
+## A Short History of Azure Local
 
-## History of Azure Local
+Azure Local comes from Hyper-V and Storage Spaces Direct, the virtualization and software-defined storage stack of Windows Server. Azure Stack HCI added Azure registration, billing and monitoring on top of that stack. With 23H2 Microsoft moved deployment, updates and VM management into the Azure portal through Azure Arc. In November 2024 the product was renamed to Azure Local.
 
-Azure Local originated from Microsoft's Hyper-V technology, a longstanding virtualization solution integrated with Windows Server. As organizations sought hybrid cloud solutions, Microsoft integrated Hyper-V with Azure, enabling businesses to extend their on-premises environments seamlessly into the cloud.
+The larger change happened in 2026. The hyperconverged cluster became one deployment type among several. Some of the new types no longer use Storage Spaces Direct. Multi-rack and small form factor do not even run Windows on the hosts.
 
-Azure Local is a natural evolution of Hyper-V, designed to offer hybrid cloud functionality by allowing users to manage their on-premises infrastructure directly from Azure. Today, Azure Local enables comprehensive system management, including hardware monitoring and lifecycle management, all through Azure, providing a unified experience for both cloud and on-premises environments.
+## From HCI to a Family of Deployment Types
 
-## Evolution of Azure Local
+This table is the reason I rewrote the article. When a requirements document says "Azure Local" today, the deployment type behind it decides the hardware, the licensing model, the services you can run and how you size the solution. Microsoft counts four deployment types (hyperconverged, disaggregated, multi-rack and small form factor) and treats rack aware clusters and external SAN as variants of hyperconverged. Disconnected operations is a connectivity mode for hyperconverged and disaggregated deployments, but it changes the design so much that I list it as its own row.
 
-Initially, Azure Local focused on virtualizing workloads and providing software-defined storage. Over time, it has evolved to include services from Azure's ecosystem. Now, it supports not only traditional workloads but also cloud-native services. Azure Local currently enables:
+| Deployment type or mode | Scale | What is different | Status |
+|---|---|---|---|
+| Hyperconverged | 1 to 16 machines | Storage Spaces Direct, switchless storage up to 3 machines | GA |
+| Rack aware cluster | Up to 8 machines in two racks (up to 4+4) | Survives the loss of a full rack, 1 ms round trip or less between the racks, new deployments only | GA since 2601 |
+| Hyperconverged with external SAN | 1 to 16 machines | Fibre Channel or iSCSI block storage next to Storage Spaces Direct | Fibre Channel GA since 2604, iSCSI GA since 2607 |
+| Disaggregated | 1 to 64 machines | SAN only, compute and storage scale separately | GA since 2604 |
+| Multi-rack | More than 100 machines, at least four racks | Fixed bill of materials, Azure Linux on the hosts, managed network fabric, connected only | Available from 2511 through your Microsoft account team |
+| Disconnected operations | Workload clusters up to 64 machines plus a three-node management cluster | Local control plane with portal and Azure Resource Manager, no Azure connection needed | GA since 2602 |
+| Small form factor | Single compact devices | Linux based, runs containers with AKS, K3s or Docker, no Azure Local VMs | Preview |
 
-- **Infrastructure Services**: Virtual machines (VMs) and networking managed natively from the Azure portal.
-- **Azure Virtual Desktop (AVD)**: Including Windows 11 multisession, now in General Availability on-premises.
-- **Azure Kubernetes Service (AKS)**: Enabled by Azure Arc, with NVIDIA GPU support and Kubernetes versions 1.31 through 1.33.
-- **Platform Services**: Azure Data Controller, SQL Managed Instances, PostgreSQL Managed Instances and Machine Learning services.
-- **Rack-Aware Clustering**: Define local availability zones based on physical racks in your datacenter, enhancing cluster resilience against rack-level failures. Generally Available and applicable to new deployments.
-- **Managed Identity Authentication**: Azure Local clusters now use system-assigned managed identity (SMI) instead of service principals with self-signed certificates, significantly improving the security posture and eliminating certificate rotation overhead.
-- **Local Identity with Azure Key Vault**: Starting with version 2604, Azure Local can be deployed without any Active Directory dependency. Using [local identity with Azure Key Vault](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-local-identity-with-key-vault?view=azloc-2604&wt.mc_id=MVP_579217), the cluster authenticates entirely through Microsoft Entra ID, removing a long-standing requirement that forced organizations to maintain a domain controller on-premises.
-- **Disaggregated Deployments**: Support for SAN-attached storage and disaggregated architectures is expanding, broadening the hardware configurations Azure Local can target.
-
-These services allow organizations to run modern workloads and benefit from cloud innovation while still utilizing on-premises infrastructure. Azure Local now ships on a **monthly release cadence** (e.g., 2408, 2411, 2503, 2509, 2511, 2512), making it one of the most actively developed on-premises infrastructure platforms available.
+The services differ per type as well. Azure Virtual Desktop runs on hyperconverged and disaggregated deployments, but not on multi-rack, not on small form factor and not with disconnected operations. Multi-rack runs Azure Local VMs and AKS only. The licensing follows the type too: cloud-connected hyperconverged clusters pay the L1 host fee, external SAN, disaggregated and multi-rack pay the higher L2 fee and disconnected operations is licensed at L3. The [find your deployment type](https://learn.microsoft.com/en-us/azure/azure-local/plan/find-your-deployment-type?wt.mc_id=MVP_579217) page on Microsoft Learn walks through the same decision.
 
 ## Use Cases for Azure Local
 
-1. **Extended Security Updates (ESU) for Legacy Systems**
+I group the use cases by the problem the customer brings, because that problem decides the deployment type.
 
-   Azure Local is an ideal solution for companies relying on legacy systems that are no longer supported. The platform includes Extended Security Updates (ESU) at no additional cost, allowing businesses to maintain critical security without incurring expensive licensing fees.
+| Scenario | Typical deployment type | Key services |
+|---|---|---|
+| VMware exit and datacenter consolidation | Hyperconverged, external SAN or disaggregated | Azure Local VMs, Azure Migrate |
+| Branch offices, retail and industrial sites | Single node or two to three node switchless, ruggedized catalog systems where there is no rack | Azure Local VMs, AKS, Azure IoT Operations |
+| Sovereign and disconnected private cloud | Disconnected operations | Azure Local VMs, AKS, SQL Server, Microsoft 365 Local |
+| Large datacenters and rack-level resilience | Rack aware, disaggregated, multi-rack | Azure Local VMs, AKS |
+| Virtual desktops | Hyperconverged or disaggregated | Azure Virtual Desktop with Windows 11 multi-session |
+| Kubernetes and AI at the edge | Hyperconverged with GPUs | AKS with full GPUs (DDA), Foundry Local, GPU partitioning for Azure Local VMs only |
+| Legacy Windows workloads | Hyperconverged | Extended Security Updates, hotpatch, Trusted Launch |
 
-2. **Virtual Desktop Infrastructure (VDI) with AVD and Windows 11 Multisession**
+### 1. Leaving VMware and Consolidating the Datacenter
 
-   Azure Local is **the only on-premises platform** where **Azure Virtual Desktop (AVD) with Windows 11 multisession** can be deployed in General Availability. Windows 11 multisession allows multiple concurrent users to share a single Windows 11 VM, delivering the same cost-efficient VDI experience available in Azure but running on your own hardware. This is a licensed capability exclusive to Microsoft's AVD licensing model. Other platforms that support Arc-enabled AVD session hosts (such as Nutanix AHV or VMware vSphere) can use Windows 11 single session or Windows Server as session host OS, but **not Windows 11 multisession**. Without multisession, each concurrent user requires a dedicated VM, eliminating the cost efficiency that makes VDI at scale viable and losing key management benefits such as Intune-based endpoint management for Windows Server hosts. AVD on Azure Local is fully integrated with Azure management, policies and monitoring; it also includes health monitoring for session hosts visible directly in the Azure portal.
+This is the conversation I have most often since Broadcom changed the VMware licensing. The migration path has matured: [Azure Migrate](https://learn.microsoft.com/en-us/azure/azure-local/migrate/migrate-whats-new?wt.mc_id=MVP_579217) moves VMware VMs to Azure Local and is generally available since October 2025. Since September 2026 it can target SAN-backed storage and reuse existing Arc resources. Migration from Hyper-V to Azure Local is still in preview. Microsoft also warns that access to the VMware VDDK might be restricted and lists Carbonite, Commvault and Veeam as alternatives in its [migration options overview](https://learn.microsoft.com/en-us/azure/azure-local/migrate/migration-options-overview?wt.mc_id=MVP_579217).
 
-3. **Azure Kubernetes Service (AKS)**
+The bigger change for these projects is storage. Many VMware estates run on a Fibre Channel array with years of depreciation left. Until 2026 Azure Local meant replacing that array with Storage Spaces Direct. Now you can keep it, either next to Storage Spaces Direct (hyperconverged with external SAN) or as the only storage (disaggregated). Supported arrays come from Dell PowerStore, Everpure FlashArray, Hitachi VSP, HPE Alletra MP, Lenovo and NetApp ONTAP, as listed in the [SAN requirements](https://learn.microsoft.com/en-us/azure/azure-local/concepts/san-requirements?wt.mc_id=MVP_579217). Keep in mind that these designs pay the L2 host fee, which is about twice the L1 fee per core.
 
-   AKS on Azure Local, enabled by Azure Arc, has matured significantly. It supports Kubernetes versions 1.31 through 1.33 and includes **NVIDIA GPU support** (including the NVIDIA RTX PRO 6000 Blackwell Server Edition), enabling GPU-accelerated workloads such as AI inference and machine learning directly on-premises. Deployment is streamlined through the Azure portal and Azure CLI, eliminating the need for manual scripting and making it one of the most accessible and integrated paths to running Kubernetes on-premises. There is no comparable offering among the competing HCI platforms at an equivalent level of Azure integration depth.
+One more date for customers who planned to stay on VMware inside Azure: Microsoft stops selling license-included Azure VMware Solution on 31 October 2026 and existing customers have to move by August 2027 ([The Register](https://www.theregister.com/virtualization/2026/08/20/microsoft-ends-one-of-the-last-ways-to-buy-vmware-without-big-bundles-1/5290044)).
 
-4. **Workloads like Virtual Machines**
+### 2. Branch Offices, Retail and Industrial Sites
 
-   Azure Local allows the native deployment and lifecycle management of virtual machines from the Azure portal, fully integrated with Azure Arc at no additional cost. This integration includes Azure Updates, Azure Policies and other Arc services, streamlining the management of on-premises workloads. Azure Local also supports **Windows Server 2025 Datacenter: Azure Edition** as a guest OS, enabling **Hotpatching via Azure Arc**, which applies security updates without requiring a reboot and reduces planned maintenance windows significantly.
+A single node or a two or three node cluster with switchless storage covers the classic branch office that needs a few VMs and some local resilience. It runs the same hyperconverged Azure Local as the datacenter, so the operations team manages the shops or plants with the same tools and update process.
 
-5. **Arc-Managed Hybrid Infrastructure**
+Many of these sites have no rack and no server room: a store backroom, a cabinet on the shop floor, a container next to a production line. The [Azure Local solutions catalog](https://azurelocalsolutions.azure.microsoft.com/#/catalog) lists ruggedized systems for exactly these places next to the usual rack servers. The models change often, so I check the catalog for the current options instead of keeping a list.
 
-   Azure Arc is a first-class citizen in Azure Local; every cluster is Arc-enabled by default. This enables centralized governance, policy enforcement, Microsoft Defender for Cloud integration and Azure Monitor across on-premises workloads using the same tooling as Azure-native resources. For organizations managing a mixed environment (Azure Local alongside other hypervisors), Arc provides a consistent governance layer that extends beyond Azure Local itself.
+For manufacturing, [Azure IoT Operations](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/overview-deploy?wt.mc_id=MVP_579217) on AKS on Azure Local is generally available on hyperconverged deployments, validated from release 2607.
 
-## Comparison of Azure Local Versions
+Microsoft is also previewing a [small form factor](https://learn.microsoft.com/en-us/azure/azure-local/small-form-factor/small-form-factor-installation?wt.mc_id=MVP_579217) deployment type: a Linux based Azure Local on compact devices that runs containers only, with zero-touch provisioning from Azure and no Azure Local VMs. It can become an option for sites that only run containers. As long as it is in preview, it does not go into a production design of mine.
 
-### Azure Local 21H2
+### 3. Sovereign and Disconnected Private Cloud
 
-- **Support**: No longer supported. This was the foundational release and has been surpassed by newer, more feature-rich versions.
+This scenario did not exist when I wrote the first version of this article. [Disconnected operations](https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-overview?wt.mc_id=MVP_579217) became generally available with release 2602. A local control plane appliance brings the Azure portal, Azure Resource Manager, RBAC, Azure Policy, Key Vault and Azure Container Registry into the site, so the cluster runs without any connection to Azure. On top of it you run Azure Local VMs, Arc-enabled servers and AKS. AKS reached general availability for disconnected operations in 2609, including Windows node pools.
 
-### Azure Local 22H2
+The entry requirements are strict. You need an eligible agreement (MOSA is not eligible), a Standard or higher support plan, Premier Solutions hardware and a business case that Microsoft approves. The control plane runs on a dedicated [three-node management cluster](https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-control-plane-appliance?wt.mc_id=MVP_579217) with 24 physical cores, 128 GB or 512 GB of memory and six or eight 2 TB data drives per node. No workloads are allowed on it. Workload clusters can grow to 64 machines since 2604.
 
-- **Stretch Cluster**: Supported, providing basic multi-site disaster recovery across two locations.
-- **Deployment**: Largely manual, relying on PowerShell scripts.
-- **AKS**: Complex, multi-script deployment.
-- **AVD**: Available in Preview only.
-- **SCVMM Support**: System Center Virtual Machine Manager (SCVMM) was fully supported.
+Microsoft groups the workloads for this scenario under its Sovereign Private Cloud offering:
 
-### Azure Local 23H2
+* [Microsoft 365 Local](https://learn.microsoft.com/en-us/azure/azure-sovereign-clouds/private/m365-local/microsoft-365-local-overview?wt.mc_id=MVP_579217) runs Exchange Server, SharePoint Server and Skype for Business Server on Azure Local, connected since December 2025 and disconnected since February 2026. It needs Premier Solutions hardware and a certified partner. Teams is not part of it.
+* [SQL Server on Azure Local](https://www.microsoft.com/en-us/sql-server/blog/2026/09/28/sql-server-on-azure-local-is-now-generally-available/) is generally available since 28 September 2026, connected and disconnected.
+* [GitHub Enterprise Local](https://learn.microsoft.com/en-us/azure/azure-sovereign-clouds/private/github-local/github-local-overview?wt.mc_id=MVP_579217) (preview) runs GitHub Enterprise Server as an appliance VM.
+* [Foundry Local](https://learn.microsoft.com/en-us/azure/azure-sovereign-clouds/private/foundry-local/overview?wt.mc_id=MVP_579217) (preview) brings AI inference to the same environment, see use case 6.
 
-- **Support**: **No longer supported.** Upgrading to a later version was mandatory, not optional.
-- **Cloud Deployment**: Introduced a cloud-first deployment model, significantly reducing setup complexity.
-- **AVD GA**: Azure Virtual Desktop reached General Availability on-premises.
-- **Enhanced Security**: The Supplemental Package is now included by default, hardening the infrastructure.
-- **Improved VM Management**: Native Azure portal experience for VM deployment and lifecycle.
-- **AKS Improvements**: More seamless AKS deployment with reduced manual scripting.
-- **SCVMM**: Not supported in this release, which was a significant blocker for organizations that relied on it.
+Azure Virtual Desktop is not among the services of disconnected operations. If a sovereign customer needs virtual desktops, that part of the design has to stay connected.
 
-### Azure Local 24H2 and Monthly Releases (2408 through 2512+)
+### 4. Large Datacenters and Rack-Level Resilience
 
-With the transition to 24H2 and a monthly release cadence, Azure Local has evolved rapidly and continuously:
+When I wrote my [Redundancy article](/blog/azure-local-redundancy/), rack aware clustering was a private preview. It is generally available since 2601. A [rack aware cluster](https://learn.microsoft.com/en-us/azure/azure-local/concepts/rack-aware-cluster-overview?wt.mc_id=MVP_579217) spreads up to eight machines over two racks or rooms with a round trip of 1 ms or less between them and survives the loss of a full rack. It is for new deployments only and does not support external SAN storage.
 
-- **SCVMM Support Returns**: System Center 2025 VMM supports Azure Local instances at versions 2408.2, 2411 or later, resolving the major upgrade blocker that kept some organizations on 22H2.
-- **Managed Identity**: Cluster deployments now use system-assigned managed identity (SMI) instead of service principals, removing the need to manage certificate rotation.
-- **Local Identity with Azure Key Vault** (from 2604): Deployments without any Active Directory dependency are now supported, using Microsoft Entra ID and Azure Key Vault for authentication.
-- **OS Alignment**: From version 2512 onwards, Azure Local runs on OS version 26100.x, aligned with Windows Server 2025 drivers and compatibility requirements.
-- **AKS Updates**: Kubernetes versions 1.31 through 1.33 are supported. NVIDIA GPU support includes the RTX PRO 6000 Blackwell Server Edition. KMS v1 is deprecated; plan cluster redeployments using KMS v2.
-- **Rack-Aware Clustering**: Physical rack-based local availability zones for improved resilience. Generally Available for new deployments.
-- **Limited Connectivity Updates** (from 2503): Ability to discover and import update packages with limited Azure connectivity, improving support for disconnected or partially connected environments.
-- **Disaggregated Deployments** (planned for 2604): Expanded support for SAN-attached storage architectures, broadening the addressable deployment scenarios.
+For scale, disaggregated deployments reach 64 machines with the storage on the SAN. Beyond that, [multi-rack](https://learn.microsoft.com/en-us/azure/azure-local/multi-rack/multi-rack-overview?wt.mc_id=MVP_579217) targets more than 100 machines and 8,000 cores. It is a prescriptive design: one aggregation rack with the network and SAN storage plus at least three compute racks, bought as a fixed bill of materials from a Microsoft hardware partner. The hosts run Azure Linux, the control plane sits in East US, Australia East or South Central US and the site connects to Azure through ExpressRoute. Multi-rack runs Azure Local VMs and AKS. SQL Server, Azure Virtual Desktop, Microsoft 365 Local, GitHub Enterprise Local, Foundry Local and Azure IoT Operations are not available on it.
 
-## Version Support and Transition Considerations
+### 5. Virtual Desktops with Azure Virtual Desktop and Windows 11 Multi-Session
 
-The monthly release cadence means organizations must keep clusters current; each feature build (e.g., 2408) is supported for approximately six months before requiring an update to a later build. Version 23H2 is no longer supported and migration to the 24H2 release train was mandatory. System Center 2025 has restored SCVMM support for Azure Local, resolving a major blocker for many organizations. The cloud-first deployment model remains a dependency, though the limited-connectivity update path introduced in 2503 has made partially isolated deployments more feasible; the Entra ID-only deployment option in 2604 removes the Active Directory requirement entirely for organizations that need it.
+Azure Local is still the only on-premises platform where Azure Virtual Desktop runs with **Windows 11 Enterprise multi-session**. Multi-session lets several users share one session host VM, which is what makes VDI at scale affordable.
+
+In September 2026 Microsoft made [Azure Virtual Desktop Hybrid](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/microsoft-azure-virtual-desktop-hybrid-is-now-generally-available/4550523?wt.mc_id=MVP_579217) generally available. It runs session hosts on Arc-enabled servers on Hyper-V, VMware vSphere, Nutanix AHV or physical hardware. It does **not** support Windows multi-session, autoscale or Start VM on Connect. Every concurrent user on those platforms needs a dedicated VM or a Windows Server session host.
+
+The pricing model is different as well. AVD Hybrid has a service fee of 10$ per user per month according to Microsoft's [AVD Hybrid pricing FAQ](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/bade/documents/products-and-services/en-us/azure/Azure-Virtual-Desktop-Hybrid-Per-user-per-month-pricing.pdf), on top of the usual per-user licenses (Microsoft 365 E3 or a comparable license for Windows, RDS CALs with Software Assurance or an RDS User Subscription for Windows Server). AVD on Azure Local is billed per session host vCPU instead, at $0.01 per vCPU per hour ([Azure Virtual Desktop pricing](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/?wt.mc_id=MVP_579217)). With multi-session and four medium users per vCPU, that comes to about $1.83 per user per month for the service fee, before the Azure Local host fee.
+
+On Azure Local, AVD runs on hyperconverged and disaggregated deployments. I covered the setup in [Azure Virtual Desktop on Azure Local](/blog/azure-stack-hci-azure-virtual-desktop/) and the Entra-only variant in [AVD with Entra join on Azure Local](/blog/azure-local-avd-entra-join/).
+
+### 6. Kubernetes and AI at the Edge
+
+[AKS enabled by Azure Arc](https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-whats-new-local?wt.mc_id=MVP_579217) runs Kubernetes 1.31 to 1.33 on Azure Local and is deployed and updated from the Azure portal or the Azure CLI. Windows Server 2019 node pools ended in March 2026. My [AKS article](/blog/azure-local-aks/) walks through a deployment.
+
+GPU support moved from preview into production in 2026. [GPU acceleration](https://learn.microsoft.com/en-us/azure/azure-local/manage/gpu-preparation?wt.mc_id=MVP_579217#supported-gpu-models) for Azure Local VMs is generally available since 2604 with two ways to attach a GPU. Discrete device assignment (DDA) gives a whole GPU to one VM. GPU partitioning (GPU-P) splits one GPU into equal fractions for several VMs. Supported NVIDIA cards include the A2, A16, L4, L40S and RTX PRO 6000. Release 2608 added GPU management from Azure in preview.
+
+For AI on Kubernetes there is a catch: AKS on Azure Local supports DDA only, because GPU partitions are not supported for AKS Arc yet. Every GPU worker node takes at least one full physical GPU. Microsoft also requires the same GPU model on all machines of the cluster. A small inference model that needs a fraction of a GPU still blocks a whole card. In practice the number of physical GPUs often decides how many AI workloads fit on AKS, so plan the GPU count per machine as carefully as cores and memory. If several small models have to share a GPU today, Azure Local VMs with GPU-P are the way to do it, with the model running outside of AKS.
+
+The AI services on top of that are still in preview:
+
+* **Foundry Local on Azure Local** runs as an Arc extension on Kubernetes on CPU or GPU and also works disconnected.
+* **Agentic Retrieval in Foundry Local**, formerly Edge RAG, adds retrieval over local data and needs two GPUs for the embedding models.
+* **KAITO** on AKS deploys open models with a Kubernetes operator.
+
+I tested running language models on Azure Local in my [LLM on Azure Local article](/blog/azure-local-llm/).
+
+### 7. Legacy Windows Workloads
+
+Extended Security Updates were one of the strongest arguments for Azure Local. The rules changed on 1 April 2026. [ESUs on Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/manage/azure-benefits-esu?wt.mc_id=MVP_579217) stay free only for products that left support before that date. Windows 10 version 22H2 and SQL Server 2014 are still covered, while the ESU period for Windows Server 2012 ended on 13 October 2026. AVD session hosts with Windows 10 22H2 also get their ESUs at no extra cost.
+
+Windows Server 2016 is the case that matters now. It reaches end of support on 12 January 2027. Microsoft has not committed to free ESUs for it on Azure Local: the Azure Local ESU page lists it under the new standardized pricing, which charges the same list price wherever the machine runs. The price itself is not published yet. Through Azure Arc you can configure [Windows Server 2016 ESUs](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates?wt.mc_id=MVP_579217) since 3 August 2026, with billing from 13 January 2027. If a business case for Azure Local counts on free ESUs for Windows Server 2016, take that line out and plan the upgrades or a budget for the ESUs.
+
+The same trend applies to hotpatching. Windows Server 2022 and 2025 Datacenter: Azure Edition VMs on Azure Local install security updates without a restart. Since [Arc-enabled hotpatch](https://learn.microsoft.com/en-us/windows-server/get-started/hotpatch?wt.mc_id=MVP_579217) for Windows Server 2025 Standard and Datacenter is now free, hotpatch is no longer a reason to pick Azure Local on its own.
+
+What remains is the security posture of the VMs: Trusted Launch with Secure Boot, vTPM and virtualization-based security is generally available and confidential VMs on AMD SEV-SNP are in preview since 2607.
+
+## How Azure Local Got Here: Releases at a Glance
+
+Azure Local ships a feature release every month. Each release is supported for six months. Outside that window Microsoft support only helps you update. The Arc resource bridge needs an update at least once a year. My [Lifecycle article](/blog/azure-local-lifecycle/) covers the update process.
+
+| Release | What changed for the use cases |
+|---|---|
+| 21H2 and 22H2 | PowerShell based deployment, stretched clusters, full SCVMM support. Out of support. |
+| 23H2 | Deployment from Azure, Arc VM management, AVD generally available, no SCVMM at first. The 23H2 OS (build 25398) reached end of support in April 2026. |
+| 2408 to 2511 | Monthly cadence. System Center 2025 VMM supports Azure Local again from 2408.2. Limited connectivity updates from 2503. Multi-rack from 2511. |
+| 2512 | Host OS moves to build 26100, aligned with Windows Server 2025. Cluster registration uses a system-assigned managed identity instead of a service principal. |
+| 2601 | Rack aware clustering generally available. |
+| 2602 | Disconnected operations generally available. |
+| 2604 | Disaggregated deployments, Fibre Channel SAN and local identity with Azure Key Vault (no Active Directory) generally available. GPU DDA and GPU-P generally available. |
+| 2607 | iSCSI SAN generally available. Confidential VMs in preview. |
+| 2608 | GPU management and adding nodes from the Azure portal, both in preview. |
+| 2609 | Backup of system secrets to Key Vault and local identity with internal DNS, both in preview. AKS generally available with disconnected operations. |
+
+The source for this table is the [What's new in Azure Local](https://learn.microsoft.com/en-us/azure/azure-local/whats-new?wt.mc_id=MVP_579217) page.
 
 ## Comparison with Other Solutions
 
-### VMware vSAN
+### VMware vSphere and vSAN
 
-VMware vSAN remains technically strong, with mature disaster recovery capabilities including Stretch Clustering across multiple data centers and a deep ecosystem of certified hardware and third-party integrations. However, **Broadcom's acquisition of VMware** has fundamentally reshaped the market: core-pack licensing minimums (72-core packs for Enterprise), bundled ELA models, the discontinuation of perpetual licensing for many tiers and significant price increases have prompted a broad re-evaluation across the industry. Many mid-market and enterprise organizations are actively seeking alternatives for the first time in over a decade.
+VMware is still technically strong: mature stretched clusters, a large hardware compatibility list and a deep third-party ecosystem. The problem my customers bring is licensing. Broadcom sells VMware Cloud Foundation as a per-core subscription with a minimum of 16 cores per CPU, VCF 9 requires regular compliance reporting and perpetual licenses are gone. Dell VxRail and the other vSAN appliances carry the same licensing question.
 
-For organizations already in the Microsoft ecosystem, Azure Local offers comparable HCI capabilities (software-defined compute, storage and networking) with a more predictable Azure subscription cost model and native Azure integration at no additional license fee.
+Azure Local is billed per physical core as well, but the host fee is lower. On cloud-connected hyperconverged clusters, Azure Hybrid Benefit waives it for Windows Server Datacenter licenses with Software Assurance. For a Microsoft-centric estate, that changes the cost discussion more than any feature comparison.
 
 ### Nutanix
 
-Nutanix delivers a mature Enterprise Cloud Platform that converges compute, storage, virtualization and management into a unified software-defined layer. It supports multiple hypervisors (its own AHV, VMware ESXi and Microsoft Hyper-V) and excels at providing a consistent management experience across on-premises private cloud, hybrid cloud and multi-cloud environments. Its cloud-neutrality and multi-hypervisor flexibility make it particularly attractive for organizations that do not want to commit to a single vendor's stack.
+Nutanix runs a mature platform that combines compute, storage, virtualization and management on its own hypervisor AHV and supports ESXi as well. Its management experience across private and public clouds and its independence from a single cloud vendor make it the strongest alternative for large enterprises that want to stay neutral.
 
-In 2025, Nutanix and Microsoft deepened their partnership: **Nutanix AHV is now a supported infrastructure for Azure Arc-enabled AVD session hosts**, meaning organizations can run AVD on Nutanix hardware managed through the Azure portal. However, this integration supports Windows 11 single session and Windows Server session hosts but **not Windows 11 multisession**. Without multisession, every concurrent user requires a dedicated VM, which eliminates the cost efficiency of shared VDI at scale. Windows 11 multisession is exclusively available on Azure and Azure Local. This makes Nutanix simultaneously a competitor to Azure Local and, in certain hybrid scenarios, a complementary platform.
-
-Licensing costs for Nutanix remain significant, but the platform's stability, operational maturity and cloud-neutrality make it the strongest alternative for large enterprises that prioritize vendor independence.
-
-### Dell EMC VxRail
-
-Dell EMC VxRail is a hyper-converged appliance built in close partnership with VMware, tightly integrated with VMware vSAN and VMware Cloud Foundation. It offers strong performance, validated hardware configurations and lifecycle management tooling through a fully integrated support model between Dell and (formerly) VMware.
-
-As with VMware vSAN, Broadcom's licensing changes have increased costs and introduced long-term uncertainty for VxRail customers. For organizations standardizing on Azure and seeking to reduce operational silos, Azure Local offers a comparable on-premises HCI experience with strong hardware vendor support; Dell, HPE, Lenovo and others all offer Azure Local-validated nodes through the Azure Local Catalog.
+Nutanix is also a partner in the Microsoft story. AHV is a supported platform for AVD Hybrid since September 2026, but with single-session hosts only. Windows 11 multi-session remains limited to Azure and Azure Local. Licensing costs for Nutanix are significant, so the decision usually comes down to vendor neutrality versus Azure integration.
 
 ### Proxmox VE
 
-Proxmox VE has emerged as a prominent alternative in the post-Broadcom landscape. It is an open-source enterprise virtualization platform built on Debian Linux, combining **KVM** for full virtual machines and **LXC** for lightweight containers. It supports software-defined storage via ZFS and Ceph, flexible networking, a unified web-based management UI and a REST API. The core platform carries no mandatory licensing costs, with optional enterprise support subscriptions available from Proxmox Server Solutions.
+Proxmox VE grew fast after the Broadcom changes. It is an open-source platform on Debian with KVM for virtual machines, LXC for containers and ZFS or Ceph for storage, with optional support subscriptions. Proxmox VE 9.2 (May 2026) added a dynamic load balancer and Proxmox Datacenter Manager (1.0 in December 2025, 1.1 in May 2026) manages several clusters from one place.
 
-Proxmox's strengths are compelling for many organizations: low total cost of ownership, freedom from vendor lock-in, a strong community and a rapid adoption wave driven by VMware refugees. Teams comfortable with Linux administration have found it a credible and cost-effective replacement for VMware in small to mid-size deployments.
-
-However, Proxmox's limitations become apparent at enterprise scale and when modern cloud-native workloads are a requirement. It lacks native cloud integration, does not offer a first-class managed Kubernetes service and requires significant engineering effort to implement enterprise-grade HA, multi-site disaster recovery and storage replication at scale. There is no equivalent to AVD, AKS or Azure Arc on Proxmox; organizations that need those capabilities must layer multiple additional tools, each adding operational complexity.
+For teams with Linux skills it is a credible VMware replacement in small and mid-size environments, with a low total cost. The gaps show up when the requirements go beyond virtual machines: there is no managed Kubernetes service, no AVD and no cloud control plane. You can Arc-enable the guest operating systems, but the platform itself stays outside Azure.
 
 ### Windows Server Hyper-V with System Center
 
-For organizations with a strong existing investment in the Microsoft ecosystem but not yet ready for Azure Local's cloud-first deployment model, **Windows Server Hyper-V combined with System Center** remains a fully viable, well-supported and compliant datacenter management stack:
+Hyper-V on Windows Server 2025 with System Center 2025 remains a supported datacenter stack for organizations that are not ready for the cloud-first model of Azure Local. VMM manages Hyper-V clusters and Azure Local instances, Configuration Manager handles patching and baselines and Operations Manager covers monitoring. Regulated industries with established change processes still run this stack successfully.
 
-- **System Center Virtual Machine Manager (VMM) 2025**: Manages VM lifecycle on Hyper-V clusters and Azure Local instances (versions 2408.2 and later), enabling provisioning, networking and storage management through a unified console. Starting from System Center 2025, **Azure Arc-enabled System Center VMM** extends Azure governance, policies and management capabilities to VMM-managed infrastructure.
-- **System Center Configuration Manager (SCCM / ConfigMgr)**: Automates patching across VMs, Hyper-V hosts and endpoints; enforces configuration baselines; and keeps every virtual asset compliant and audit-ready. A well-understood toolchain in regulated industries.
-- **System Center Operations Manager (SCOM)**: Monitors Hyper-V clusters, VM health and resource utilization, providing SLA dashboards and alerting for latency-sensitive workloads.
+Two things changed. Arc-enabled SCVMM retires in September 2029 and Microsoft recommends [Arc-enabled servers](https://learn.microsoft.com/en-us/azure/azure-arc/system-center-virtual-machine-manager/overview?wt.mc_id=MVP_579217) instead, so the Azure governance path for Hyper-V runs through the Connected Machine agent. And AVD Hybrid now supports Hyper-V hosts, with the same single-session limitation as on the other platforms. Native AKS and AVD with Windows 11 multi-session remain Azure Local only.
 
-This stack is well-suited for regulated industries and large enterprises where established operational processes, deep compliance automation and proven change-control workflows are as important as cloud integration. With Arc-enabled SCVMM, organizations can adopt Azure governance incrementally, applying Azure Policies, Microsoft Defender for Cloud and Azure Monitor to their Hyper-V infrastructure without deploying Azure Local.
+### Red Hat OpenShift
 
-The main limitation compared to Azure Local is the absence of native AKS, AVD with Windows 11 multisession and the seamless Azure portal experience. As organizations modernize toward containers and cloud-native workloads, Azure Local provides a more direct path without requiring them to abandon the Microsoft ecosystem.
+In the first version of this article I wrote that OpenShift does not address VM workloads. That is no longer true. [OpenShift Virtualization](https://www.redhat.com/en/technologies/cloud-computing/openshift/virtualization-engine), based on KubeVirt, runs virtual machines next to containers, the OpenShift Virtualization Engine subscription covers VM-only clusters per bare-metal node and the Migration Toolkit for Virtualization moves VMs from VMware.
 
-### OpenShift
-
-OpenShift is a Kubernetes-based platform from Red Hat / IBM known for robust container orchestration, developer tooling, a strong operator framework and enterprise support. It excels in cloud-native and DevOps-oriented organizations and supports deployment across on-premises, hybrid and multi-cloud environments.
-
-However, OpenShift is fundamentally a container platform and does not address traditional VM workloads, VDI or HCI-level infrastructure management. Azure Local's AKS integration provides a strong Kubernetes story alongside native VM workloads, AVD and Arc governance, making it a more comprehensive hybrid platform for organizations that need both containers and VMs on-premises within a single managed solution.
+That makes OpenShift a real alternative for organizations that are container-first and want VMs on the same Kubernetes platform. Azure Local fits better when the estate is Windows-heavy, when virtual desktops with multi-session are part of the plan or when the operations team wants to manage everything from the Azure portal. OpenShift clusters can still be connected to Azure as Arc-enabled Kubernetes.
 
 ## Azure Arc: A Unifying Management Plane
 
-Azure Arc deserves special mention as a strategic layer that transcends any individual infrastructure platform. Rather than being tied exclusively to Azure Local, Arc extends Azure's control plane to a broad range of on-premises and multi-cloud environments:
+Azure Arc reaches beyond Azure Local and is often the first step of a migration. It brings the Azure control plane to:
 
-- **Azure Local clusters** (Arc-enabled by default at deployment)
-- **VMware vSphere environments** via Azure Arc-enabled VMware vSphere
-- **Nutanix AHV clusters** via Arc-enabled servers
-- **Windows Server Hyper-V hosts** via Azure Arc-enabled System Center VMM
-- **Physical Windows Server and Linux machines** via the Azure Connected Machine agent
-- **Other cloud environments** (AWS, GCP) via Arc-enabled servers
+- **Azure Local** instances, which are Arc-enabled from the deployment on
+- **VMware vSphere** through Azure Arc-enabled VMware vSphere
+- **Hyper-V** through Arc-enabled SCVMM until its retirement in September 2029 and through Arc-enabled servers after that
+- **Any Windows or Linux machine**, physical or virtual, on Nutanix, Proxmox, AWS or GCP through the Connected Machine agent
+- **Kubernetes clusters** such as OpenShift through Arc-enabled Kubernetes
 
-This means organizations can adopt a hybrid governance strategy using Arc across their entire estate, applying Azure Policies, Microsoft Defender for Cloud, Azure Monitor and Azure Update Manager uniformly, regardless of whether workloads run on Azure Local, VMware, Nutanix, Hyper-V or bare metal.
+With that in place you can apply Azure Policy, Microsoft Defender for Cloud, Azure Monitor and Azure Update Manager to the whole estate, whatever the hypervisor underneath.
 
-A particularly relevant 2025 announcement is **AVD hybrid via Arc-enabled Servers**: session hosts can run on Arc-enabled infrastructure such as Hyper-V, Nutanix AHV, VMware vSphere or physical Windows Servers, with management through the Azure portal. Public preview is expected in the first half of 2026. It is important to note that **Windows 11 multisession is not supported in this scenario**: session hosts on non-Azure Local infrastructure can run Windows 11 single session or Windows Server, but the multisession capability (multiple concurrent users sharing a single VM) is exclusively available on Azure and Azure Local. Without it, each user requires a dedicated VM, negating the cost efficiency of shared VDI at scale.
+This is the incremental path I recommend most often. Arc-enable the existing infrastructure first and get the governance in place, then move workloads to Azure Local when the hardware cycle or the licensing renewal makes the move worthwhile.
 
-This positions Azure Arc as a realistic **incremental migration path**: organizations can begin by Arc-enabling their existing infrastructure to gain immediate Azure governance benefits and then migrate specific workloads to Azure Local progressively when they are ready for the full cloud-first experience, without requiring a disruptive forklift migration.
+## Where Azure Local Stands Out
 
-## Competitive Advantages of Azure Local
+Compared with the alternatives above, these capabilities are unique to Azure Local or strongest there:
 
-When comparing Azure Local to the alternatives above, three capabilities stand out as unique or best-in-class for on-premises deployments:
-
-1. **Azure Kubernetes Service (AKS) on-premises**: The simplest and most integrated path to enterprise Kubernetes on your own hardware. With NVIDIA GPU support (including the RTX PRO 6000 Blackwell Server Edition), native Azure lifecycle management, Kubernetes versions 1.31 through 1.33 and zero need for manual cluster bootstrapping scripts, AKS on Azure Local is the most accessible on-premises Kubernetes experience available. No competing HCI platform offers this level of Azure-native AKS integration.
-
-2. **Azure Virtual Desktop (AVD) with Windows 11 Multisession**: Azure Local is the only on-premises platform where AVD with Windows 11 multisession is natively supported and generally available. Windows 11 multisession (allowing multiple concurrent users to share a single Windows 11 VM) is an exclusive Microsoft licensed capability and Azure Local is its on-premises home. All other Arc-enabled platforms that support AVD session hosts are limited to Windows 11 single session or Windows Server, both of which require one VM per concurrent user. This eliminates the cost efficiency that multisession provides and, in the case of Windows Server hosts, also removes Intune-based endpoint management. Azure Local is the only on-premises platform where the full multisession model is available, making it the only viable choice for cost-efficient shared VDI at scale without moving workloads to Azure.
-
-3. **Native Azure Integration for Management and Support**: Azure Local is managed, monitored, billed and governed entirely through Azure. VM lifecycle, AKS, AVD, updates, policies, security baselines and support tickets are all handled through the Azure portal and Azure support channels, using the same tooling and processes as Azure-native resources. This eliminates the operational context-switching between on-premises management consoles and cloud portals and means that Microsoft's Azure support organization covers both the cloud and on-premises layers under a single agreement.
+1. **Azure Virtual Desktop with Windows 11 multi-session on-premises.** AVD Hybrid brought session hosts to other hypervisors in 2026, without multi-session. For shared VDI at scale on your own hardware, Azure Local is the only option.
+2. **VMs, Kubernetes and GPUs on one platform managed from Azure.** Azure Local VMs, AKS and GPU workloads share the same cluster, the same portal and the same update process. No other HCI platform offers AKS with this depth of Azure integration.
+3. **A sovereign cloud with the Azure control plane on site.** Disconnected operations, Microsoft 365 Local and SQL Server on Azure Local give regulated and air-gapped sites the Azure tooling without the Azure connection.
+4. **Azure-native operations and support.** Updates, policies, security baselines, billing and support tickets run through Azure, under one support agreement for the cloud and the on-premises layer.
 
 ## Conclusion
 
-Azure Local has matured into a comprehensive hybrid infrastructure platform that spans legacy workloads, modern cloud-native applications and everything in between. With its monthly release cadence, the platform now evolves faster than any previous version of Azure Stack HCI, continuously adding capabilities around AKS, AVD, Arc governance, GPU support and hardware flexibility.
+Azure Local in 2026 covers much more than the hyperconverged cluster I compared in 2024. The same product name now spans single edge devices, sovereign sites without an Azure connection, SAN-based datacenters and multi-rack deployments with hundreds of machines. The first decision in any project is the deployment type. The use cases above are how I map a customer's problem to one.
 
-The competitive landscape has shifted significantly since this article was first published. Broadcom's VMware acquisition has unsettled a large installed base, making alternatives like Nutanix, Proxmox, Windows Server Hyper-V and Azure Local more attractive than ever. Each has a distinct sweet spot: **Proxmox** for cost-sensitive Linux-native teams seeking vendor independence; **Windows Server Hyper-V + System Center** for compliance-heavy Microsoft shops with established operational processes; **Nutanix** for multi-cloud flexibility and a cloud-neutral stance; and **Azure Local** for organizations that want the deepest possible Azure integration on-premises without sacrificing cloud-native capability.
+The market moved as well. Broadcom pushed many VMware customers to look around, Proxmox and OpenShift Virtualization became serious options and AVD Hybrid brought Azure management to other hypervisors. Each platform has its place: Proxmox for cost-sensitive Linux teams, OpenShift for container-first organizations, Nutanix for vendor neutrality and Hyper-V with System Center for Microsoft shops with established processes. Azure Local is the choice when you want the Azure operating model on your own hardware, especially with virtual desktops, Kubernetes, GPUs or sovereignty requirements in the plan.
 
-Azure Local's three key differentiators (**AKS**, **AVD with Windows 11 multisession** and **native Azure integration for management, governance and support**) make it the strongest choice for organizations that are already committed to Azure and want to extend that investment to on-premises infrastructure with full operational consistency.
-
-Azure Arc further strengthens this position by enabling partial adoption: organizations can govern existing VMware, Nutanix, Hyper-V or bare-metal infrastructure through Arc today, gain immediate Azure governance benefits and migrate to Azure Local progressively as their workloads and readiness evolve.
+Azure Arc keeps the path open for everyone else: govern the existing estate from Azure today and move workloads to Azure Local when it makes sense.
 
 ## Disclaimer
 
-The content of this article is based on my own experiences and understanding of Azure Local, gathered over time through practical implementations, industry knowledge and continuous learning. While I strive to provide accurate and up-to-date information, it's important to consult official Microsoft documentation or professional support for specific use cases and technical issues.
+This article reflects my own project experience and my reading of the Microsoft documentation as of October 2026. Azure Local changes with every monthly release, so check the official documentation before you base a decision on it.
 
 ## Sources
 
-- [Azure Local - What's New (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/whats-new?view=azloc-2512&wt.mc_id=MVP_579217)
-- [Azure Local - Release Information (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?view=azloc-24113&wt.mc_id=MVP_579217)
-- [Azure Local - Local Identity with Azure Key Vault (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-local-identity-with-key-vault?view=azloc-2604&wt.mc_id=MVP_579217)
-- [AKS enabled by Azure Arc - What's New (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-whats-new-local?wt.mc_id=MVP_579217)
-- [What's new in Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/virtual-desktop/whats-new?wt.mc_id=MVP_579217)
-- [Announcing new hybrid deployment options for Azure Virtual Desktop (Microsoft Tech Community)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/announcing-new-hybrid-deployment-options-for-azure-virtual-desktop/4468781?wt.mc_id=MVP_579217)
-- [Azure Virtual Desktop Goes Fully Hybrid with Arc-Enabled Servers (InfoQ)](https://www.infoq.com/news/2025/11/azure-avd-fully-hybrid-arc/)
-- [What is Azure Arc-enabled VMware vSphere (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-arc/vmware-vsphere/overview?wt.mc_id=MVP_579217)
-- [What's new in System Center Virtual Machine Manager 2025 (Microsoft Learn)](https://learn.microsoft.com/en-us/system-center/vmm/whats-new-in-vmm?view=sc-vmm-2025&wt.mc_id=MVP_579217)
-- [Manage Azure Local instances in VMM (Microsoft Learn)](https://learn.microsoft.com/en-us/system-center/vmm/manage-azure-stack-hci?view=sc-vmm-2025&wt.mc_id=MVP_579217)
+- [What's new in Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/whats-new?wt.mc_id=MVP_579217)
+- [Azure Local release information (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/release-information-23h2?wt.mc_id=MVP_579217)
+- [Find your Azure Local deployment type (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/plan/find-your-deployment-type?wt.mc_id=MVP_579217)
+- [Azure Local scalability and deployment types (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/scalability-deployments?wt.mc_id=MVP_579217)
+- [Disaggregated deployments of Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/overview/disaggregated-overview?wt.mc_id=MVP_579217)
+- [Supported SAN solutions on Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/concepts/san-requirements?wt.mc_id=MVP_579217)
+- [Rack aware clustering overview (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/concepts/rack-aware-cluster-overview?wt.mc_id=MVP_579217)
+- [Multi-rack deployments of Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/multi-rack/multi-rack-overview?wt.mc_id=MVP_579217)
+- [Small form factor deployments of Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/small-form-factor/small-form-factor-installation?wt.mc_id=MVP_579217)
+- [Disconnected operations for Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/manage/disconnected-operations-overview?wt.mc_id=MVP_579217)
+- [Microsoft 365 Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-sovereign-clouds/private/m365-local/microsoft-365-local-overview?wt.mc_id=MVP_579217)
+- [SQL Server on Azure Local is now generally available (Microsoft SQL Server Blog)](https://www.microsoft.com/en-us/sql-server/blog/2026/09/28/sql-server-on-azure-local-is-now-generally-available/)
+- [Azure Migrate for Azure Local: what's new (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/migrate/migrate-whats-new?wt.mc_id=MVP_579217)
+- [Extended Security Updates on Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/manage/azure-benefits-esu?wt.mc_id=MVP_579217)
+- [Prepare to deliver Extended Security Updates through Azure Arc (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates?wt.mc_id=MVP_579217)
+- [Hotpatch for Windows Server (Microsoft Learn)](https://learn.microsoft.com/en-us/windows-server/get-started/hotpatch?wt.mc_id=MVP_579217)
+- [GPU preparation for Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-local/manage/gpu-preparation?wt.mc_id=MVP_579217)
+- [AKS enabled by Azure Arc: what's new (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-whats-new-local?wt.mc_id=MVP_579217)
+- [Foundry Local on Azure Local (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-sovereign-clouds/private/foundry-local/overview?wt.mc_id=MVP_579217)
+- [Azure Virtual Desktop Hybrid is now generally available (Microsoft Tech Community)](https://techcommunity.microsoft.com/blog/azurevirtualdesktopblog/microsoft-azure-virtual-desktop-hybrid-is-now-generally-available/4550523?wt.mc_id=MVP_579217)
+- [Azure Virtual Desktop Hybrid overview (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/virtual-desktop/hybrid-overview?wt.mc_id=MVP_579217)
+- [Azure Virtual Desktop pricing (Microsoft Azure)](https://azure.microsoft.com/en-us/pricing/details/virtual-desktop/?wt.mc_id=MVP_579217)
+- [Azure Virtual Desktop Hybrid pricing and licensing FAQ (Microsoft, PDF)](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/bade/documents/products-and-services/en-us/azure/Azure-Virtual-Desktop-Hybrid-Per-user-per-month-pricing.pdf)
+- [Arc-enabled System Center VMM overview (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/azure-arc/system-center-virtual-machine-manager/overview?wt.mc_id=MVP_579217)
+- [Red Hat OpenShift Virtualization Engine (Red Hat)](https://www.redhat.com/en/technologies/cloud-computing/openshift/virtualization-engine)
+- [Proxmox press releases (Proxmox)](https://www.proxmox.com/en/about/company-details/press-releases)
+- [Microsoft ends license-included Azure VMware Solution (The Register)](https://www.theregister.com/virtualization/2026/08/20/microsoft-ends-one-of-the-last-ways-to-buy-vmware-without-big-bundles-1/5290044)
 - [Awesome Azure Local (GitHub)](https://github.com/schmittnieto/awesome-azure-local)
 
-*Thank you for reading. If you have any questions or need assistance with Azure Local, feel free to reach out or leave a comment below.*
+*Thank you for reading. If you have questions about Azure Local or want to share how you decided between these platforms, leave a comment below.*

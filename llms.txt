@@ -22,7 +22,7 @@ Important notes:
 ## Azure Local Series
 
 - [Azure Local: Entra Joined AVD Session Hosts with PowerShell](https://schmitt-nieto.com/blog/azure-local-avd-entra-join/): PowerShell deployment of Entra joined session hosts on Azure Local, guest registration verification through Arc Run Command and an experimental local FSLogix profile setup for cloud only users.
-- [Azure Local: Evolution, Use Cases and Comparison with Other Solutions](https://schmitt-nieto.com/blog/azure-stack-hci-evolution-use-cases-comparison/): Overview of Azure Local evolution, use cases and comparison with VMware vSAN, Nutanix, Proxmox and Windows Server Hyper-V.
+- [Azure Local: Evolution, Use Cases and Comparison with Other Solutions](https://schmitt-nieto.com/blog/azure-stack-hci-evolution-use-cases-comparison/): Where Azure Local fits as of release 2609, from VMware exits and edge sites to disconnected sovereign clouds, SAN-based and multi-rack deployments, AVD and AI at the edge, compared with VMware, Nutanix, Proxmox, Hyper-V with System Center and OpenShift.
 - [Azure Local: Demolab](https://schmitt-nieto.com/blog/azure-stack-hci-demolab/): Step-by-step lab deployment approach for Azure Local on minimal hardware using AzSHCI scripts.
 - [Azure Local: Day2 operations](https://schmitt-nieto.com/blog/azure-stack-hci-day2/): Post-deployment operations such as networking, VM images, monitoring and security.
 - [Azure Local: VM Deployment](https://schmitt-nieto.com/blog/azure-stack-hci-vm-deployment/): VM deployment and management on Azure Local.
