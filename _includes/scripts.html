@@ -94,7 +94,8 @@
      extensions: ["tex2jax.js"],
      jax: ["input/TeX", "output/HTML-CSS"],
      tex2jax: {
-       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       // No single $ delimiter: prices such as $10 and $0.01 in one paragraph would render as math
+       inlineMath: [ ["\\(","\\)"] ],
        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
        processEscapes: true
      },
