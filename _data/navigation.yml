@@ -21,18 +21,16 @@ Azurelocal:
       url: /blog/azure-stack-hci-vm-deployment/
     - title: "Azure Virtual Desktop"
       url: /blog/azure-stack-hci-azure-virtual-desktop/
-    - title: "Entra Joined AVD with PowerShell"
-      url: /blog/azure-local-avd-entra-join/
     - title: "AKS & SQL Managed Instances"
       url: /blog/azure-local-aks/
     - title: "Lifecycle Management"
       url: /blog/azure-local-lifecycle/
     - title: "Redundancy"
       url: /blog/azure-local-redundancy/
-    - title: "Backup & Disaster Recovery"
-      url: /blog/azure-local-backup-and-disaster-recovery/
     - title: "Azure Local Calculator"
       url: /azurelocal-calculator/
+    - title: "Backup & Disaster Recovery"
+      url: /blog/azure-local-backup-and-disaster-recovery/
     - title: "Awesome Azure Local"
       url: /blog/awesome-azure-local/
     - title: "Deep Insights Workbook"
@@ -45,17 +43,19 @@ Azurelocal:
       url: /blog/how-to-build-your-azure-local-lab/
     - title: "Troubleshooting & Support"
       url: /blog/azure-local-troubleshooting/
+    - title: "Entra Joined AVD with PowerShell"
+      url: /blog/azure-local-avd-entra-join/
 
 Avd:
 - title: Azure Virtual Desktop
   children:
-    - title: "Awesome Azure Virtual Desktop"
-      url: /blog/awesome-azure-virtual-desktop/
     - title: "AVD on Azure Local"
       url: /blog/azure-stack-hci-azure-virtual-desktop/
-    - title: "Entra Joined AVD on Azure Local"
-      url: /blog/azure-local-avd-entra-join/
     - title: "Azure Local meets Nerdio"
       url: /blog/azure-local-nerdio/
     - title: "Nerdio Scripted Actions: Windows Scripts"
       url: /blog/nerdio-scripted-actions-windows-scripts/
+    - title: "Awesome Azure Virtual Desktop"
+      url: /blog/awesome-azure-virtual-desktop/
+    - title: "Entra Joined AVD on Azure Local"
+      url: /blog/azure-local-avd-entra-join/

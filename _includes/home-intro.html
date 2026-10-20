@@ -18,11 +18,18 @@
         {% if card.nav %}
           {% assign series = site.data.navigation[card.nav][0].children %}
           {% if series and series.size > 0 %}
-            {% assign card_url = series[0].url %}
+            {%- comment -%} card.start picks the entry point by URL, the sidebar itself keeps its order {%- endcomment -%}
+            {% assign start_item = series[0] %}
+            {% if card.start %}
+              {% assign start_item = series | where: "url", card.start | first %}
+            {% endif %}
+            {% if start_item %}
+              {% assign card_url = start_item.url %}
+              {% assign default_label = "Start with " | append: start_item.title %}
+              {% assign card_label = card.link_label | default: default_label %}
+            {% endif %}
             {% assign series_count = series.size | append: "" %}
             {% assign card_text = card.text | replace: "{count}", series_count %}
-            {% assign default_label = "Start with " | append: series[0].title %}
-            {% assign card_label = card.link_label | default: default_label %}
           {% endif %}
         {% endif %}
         {% if card_url %}

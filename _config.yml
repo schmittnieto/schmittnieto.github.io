@@ -42,8 +42,9 @@ lunr:
 # enabled: false hides it. Cards render in the order listed; remove an entry to hide that card.
 # Card types:
 #   nav:  a key in _data/navigation.yml. Links to its first entry, "{count}" in text becomes the number of entries.
+#         start (optional): URL of another entry of that list to link instead, the sidebar order stays as it is.
 #   url:  a plain link.
-# link_label is optional. Defaults: "Start with <first entry>" for nav cards, "Open" for url cards.
+# link_label is optional. Defaults: "Start with <first or start entry>" for nav cards, "Open" for url cards.
 home_intro:
   enabled: true
   lead: "Hands-on notes on Azure Local, Azure Virtual Desktop and hybrid Azure, written from my lab and customer projects."
@@ -53,6 +54,7 @@ home_intro:
       text: "{count} guides, from use cases and a demo lab to day 2 operations, Terraform and troubleshooting."
     - title: "Azure Virtual Desktop series"
       nav: Avd
+      start: /blog/awesome-azure-virtual-desktop/
       text: "{count} guides on AVD, including session hosts on Azure Local and Nerdio Manager."
     - title: "Azure Local Calculator"
       url: /azurelocal-calculator/
