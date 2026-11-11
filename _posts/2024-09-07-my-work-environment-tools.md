@@ -66,7 +66,7 @@ Working with Azure requires a lot of command-line interaction, and Azure CLI is 
 
 ## Oh My Posh: PowerShell Customization
 
-Oh My Posh is a fantastic tool for customizing my PowerShell prompt. By following [Jon D. Jones's guide](https://www.jondjones.com/tactics/productivity/customise-your-powershell-prompt-like-a-boss/), I have configured a visually appealing and informative prompt that enhances my command-line experience. Jon's detailed walkthrough provided a great foundation for my setup.
+Oh My Posh is a fantastic tool for customizing my PowerShell prompt. By following [Jon D. Jones's guide](https://web.archive.org/web/20250120070128/https://www.jondjones.com/tactics/productivity/customise-your-powershell-prompt-like-a-boss/), I have configured a visually appealing and informative prompt that enhances my command-line experience. Jon's detailed walkthrough provided a great foundation for my setup.
 
 ## Autocomplete in PowerShell
 

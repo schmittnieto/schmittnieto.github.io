@@ -50,13 +50,30 @@ jobs:
           # Never fail here, so the report step below always runs.
           fail: false
 
-      - name: Open an issue when links are broken
+      - name: Find the open broken links issue
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          number=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --label broken-links --json number --jq '.[0].number // empty')
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      # Reuses the open issue when there is one, so each run does not pile up a new one.
+      - name: Open or update the issue when links are broken
         if: steps.lychee.outputs.exit_code != 0
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: Broken links found in articles
           content-filepath: ./lychee/out.md
           labels: broken-links, automated
+          issue-number: ${{ steps.existing.outputs.number }}
+
+      - name: Close the issue when all links are fine
+        if: steps.lychee.outputs.exit_code == 0 && steps.existing.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue close "${{ steps.existing.outputs.number }}" --repo "$GITHUB_REPOSITORY" --comment "The latest link check found no broken links."
 
       - name: Fail the run when links are broken
         if: steps.lychee.outputs.exit_code != 0
