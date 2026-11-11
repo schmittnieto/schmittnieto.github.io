@@ -84,7 +84,7 @@ I won’t delve too deeply into the basic concepts of backup and recovery here, 
 - [RPO and RTO: What’s the Difference?](https://www.veeam.com/blog/recovery-time-recovery-point-objectives.html)
 - [Best Practices: Assess, Design, Build, Operate & Secure](https://bp.veeam.com/vbr/)
 - [Backup resource calculator](https://www.veeam.com/calculators/simple/vbr/machines)
-- [Backup servers and repositories should not depend on the infrastructure (e.g. not be part of AD, be on a separate physical server...)](https://bp.veeam.com/security/Design-and-implementation/Hardening/Workgroup_or_Domain.html)
+- [Backup servers and repositories should not depend on the infrastructure (e.g. not be part of AD, be on a separate physical server...)](https://bp.veeam.com/security/System-Resilience/Control-Plane-Hardening/Workgroup-or-Domain.html)
 
 As I mentioned in the introduction, even though Azure Local is part of Azure’s hybrid infrastructure, it does not include the native Azure Backup service. On reflection, this makes sense, as it would be very difficult, costly, and inefficient to maintain the required RPOs and RTOs by continuously backing up workloads solely over the Internet (WAN).
 

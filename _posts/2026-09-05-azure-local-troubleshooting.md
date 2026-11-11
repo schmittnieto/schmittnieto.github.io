@@ -409,7 +409,7 @@ That is the whole point of the repository. My bad week became somebody else's te
 
 The second one is plumbing rather than a war story. The CSSTools module is useful and it was hard to see as a whole. More than seventy exported functions, eight insight components, a set of remediations and the support scripts lived across separate documentation folders, so answering "what can this thing do" meant opening a lot of pages and answering "what is the syntax" meant one page per command. I put together a consolidated command overview: everything in one place, grouped by family, condensed syntax with optional parameters in brackets, each entry linking to its detail page.
 
-That one landed in [July 2026](https://github.com/Azure/AzureLocal-Supportability/commit/40e02059f25d3ce4445e525a0472d073375904c8) and you can read the result in the [command overview shipped with 1.2607.16.2249](https://github.com/Azure/AzureLocal-Supportability/blob/main/tools/CSSTools/1.2607.16.2249/README.md).
+That one landed in [July 2026](https://github.com/Azure/AzureLocal-Supportability/commit/40e02059f25d3ce4445e525a0472d073375904c8) and you can read the result in the [command overview shipped with 1.2607.16.2249](https://github.com/Azure/AzureLocal-Supportability/blob/main/tools/CSSTools/2607/README.md).
 
 ### What the bar looks like
 
